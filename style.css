@@ -76,10 +76,16 @@ h1 {
 }
 
 label {
-    margin-bottom: 0.5rem;
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #343a40;
+}
+
+.required-indicator {
+    color: #dc3545; /* Merah */
     font-weight: 600;
-    color: var(--label-color);
-    font-size: 1em;
+    margin-left: 4px;
 }
 
 .input-wrapper {
