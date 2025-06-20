@@ -562,8 +562,8 @@ h1.form-title {
     align-items: center;
 }
 
-.side-by-side-group .input-wrapper.flex-grow input {
-    width: 100%;
+.side-by-side-group .input-wrapper.flex-grow {
+    flex: 1;
 }
 
 .logo-upload-wrapper {
@@ -607,7 +607,7 @@ input[type="file"] {
 }
 
 .online-shop-row select:invalid {
-    color: #6c757d; /* Abu-abu placeholder */
+    color: #a9a9a9; /* Softer Grey */
 }
 
 .online-shop-row input {
