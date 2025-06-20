@@ -27,6 +27,16 @@ body {
     box-sizing: border-box;
 }
 
+.logo {
+    display: block;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%; /* Lingkaran */
+    object-fit: cover;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
 .container {
     width: 100%;
     max-width: 800px;
@@ -293,4 +303,71 @@ textarea {
 
 .modal-btn-confirm:hover {
     background-color: var(--button-hover-bg-color);
+}
+
+/* Searchable Dropdown Styles */
+.searchable-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.searchable-select-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.searchable-select-input:focus {
+    outline: none;
+    border-color: var(--input-focus-color);
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}
+
+.searchable-select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1001;
+    display: none; /* Disembunyikan secara default */
+}
+
+.searchable-select-wrapper.open .searchable-select-dropdown {
+    display: block; /* Tampilkan saat wrapper memiliki class 'open' */
+}
+
+.searchable-select-option,
+.searchable-select-status {
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.searchable-select-option:last-child {
+    border-bottom: none;
+}
+
+.searchable-select-option:hover {
+    background-color: #f4f7f6;
+}
+
+.searchable-select-status {
+    color: #888;
+    font-style: italic;
+    cursor: default;
+}
+
+.searchable-select-option.highlight {
+    background-color: var(--secondary-color);
+    color: white;
 } 
