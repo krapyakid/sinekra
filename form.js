@@ -2,10 +2,106 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('alumni-form');
     if (!form) return; // Keluar jika ini bukan halaman formulir
     
-    // Fungsi utama untuk membuat dropdown yang bisa dicari
-// ... existing code ...
-    modal?.addEventListener('click', (e) => {
-        if (e.target === modal) hideModal();
+    // --- (FIX) KODE DROPDOWN YANG HILANG DIKEMBALIKAN ---
+    function setupSearchableDropdown(config) {
+        const wrapper = document.getElementById(config.wrapperId);
+        if (!wrapper) return;
+
+        const input = wrapper.querySelector('.searchable-select-input');
+        const dropdown = wrapper.querySelector('.searchable-select-dropdown');
+        const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+        const statusEl = wrapper.querySelector('.searchable-select-status');
+        
+        let allOptions = [];
+
+        async function fetchData() {
+            try {
+                const response = await fetch(config.url);
+                if (!response.ok) throw new Error('Network response was not ok');
+                const csvText = await response.text();
+                
+                const rows = csvText.trim().split('\n');
+                rows.shift(); // Buang header
+                
+                allOptions = rows.map(row => {
+                    const parts = row.split(/,(.+)/);
+                    return parts.length > 1 ? parts[1].replace(/^"|"$/g, '').trim() : null;
+                }).filter(Boolean);
+
+                renderOptions(allOptions);
+            } catch (error) {
+                console.error(`Gagal mengambil data untuk ${config.wrapperId}:`, error);
+                if(statusEl) statusEl.textContent = 'Gagal memuat data';
+            }
+        }
+
+        function renderOptions(options) {
+            dropdown.innerHTML = '';
+            if (options.length === 0 && statusEl) {
+                statusEl.textContent = 'Tidak ada hasil';
+                dropdown.appendChild(statusEl);
+                return;
+            }
+            options.forEach(optionText => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'searchable-select-option';
+                optionEl.textContent = optionText;
+                optionEl.addEventListener('mousedown', () => {
+                    selectOption(optionText);
+                });
+                dropdown.appendChild(optionEl);
+            });
+        }
+
+        function selectOption(value) {
+            input.value = value;
+            hiddenInput.value = value;
+            wrapper.classList.remove('open');
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        input.addEventListener('input', () => {
+            const query = input.value.toLowerCase();
+            const filtered = allOptions.filter(opt => opt.toLowerCase().includes(query));
+            renderOptions(filtered);
+            hiddenInput.value = '';
+        });
+
+        input.addEventListener('focus', () => {
+            wrapper.classList.add('open');
+            renderOptions(allOptions);
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) {
+                wrapper.classList.remove('open');
+            }
+        });
+        
+        fetchData();
+    }
+
+    setupSearchableDropdown({
+        wrapperId: 'domisili-wrapper',
+        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQMiSYxBNhT7Z5BkUqTbYs2o60cuMIG-tGChp8QpC1bvcgWM25SRDOVSeqC5u-DZsbcE4V7Hk6YvU1c/pub?gid=923893261&single=true&output=csv'
+    });
+
+    setupSearchableDropdown({
+        wrapperId: 'profesi-wrapper',
+        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTQG6LnmWxsk4IEJLkv2bAhxxgCoV9wNTemWVnN0mcHaDthpC_Vo69ySPCNQMBdP-n1A46tX6f1FYQT/pub?gid=2117269894&single=true&output=csv'
+    });
+    // --- AKHIR DARI FIX ---
+
+    // Fungsionalitas Hapus Baris Toko Online
+    document.querySelectorAll('.clear-row-icon').forEach(icon => {
+        icon.addEventListener('click', function() {
+            const row = this.parentElement;
+            const select = row.querySelector('select');
+            const input = row.querySelector('input');
+            
+            if (select) select.selectedIndex = 0; // Reset ke "Pilih Platform"
+            if (input) input.value = '';
+        });
     });
 
     // Validasi Ukuran File Logo
