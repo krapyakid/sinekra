@@ -217,7 +217,7 @@ textarea {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 1100;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -372,4 +372,73 @@ textarea {
 .searchable-select-option.highlight {
     background-color: var(--secondary-color);
     color: white;
+}
+
+/* Header and Menu Styles */
+.main-header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.logo {
+    margin-bottom: 20px;
+}
+
+.main-header .logo {
+    margin-bottom: 0; /* Override margin for logo inside header */
+}
+
+.menu-wrapper {
+    position: absolute;
+    left: 0px; /* Position to the left edge of the container */
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 101; /* Ensure menu is above other content */
+}
+
+.menu-icon {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    padding: 8px;
+    border-radius: 50%;
+    box-sizing: content-box; /* padding doesn't add to width */
+}
+
+.menu-icon:hover {
+    background-color: #f0f0f0;
+}
+
+.kebab-menu-dropdown {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: calc(100% + 5px); /* Position below the icon with a small gap */
+    left: 0;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    min-width: 180px;
+    z-index: 1000;
+    padding: 8px 0;
+    border: 1px solid #eee;
+}
+
+.kebab-menu-dropdown.show {
+    display: block; /* Class to show the menu */
+}
+
+.kebab-menu-dropdown a {
+    display: block;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.kebab-menu-dropdown a:hover {
+    background-color: #f5f5f5;
 } 
