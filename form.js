@@ -148,24 +148,46 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Validasi Form dan Modal
+    // Validasi Form dan Modal (FIXED LOGIC)
     if (form) {
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             let allValid = true;
 
-            form.querySelectorAll('[required]').forEach(field => {
-                field.style.borderColor = 'var(--input-border-color)';
-                let isFieldValid = true;
-                if (field.classList.contains('searchable-select-input')) {
-                    const hiddenField = field.parentElement.querySelector('input[type="hidden"]');
-                    if (!hiddenField || !hiddenField.value) isFieldValid = false;
+            // 1. Reset semua style error sebelumnya
+            form.querySelectorAll('input[required], textarea[required]').forEach(field => {
+                let parentWrapper = field.closest('.input-wrapper, .searchable-select-wrapper');
+                if (parentWrapper) {
+                    parentWrapper.style.borderColor = 'var(--input-border-color)';
                 } else {
-                    if (!field.checkValidity()) isFieldValid = false;
+                    field.style.borderColor = 'var(--input-border-color)';
                 }
+            });
+
+            // 2. Lakukan validasi ulang pada setiap field yang required
+            form.querySelectorAll('input[required], textarea[required]').forEach(field => {
+                let isFieldValid = true;
+                let fieldToBorder = field; // Elemen yang akan diberi border merah
+
+                if (field.classList.contains('searchable-select-input')) {
+                    // Validasi khusus untuk dropdown pencarian
+                    const hiddenField = field.parentElement.querySelector('input[type="hidden"]');
+                    if (!hiddenField || !hiddenField.value) {
+                        isFieldValid = false;
+                    }
+                    fieldToBorder = field.parentElement; // Beri border pada wrapper-nya
+                } else {
+                    // Gunakan checkValidity() bawaan browser yang lebih andal
+                    if (!field.checkValidity()) {
+                        isFieldValid = false;
+                    }
+                }
+
                 if (!isFieldValid) {
                     allValid = false;
-                    field.style.borderColor = 'var(--danger-color)';
+                    if (fieldToBorder) {
+                        fieldToBorder.style.borderColor = 'var(--danger-color)';
+                    }
                 }
             });
 
