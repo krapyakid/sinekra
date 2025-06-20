@@ -562,8 +562,12 @@ h1.form-title {
     align-items: center;
 }
 
-.flex-grow {
-    flex: 1;
+.side-by-side-group .input-wrapper.flex-grow input {
+    width: 100%;
+}
+
+.logo-upload-wrapper {
+    text-align: center;
 }
 
 input[type="file"] {
@@ -571,24 +575,27 @@ input[type="file"] {
 }
 
 .file-upload-btn {
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: #f8f9fa;
+    color: #206871; /* Teal color from logo */
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
     text-align: center;
     display: block;
-    border: 1px solid #ccc;
+    border: 1px solid #ced4da;
+    font-weight: 500;
+    margin-bottom: 0.5rem; /* Space for the small text */
 }
 
 .file-upload-btn:hover {
-    background-color: #e0e0e0;
+    background-color: #e9ecef;
 }
 
 .online-shop-row {
     display: flex;
     gap: 1rem;
     margin-bottom: 0.75rem;
+    align-items: center; /* Vertically align items */
 }
 
 .online-shop-row select {
@@ -599,8 +606,25 @@ input[type="file"] {
     background-color: white;
 }
 
+.online-shop-row select:invalid {
+    color: #6c757d; /* Abu-abu placeholder */
+}
+
 .online-shop-row input {
     flex-grow: 1;
+}
+
+.clear-row-icon {
+    font-family: sans-serif;
+    font-size: 1.5rem;
+    color: #adb5bd;
+    cursor: pointer;
+    padding: 0 5px;
+    font-weight: bold;
+}
+
+.clear-row-icon:hover {
+    color: #dc3545; /* Red on hover */
 }
 
 .online-shop-row:last-child {
