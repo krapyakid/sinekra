@@ -126,6 +126,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // (FIX) Validasi & Auto-format Nomor Telepon
+    const phoneInput = document.getElementById('no-hp');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', (e) => {
+            let value = e.target.value;
+
+            // 1. Sanitize: Hapus semua karakter ilegal (non-angka, kecuali + di awal)
+            let sanitized = value.startsWith('+') 
+                ? '+' + value.substring(1).replace(/[^0-9]/g, '')
+                : value.replace(/[^0-9]/g, '');
+
+            // 2. Terapkan aturan format otomatis
+            if (sanitized.startsWith('0')) {
+                // Jika pengguna mengetik 0... ganti menjadi +62...
+                sanitized = '+62' + sanitized.substring(1);
+            } else if (sanitized === '+') {
+                // Jika pengguna hanya mengetik +, lengkapi menjadi +62
+                sanitized = '+62';
+            }
+
+            // Terapkan nilai yang sudah bersih dan terformat
+            e.target.value = sanitized;
+        });
+    }
+
     // Validasi Form dan Modal
     if (form) {
         form.addEventListener('submit', function(event) {
