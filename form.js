@@ -2,6 +2,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('alumni-form');
     if (!form) return; // Keluar jika ini bukan halaman formulir
     
+    // Fungsi untuk mengisi dropdown tahun
+    function populateYearDropdown() {
+        const select = document.getElementById('angkatan');
+        if (!select) return;
+
+        const currentYear = new Date().getFullYear();
+        const startYear = 1950;
+
+        for (let year = currentYear; year >= startYear; year--) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            select.appendChild(option);
+        }
+    }
+    populateYearDropdown();
+
     // --- (FIX) KODE DROPDOWN YANG HILANG DIKEMBALIKAN ---
     function setupSearchableDropdown(config) {
         const wrapper = document.getElementById(config.wrapperId);
@@ -160,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // 2. Lakukan validasi ulang pada setiap field yang required
-            form.querySelectorAll('input[required], textarea[required]').forEach(field => {
+            form.querySelectorAll('input[required], textarea[required], select[required]').forEach(field => {
                 let isFieldValid = true;
                 const wrapper = field.closest('.input-wrapper, .searchable-select-wrapper');
 
