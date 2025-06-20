@@ -21,11 +21,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 const csvText = await response.text();
                 
                 const rows = csvText.trim().split('\n');
-                rows.shift(); // Buang header
+                rows.shift();
                 
                 allOptions = rows.map(row => {
-                    const parts = row.split(/,(.+)/);
-                    return parts.length > 1 ? parts[1].replace(/^"|"$/g, '').trim() : null;
+                    const cleanRow = row.trim();
+                    if (!cleanRow) return null;
+                    const parts = cleanRow.split(/,(.+)/);
+                    const value = parts.length > 1 ? parts[1] : parts[0];
+                    return value.replace(/^"|"$/g, '').trim();
                 }).filter(Boolean);
 
                 renderOptions(allOptions);
@@ -92,6 +95,25 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     // --- AKHIR DARI FIX ---
 
+    // --- (FIX #1 & #3) Fungsionalitas Ikon Hapus & Validasi Dikembalikan ---
+    // Fungsionalitas Ikon Hapus pada setiap input
+    document.querySelectorAll('.input-wrapper .clear-icon').forEach(icon => {
+        const input = icon.parentElement.querySelector('input, textarea');
+        if (input) {
+            const showOrHideIcon = () => {
+                icon.style.display = input.value ? 'block' : 'none';
+            };
+            icon.addEventListener('click', () => {
+                input.value = '';
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                input.focus();
+                showOrHideIcon();
+            });
+            input.addEventListener('input', showOrHideIcon);
+            showOrHideIcon();
+        }
+    });
+    
     // Fungsionalitas Hapus Baris Toko Online
     document.querySelectorAll('.clear-row-icon').forEach(icon => {
         icon.addEventListener('click', function() {
@@ -103,6 +125,35 @@ document.addEventListener('DOMContentLoaded', function() {
             if (input) input.value = '';
         });
     });
+
+    // Validasi Form dan Modal
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            let allValid = true;
+
+            form.querySelectorAll('[required]').forEach(field => {
+                field.style.borderColor = 'var(--input-border-color)';
+                let isFieldValid = true;
+                if (field.classList.contains('searchable-select-input')) {
+                    const hiddenField = field.parentElement.querySelector('input[type="hidden"]');
+                    if (!hiddenField || !hiddenField.value) isFieldValid = false;
+                } else {
+                    if (!field.checkValidity()) isFieldValid = false;
+                }
+                if (!isFieldValid) {
+                    allValid = false;
+                    field.style.borderColor = 'var(--danger-color)';
+                }
+            });
+
+            if (allValid) {
+                showConfirmationModal();
+            } else {
+                alert('Harap isi semua field yang wajib diisi dengan format yang benar.');
+            }
+        });
+    }
 
     // Validasi Ukuran File Logo
     const logoUpload = document.getElementById('logo-upload');
