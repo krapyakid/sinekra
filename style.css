@@ -100,19 +100,18 @@ label {
     align-items: center;
 }
 
-input[type="text"],
-input[type="number"],
-input[type="tel"],
-select,
-textarea {
+.input-wrapper input,
+.input-wrapper textarea,
+.input-wrapper select {
     width: 100%;
     padding: 0.8rem 1rem;
-    border: 1px solid var(--input-border-color);
+    border: none;
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 1em;
     transition: border-color 0.3s, box-shadow 0.3s;
-    background-color: #fff;
+    background-color: transparent;
+    outline: none;
 }
 
 /* Tambahkan padding kanan pada input yang punya ikon hapus */
@@ -641,4 +640,8 @@ input[type="file"] {
 
 .online-shop-row:last-child {
     margin-bottom: 0;
+}
+
+.input-wrapper select:invalid {
+    color: #a9a9a9;
 } 
