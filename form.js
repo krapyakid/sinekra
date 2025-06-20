@@ -1,4 +1,4 @@
- document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('alumni-form');
     if (!form) return; // Keluar jika ini bukan halaman formulir
     
