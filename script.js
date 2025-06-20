@@ -98,20 +98,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // --- Sisa Fungsionalitas (Ikon Hapus, Validasi, Modal) ---
-    // (Kode ini sebagian besar tetap, hanya validasi yang disesuaikan sedikit)
+    // Fungsionalitas Ikon Hapus (DIPERBARUI untuk semua jenis input)
+    document.querySelectorAll('.clear-icon').forEach(icon => {
+        const wrapper = icon.parentElement;
+        const input = wrapper.querySelector('input:not([type="hidden"]), textarea');
 
-    // Fungsionalitas Ikon Hapus
-    document.querySelectorAll('.input-wrapper .clear-icon').forEach(icon => {
-        const input = icon.previousElementSibling;
         if (input) {
+            const showOrHideIcon = () => {
+                icon.style.display = input.value ? 'block' : 'none';
+            };
+
             icon.addEventListener('click', () => {
                 input.value = '';
+                // Jika ini dropdown pencarian, kosongkan juga hidden input-nya
+                if (wrapper.classList.contains('searchable-select-wrapper')) {
+                    const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+                    if (hiddenInput) {
+                        hiddenInput.value = '';
+                    }
+                }
+                // Kirim event 'input' agar semua listener lain (termasuk validasi) tahu ada perubahan
                 input.dispatchEvent(new Event('input', { bubbles: true }));
                 input.focus();
             });
-            input.addEventListener('input', () => {
-                icon.style.display = input.value ? 'block' : 'none';
-            });
+
+            input.addEventListener('input', showOrHideIcon);
+            // Pengecekan awal saat halaman dimuat (jika ada nilai dari browser)
+            showOrHideIcon();
         }
     });
 
@@ -129,36 +142,45 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Validasi Form dan Modal
+    // Validasi Form dan Modal (LOGIKA DIPERBAIKI)
     if (form) {
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             let allValid = true;
 
+            // 1. Reset semua style error sebelumnya
             form.querySelectorAll('[required]').forEach(field => {
-                // Untuk dropdown custom, periksa hidden input
+                field.style.borderColor = 'var(--input-border-color)';
+            });
+
+            // 2. Lakukan validasi ulang pada setiap field
+            form.querySelectorAll('[required]').forEach(field => {
+                let isFieldValid = true;
+
                 if (field.classList.contains('searchable-select-input')) {
+                    // Validasi khusus untuk dropdown pencarian
                     const hiddenField = field.parentElement.querySelector('input[type="hidden"]');
                     if (!hiddenField || !hiddenField.value) {
-                        allValid = false;
-                        field.style.borderColor = 'var(--danger-color)';
-                    } else {
-                        field.style.borderColor = 'var(--input-border-color)';
+                        isFieldValid = false;
                     }
-                } else { // Validasi untuk field biasa
-                    if (!field.value.trim()) {
-                        allValid = false;
-                        field.style.borderColor = 'var(--danger-color)';
-                    } else {
-                        field.style.borderColor = 'var(--input-border-color)';
+                } else {
+                    // Gunakan checkValidity() bawaan browser yang lebih andal
+                    // Ini akan otomatis memeriksa 'required', 'pattern', dll.
+                    if (!field.checkValidity()) {
+                        isFieldValid = false;
                     }
+                }
+
+                if (!isFieldValid) {
+                    allValid = false;
+                    field.style.borderColor = 'var(--danger-color)';
                 }
             });
 
             if (allValid) {
                 showConfirmationModal();
             } else {
-                alert('Harap isi semua field yang wajib diisi.');
+                alert('Harap isi semua field yang wajib diisi dengan format yang benar.');
             }
         });
     }
