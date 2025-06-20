@@ -195,11 +195,13 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.classList.remove('visible');
     }
 
-    document.getElementById('modal-cancel-btn')?.addEventListener('click', hideModal);
     document.getElementById('modal-confirm-btn')?.addEventListener('click', () => {
         hideModal();
         alert("Data (disimulasikan) berhasil dikirim!");
+        // Untuk pengiriman data nyata, Anda bisa gunakan:
+        // form.submit();
     });
+
     modal?.addEventListener('click', (e) => {
         if (e.target === modal) hideModal();
     });
