@@ -34,7 +34,7 @@
             <div class="form-group">
                 <label for="angkatan">Angkatan Tahun</label>
                 <div class="input-wrapper">
-                    <input type="number" id="angkatan" name="angkatan" placeholder="Contoh: 2005" required>
+                    <input type="text" inputmode="numeric" id="angkatan" name="angkatan" placeholder="Contoh: 2005" required pattern="\d{4}" maxlength="4">
                     <span class="clear-icon" title="Hapus"></span>
                 </div>
             </div>
@@ -63,7 +63,7 @@
             <div class="form-group">
                 <label for="no-hp">No. HP/WA</label>
                 <div class="input-wrapper">
-                    <input type="tel" id="no-hp" name="no_hp" required placeholder="Contoh: +6281234567890" pattern="^\+62[0-9]{9,15}$" maxlength="16">
+                    <input type="tel" id="no-hp" name="no_hp" required placeholder="Contoh: +6281234567890" pattern="^\+62[0-9]{9,15}$">
                     <span class="clear-icon" title="Hapus"></span>
                 </div>
                 <small class="char-limit-info">Maksimal 16 karakter</small>
