@@ -1,89 +1,118 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('alumni-form');
-    const domisiliSelect = document.getElementById('domisili');
-    const profesiSelect = document.getElementById('profesi');
     
-    // Konfigurasi untuk dropdown yang datanya diambil dari luar
-    const fetchConfigs = [
-        {
-            element: domisiliSelect,
-            // URL diperbarui ke link Google Sheets "Publish to the web"
-            url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQMiSYxBNhT7Z5BkUqTbYs2o60cuMIG-tGChp8QpC1bvcgWM25SRDOVSeqC5u-DZsbcE4V7Hk6YvU1c/pub?gid=923893261&single=true&output=csv',
-            defaultText: 'Pilih Domisili'
-        },
-        {
-            element: profesiSelect,
-            url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTQG6LnmWxsk4IEJLkv2bAhxxgCoV9wNTemWVnN0mcHaDthpC_Vo69ySPCNQMBdP-n1A46tX6f1FYQT/pub?gid=2117269894&single=true&output=csv',
-            defaultText: 'Pilih Profesi/Aktifitas'
-        }
-    ];
+    // Fungsi utama untuk membuat dropdown yang bisa dicari
+    function setupSearchableDropdown(config) {
+        const wrapper = document.getElementById(config.wrapperId);
+        if (!wrapper) return;
 
-    // Fungsi generik untuk mengambil data CSV dan mengisi elemen <select>
-    async function populateSelectFromCsv(config) {
-        if (!config.element) return;
+        const input = wrapper.querySelector('.searchable-select-input');
+        const dropdown = wrapper.querySelector('.searchable-select-dropdown');
+        const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+        const statusEl = wrapper.querySelector('.searchable-select-status');
         
-        try {
-            // Menghapus proxy dan fetch langsung dari URL.
-            // Ini bisa dilakukan karena halaman sudah online di GitHub Pages, bukan file lokal lagi.
-            const response = await fetch(config.url);
-            
-            if (!response.ok) throw new Error(`Network response was not ok for ${config.element.id}`);
-            const csvText = await response.text();
+        let allOptions = []; // Untuk menyimpan semua data dari CSV
 
-            config.element.innerHTML = ''; // Hapus opsi "Memuat data..."
+        // Ambil data dari CSV
+        async function fetchData() {
+            try {
+                const response = await fetch(config.url);
+                if (!response.ok) throw new Error('Network response was not ok');
+                const csvText = await response.text();
+                
+                const rows = csvText.trim().split('\n');
+                const header = rows.shift();
+                
+                allOptions = rows.map(row => {
+                    const parts = row.split(/,(.+)/);
+                    return parts.length > 1 ? parts[1].replace(/^"|"$/g, '').trim() : null;
+                }).filter(Boolean); // Filter null/kosong
 
-            const defaultOption = document.createElement('option');
-            defaultOption.value = "";
-            defaultOption.textContent = config.defaultText;
-            defaultOption.disabled = true;
-            defaultOption.selected = true;
-            config.element.appendChild(defaultOption);
-            
-            // Logika disesuaikan untuk format CSV baru
-            const rows = csvText.trim().split('\n');
-            const header = rows.shift(); // Ambil dan buang baris header
-
-            rows.forEach(row => {
-                // Split berdasarkan koma pertama untuk memisahkan ID dan nama
-                const parts = row.split(/,(.+)/); 
-                if (parts.length > 1) {
-                    // Ambil bagian kedua, lalu bersihkan dari kutip dan spasi
-                    const value = parts[1].replace(/^"|"$/g, '').trim();
-                    if (value) {
-                        const option = document.createElement('option');
-                        option.value = value;
-                        option.textContent = value;
-                        config.element.appendChild(option);
-                    }
-                }
-            });
-        } catch (error) {
-            console.error(`Gagal mengambil data untuk ${config.element.id}:`, error);
-            config.element.innerHTML = `<option value="" disabled selected>Gagal memuat data</option>`;
-            config.element.style.color = 'var(--danger-color)';
+                renderOptions(allOptions);
+            } catch (error) {
+                console.error(`Gagal mengambil data untuk ${config.wrapperId}:`, error);
+                statusEl.textContent = 'Gagal memuat data';
+            }
         }
-    }
-    
-    // Panggil fungsi untuk setiap dropdown
-    fetchConfigs.forEach(populateSelectFromCsv);
 
-    const modal = document.getElementById('confirmation-modal');
-    const modalPreview = document.getElementById('modal-preview');
-    const cancelBtn = document.getElementById('modal-cancel-btn');
-    const confirmBtn = document.getElementById('modal-confirm-btn');
+        // Render opsi ke dalam dropdown
+        function renderOptions(options) {
+            dropdown.innerHTML = '';
+            if (options.length === 0) {
+                statusEl.textContent = 'Tidak ada hasil';
+                dropdown.appendChild(statusEl);
+                return;
+            }
+            options.forEach(optionText => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'searchable-select-option';
+                optionEl.textContent = optionText;
+                optionEl.addEventListener('mousedown', () => { // mousedown agar terjadi sebelum blur
+                    selectOption(optionText);
+                });
+                dropdown.appendChild(optionEl);
+            });
+        }
 
-    document.querySelectorAll('.input-wrapper').forEach(wrapper => {
-        const input = wrapper.querySelector('input, textarea');
-        const clearIcon = wrapper.querySelector('.clear-icon');
-        if (!input || !clearIcon) return;
+        // Pilih sebuah opsi
+        function selectOption(value) {
+            input.value = value;
+            hiddenInput.value = value;
+            wrapper.classList.remove('open');
+            // Trigger event input agar divalidasi dan ikon hapus muncul (jika ada)
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        // Event listener untuk input
         input.addEventListener('input', () => {
-            clearIcon.style.display = input.value ? 'block' : 'none';
+            const query = input.value.toLowerCase();
+            const filtered = allOptions.filter(opt => opt.toLowerCase().includes(query));
+            renderOptions(filtered);
+            hiddenInput.value = ''; // Kosongkan value jika user mengetik manual
         });
-        clearIcon.addEventListener('click', () => {
-            input.value = '';
-            input.dispatchEvent(new Event('input'));
-            input.focus();
+
+        input.addEventListener('focus', () => {
+            wrapper.classList.add('open');
+            renderOptions(allOptions); // Tampilkan semua opsi saat pertama kali fokus
         });
+
+        // Sembunyikan dropdown jika klik di luar
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) {
+                wrapper.classList.remove('open');
+            }
+        });
+        
+        fetchData();
+    }
+
+    // Konfigurasi dan inisialisasi dropdown
+    setupSearchableDropdown({
+        wrapperId: 'domisili-wrapper',
+        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQMiSYxBNhT7Z5BkUqTbYs2o60cuMIG-tGChp8QpC1bvcgWM25SRDOVSeqC5u-DZsbcE4V7Hk6YvU1c/pub?gid=923893261&single=true&output=csv'
+    });
+
+    setupSearchableDropdown({
+        wrapperId: 'profesi-wrapper',
+        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTQG6LnmWxsk4IEJLkv2bAhxxgCoV9wNTemWVnN0mcHaDthpC_Vo69ySPCNQMBdP-n1A46tX6f1FYQT/pub?gid=2117269894&single=true&output=csv'
+    });
+
+    // --- Sisa Fungsionalitas (Ikon Hapus, Validasi, Modal) ---
+    // (Kode ini sebagian besar tetap, hanya validasi yang disesuaikan sedikit)
+
+    // Fungsionalitas Ikon Hapus
+    document.querySelectorAll('.input-wrapper .clear-icon').forEach(icon => {
+        const input = icon.previousElementSibling;
+        if (input) {
+            icon.addEventListener('click', () => {
+                input.value = '';
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                input.focus();
+            });
+            input.addEventListener('input', () => {
+                icon.style.display = input.value ? 'block' : 'none';
+            });
+        }
     });
 
     if (form) {
@@ -95,57 +124,48 @@ document.addEventListener('DOMContentLoaded', function() {
     const phoneInput = document.getElementById('no-hp');
     if (phoneInput) {
         phoneInput.addEventListener('input', (e) => {
-            const input = e.target;
-            let value = input.value;
-            const cursorPosition = input.selectionStart;
-            const originalLength = value.length;
-            if (value.startsWith('08')) value = '+62' + value.substring(1);
-            let sanitized = '';
-            if (value.length > 0) {
-                sanitized = value[0] === '+' ? '+' : '';
-                sanitized += value.substring(sanitized.length).replace(/[^0-9]/g, '');
-            }
-            if (input.value !== sanitized) {
-                input.value = sanitized;
-                const newLength = sanitized.length;
-                const newCursorPosition = cursorPosition + (newLength - originalLength);
-                input.setSelectionRange(newCursorPosition, newCursorPosition);
-            }
+            let value = e.target.value;
+            e.target.value = value[0] === '+' ? '+' + value.slice(1).replace(/[^0-9]/g, '') : value.replace(/[^0-9]/g, '');
         });
     }
 
+    // Validasi Form dan Modal
     if (form) {
         form.addEventListener('submit', function(event) {
-            event.preventDefault(); 
+            event.preventDefault();
             let allValid = true;
 
-            this.querySelectorAll('[required]').forEach(field => {
-                field.style.borderColor = 'var(--input-border-color)';
-            });
-            
-            this.querySelectorAll('[required]').forEach(field => {
-                let isValid = field.checkValidity();
-                if (field.id === 'no-hp' && field.value) {
-                    isValid = new RegExp(field.pattern).test(field.value);
-                } else if (!field.value.trim() && field.tagName !== 'SELECT') {
-                    isValid = false;
-                } else if (field.tagName === 'SELECT' && !field.value) {
-                    isValid = false;
-                }
-
-                if (!isValid) {
-                    allValid = false;
-                    field.style.borderColor = 'var(--danger-color)';
+            form.querySelectorAll('[required]').forEach(field => {
+                // Untuk dropdown custom, periksa hidden input
+                if (field.classList.contains('searchable-select-input')) {
+                    const hiddenField = field.parentElement.querySelector('input[type="hidden"]');
+                    if (!hiddenField || !hiddenField.value) {
+                        allValid = false;
+                        field.style.borderColor = 'var(--danger-color)';
+                    } else {
+                        field.style.borderColor = 'var(--input-border-color)';
+                    }
+                } else { // Validasi untuk field biasa
+                    if (!field.value.trim()) {
+                        allValid = false;
+                        field.style.borderColor = 'var(--danger-color)';
+                    } else {
+                        field.style.borderColor = 'var(--input-border-color)';
+                    }
                 }
             });
 
             if (allValid) {
                 showConfirmationModal();
             } else {
-                alert('Harap isi semua field yang wajib diisi dengan format yang benar.');
+                alert('Harap isi semua field yang wajib diisi.');
             }
         });
     }
+    
+    // ... (Fungsi showConfirmationModal dan sisanya tetap sama persis)
+    const modal = document.getElementById('confirmation-modal');
+    const modalPreview = document.getElementById('modal-preview');
 
     function showConfirmationModal() {
         modalPreview.innerHTML = '';
@@ -175,18 +195,12 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.classList.remove('visible');
     }
 
-    if (cancelBtn) cancelBtn.addEventListener('click', hideModal);
-
-    if (confirmBtn) {
-        confirmBtn.addEventListener('click', () => {
-            hideModal();
-            alert("Data (disimulasikan) berhasil dikirim!");
-        });
-    }
-    
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) hideModal();
-        });
-    }
+    document.getElementById('modal-cancel-btn')?.addEventListener('click', hideModal);
+    document.getElementById('modal-confirm-btn')?.addEventListener('click', () => {
+        hideModal();
+        alert("Data (disimulasikan) berhasil dikirim!");
+    });
+    modal?.addEventListener('click', (e) => {
+        if (e.target === modal) hideModal();
+    });
 }); 
