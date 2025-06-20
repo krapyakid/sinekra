@@ -105,7 +105,8 @@ textarea {
 
 /* Tambahkan padding kanan pada input yang punya ikon hapus */
 .input-wrapper input,
-.input-wrapper textarea {
+.input-wrapper textarea,
+.searchable-select-input {
     padding-right: 2.5rem;
 }
 
@@ -139,7 +140,8 @@ textarea {
 }
 
 /* Posisikan ikon di tengah untuk input satu baris */
-.input-wrapper input + .clear-icon {
+.input-wrapper input + .clear-icon,
+.searchable-select-wrapper .searchable-select-input + .clear-icon {
     top: 50%;
     transform: translateY(-50%);
 }
