@@ -1,4 +1,4 @@
- document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('alumni-form');
     const domisiliSelect = document.getElementById('domisili');
     const profesiSelect = document.getElementById('profesi');
@@ -22,11 +22,11 @@
     async function populateSelectFromCsv(config) {
         if (!config.element) return;
         
-        // Gunakan proxy untuk menghindari masalah CORS
-        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(config.url)}`;
-        
         try {
-            const response = await fetch(proxyUrl);
+            // Menghapus proxy dan fetch langsung dari URL.
+            // Ini bisa dilakukan karena halaman sudah online di GitHub Pages, bukan file lokal lagi.
+            const response = await fetch(config.url);
+            
             if (!response.ok) throw new Error(`Network response was not ok for ${config.element.id}`);
             const csvText = await response.text();
 
