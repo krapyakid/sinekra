@@ -47,8 +47,10 @@
             <div class="form-group">
                 <label for="angkatan">Angkatan Tahun<span class="required-indicator">*</span></label>
                 <div class="input-wrapper">
-                    <input type="text" inputmode="numeric" id="angkatan" name="angkatan" placeholder="Contoh: 2005" required pattern="\d{4}" maxlength="4">
-                    <span class="clear-icon" title="Hapus"></span>
+                    <select id="angkatan" name="angkatan" required>
+                        <option value="" selected disabled>Pilih Tahun Angkatan</option>
+                        <!-- Opsi tahun akan diisi oleh JavaScript -->
+                    </select>
                 </div>
             </div>
 
