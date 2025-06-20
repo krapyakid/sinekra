@@ -98,6 +98,15 @@ label {
     position: relative;
     display: flex;
     align-items: center;
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+}
+
+.input-wrapper:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .input-wrapper input,
@@ -321,13 +330,16 @@ textarea {
 /* Searchable Dropdown Styles */
 .searchable-select-wrapper {
     position: relative;
-    width: 100%;
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
 }
 
 .searchable-select-input {
     width: 100%;
     padding: 0.8rem 1rem;
-    border: 1px solid var(--input-border-color);
+    border: none;
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 1em;
