@@ -538,4 +538,71 @@ textarea {
 
 .custom-ol li {
     margin-bottom: 0.5rem;
+}
+
+/* Form Page Specific Styles */
+h1.form-title {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #444;
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.sub-group {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+.side-by-side-group {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.flex-grow {
+    flex: 1;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.file-upload-btn {
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    display: block;
+    border: 1px solid #ccc;
+}
+
+.file-upload-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.online-shop-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.online-shop-row select {
+    flex-basis: 150px;
+    padding: 10px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+    background-color: white;
+}
+
+.online-shop-row input {
+    flex-grow: 1;
+}
+
+.online-shop-row:last-child {
+    margin-bottom: 0;
 } 
