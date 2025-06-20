@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const select = document.getElementById('angkatan');
         if (!select) return;
 
-        const currentYear = new Date().getFullYear();
+        const endYear = new Date().getFullYear() - 1; // Tahun maksimal adalah tahun lalu
         const startYear = 1950;
 
-        for (let year = currentYear; year >= startYear; year--) {
+        for (let year = endYear; year >= startYear; year--) {
             const option = document.createElement('option');
             option.value = year;
             option.textContent = year;
