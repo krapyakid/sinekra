@@ -441,4 +441,104 @@ textarea {
 
 .kebab-menu-dropdown a:hover {
     background-color: #f5f5f5;
+}
+
+/* Home Page Content Styles */
+.content-center {
+    text-align: center;
+    padding: 0 20px; /* Add some padding on the sides */
+}
+
+.main-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 0;
+    margin-bottom: 2rem;
+}
+
+.date-banner {
+    background-color: #d9534f; /* A shade of red */
+    color: white;
+    padding: 10px 20px;
+    display: inline-block;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    position: relative;
+    left: -20px; /* Aligns with the left edge of the text block */
+    text-align: left;
+}
+
+.section {
+    margin-bottom: 2rem;
+    text-align: left; /* Align text inside sections to the left */
+}
+
+.section h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #444;
+}
+
+.section p, .section li {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+.quote {
+    background-color: #f9f9f9;
+    border-left: 5px solid #ccc;
+    margin: 1.5em 0;
+    padding: 1em 1.5em;
+    font-style: italic;
+}
+
+.quote p {
+    margin: 0;
+}
+
+.quote footer {
+    text-align: right;
+    margin-top: 0.5em;
+    font-style: normal;
+    font-weight: bold;
+    color: #777;
+}
+
+.separator {
+    height: 1px;
+    width: 80px;
+    background-color: #ddd;
+    margin: 3rem auto; /* Center the separator */
+    position: relative;
+}
+
+.separator::before {
+    content: '*';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    color: #d9534f;
+    padding: 0 10px;
+    font-size: 1.5rem;
+}
+
+.custom-ol {
+    padding-left: 20px; /* Standard list indentation */
+    text-align: left;
+}
+
+.custom-ol li {
+    margin-bottom: 0.5rem;
 } 
