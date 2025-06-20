@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -21,8 +21,9 @@
                 </nav>
             </div>
             <img src="assets/banner_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="logo">
+            <div class="header-info">Sabtu, 21/06/2025</div>
         </header>
-        <h1>Form Data Anggota Sinergi Krapyak</h1>
+        <h1 class="form-title">Form Data Anggota Sinergi Santri Krapyak</h1>
         <form id="alumni-form" class="form-grid" action="#" method="POST" novalidate>
             
             <!-- ... All form-group divs remain unchanged ... -->
@@ -108,6 +109,83 @@
                 <div class="input-wrapper">
                     <textarea id="prospek" name="prospek" maxlength="150" placeholder="Contoh : Mencari reseller, Butuh mitra distribusi, Ingin bergabung koperasi, Open rekrutmen atau pembinaan, dll"></textarea>
                     <span class="clear-icon" title="Hapus"></span>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="nama-usaha">Nama Toko/Usaha</label>
+                <div class="input-wrapper">
+                    <input type="text" id="nama-usaha" name="nama_usaha" maxlength="100">
+                    <span class="clear-icon" title="Hapus"></span>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label>Website & Toko Online</label>
+                <div class="sub-group">
+                    <div class="side-by-side-group">
+                        <div class="input-wrapper flex-grow">
+                            <input type="url" name="website_url" placeholder="URL Website (https://...)" pattern="https://.*">
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="file" name="logo_upload" id="logo-upload" accept="image/*">
+                            <label for="logo-upload" class="file-upload-btn">Upload Logo</label>
+                        </div>
+                    </div>
+                    <small>Logo maks. 200KB.</small>
+                </div>
+                
+                <div class="sub-group">
+                    <div class="online-shop-row">
+                        <select name="platform_1">
+                            <option value="Tokopedia">Tokopedia</option>
+                            <option value="Shopee">Shopee</option>
+                            <option value="Blibli">Blibli</option>
+                            <option value="Lazada">Lazada</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        <input type="url" name="platform_url_1" placeholder="URL Toko di Platform">
+                    </div>
+                    <div class="online-shop-row">
+                        <select name="platform_2">
+                            <option value="Tokopedia">Tokopedia</option>
+                            <option value="Shopee">Shopee</option>
+                            <option value="Blibli">Blibli</option>
+                            <option value="Lazada">Lazada</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        <input type="url" name="platform_url_2" placeholder="URL Toko di Platform">
+                    </div>
+                    <div class="online-shop-row">
+                        <select name="platform_3">
+                            <option value="Tokopedia">Tokopedia</option>
+                            <option value="Shopee">Shopee</option>
+                            <option value="Blibli">Blibli</option>
+                            <option value="Lazada">Lazada</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        <input type="url" name="platform_url_3" placeholder="URL Toko di Platform">
+                    </div>
+                    <div class="online-shop-row">
+                        <select name="platform_4">
+                            <option value="Tokopedia">Tokopedia</option>
+                            <option value="Shopee">Shopee</option>
+                            <option value="Blibli">Blibli</option>
+                            <option value="Lazada">Lazada</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        <input type="url" name="platform_url_4" placeholder="URL Toko di Platform">
+                    </div>
+                    <div class="online-shop-row">
+                        <select name="platform_5">
+                            <option value="Tokopedia">Tokopedia</option>
+                            <option value="Shopee">Shopee</option>
+                            <option value="Blibli">Blibli</option>
+                            <option value="Lazada">Lazada</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        <input type="url" name="platform_url_5" placeholder="URL Toko di Platform">
+                    </div>
                 </div>
             </div>
 
