@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Data Anggota</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Form Data Anggota Sinergi Krapyak</h1>
+        <form id="alumni-form" class="form-grid" action="#" method="POST" novalidate>
+            
+            <div class="form-group">
+                <label for="nama-lengkap">Nama Lengkap</label>
+                <div class="input-wrapper">
+                    <input type="text" id="nama-lengkap" name="nama_lengkap" required maxlength="80">
+                    <span class="clear-icon" title="Hapus"></span>
+                </div>
+                <small class="char-limit-info">Maksimal 80 karakter</small>
+            </div>
+
+            <div class="form-group">
+                <label for="panggilan">Nama Panggilan</label>
+                <div class="input-wrapper">
+                    <input type="text" id="panggilan" name="panggilan" required maxlength="30">
+                    <span class="clear-icon" title="Hapus"></span>
+                </div>
+                <small class="char-limit-info">Maksimal 30 karakter</small>
+            </div>
+
+            <div class="form-group">
+                <label for="angkatan">Angkatan Tahun</label>
+                <div class="input-wrapper">
+                    <input type="number" id="angkatan" name="angkatan" placeholder="Contoh: 2005" required>
+                    <span class="clear-icon" title="Hapus"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="komplek">Komplek</label>
+                <div class="input-wrapper">
+                    <input type="text" id="komplek" name="komplek" required maxlength="30">
+                    <span class="clear-icon" title="Hapus"></span>
+                </div>
+                <small class="char-limit-info">Maksimal 30 karakter</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="domisili">Domisili Saat Ini</label>
+                <div class="input-wrapper">
+                    <select id="domisili" name="domisili" required>
+                        <option id="domisili-loading" value="" disabled selected>Memuat data...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="no-hp">No. HP/WA</label>
+                <div class="input-wrapper">
+                    <input type="tel" id="no-hp" name="no_hp" required placeholder="Contoh: +6281234567890" pattern="^\+62[0-9]{9,15}$" maxlength="16">
+                    <span class="clear-icon" title="Hapus"></span>
+                </div>
+                <small class="char-limit-info">Maksimal 16 karakter</small>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="profesi">Profesi/Aktifitas Saat Ini</label>
+                <div class="input-wrapper">
+                    <select id="profesi" name="profesi" required>
+                        <option value="" disabled selected>Memuat data...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="penjelasan-usaha">Detail Profesi/Aktifitas</label>
+                <div class="input-wrapper">
+                    <textarea id="penjelasan-usaha" name="penjelasan_usaha" maxlength="300"></textarea>
+                    <span class="clear-icon" title="Hapus"></span>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="prospek">Prospek/Kerjasama yang Ditawarkan</label>
+                <div class="input-wrapper">
+                    <textarea id="prospek" name="prospek" maxlength="150" placeholder="Contoh : Mencari reseller, Butuh mitra distribusi, Ingin bergabung koperasi, Open rekrutmen atau pembinaan, dll"></textarea>
+                    <span class="clear-icon" title="Hapus"></span>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="ide">Usulan untuk Sinergi Ekonomi Krapyak</label>
+                <div class="input-wrapper">
+                    <textarea id="ide" name="ide" maxlength="200" placeholder="Ide, Saran, Kritik, atau Tawaran Kontribusi"></textarea>
+                    <span class="clear-icon" title="Hapus"></span>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="lain-lain">Lain-Lain</label>
+                <div class="input-wrapper">
+                    <textarea id="lain-lain" name="lain_lain" maxlength="200"></textarea>
+                    <span class="clear-icon" title="Hapus"></span>
+                </div>
+            </div>
+
+            <div class="form-group full-width button-group">
+                <button type="reset" class="reset-btn">Reset</button>
+                <button type="submit" class="submit-btn">Submit Data</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="confirmation-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Konfirmasi Data</h2>
+            <p>Mohon periksa kembali data yang Anda masukkan. Apakah Anda yakin data sudah benar dan ingin dikirim?</p>
+            <div id="modal-preview" class="modal-preview-grid">
+                <!-- Data preview akan disisipkan oleh JavaScript -->
+            </div>
+            <div class="modal-button-group">
+                <button type="button" id="modal-cancel-btn" class="modal-btn modal-btn-cancel">Batal</button>
+                <button type="button" id="modal-confirm-btn" class="modal-btn modal-btn-confirm">Kirim Sekarang</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html> 

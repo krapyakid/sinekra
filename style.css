@@ -1,0 +1,296 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --background-color: #f4f7f6;
+    --form-bg-color: #ffffff;
+    --input-border-color: #ccc;
+    --input-focus-color: #3498db;
+    --text-color: #333;
+    --label-color: #555;
+    --button-bg-color: #3498db;
+    --button-hover-bg-color: #2980b9;
+    --reset-bg-color: #95a5a6;
+    --reset-hover-bg-color: #7f8c8d;
+    --danger-color: #e74c3c;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    background-color: var(--form-bg-color);
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 2.5rem;
+    font-size: 2.25em;
+    font-weight: 600;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.char-limit-info {
+    font-size: 0.85em;
+    color: #666;
+    font-style: italic;
+    margin-top: 6px;
+    text-align: right;
+    height: 1em; /* Reserve space to prevent layout shift */
+}
+
+label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--label-color);
+    font-size: 1em;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+}
+
+/* Tambahkan padding kanan pada input yang punya ikon hapus */
+.input-wrapper input,
+.input-wrapper textarea {
+    padding-right: 2.5rem;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--input-focus-color);
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.clear-icon {
+    position: absolute;
+    right: 12px;
+    width: 20px;
+    height: 20px;
+    background-image: url('assets/erase-svgrepo.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    opacity: 0.5;
+    display: none; /* Hidden by default */
+    z-index: 2;
+    transition: opacity 0.2s;
+}
+
+/* Posisikan ikon di tengah untuk input satu baris */
+.input-wrapper input + .clear-icon {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Posisikan ikon di atas untuk textarea */
+.input-wrapper textarea + .clear-icon {
+    top: 12px;
+    transform: none;
+}
+
+.clear-icon:hover {
+    opacity: 1;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.submit-btn,
+.reset-btn {
+    flex: 1;
+    background-color: var(--button-bg-color);
+    color: white;
+    padding: 0.9rem 1.25rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.submit-btn:hover {
+    background-color: var(--button-hover-bg-color);
+    transform: translateY(-2px);
+}
+
+.reset-btn {
+    background-color: var(--reset-bg-color);
+}
+
+.reset-btn:hover {
+    background-color: var(--reset-hover-bg-color);
+    transform: translateY(-2px);
+}
+        
+#domisili-loading {
+    font-style: italic;
+    color: #777;
+}
+
+/* Responsive layout */
+@media (min-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.75rem;
+    }
+    .full-width {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.visible .modal-content {
+    transform: scale(1);
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: var(--primary-color);
+}
+
+.modal-preview-grid {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+    font-size: 0.95em;
+    border-top: 1px solid #eee;
+    padding-top: 1.5rem;
+}
+
+.preview-label {
+    font-weight: 600;
+    color: var(--label-color);
+    padding-right: 1rem;
+}
+
+.preview-value {
+    word-break: break-word;
+    white-space: pre-wrap; /* To respect newlines in textarea */
+}
+
+.modal-button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.modal-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.modal-btn-cancel {
+    background-color: #f1f1f1;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.modal-btn-cancel:hover {
+    background-color: #e1e1e1;
+}
+
+.modal-btn-confirm {
+    background-color: var(--button-bg-color);
+    color: #fff;
+}
+
+.modal-btn-confirm:hover {
+    background-color: var(--button-hover-bg-color);
+} 
