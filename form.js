@@ -33,8 +33,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await fetch(config.url);
                 if (!response.ok) throw new Error('Network response was not ok');
                 const csvText = await response.text();
-                const rows = csvText.trim().split('\\n').slice(1);
-                allOptions = rows.map(row => row.trim().replace(/^"|"$/g, '').split(/,(.+)/)[1] || row.trim().replace(/^"|"$/g, '')).filter(Boolean);
+                const rows = csvText.trim().split(/\\r?\\n/).slice(1);
+                allOptions = rows.map(row => {
+                    const value = row.trim().replace(/^"|"$/g, '');
+                    const parts = value.split(/,(.+)/);
+                    return (parts[1] || parts[0]).trim();
+                }).filter(Boolean);
                 renderOptions(allOptions);
             } catch (error) {
                 console.error(`Gagal mengambil data untuk ${config.wrapperId}:`, error);
