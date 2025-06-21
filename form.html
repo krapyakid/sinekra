@@ -24,7 +24,7 @@
             <div class="header-info">Sabtu, 21/06/2025</div>
         </header>
         <h1 class="form-title">Form Data Anggota Sinergi Ekonomi Santri Krapyak</h1>
-        <form id="alumni-form" class="form-grid" action="https://script.google.com/macros/s/AKfycbzvH3uqGJ_cPhOi4147NpUWGVtTzwcl9rWTZns7FYBQgoOGEZEeQEb0CVOIyKubeilS/exec" method="POST" novalidate>
+        <form id="alumni-form" class="form-grid" action="https://script.google.com/macros/s/AKfycbzkclYyrN8eA2iBahdt2oKGy77h9tjiNtmhZCmVJgXC72dnEo8qmFBQ1jI3AHE-I6Mi/exec" method="POST" enctype="multipart/form-data" novalidate>
             
             <div class="form-group">
                 <label for="nama-lengkap">Nama Lengkap<span class="required-indicator">*</span></label>
@@ -72,7 +72,7 @@
                     <div class="searchable-select-dropdown">
                         <div class="searchable-select-status">Memuat data...</div>
                     </div>
-                    <input type="hidden" name="domisili" id="domisili-value" required>
+                    <input type="hidden" name="domisili" id="domisili-value">
                 </div>
             </div>
 
@@ -93,7 +93,7 @@
                     <div class="searchable-select-dropdown">
                         <div class="searchable-select-status">Memuat data...</div>
                     </div>
-                    <input type="hidden" name="profesi" id="profesi-value" required>
+                    <input type="hidden" name="profesi" id="profesi-value">
                 </div>
             </div>
 
@@ -179,6 +179,11 @@
                 <button type="reset" class="reset-btn">Reset</button>
                 <button type="submit" class="submit-btn">Lanjutkan</button>
             </div>
+
+            <!-- Hidden fields for extra data -->
+            <input type="hidden" id="ip-address" name="ip_by">
+            <input type="hidden" id="device-info" name="device">
+
         </form>
     </div>
 
@@ -199,4 +204,4 @@
     <script src="form.js"></script>
 
 </body>
-</html>
+</html> 
