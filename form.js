@@ -47,10 +47,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 // --- LOGIKA PARSING BARU YANG LEBIH KUAT DAN SEDERHANA ---
                 const rows = csvText.trim().split(/\r?\n/).slice(1);
                 allOptions = rows.map(row => {
-                    const columns = row.split(',');
-                    if (columns.length === 0) return null;
-                    // Ambil kolom terakhir, bersihkan dari spasi dan kutip ganda
-                    return columns[columns.length - 1].trim().replace(/^"|"$/g, '');
+                    const cleanRow = row.trim().replace(/^"|"$/g, '');
+                    // Pisahkan pada koma pertama saja
+                    const parts = cleanRow.split(/,(.+)/); 
+
+                    // Jika tidak ada koma, ambil seluruh baris.
+                    // Jika ada koma, ambil semua teks SETELAH koma pertama.
+                    return (parts[1] || parts[0]).trim();
                 }).filter(Boolean); // Hapus baris yang kosong atau null
 
                 if (allOptions.length === 0) {
