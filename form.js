@@ -33,16 +33,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await fetch(config.url);
                 if (!response.ok) throw new Error('Network response was not ok');
                 const csvText = await response.text();
-                const rows = csvText.trim().split(/\\r?\\n/).slice(1);
+                
+                // PERBAIKAN FINAL & PENYEDERHANAAN LOGIKA PARSING
+                const rows = csvText.trim().split(/\\r?\\n/).slice(1); // Mulai dari baris kedua (setelah header)
                 allOptions = rows.map(row => {
-                    const value = row.trim().replace(/^"|"$/g, '');
-                    const parts = value.split(/,(.+)/);
-                    return (parts[1] || parts[0]).trim();
-                }).filter(Boolean);
+                    // Ambil saja konten hingga koma pertama, atau seluruh baris jika tidak ada koma.
+                    // Ini cara paling aman untuk memastikan data utama terambil.
+                    const parts = row.split(',');
+                    return parts[0].trim().replace(/^"|"$/g, ''); // Ambil bagian pertama, bersihkan, dan hapus kutip
+                }).filter(Boolean); // Hapus baris kosong
+
+                if (allOptions.length === 0) {
+                    throw new Error("Data berhasil di-fetch, namun hasil parsing kosong.");
+                }
+
                 renderOptions(allOptions);
             } catch (error) {
-                console.error(`Gagal mengambil data untuk ${config.wrapperId}:`, error);
-                if (statusEl) statusEl.textContent = 'Gagal memuat data';
+                console.error(`Gagal mengambil atau memproses data untuk ${config.wrapperId}:`, error);
+                if (statusEl) statusEl.textContent = 'Gagal memuat data.';
             }
         }
 
