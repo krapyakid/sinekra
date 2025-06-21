@@ -84,7 +84,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const query = input.value.toLowerCase();
             const filtered = allOptions.filter(opt => opt.toLowerCase().includes(query));
             renderOptions(filtered);
-            hiddenInput.value = '';
+
+            // FIX: Hanya hapus hidden value jika teks yang diketik manual
+            // tidak cocok persis dengan salah satu opsi yang tersedia.
+            // Ini mencegah nilai dihapus setelah dipilih dari dropdown.
+            const isCompleteMatch = allOptions.some(opt => opt.toLowerCase() === query);
+            if (!isCompleteMatch) {
+                hiddenInput.value = '';
+            }
         });
 
         input.addEventListener('focus', () => {
