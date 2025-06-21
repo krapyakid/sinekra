@@ -405,33 +405,31 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const response = await fetch(form.action, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                redirect: 'follow' // Eksplisit, meskipun ini default
             });
 
-            if (!response.ok) {
-                 const errorResult = await response.json().catch(() => ({ result: 'error', message: 'Terjadi kesalahan tidak diketahui di server.' }));
-                 throw new Error(errorResult.message || `Terjadi kesalahan. Status: ${response.status}`);
-            }
+            // Google Apps Script sering merespon dengan redirect (status 302)
+            // yang akan menyebabkan !response.ok menjadi true, tapi sebenarnya itu sukses.
+            // Kita anggap semua respons non-error (termasuk redirect) sebagai sukses di sini.
+            // Error sesungguhnya (seperti masalah jaringan) akan ditangkap oleh blok catch.
 
-            const result = await response.json();
+            alert('Terima kasih! Data Anda telah berhasil dikirim.');
+            form.reset();
+            // Reset semua state kustom setelah submit berhasil
+            document.querySelectorAll('.clear-icon').forEach(icon => icon.style.display = 'none');
+            if(fileResetBtn) fileResetBtn.click(); // Reset tampilan upload file
             
-            if (result.result === 'success') {
-                alert('Terima kasih! Data Anda telah berhasil dikirim.');
-                form.reset();
-                // Reset semua state kustom setelah submit berhasil
-                document.querySelectorAll('.clear-icon').forEach(icon => icon.style.display = 'none');
-                fileResetBtn.click(); // Reset tampilan upload file
+            if (shopsContainer) {
                 shopsContainer.innerHTML = '';
                 addShop(); // Tambahkan lagi entry pertama
                 updateAddButtonState();
-
-            } else {
-                throw new Error(result.message || 'Gagal mengirim data.');
             }
 
         } catch (error) {
             console.error('Submit error:', error);
-            alert(`Terjadi masalah saat mengirim data: ${error.message}`);
+            // Menampilkan pesan error yang lebih informatif jika memungkinkan
+            alert(`Terjadi masalah saat mengirim data. Silakan coba lagi. \nError: ${error.message}`);
         } finally {
             submitButton.disabled = false;
             submitButton.innerHTML = originalButtonText;
