@@ -114,7 +114,7 @@
             </div>
 
             <div class="form-group full-width">
-                <label for="nama-usaha">Nama Toko/Usaha</label>
+                <label for="nama-usaha">Nama Toko/Usaha <small class="optional-indicator">(Jika Ada)</small></label>
                 <div class="input-wrapper">
                     <input type="text" id="nama-usaha" name="nama_usaha" maxlength="80">
                     <span class="clear-icon" title="Hapus"></span>
@@ -123,7 +123,7 @@
             </div>
 
             <div class="form-group full-width">
-                <label for="url-gmaps">URL Google Maps Tempat Usaha</label>
+                <label for="url-gmaps">Tautan Lokasi Usaha di Google Maps</label>
                 <div class="input-wrapper">
                     <input type="text" id="url-gmaps" name="url_gmaps" placeholder="Contoh: https://maps.app.goo.gl/xxxx" pattern="https?://(maps\\.app\\.goo\\.gl/.*|.*\\.google\\.com/maps/.*)" title="Harap masukkan URL Google Maps yang valid.">
                     <span class="clear-icon" title="Hapus"></span>
@@ -131,82 +131,32 @@
             </div>
 
             <div class="form-group full-width">
-                <label>Website & Toko Online <small class="optional-indicator">(Jika memiliki)</small></label>
-                <div class="sub-group">
-                    <div class="side-by-side-group">
-                        <div class="input-wrapper flex-grow">
-                            <input type="text" name="website_url" placeholder="URL Website (https://...)" pattern="https?://.+" title="Harap masukkan URL yang valid.">
-                        </div>
-                        <div class="input-wrapper logo-upload-wrapper">
-                            <input type="file" name="logo_upload" id="logo-upload" accept="image/*">
-                            <label for="logo-upload" class="file-upload-btn">Upload Logo Perusahaan</label>
-                             <small>Logo maks. 200KB.</small>
-                        </div>
+                <label for="website-usaha">Website Usaha <small class="optional-indicator">(Jika Ada)</small></label>
+                <div class="input-wrapper">
+                    <input type="text" id="website-usaha" name="website_url" placeholder="Contoh: https://namausaha.com" pattern="https?://.+" title="Harap masukkan URL yang valid.">
+                    <span class="clear-icon" title="Hapus"></span>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="logo-upload">Upload Logo Usaha <small class="optional-indicator">(Jika Ada)</small></label>
+                <div class="input-wrapper file-upload-wrapper">
+                    <input type="file" name="logo_upload" id="logo-upload" accept="image/png, image/jpeg, image/gif" style="display: none;">
+                    <label for="logo-upload" class="file-upload-btn">Pilih File</label>
+                    <div id="file-info" style="display: none;">
+                        <span id="file-name" class="file-name-display"></span>
+                        <button type="button" id="file-reset" class="file-reset-btn">&times;</button>
                     </div>
                 </div>
-                
-                <div class="sub-group">
-                    <div class="online-shop-row">
-                        <select name="platform_1">
-                            <option value="" selected disabled>Pilih Platform</option>
-                            <option value="Tokopedia">Tokopedia</option>
-                            <option value="Shopee">Shopee</option>
-                            <option value="Blibli">Blibli</option>
-                            <option value="Lazada">Lazada</option>
-                            <option value="Lainnya">Lainnya</option>
-                        </select>
-                        <input type="text" name="platform_url_1" placeholder="URL/Link Toko Olshop" pattern="https?://.+" title="Harap masukkan URL yang valid.">
-                        <span class="clear-row-icon" title="Hapus Baris">×</span>
-                    </div>
-                    <div class="online-shop-row">
-                        <select name="platform_2">
-                            <option value="" selected disabled>Pilih Platform</option>
-                            <option value="Tokopedia">Tokopedia</option>
-                            <option value="Shopee">Shopee</option>
-                            <option value="Blibli">Blibli</option>
-                            <option value="Lazada">Lazada</option>
-                            <option value="Lainnya">Lainnya</option>
-                        </select>
-                        <input type="text" name="platform_url_2" placeholder="URL/Link Toko Olshop" pattern="https?://.+" title="Harap masukkan URL yang valid.">
-                        <span class="clear-row-icon" title="Hapus Baris">×</span>
-                    </div>
-                    <div class="online-shop-row">
-                        <select name="platform_3">
-                            <option value="" selected disabled>Pilih Platform</option>
-                            <option value="Tokopedia">Tokopedia</option>
-                            <option value="Shopee">Shopee</option>
-                            <option value="Blibli">Blibli</option>
-                            <option value="Lazada">Lazada</option>
-                            <option value="Lainnya">Lainnya</option>
-                        </select>
-                        <input type="text" name="platform_url_3" placeholder="URL/Link Toko Olshop" pattern="https?://.+" title="Harap masukkan URL yang valid.">
-                        <span class="clear-row-icon" title="Hapus Baris">×</span>
-                    </div>
-                    <div class="online-shop-row">
-                        <select name="platform_4">
-                            <option value="" selected disabled>Pilih Platform</option>
-                            <option value="Tokopedia">Tokopedia</option>
-                            <option value="Shopee">Shopee</option>
-                            <option value="Blibli">Blibli</option>
-                            <option value="Lazada">Lazada</option>
-                            <option value="Lainnya">Lainnya</option>
-                        </select>
-                        <input type="text" name="platform_url_4" placeholder="URL/Link Toko Olshop" pattern="https?://.+" title="Harap masukkan URL yang valid.">
-                        <span class="clear-row-icon" title="Hapus Baris">×</span>
-                    </div>
-                    <div class="online-shop-row">
-                        <select name="platform_5">
-                            <option value="" selected disabled>Pilih Platform</option>
-                            <option value="Tokopedia">Tokopedia</option>
-                            <option value="Shopee">Shopee</option>
-                            <option value="Blibli">Blibli</option>
-                            <option value="Lazada">Lazada</option>
-                            <option value="Lainnya">Lainnya</option>
-                        </select>
-                        <input type="text" name="platform_url_5" placeholder="URL/Link Toko Olshop" pattern="https?://.+" title="Harap masukkan URL yang valid.">
-                        <span class="clear-row-icon" title="Hapus Baris">×</span>
-                    </div>
+                <small class="char-limit-info">Maks. 200KB. Format: JPG, PNG, GIF.</small>
+            </div>
+
+            <div class="form-group full-width">
+                <label>Toko Online <small class="optional-indicator">(Jika Ada, maks. 5)</small></label>
+                <div id="online-shops-container">
+                    <!-- Konten dinamis untuk toko online akan ditambahkan di sini oleh JavaScript -->
                 </div>
+                <button type="button" id="add-shop-btn" class="add-btn mt-2">Tambah Link Olshop</button>
             </div>
 
             <div class="form-group full-width">
