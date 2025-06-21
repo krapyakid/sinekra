@@ -51,6 +51,7 @@
                         <option value="" selected disabled>Pilih Tahun Angkatan</option>
                         <!-- Opsi tahun akan diisi oleh JavaScript -->
                     </select>
+                    <span class="clear-icon" title="Hapus"></span>
                 </div>
             </div>
 
@@ -66,7 +67,7 @@
             <div class="form-group">
                 <label for="domisili-search">Domisili Saat Ini<span class="required-indicator">*</span></label>
                 <div class="searchable-select-wrapper" id="domisili-wrapper">
-                    <input type="text" id="domisili-search" class="searchable-select-input" placeholder="Ketik untuk mencari domisili..." autocomplete="off" required>
+                    <input type="text" id="domisili-search" class="searchable-select-input" placeholder="Ketik untuk mencari domisili..." autocomplete="off">
                     <span class="clear-icon" title="Hapus"></span>
                     <div class="searchable-select-dropdown">
                         <div class="searchable-select-status">Memuat data...</div>
@@ -87,7 +88,7 @@
             <div class="form-group full-width">
                 <label for="profesi-search">Profesi/Aktifitas Saat Ini<span class="required-indicator">*</span></label>
                 <div class="searchable-select-wrapper" id="profesi-wrapper">
-                    <input type="text" id="profesi-search" class="searchable-select-input" placeholder="Ketik untuk mencari profesi..." autocomplete="off" required>
+                    <input type="text" id="profesi-search" class="searchable-select-input" placeholder="Ketik untuk mencari profesi..." autocomplete="off">
                     <span class="clear-icon" title="Hapus"></span>
                     <div class="searchable-select-dropdown">
                         <div class="searchable-select-status">Memuat data...</div>
@@ -124,7 +125,7 @@
             <div class="form-group full-width">
                 <label for="url-gmaps">URL Google Maps Tempat Usaha</label>
                 <div class="input-wrapper">
-                    <input type="url" id="url-gmaps" name="url_gmaps" placeholder="Contoh: https://maps.app.goo.gl/xxxx">
+                    <input type="url" id="url-gmaps" name="url_gmaps" placeholder="Contoh: https://maps.app.goo.gl/xxxx" pattern="https://(maps\\.app\\.goo\\.gl/.*|.*google\\..*/maps/.*)" title="Harap masukkan URL Google Maps yang valid (dimulai dengan https://)">
                     <span class="clear-icon" title="Hapus"></span>
                 </div>
             </div>
@@ -134,7 +135,7 @@
                 <div class="sub-group">
                     <div class="side-by-side-group">
                         <div class="input-wrapper flex-grow">
-                            <input type="url" name="website_url" placeholder="URL Website (https://...)" pattern="https://.*">
+                            <input type="url" name="website_url" placeholder="URL Website (https://...)" pattern="https://.*" title="Harap masukkan URL yang valid, diawali dengan https://">
                         </div>
                         <div class="input-wrapper logo-upload-wrapper">
                             <input type="file" name="logo_upload" id="logo-upload" accept="image/*">
@@ -154,7 +155,7 @@
                             <option value="Lazada">Lazada</option>
                             <option value="Lainnya">Lainnya</option>
                         </select>
-                        <input type="url" name="platform_url_1" placeholder="URL/Link Toko Olshop">
+                        <input type="url" name="platform_url_1" placeholder="URL/Link Toko Olshop" pattern="https://.*" title="Harap masukkan URL yang valid, diawali dengan https://">
                         <span class="clear-row-icon" title="Hapus Baris">×</span>
                     </div>
                     <div class="online-shop-row">
@@ -166,7 +167,7 @@
                             <option value="Lazada">Lazada</option>
                             <option value="Lainnya">Lainnya</option>
                         </select>
-                        <input type="url" name="platform_url_2" placeholder="URL/Link Toko Olshop">
+                        <input type="url" name="platform_url_2" placeholder="URL/Link Toko Olshop" pattern="https://.*" title="Harap masukkan URL yang valid, diawali dengan https://">
                         <span class="clear-row-icon" title="Hapus Baris">×</span>
                     </div>
                     <div class="online-shop-row">
@@ -178,7 +179,7 @@
                             <option value="Lazada">Lazada</option>
                             <option value="Lainnya">Lainnya</option>
                         </select>
-                        <input type="url" name="platform_url_3" placeholder="URL/Link Toko Olshop">
+                        <input type="url" name="platform_url_3" placeholder="URL/Link Toko Olshop" pattern="https://.*" title="Harap masukkan URL yang valid, diawali dengan https://">
                         <span class="clear-row-icon" title="Hapus Baris">×</span>
                     </div>
                     <div class="online-shop-row">
@@ -190,7 +191,7 @@
                             <option value="Lazada">Lazada</option>
                             <option value="Lainnya">Lainnya</option>
                         </select>
-                        <input type="url" name="platform_url_4" placeholder="URL/Link Toko Olshop">
+                        <input type="url" name="platform_url_4" placeholder="URL/Link Toko Olshop" pattern="https://.*" title="Harap masukkan URL yang valid, diawali dengan https://">
                         <span class="clear-row-icon" title="Hapus Baris">×</span>
                     </div>
                     <div class="online-shop-row">
@@ -202,7 +203,7 @@
                             <option value="Lazada">Lazada</option>
                             <option value="Lainnya">Lainnya</option>
                         </select>
-                        <input type="url" name="platform_url_5" placeholder="URL/Link Toko Olshop">
+                        <input type="url" name="platform_url_5" placeholder="URL/Link Toko Olshop" pattern="https://.*" title="Harap masukkan URL yang valid, diawali dengan https://">
                         <span class="clear-row-icon" title="Hapus Baris">×</span>
                     </div>
                 </div>
