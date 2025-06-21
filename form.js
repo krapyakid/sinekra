@@ -191,23 +191,21 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             let allValid = true;
 
-            // 1. Reset border pada semua wrapper
+            // 1. Reset border
             form.querySelectorAll('.input-wrapper, .searchable-select-wrapper').forEach(wrapper => {
                 wrapper.style.borderColor = 'var(--input-border-color)';
             });
 
-            // 2. Lakukan validasi pada setiap field yang required
+            // 2. Validasi field required bawaan
             form.querySelectorAll('input[required], textarea[required], select[required]').forEach(field => {
                 if (!field.checkValidity()) {
                     allValid = false;
-                    const wrapper = field.closest('.input-wrapper, .searchable-select-wrapper');
-                    if (wrapper) {
-                        wrapper.style.borderColor = 'var(--danger-color)';
-                    }
+                    const wrapper = field.closest('.input-wrapper');
+                    if (wrapper) wrapper.style.borderColor = 'var(--danger-color)';
                 }
             });
 
-            // 3. Validasi manual untuk dropdown custom
+            // 3. Validasi dropdown custom
             ['domisili', 'profesi'].forEach(id => {
                 const wrapper = document.getElementById(`${id}-wrapper`);
                 const hiddenInput = document.getElementById(`${id}-value`);
@@ -217,14 +215,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
-            // 4. Validasi manual untuk pattern URL (yang tidak required)
+            // 4. Validasi pattern untuk URL
             form.querySelectorAll('input[pattern]').forEach(field => {
-                if (field.value && !field.checkValidity()) { // Hanya validasi jika ada isinya
+                if (field.value && !field.checkValidity()) {
                     allValid = false;
                     const wrapper = field.closest('.input-wrapper');
-                    if (wrapper) {
-                        wrapper.style.borderColor = 'var(--danger-color)';
-                    }
+                    if (wrapper) wrapper.style.borderColor = 'var(--danger-color)';
                 }
             });
 
@@ -251,18 +247,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- START OF REVISED MODAL AND SUBMISSION LOGIC ---
+    // === START: BLOK MODAL DAN SUBMIT YANG DI-REFACTOR TOTAL (FINAL) ===
     const modal = document.getElementById('confirmation-modal');
     const modalPreview = document.getElementById('modal-preview');
     const confirmSubmitBtn = document.getElementById('confirm-submit');
     const cancelSubmitBtn = document.getElementById('cancel-submit');
 
     function showConfirmationModal() {
-        modalPreview.innerHTML = ''; // Clear previous preview
+        if (!modalPreview) return;
+        modalPreview.innerHTML = '';
 
         const addPreviewRow = (label, value) => {
             if (!value || (Array.isArray(value) && value.length === 0)) return;
-
             const row = document.createElement('div');
             row.className = 'preview-row';
             const labelDiv = document.createElement('div');
@@ -272,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
             valueDiv.className = 'preview-value';
 
             if (value instanceof File) {
-                 valueDiv.textContent = value.name ? `${value.name} (${(value.size / 1024).toFixed(1)} KB)` : 'Tidak ada logo';
+                valueDiv.textContent = value.name ? `${value.name} (${(value.size / 1024).toFixed(1)} KB)` : 'Tidak ada logo';
             } else if (Array.isArray(value)) {
                 const list = document.createElement('ul');
                 list.style.margin = '0';
@@ -286,13 +282,11 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 valueDiv.textContent = value;
             }
-            
             row.appendChild(labelDiv);
             row.appendChild(valueDiv);
             modalPreview.appendChild(row);
         };
 
-        // Get data for preview
         addPreviewRow("Nama Lengkap", form.elements.nama_lengkap.value);
         addPreviewRow("Panggilan", form.elements.panggilan.value);
         addPreviewRow("Angkatan", form.elements.angkatan.value);
@@ -305,14 +299,13 @@ document.addEventListener('DOMContentLoaded', function() {
         addPreviewRow("Nama Usaha/Toko", form.elements.nama_usaha.value);
         addPreviewRow("URL Google Maps", form.elements.url_gmaps.value);
         addPreviewRow("Website", form.elements.website_url.value);
-        if (form.elements.logo_upload.files.length > 0) {
+        if (form.elements.logo_upload && form.elements.logo_upload.files.length > 0) {
             addPreviewRow("Logo Usaha/Toko", form.elements.logo_upload.files[0]);
         }
-
         const tokoOnlineData = [];
-        document.querySelectorAll('.toko-online-row').forEach(row => {
+        document.querySelectorAll('.online-shop-row').forEach(row => {
             const platformSelect = row.querySelector('select');
-            const urlInput = row.querySelector('input');
+            const urlInput = row.querySelector('input[type="text"]');
             if (platformSelect && urlInput && platformSelect.value && urlInput.value) {
                 tokoOnlineData.push({ platform: platformSelect.value, url: urlInput.value });
             }
@@ -321,114 +314,97 @@ document.addEventListener('DOMContentLoaded', function() {
         addPreviewRow("Ide & Gagasan", form.elements.ide.value);
         addPreviewRow("Lain-lain", form.elements.lain_lain.value);
 
-        modal.style.display = 'block';
+        if (modal) modal.style.display = 'block';
     }
 
-    confirmSubmitBtn.addEventListener('click', async function() {
-        const submitButton = this;
-        const originalButtonText = submitButton.innerHTML;
-        submitButton.disabled = true;
-        submitButton.innerHTML = '<span class="spinner"></span> Mengirim...';
-        
-        try {
-            // Langkah A: Ambil IP Address & Info Perangkat
-            const ipResponse = await fetch('https://api.ipify.org?format=json');
-            if (!ipResponse.ok) throw new Error('Gagal mengambil data IP.');
-            const ipData = await ipResponse.json();
-            const userIp = ipData.ip;
-            const deviceInfo = navigator.userAgent;
-
-            // Langkah B: Siapkan FormData seperti sebelumnya
-            const formData = new FormData();
-            
-            const formElements = form.elements;
-            for (let i = 0; i < formElements.length; i++) {
-                const field = formElements[i];
-                if (field.name && field.type !== 'submit' && field.type !== 'file' && !field.closest('.toko-online-row')) {
-                    if (field.classList.contains('searchable-select-input')) {
+    if (confirmSubmitBtn) {
+        confirmSubmitBtn.addEventListener('click', async function() {
+            const submitButton = this;
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span class="spinner"></span> Mengirim...';
+            try {
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                
+                const formData = new FormData();
+                 const formElements = form.elements;
+                for (let i = 0; i < formElements.length; i++) {
+                    const field = formElements[i];
+                    if (!field.name || field.type === 'submit' || field.closest('.online-shop-row')) continue;
+                    if (field.type === 'file') {
+                        if (field.files.length > 0) formData.append(field.name, field.files[0]);
+                    } else if (field.classList.contains('searchable-select-input')) {
                         const hiddenInput = field.parentElement.querySelector('input[type="hidden"]');
-                        if (hiddenInput && hiddenInput.name) {
-                            formData.append(hiddenInput.name, hiddenInput.value);
-                        }
-                    } else {
+                        if (hiddenInput) formData.append(hiddenInput.name, hiddenInput.value);
+                    }
+                    else {
                         formData.append(field.name, field.value);
                     }
                 }
-            }
-            
-            if (logoUpload.files.length > 0) {
-                formData.append('logo_upload', logoUpload.files[0]);
-            }
 
-            const tokoOnlineData = [];
-            document.querySelectorAll('.toko-online-row').forEach(row => {
-                const platformSelect = row.querySelector('select');
-                const urlInput = row.querySelector('input');
-                if (platformSelect && urlInput && platformSelect.value && urlInput.value) {
-                    tokoOnlineData.push({ platform: platformSelect.value, url: urlInput.value });
+                const tokoOnlineData = [];
+                document.querySelectorAll('.online-shop-row').forEach(row => {
+                    const platformSelect = row.querySelector('select');
+                    const urlInput = row.querySelector('input[type="text"]');
+                    if (platformSelect && urlInput && platformSelect.value && urlInput.value) {
+                        tokoOnlineData.push({ platform: platformSelect.value, url: urlInput.value });
+                    }
+                });
+                if (tokoOnlineData.length > 0) {
+                    formData.append('toko_online', JSON.stringify(tokoOnlineData));
                 }
-            });
-            if (tokoOnlineData.length > 0) {
-                formData.append('toko_online', JSON.stringify(tokoOnlineData));
-            }
+                
+                formData.append('ip_by', ipData.ip);
+                formData.append('device', navigator.userAgent);
 
-            // Langkah C: Tambahkan data IP dan Perangkat ke FormData
-            formData.append('ip_by', userIp);
-            formData.append('device', deviceInfo);
-            
-            // Langkah D: Kirim semua data
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: formData 
-            });
-            const data = await response.json();
-
-            if (data.result === 'success') {
+                const response = await fetch(form.action, { method: 'POST', body: formData });
+                const result = await response.json();
+                if (result.result !== 'success') throw new Error(result.error || 'Unknown error from server');
+                
                 alert('Data berhasil terkirim! Terima kasih.');
                 form.reset();
                 document.querySelectorAll('.clear-icon').forEach(icon => icon.style.display = 'none');
                 document.querySelectorAll('.searchable-select-input').forEach(input => {
                     input.value = '';
                     const hiddenInput = input.parentElement.querySelector('input[type="hidden"]');
-                    if(hiddenInput) hiddenInput.value = '';
+                    if (hiddenInput) hiddenInput.value = '';
                 });
-                modal.style.display = 'none';
-            } else {
-                throw new Error(data.error || 'Terjadi kesalahan saat pengiriman.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Gagal mengirim data: ' + error.message);
-        } finally {
-            submitButton.disabled = false;
-            submitButton.innerHTML = originalButtonText;
-        }
-    });
+                if (modal) modal.style.display = 'none';
 
-    cancelSubmitBtn.addEventListener('click', function() {
-        modal.style.display = 'none';
-    });
-    
-    // Perbaikan FINAL pada logika navigasi keyboard
-    const formElements = Array.from(form.querySelectorAll('input:not([type="hidden"]), textarea, select'));
-    const submitButton = form.querySelector('button.button'); // Menggunakan selector yang benar
-
-    if (submitButton) {
-        formElements.forEach((element, index) => {
-            if (element) {
-                element.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
-                        e.preventDefault();
-                        const nextElement = formElements[index + 1];
-                        if (nextElement) {
-                            nextElement.focus();
-                        } else {
-                            submitButton.focus();
-                        }
-                    }
-                });
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Gagal mengirim data: ' + error.message);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
             }
         });
     }
-    // --- END OF REVISED MODAL AND SUBMISSION LOGIC ---
+
+    if (cancelSubmitBtn) {
+        cancelSubmitBtn.addEventListener('click', function() {
+            if (modal) modal.style.display = 'none';
+        });
+    }
+
+    // Navigasi keyboard - Menggunakan selector yang benar
+    const formElements = Array.from(form.querySelectorAll('input:not([type="hidden"]), textarea, select'));
+    const submitBtn = form.querySelector('.submit-btn'); // FIX: Menggunakan class .submit-btn yang benar
+    if (submitBtn) {
+        formElements.forEach((element, index) => {
+            element.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                    const nextElement = formElements[index + 1];
+                    if (nextElement) {
+                        nextElement.focus();
+                    } else {
+                        submitBtn.focus();
+                    }
+                }
+            });
+        });
+    }
+    // === END: BLOK MODAL DAN SUBMIT YANG DI-REFACTOR TOTAL (FINAL) ===
 }); 
