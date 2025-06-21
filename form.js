@@ -1,4 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // --- LOGIKA BARU: MENANGANI STATUS DARI URL SETELAH SUBMIT ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
+
+    if (status) {
+        const message = decodeURIComponent(urlParams.get('message') || '');
+        if (status === 'success') {
+            alert('Terima kasih! Data Anda telah berhasil dikirim.');
+        } else if (status === 'error') {
+            alert('Terjadi masalah saat mengirim data:\n\n' + message);
+        }
+        
+        // Bersihkan URL agar pesan tidak muncul lagi saat di-refresh
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.replaceState({ path: newUrl }, '', newUrl);
+    }
+
     const form = document.getElementById('alumni-form');
     if (!form) return;
 
@@ -30,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         async function fetchData() {
             try {
-                // Tambahkan parameter cache-busting untuk memastikan data selalu baru
                 const url = new URL(config.url);
                 url.searchParams.append('t', new Date().getTime());
 
@@ -44,24 +60,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     throw new Error("File CSV yang diambil kosong.");
                 }
 
-                // --- LOGIKA PARSING BARU YANG LEBIH KUAT DAN SEDERHANA ---
                 const rows = csvText.trim().split(/\r?\n/).slice(1);
                 allOptions = rows.map(row => {
                     const cleanRow = row.trim();
-                    // Pisahkan pada koma pertama saja
                     const parts = cleanRow.split(/,(.+)/); 
-
-                    // Jika tidak ada koma, ambil seluruh baris.
-                    // Jika ada koma, ambil semua teks SETELAH koma pertama.
                     let value = (parts[1] || parts[0]).trim();
-                    
-                    // Hapus kutip ganda yang mungkin mengapit seluruh nilai.
                     if (value.startsWith('"') && value.endsWith('"')) {
-                        value = value.substring(1, value.length - 1).replace(/""/g, '"'); // Juga handle kutip ganda di dalam string
+                        value = value.substring(1, value.length - 1).replace(/""/g, '"');
                     }
-                    
                     return value;
-                }).filter(Boolean); // Hapus baris yang kosong atau null
+                }).filter(Boolean);
 
                 if (allOptions.length === 0) {
                     throw new Error("Data berhasil diambil, tapi hasil parsing kosong. Periksa format file CSV Anda.");
@@ -118,7 +126,6 @@ document.addEventListener('DOMContentLoaded', function() {
         fetchData();
     }
     
-    // Panggil fungsi-fungsi untuk mengisi data
     populateYearDropdown();
     setupSearchableDropdown({
         wrapperId: 'domisili-wrapper',
@@ -134,7 +141,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // BAGIAN 2: FUNGSI-FUNGSI UNTUK INTERAKSI FORM (IKON HAPUS, VALIDASI, DLL)
     // =================================================================================
 
-    // Fungsi untuk ikon hapus di setiap input
     function setupClearIcons() {
         document.querySelectorAll('.input-wrapper .clear-icon').forEach(icon => {
             const wrapper = icon.closest('.input-wrapper');
@@ -173,12 +179,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (input.tagName === 'SELECT') {
                 input.addEventListener('change', showOrHideIcon);
             }
-            showOrHideIcon(); // Panggil saat inisialisasi
+            showOrHideIcon();
         });
     }
-    setupClearIcons(); // Panggil fungsi setup
+    setupClearIcons();
 
-    // Format input nomor HP
     const phoneInput = document.getElementById('no-hp');
     if (phoneInput) {
         phoneInput.addEventListener('input', (e) => {
@@ -189,7 +194,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- LOGIKA BARU: UPLOAD LOGO ---
     const logoUpload = document.getElementById('logo-upload');
     const fileInfo = document.getElementById('file-info');
     const fileNameDisplay = document.getElementById('file-name');
@@ -202,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (file) {
                 if (file.size > 200 * 1024) { // 200KB
                     alert('Ukuran file logo tidak boleh melebihi 200KB.');
-                    this.value = ''; // Hapus file yang dipilih
+                    this.value = '';
                     return;
                 }
                 fileNameDisplay.textContent = file.name;
@@ -212,14 +216,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         fileResetBtn.addEventListener('click', () => {
-            logoUpload.value = ''; // Hapus file dari input
+            logoUpload.value = '';
             fileInfo.style.display = 'none';
             fileNameDisplay.textContent = '';
             uploadButton.style.display = 'inline-block';
         });
     }
 
-    // --- LOGIKA BARU: DYNAMIC ONLINE SHOPS ---
     const shopsContainer = document.getElementById('online-shops-container');
     const addShopBtn = document.getElementById('add-shop-btn');
     const MAX_SHOPS = 5;
@@ -261,14 +264,13 @@ document.addEventListener('DOMContentLoaded', function() {
         platformSelect.addEventListener('change', () => {
             if (platformSelect.value) {
                 urlWrapper.classList.add('visible');
-                urlWrapper.style.display = 'block'; // Pastikan terlihat
+                urlWrapper.style.display = 'block';
             } else {
                 urlWrapper.classList.remove('visible');
-                 urlWrapper.style.display = 'none'; // Sembunyikan
+                 urlWrapper.style.display = 'none';
             }
         });
         
-        // Setup ikon hapus untuk input URL yang baru dibuat
         setupClearIcons();
 
         if (index > 1) {
@@ -298,7 +300,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (addShopBtn) {
         addShopBtn.addEventListener('click', addShop);
-        // Add the first entry automatically on page load
         addShop();
     }
 
@@ -307,36 +308,36 @@ document.addEventListener('DOMContentLoaded', function() {
     // BAGIAN 3: LOGIKA UTAMA UNTUK VALIDASI DAN SUBMIT
     // =================================================================================
 
-    const submitBtn = form.querySelector('.submit-btn');
-    if (submitBtn) {
-        submitBtn.addEventListener('click', function() {
-            let allValid = true;
-            form.querySelectorAll('.input-wrapper, .searchable-select-wrapper').forEach(w => w.style.borderColor = '');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
 
-            form.querySelectorAll('input[required], textarea[required], select[required]').forEach(field => {
-                if (!field.checkValidity()) {
-                    allValid = false;
-                    field.closest('.input-wrapper, .searchable-select-wrapper').style.borderColor = 'var(--danger-color)';
-                }
-            });
-            ['domisili-value', 'profesi-value'].forEach(id => {
-                const hiddenInput = document.getElementById(id);
-                if (!hiddenInput.value) {
-                    allValid = false;
-                    hiddenInput.closest('.searchable-select-wrapper').style.borderColor = 'var(--danger-color)';
-                }
-            });
-            form.querySelectorAll('input[pattern]').forEach(field => {
-                if (field.value && !field.checkValidity()) {
-                    allValid = false;
-                    field.closest('.input-wrapper').style.borderColor = 'var(--danger-color)';
-                }
-            });
+        let allValid = true;
+        form.querySelectorAll('.input-wrapper, .searchable-select-wrapper').forEach(w => w.style.borderColor = '');
 
-            if (allValid) showConfirmationModal();
-            else alert('Harap isi semua field wajib (*) dan perbaiki isian yang ditandai merah.');
+        form.querySelectorAll('input[required], textarea[required], select[required]').forEach(field => {
+            let isValid = field.checkValidity();
+            if (field.id === 'domisili-value' || field.id === 'profesi-value') {
+                isValid = !!field.value;
+            }
+            if (!isValid) {
+                allValid = false;
+                field.closest('.input-wrapper, .searchable-select-wrapper').style.borderColor = 'var(--danger-color)';
+            }
         });
-    }
+        
+        form.querySelectorAll('input[pattern]').forEach(field => {
+            if (field.value && !field.checkValidity()) {
+                allValid = false;
+                field.closest('.input-wrapper').style.borderColor = 'var(--danger-color)';
+            }
+        });
+
+        if (allValid) {
+            showConfirmationModal();
+        } else {
+            alert('Harap isi semua field wajib (*) dan perbaiki isian yang ditandai merah.');
+        }
+    });
 
     const modal = document.getElementById('confirmation-modal');
     const modalContent = modal.querySelector('.modal-content');
@@ -345,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelSubmitBtn = document.getElementById('cancel-submit');
 
     function showConfirmationModal() {
-        modalPreviewGrid.innerHTML = ''; // Hapus konten lama
+        modalPreviewGrid.innerHTML = '';
         
         const addRow = (label, value) => {
             if (!value || (Array.isArray(value) && value.length === 0)) return;
@@ -364,7 +365,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return el.value || 'Tidak diisi';
         }
 
-        // Data Pribadi & Profesional
         addRow("Nama Lengkap", getDisplayValue('nama_lengkap'));
         addRow("Panggilan", getDisplayValue('panggilan'));
         addRow("Angkatan", getDisplayValue('angkatan'));
@@ -374,14 +374,11 @@ document.addEventListener('DOMContentLoaded', function() {
         addRow("Profesi", getDisplayValue('profesi'));
         addRow("Detail Profesi", getDisplayValue('penjelasan_usaha'));
         addRow("Prospek Kerjasama", getDisplayValue('prospek'));
-
-        // Data Usaha
         addRow("Nama Usaha/Toko", getDisplayValue('nama_usaha'));
         addRow("Tautan Lokasi (Maps)", getDisplayValue('url_gmaps'));
         addRow("Website Usaha", getDisplayValue('website_url'));
         addRow("Logo Usaha", getDisplayValue('logo_upload'));
 
-        // Data Toko Online
         const onlineShops = [];
         document.querySelectorAll('.online-shop-entry').forEach((entry, i) => {
             const platform = entry.querySelector(`select[name="platform_${i+1}"]`).value;
@@ -394,65 +391,21 @@ document.addEventListener('DOMContentLoaded', function() {
             addRow("Toko Online", onlineShops.join('<br>'));
         }
         
-        // Data Tambahan
         addRow("Usulan untuk Sinergi", getDisplayValue('ide'));
         addRow("Lain-Lain", getDisplayValue('lain_lain'));
 
         modal.classList.add('visible');
-        modalContent.scrollTop = 0; // Scroll to top
+        modalContent.scrollTop = 0;
     }
 
-    async function handleSubmit() {
-        const formData = new FormData(form);
+    function handleSubmit() {
         const submitButton = document.getElementById('confirm-submit');
-        const originalButtonText = submitButton.innerHTML;
         submitButton.disabled = true;
         submitButton.innerHTML = `<span class="spinner"></span> Mengirim...`;
-
-        try {
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: formData,
-            });
-
-            // Logika baru untuk menangani respons Google Script
-            let result;
-            try {
-                // Skrip Google akan mengembalikan JSON jika terjadi error.
-                result = await response.json();
-            } catch (e) {
-                // Jika .json() gagal, itu karena server melakukan redirect,
-                // yang dalam kasus ini menandakan PENGIRIMAN BERHASIL.
-                alert('Terima kasih! Data Anda telah berhasil dikirim.');
-                form.reset();
-                if(fileResetBtn) fileResetBtn.click();
-                if (shopsContainer) {
-                    shopsContainer.innerHTML = '';
-                    addShop();
-                    updateAddButtonState();
-                }
-                return; // Keluar dari fungsi
-            }
-
-            // Jika kode sampai di sini, berarti kita menerima JSON, yang menandakan ada error.
-            if (result && result.result === 'error') {
-                // Tampilkan pesan error spesifik dari backend.
-                throw new Error(result.error || 'Terjadi kesalahan pada server backend.');
-            }
-
-            // Fallback untuk kasus tak terduga lainnya.
-            throw new Error('Terjadi respons yang tidak diketahui dari server.');
-
-        } catch (error) {
-            console.error('Submit error:', error);
-            alert(`Terjadi masalah saat mengirim data: ${error.message}`);
-        } finally {
-            submitButton.disabled = false;
-            submitButton.innerHTML = originalButtonText;
-            modal.classList.remove('visible');
-        }
+        
+        form.submit();
     }
     
     cancelSubmitBtn.addEventListener('click', () => modal.classList.remove('visible'));
     confirmSubmitBtn.addEventListener('click', handleSubmit);
-}); 
+});
