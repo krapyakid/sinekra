@@ -47,13 +47,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 // --- LOGIKA PARSING BARU YANG LEBIH KUAT DAN SEDERHANA ---
                 const rows = csvText.trim().split(/\r?\n/).slice(1);
                 allOptions = rows.map(row => {
-                    const cleanRow = row.trim().replace(/^"|"$/g, '');
+                    const cleanRow = row.trim();
                     // Pisahkan pada koma pertama saja
                     const parts = cleanRow.split(/,(.+)/); 
 
                     // Jika tidak ada koma, ambil seluruh baris.
                     // Jika ada koma, ambil semua teks SETELAH koma pertama.
-                    return (parts[1] || parts[0]).trim();
+                    let value = (parts[1] || parts[0]).trim();
+                    
+                    // Hapus kutip ganda yang mungkin mengapit seluruh nilai.
+                    if (value.startsWith('"') && value.endsWith('"')) {
+                        value = value.substring(1, value.length - 1).replace(/""/g, '"'); // Juga handle kutip ganda di dalam string
+                    }
+                    
+                    return value;
                 }).filter(Boolean); // Hapus baris yang kosong atau null
 
                 if (allOptions.length === 0) {
