@@ -34,14 +34,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!response.ok) throw new Error('Network response was not ok');
                 const csvText = await response.text();
                 
-                // PERBAIKAN FINAL & PENYEDERHANAAN LOGIKA PARSING
-                const rows = csvText.trim().split(/\\r?\\n/).slice(1); // Mulai dari baris kedua (setelah header)
+                // PERBAIKAN LOGIKA PARSING CSV SECARA MENYELURUH
+                const rows = csvText.trim().split(/\\r?\\n/).slice(1);
                 allOptions = rows.map(row => {
-                    // Ambil saja konten hingga koma pertama, atau seluruh baris jika tidak ada koma.
-                    // Ini cara paling aman untuk memastikan data utama terambil.
-                    const parts = row.split(',');
-                    return parts[0].trim().replace(/^"|"$/g, ''); // Ambil bagian pertama, bersihkan, dan hapus kutip
-                }).filter(Boolean); // Hapus baris kosong
+                    const cleanRow = row.trim().replace(/^"|"$/g, ''); // Bersihkan baris dari kutip di awal/akhir
+                    const parts = cleanRow.split(/,(.+)/); // Pisahkan pada koma pertama saja
+                    
+                    // Jika ada lebih dari satu bagian (ada koma), ambil bagian kedua.
+                    // Jika tidak, ambil seluruh baris.
+                    return parts.length > 1 ? parts[1].trim().replace(/^"|"$/g, '') : parts[0].trim();
+                }).filter(Boolean);
 
                 if (allOptions.length === 0) {
                     throw new Error("Data berhasil di-fetch, namun hasil parsing kosong.");
