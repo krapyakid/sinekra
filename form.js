@@ -127,32 +127,51 @@ document.addEventListener('DOMContentLoaded', function() {
     // BAGIAN 2: FUNGSI-FUNGSI UNTUK INTERAKSI FORM (IKON HAPUS, VALIDASI, DLL)
     // =================================================================================
 
-    document.querySelectorAll('.input-wrapper .clear-icon').forEach(icon => {
-        const input = icon.parentElement.querySelector('input, textarea, select');
-        if (!input) return;
-        const showOrHideIcon = () => {
-            let hasValue = input.tagName === 'SELECT' ? input.selectedIndex > 0 : !!input.value;
-            icon.style.display = hasValue ? 'block' : 'none';
-        };
-        icon.addEventListener('click', () => {
-            if (input.tagName === 'SELECT') input.selectedIndex = 0;
-            else input.value = '';
-            input.dispatchEvent(new Event('input', { bubbles: true }));
-            input.focus();
-        });
-        input.addEventListener('input', showOrHideIcon);
-        if (input.tagName === 'SELECT') input.addEventListener('change', showOrHideIcon);
-        showOrHideIcon();
-    });
+    // Fungsi untuk ikon hapus di setiap input
+    function setupClearIcons() {
+        document.querySelectorAll('.input-wrapper .clear-icon').forEach(icon => {
+            const wrapper = icon.closest('.input-wrapper');
+            if (!wrapper) return;
+            const input = wrapper.querySelector('input, textarea, select');
+            if (!input) return;
 
-    document.querySelectorAll('.clear-row-icon').forEach(icon => {
-        icon.addEventListener('click', function() {
-            const row = this.parentElement;
-            row.querySelector('select').selectedIndex = 0;
-            row.querySelector('input').value = '';
-        });
-    });
+            const showOrHideIcon = () => {
+                let hasValue = false;
+                 if (input.tagName === 'SELECT') {
+                    hasValue = input.selectedIndex > 0 && input.value !== '';
+                } else {
+                    hasValue = !!input.value;
+                }
+                icon.style.display = hasValue ? 'block' : 'none';
+            };
 
+            icon.addEventListener('click', () => {
+                const isSearchableSelect = input.closest('.searchable-select-wrapper');
+                if (isSearchableSelect) {
+                    const hiddenInput = isSearchableSelect.querySelector('input[type="hidden"]');
+                    input.value = '';
+                    if (hiddenInput) hiddenInput.value = '';
+                } else if (input.tagName === 'SELECT') {
+                    input.selectedIndex = 0;
+                } else {
+                    input.value = '';
+                }
+                
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                input.focus();
+                showOrHideIcon();
+            });
+
+            input.addEventListener('input', showOrHideIcon);
+            if (input.tagName === 'SELECT') {
+                input.addEventListener('change', showOrHideIcon);
+            }
+            showOrHideIcon(); // Panggil saat inisialisasi
+        });
+    }
+    setupClearIcons(); // Panggil fungsi setup
+
+    // Format input nomor HP
     const phoneInput = document.getElementById('no-hp');
     if (phoneInput) {
         phoneInput.addEventListener('input', (e) => {
@@ -163,14 +182,117 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // --- LOGIKA BARU: UPLOAD LOGO ---
     const logoUpload = document.getElementById('logo-upload');
+    const fileInfo = document.getElementById('file-info');
+    const fileNameDisplay = document.getElementById('file-name');
+    const fileResetBtn = document.getElementById('file-reset');
+    const uploadButton = document.querySelector('label[for="logo-upload"]');
+
     if (logoUpload) {
         logoUpload.addEventListener('change', function() {
-            if (this.files[0] && this.files[0].size > 200 * 1024) {
-                alert('Ukuran file logo tidak boleh melebihi 200KB.');
-                this.value = '';
+            const file = this.files[0];
+            if (file) {
+                if (file.size > 200 * 1024) { // 200KB
+                    alert('Ukuran file logo tidak boleh melebihi 200KB.');
+                    this.value = ''; // Hapus file yang dipilih
+                    return;
+                }
+                fileNameDisplay.textContent = file.name;
+                fileInfo.style.display = 'flex';
+                uploadButton.style.display = 'none';
             }
         });
+
+        fileResetBtn.addEventListener('click', () => {
+            logoUpload.value = ''; // Hapus file dari input
+            fileInfo.style.display = 'none';
+            fileNameDisplay.textContent = '';
+            uploadButton.style.display = 'inline-block';
+        });
+    }
+
+    // --- LOGIKA BARU: DYNAMIC ONLINE SHOPS ---
+    const shopsContainer = document.getElementById('online-shops-container');
+    const addShopBtn = document.getElementById('add-shop-btn');
+    const MAX_SHOPS = 5;
+
+    const createShopEntry = (index) => {
+        const entryId = `shop-entry-${index}`;
+        const entry = document.createElement('div');
+        entry.className = 'online-shop-entry';
+        entry.id = entryId;
+
+        const platformOptions = `
+            <option value="" selected disabled>Pilih Platform</option>
+            <option value="Tokopedia">Tokopedia</option>
+            <option value="Shopee">Shopee</option>
+            <option value="TikTok Shop">TikTok Shop</option>
+            <option value="Blibli">Blibli</option>
+            <option value="Lazada">Lazada</option>
+            <option value="Lainnya">Lainnya</option>
+        `;
+
+        entry.innerHTML = `
+            <div class="online-shop-main">
+                <div class="online-shop-row">
+                    <select name="platform_${index}" aria-label="Platform Toko Online ${index}">
+                        ${platformOptions}
+                    </select>
+                    <div class="input-wrapper url-input-wrapper">
+                        <input type="text" name="platform_url_${index}" placeholder="URL/Link Toko Olshop" pattern="https?://.+">
+                        <span class="clear-icon" title="Hapus"></span>
+                    </div>
+                </div>
+            </div>
+            ${index > 1 ? `<button type="button" class="remove-shop-btn" aria-label="Hapus Toko" data-target="${entryId}">&times;</button>` : '<div style="width: 32px; height: 32px; flex-shrink: 0;"></div>'}
+        `;
+
+        const platformSelect = entry.querySelector('select');
+        const urlWrapper = entry.querySelector('.url-input-wrapper');
+
+        platformSelect.addEventListener('change', () => {
+            if (platformSelect.value) {
+                urlWrapper.classList.add('visible');
+                urlWrapper.style.display = 'block'; // Pastikan terlihat
+            } else {
+                urlWrapper.classList.remove('visible');
+                 urlWrapper.style.display = 'none'; // Sembunyikan
+            }
+        });
+        
+        // Setup ikon hapus untuk input URL yang baru dibuat
+        setupClearIcons();
+
+        if (index > 1) {
+            entry.querySelector('.remove-shop-btn').addEventListener('click', function() {
+                document.getElementById(this.dataset.target).remove();
+                updateAddButtonState();
+            });
+        }
+        
+        return entry;
+    };
+
+    const updateAddButtonState = () => {
+        const currentShops = shopsContainer.children.length;
+        addShopBtn.disabled = currentShops >= MAX_SHOPS;
+    };
+
+    const addShop = () => {
+        const currentShopCount = shopsContainer.children.length;
+        if (currentShopCount < MAX_SHOPS) {
+            const newIndex = currentShopCount + 1;
+            const newEntry = createShopEntry(newIndex);
+            shopsContainer.appendChild(newEntry);
+            updateAddButtonState();
+        }
+    };
+
+    if (addShopBtn) {
+        addShopBtn.addEventListener('click', addShop);
+        // Add the first entry automatically on page load
+        addShop();
     }
 
 
@@ -210,115 +332,113 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     const modal = document.getElementById('confirmation-modal');
+    const modalContent = modal.querySelector('.modal-content');
+    const modalPreviewGrid = modal.querySelector('.modal-preview-grid');
     const confirmSubmitBtn = document.getElementById('confirm-submit');
     const cancelSubmitBtn = document.getElementById('cancel-submit');
 
     function showConfirmationModal() {
-        const modalPreview = document.getElementById('modal-preview');
-        modalPreview.innerHTML = '';
+        modalPreviewGrid.innerHTML = ''; // Hapus konten lama
         
         const addRow = (label, value) => {
             if (!value || (Array.isArray(value) && value.length === 0)) return;
-            const row = `
-                <div class="preview-row">
-                    <div class="preview-label">${label}</div>
-                    <div class="preview-value">${value}</div>
-                </div>`;
-            modalPreview.innerHTML += row;
+            const rowHTML = `
+                <div class="preview-label">${label}</div>
+                <div class="preview-value">${value}</div>`;
+            modalPreviewGrid.insertAdjacentHTML('beforeend', rowHTML);
         };
 
         const getDisplayValue = (name) => {
             const el = form.elements[name];
             if (!el) return '';
-            if (el.type === 'file') return el.files.length > 0 ? `${el.files[0].name} (${(el.files[0].size/1024).toFixed(1)} KB)` : '';
-            return el.value;
+            if (el.type === 'file') {
+                return el.files.length > 0 ? `${el.files[0].name} (${(el.files[0].size/1024).toFixed(1)} KB)` : 'Tidak ada';
+            }
+            return el.value || 'Tidak diisi';
         }
 
+        // Data Pribadi & Profesional
         addRow("Nama Lengkap", getDisplayValue('nama_lengkap'));
         addRow("Panggilan", getDisplayValue('panggilan'));
         addRow("Angkatan", getDisplayValue('angkatan'));
         addRow("Komplek", getDisplayValue('komplek'));
         addRow("Domisili", getDisplayValue('domisili'));
-        addRow("No. HP (+62)", getDisplayValue('no_hp'));
+        addRow("No. HP/WA", getDisplayValue('no_hp'));
         addRow("Profesi", getDisplayValue('profesi'));
         addRow("Detail Profesi", getDisplayValue('penjelasan_usaha'));
         addRow("Prospek Kerjasama", getDisplayValue('prospek'));
+
+        // Data Usaha
         addRow("Nama Usaha/Toko", getDisplayValue('nama_usaha'));
-        addRow("URL Google Maps", getDisplayValue('url_gmaps'));
-        addRow("Website", getDisplayValue('website_url'));
-        addRow("Logo Usaha/Toko", getDisplayValue('logo_upload'));
+        addRow("Tautan Lokasi (Maps)", getDisplayValue('url_gmaps'));
+        addRow("Website Usaha", getDisplayValue('website_url'));
+        addRow("Logo Usaha", getDisplayValue('logo_upload'));
 
-        const tokoOnline = Array.from(document.querySelectorAll('.online-shop-row'))
-            .map(row => ({
-                platform: row.querySelector('select').value,
-                url: row.querySelector('input').value
-            }))
-            .filter(item => item.platform && item.url)
-            .map(item => `<li>${item.platform}: ${item.url}</li>`).join('');
-        if (tokoOnline) addRow("Toko Online", `<ul style="margin:0;padding-left:20px;">${tokoOnline}</ul>`);
-
-        addRow("Ide & Gagasan", getDisplayValue('ide'));
-        addRow("Lain-lain", getDisplayValue('lain_lain'));
-
-        if (modal) modal.style.display = 'block';
-    }
-
-    if (confirmSubmitBtn) {
-        confirmSubmitBtn.addEventListener('click', async function() {
-            this.disabled = true;
-            this.innerHTML = '<span class="spinner"></span> Mengirim...';
-            
-            try {
-                const formData = new FormData(form);
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipResponse.json();
-                formData.append('ip_by', ipData.ip);
-                formData.append('device', navigator.userAgent);
-                
-                const tokoOnlineData = Array.from(document.querySelectorAll('.online-shop-row'))
-                    .map(row => ({
-                        platform: row.querySelector('select').value,
-                        url: row.querySelector('input').value
-                    }))
-                    .filter(item => item.platform && item.url);
-
-                if (tokoOnlineData.length > 0) {
-                    formData.append('toko_online', JSON.stringify(tokoOnlineData));
-                }
-                
-                // Hapus field individual agar tidak terkirim ganda
-                for (let i = 1; i <= 5; i++) {
-                    formData.delete(`platform_${i}`);
-                    formData.delete(`platform_url_${i}`);
-                }
-
-                const response = await fetch(form.action, { method: 'POST', body: formData });
-                const result = await response.json();
-                
-                if (result.result !== 'success') throw new Error(result.error || 'Unknown server error');
-                
-                alert('Data berhasil terkirim! Terima kasih.');
-                form.reset();
-                document.querySelectorAll('.clear-icon').forEach(icon => icon.style.display = 'none');
-                document.querySelectorAll('.searchable-select-input').forEach(input => {
-                    input.value = '';
-                    const hiddenInput = input.parentElement.querySelector('input[type="hidden"]');
-                    if (hiddenInput) hiddenInput.value = '';
-                });
-                if (modal) modal.style.display = 'none';
-
-            } catch (error) {
-                alert('Gagal mengirim data: ' + error.message);
-            } finally {
-                this.disabled = false;
-                this.innerHTML = 'Kirim Data Final';
+        // Data Toko Online
+        const onlineShops = [];
+        document.querySelectorAll('.online-shop-entry').forEach((entry, i) => {
+            const platform = entry.querySelector(`select[name="platform_${i+1}"]`).value;
+            const url = entry.querySelector(`input[name="platform_url_${i+1}"]`).value;
+            if (platform && url) {
+                onlineShops.push(`<b>${platform}:</b> ${url}`);
             }
         });
+        if (onlineShops.length > 0) {
+            addRow("Toko Online", onlineShops.join('<br>'));
+        }
+        
+        // Data Tambahan
+        addRow("Usulan untuk Sinergi", getDisplayValue('ide'));
+        addRow("Lain-Lain", getDisplayValue('lain_lain'));
+
+        modal.classList.add('visible');
+        modalContent.scrollTop = 0; // Scroll to top
     }
 
-    if (cancelSubmitBtn) {
-        cancelSubmitBtn.addEventListener('click', () => {
-            if (modal) modal.style.display = 'none';
-        });
+    async function handleSubmit() {
+        const formData = new FormData(form);
+        const submitButton = document.getElementById('confirm-submit');
+        const originalButtonText = submitButton.innerHTML;
+        submitButton.disabled = true;
+        submitButton.innerHTML = `<span class="spinner"></span> Mengirim...`;
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                 const errorResult = await response.json().catch(() => ({ result: 'error', message: 'Terjadi kesalahan tidak diketahui di server.' }));
+                 throw new Error(errorResult.message || `Terjadi kesalahan. Status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            
+            if (result.result === 'success') {
+                alert('Terima kasih! Data Anda telah berhasil dikirim.');
+                form.reset();
+                // Reset semua state kustom setelah submit berhasil
+                document.querySelectorAll('.clear-icon').forEach(icon => icon.style.display = 'none');
+                fileResetBtn.click(); // Reset tampilan upload file
+                shopsContainer.innerHTML = '';
+                addShop(); // Tambahkan lagi entry pertama
+                updateAddButtonState();
+
+            } else {
+                throw new Error(result.message || 'Gagal mengirim data.');
+            }
+
+        } catch (error) {
+            console.error('Submit error:', error);
+            alert(`Terjadi masalah saat mengirim data: ${error.message}`);
+        } finally {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+            modal.classList.remove('visible');
+        }
     }
+    
+    cancelSubmitBtn.addEventListener('click', () => modal.classList.remove('visible'));
+    confirmSubmitBtn.addEventListener('click', handleSubmit);
 }); 
