@@ -409,17 +409,18 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.style.display = 'none';
     });
     
+    // Perbaikan pada logika navigasi keyboard untuk mencegah error
     const formElements = Array.from(form.querySelectorAll('input:not([type="hidden"]), textarea, select'));
-    const submitButton = form.querySelector('.submit-btn');
     formElements.forEach((element, index) => {
         element.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') { // Jangan submit jika di textarea
                 e.preventDefault();
                 const nextElement = formElements[index + 1];
                 if (nextElement) {
                     nextElement.focus();
                 } else {
-                    submitButton.focus();
+                    // Jika elemen terakhir, fokus ke tombol submit utama
+                    form.querySelector('.submit-btn')?.focus();
                 }
             }
         });
