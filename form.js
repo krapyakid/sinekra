@@ -30,23 +30,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
         async function fetchData() {
             try {
-                const response = await fetch(config.url);
-                if (!response.ok) throw new Error('Network response was not ok');
+                const response = await fetch(config.url, { cache: 'no-cache' });
+                if (!response.ok) throw new Error(`Network response was not ok, status: ${response.status}`);
+                
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("text/csv")) {
+                    // Jika bukan CSV, mungkin halaman login Google. Ini adalah deteksi error yang lebih baik.
+                    throw new Error(`Gagal memuat data: Tipe konten salah (diterima ${contentType}, diharapkan text/csv). Pastikan URL Google Sheet sudah di-"Publish to web" sebagai CSV.`);
+                }
+
                 const csvText = await response.text();
                 
-                // PERBAIKAN LOGIKA PARSING CSV SECARA MENYELURUH
-                const rows = csvText.trim().split(/\\r?\\n/).slice(1);
+                // PERBAIKAN FINAL PADA REGULAR EXPRESSION UNTUK MEMISAHKAN BARIS
+                const rows = csvText.trim().split(/\r?\n/).slice(1);
+                
                 allOptions = rows.map(row => {
-                    const cleanRow = row.trim().replace(/^"|"$/g, ''); // Bersihkan baris dari kutip di awal/akhir
-                    const parts = cleanRow.split(/,(.+)/); // Pisahkan pada koma pertama saja
-                    
-                    // Jika ada lebih dari satu bagian (ada koma), ambil bagian kedua.
-                    // Jika tidak, ambil seluruh baris.
+                    const cleanRow = row.trim().replace(/^"|"$/g, '');
+                    const parts = cleanRow.split(/,(.+)/);
                     return parts.length > 1 ? parts[1].trim().replace(/^"|"$/g, '') : parts[0].trim();
                 }).filter(Boolean);
 
                 if (allOptions.length === 0) {
-                    throw new Error("Data berhasil di-fetch, namun hasil parsing kosong.");
+                    throw new Error("Data berhasil di-fetch, namun hasil parsing kosong. Periksa format file CSV.");
                 }
 
                 renderOptions(allOptions);
