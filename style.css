@@ -57,7 +57,8 @@ h1 {
 
 .form-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    /* Mobile-first: default to a single column */
+    grid-template-columns: 1fr;
     gap: 1.5rem;
 }
 
@@ -216,6 +217,7 @@ textarea {
 }
 
 /* Responsive layout */
+/* For tablets and larger screens, switch to two columns */
 @media (min-width: 768px) {
     .form-grid {
         grid-template-columns: 1fr 1fr;
@@ -223,6 +225,34 @@ textarea {
     }
     .full-width {
         grid-column: 1 / -1;
+    }
+}
+
+/* Specific adjustments for smaller mobile screens */
+@media (max-width: 480px) {
+    body {
+        padding: 1rem;
+    }
+
+    .container {
+        padding: 1.5rem;
+    }
+
+    h1.form-title {
+        font-size: 1.5em;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .online-shop-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .online-shop-row select {
+        flex-basis: auto;
     }
 }
 
