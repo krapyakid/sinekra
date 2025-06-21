@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Validasi Ukuran File Logo
-    const logoUpload = document.getElementById('logo-upload');
+    const logoUpload = document.getElementById('logo_upload');
     if (logoUpload) {
         logoUpload.addEventListener('change', function() {
             if (this.files && this.files[0]) {
@@ -223,93 +223,166 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Modal Confirmation Logic (DIPERBARUI)
+    // --- START OF REVISED MODAL AND SUBMISSION LOGIC ---
     const modal = document.getElementById('confirmation-modal');
     const modalPreview = document.getElementById('modal-preview');
+    const confirmSubmitBtn = document.getElementById('confirm-submit');
+    const cancelSubmitBtn = document.getElementById('cancel-submit');
 
     function showConfirmationModal() {
-        modalPreview.innerHTML = '';
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+        modalPreview.innerHTML = ''; // Clear previous preview
 
-        // Urutan field yang diinginkan
-        const fieldOrder = [
-            'nama_lengkap', 'panggilan', 'angkatan', 'komplek', 'domisili', 
-            'no_hp', 'profesi', 'penjelasan_usaha', 'prospek',
-            'nama_usaha', 'url_gmaps', 'website_url', 'logo_upload',
-            'platform_1', 'platform_2', 'platform_3', 'platform_4', 'platform_5',
-            'ide', 'lain_lain'
-        ];
-
-        // Fungsi untuk menambahkan baris preview
         const addPreviewRow = (label, value) => {
+            if (!value || (Array.isArray(value) && value.length === 0)) return;
+
+            const row = document.createElement('div');
+            row.className = 'preview-row';
             const labelDiv = document.createElement('div');
             labelDiv.className = 'preview-label';
             labelDiv.textContent = label;
-            
             const valueDiv = document.createElement('div');
             valueDiv.className = 'preview-value';
-            valueDiv.innerHTML = value ? value.toString().replace(/\n/g, '<br>') : '<i>(tidak diisi)</i>';
+
+            if (value instanceof File) {
+                 valueDiv.textContent = value.name ? `${value.name} (${(value.size / 1024).toFixed(1)} KB)` : 'Tidak ada logo';
+            } else if (Array.isArray(value)) {
+                const list = document.createElement('ul');
+                list.style.margin = '0';
+                list.style.paddingLeft = '20px';
+                value.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${item.platform}: ${item.url}`;
+                    list.appendChild(listItem);
+                });
+                valueDiv.appendChild(list);
+            } else {
+                valueDiv.textContent = value;
+            }
             
-            modalPreview.appendChild(labelDiv);
-            modalPreview.appendChild(valueDiv);
+            row.appendChild(labelDiv);
+            row.appendChild(valueDiv);
+            modalPreview.appendChild(row);
         };
-        
-        // Buat label map
-        const labelMap = {};
-        form.querySelectorAll('label').forEach(label => {
-            const forId = label.htmlFor;
-            if (forId) {
-                const input = document.getElementById(forId);
-                if (input && input.name) {
-                    labelMap[input.name] = label.textContent;
-                }
+
+        // Get data for preview
+        addPreviewRow("Nama Lengkap", form.elements.nama_lengkap.value);
+        addPreviewRow("Panggilan", form.elements.panggilan.value);
+        addPreviewRow("Angkatan", form.elements.angkatan.value);
+        addPreviewRow("Komplek", form.elements.komplek.value);
+        addPreviewRow("Domisili", form.elements.domisili.value);
+        addPreviewRow("No. HP (+62)", form.elements.no_hp.value);
+        addPreviewRow("Profesi", form.elements.profesi.value);
+        addPreviewRow("Detail Profesi", form.elements.penjelasan_usaha.value);
+        addPreviewRow("Prospek Kerjasama", form.elements.prospek.value);
+        addPreviewRow("Nama Usaha/Toko", form.elements.nama_usaha.value);
+        addPreviewRow("URL Google Maps", form.elements.url_gmaps.value);
+        addPreviewRow("Website", form.elements.website_url.value);
+        if (form.elements.logo_upload.files.length > 0) {
+            addPreviewRow("Logo Usaha/Toko", form.elements.logo_upload.files[0]);
+        }
+
+        const tokoOnlineData = [];
+        document.querySelectorAll('.toko-online-row').forEach(row => {
+            const platformSelect = row.querySelector('select');
+            const urlInput = row.querySelector('input');
+            if (platformSelect && urlInput && platformSelect.value && urlInput.value) {
+                tokoOnlineData.push({ platform: platformSelect.value, url: urlInput.value });
             }
         });
-        // Label manual untuk yang tidak punya 'for'
-        labelMap['nama_usaha'] = 'Nama Toko/Usaha';
-        labelMap['url_gmaps'] = 'URL Google Maps';
-        labelMap['website_url'] = 'URL Website';
-        labelMap['logo_upload'] = 'Logo Usaha';
+        addPreviewRow("Toko Online", tokoOnlineData);
+        addPreviewRow("Ide & Gagasan", form.elements.ide.value);
+        addPreviewRow("Lain-lain", form.elements.lain_lain.value);
 
-        for (const name of fieldOrder) {
-            if (name.startsWith('platform_')) {
-                 // Skip, akan ditangani secara khusus
-                 continue;
-            }
-             if (data.hasOwnProperty(name)) {
-                let value = data[name];
-                const label = labelMap[name] || name;
-
-                if (name === 'logo_upload' && value instanceof File) {
-                    value = value.name ? `${value.name} (${(value.size / 1024).toFixed(1)} KB)` : '';
-                }
-                
-                addPreviewRow(label, value);
-            }
-        }
-
-        // Tampilkan link toko online secara berkelompok
-        let onlineShopContent = '';
-        for (let i = 1; i <= 5; i++) {
-            const platform = data[`platform_${i}`];
-            const url = data[`platform_url_${i}`];
-            if (url) { // Hanya tampilkan jika URL diisi
-                onlineShopContent += `<li><b>${platform}:</b> ${url}</li>`;
-            }
-        }
-        if (onlineShopContent) {
-            addPreviewRow('Toko Online', `<ul style="margin:0;padding-left:20px;">${onlineShopContent}</ul>`);
-        }
-
-
-        modal.classList.add('visible');
+        modal.style.display = 'block';
     }
 
-    // Navigasi form dengan tombol Enter (DIPERBARUI)
+    confirmSubmitBtn.addEventListener('click', async function() {
+        const submitButton = this;
+        const originalButtonText = submitButton.innerHTML;
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<span class="spinner"></span> Mengirim...';
+        
+        try {
+            // Langkah A: Ambil IP Address & Info Perangkat
+            const ipResponse = await fetch('https://api.ipify.org?format=json');
+            if (!ipResponse.ok) throw new Error('Gagal mengambil data IP.');
+            const ipData = await ipResponse.json();
+            const userIp = ipData.ip;
+            const deviceInfo = navigator.userAgent;
+
+            // Langkah B: Siapkan FormData seperti sebelumnya
+            const formData = new FormData();
+            
+            const formElements = form.elements;
+            for (let i = 0; i < formElements.length; i++) {
+                const field = formElements[i];
+                if (field.name && field.type !== 'submit' && field.type !== 'file' && !field.closest('.toko-online-row')) {
+                    if (field.classList.contains('searchable-select-input')) {
+                        const hiddenInput = field.parentElement.querySelector('input[type="hidden"]');
+                        if (hiddenInput && hiddenInput.name) {
+                            formData.append(hiddenInput.name, hiddenInput.value);
+                        }
+                    } else {
+                        formData.append(field.name, field.value);
+                    }
+                }
+            }
+            
+            if (logoUpload.files.length > 0) {
+                formData.append('logo_upload', logoUpload.files[0]);
+            }
+
+            const tokoOnlineData = [];
+            document.querySelectorAll('.toko-online-row').forEach(row => {
+                const platformSelect = row.querySelector('select');
+                const urlInput = row.querySelector('input');
+                if (platformSelect && urlInput && platformSelect.value && urlInput.value) {
+                    tokoOnlineData.push({ platform: platformSelect.value, url: urlInput.value });
+                }
+            });
+            if (tokoOnlineData.length > 0) {
+                formData.append('toko_online', JSON.stringify(tokoOnlineData));
+            }
+
+            // Langkah C: Tambahkan data IP dan Perangkat ke FormData
+            formData.append('ip_by', userIp);
+            formData.append('device', deviceInfo);
+            
+            // Langkah D: Kirim semua data
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData 
+            });
+            const data = await response.json();
+
+            if (data.result === 'success') {
+                alert('Data berhasil terkirim! Terima kasih.');
+                form.reset();
+                document.querySelectorAll('.clear-icon').forEach(icon => icon.style.display = 'none');
+                document.querySelectorAll('.searchable-select-input').forEach(input => {
+                    input.value = '';
+                    const hiddenInput = input.parentElement.querySelector('input[type="hidden"]');
+                    if(hiddenInput) hiddenInput.value = '';
+                });
+                modal.style.display = 'none';
+            } else {
+                throw new Error(data.error || 'Terjadi kesalahan saat pengiriman.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Gagal mengirim data: ' + error.message);
+        } finally {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        }
+    });
+
+    cancelSubmitBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+    
     const formElements = Array.from(form.querySelectorAll('input:not([type="hidden"]), textarea, select'));
     const submitButton = form.querySelector('.submit-btn');
-
     formElements.forEach((element, index) => {
         element.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
@@ -318,11 +391,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (nextElement) {
                     nextElement.focus();
                 } else {
-                    // Jika tidak ada elemen berikutnya, fokus ke tombol submit
                     submitButton.focus();
                 }
             }
         });
     });
-
+    // --- END OF REVISED MODAL AND SUBMISSION LOGIC ---
 }); 
