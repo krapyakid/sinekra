@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const fieldOrder = [
             'nama_lengkap', 'panggilan', 'angkatan', 'komplek', 'domisili', 
             'no_hp', 'profesi', 'penjelasan_usaha', 'prospek',
-            'nama_usaha', 'website_url', 'logo_upload',
+            'nama_usaha', 'url_gmaps', 'website_url', 'logo_upload',
             'platform_1', 'platform_2', 'platform_3', 'platform_4', 'platform_5',
             'ide', 'lain_lain'
         ];
@@ -268,6 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         // Label manual untuk yang tidak punya 'for'
         labelMap['nama_usaha'] = 'Nama Toko/Usaha';
+        labelMap['url_gmaps'] = 'URL Google Maps';
         labelMap['website_url'] = 'URL Website';
         labelMap['logo_upload'] = 'Logo Usaha';
 
