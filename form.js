@@ -30,33 +30,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
         async function fetchData() {
             try {
-                const response = await fetch(config.url, { cache: 'no-cache' });
-                if (!response.ok) throw new Error(`Network response was not ok, status: ${response.status}`);
-                
-                const contentType = response.headers.get("content-type");
-                if (!contentType || !contentType.includes("text/csv")) {
-                    // Jika bukan CSV, mungkin halaman login Google. Ini adalah deteksi error yang lebih baik.
-                    throw new Error(`Gagal memuat data: Tipe konten salah (diterima ${contentType}, diharapkan text/csv). Pastikan URL Google Sheet sudah di-"Publish to web" sebagai CSV.`);
+                // Tambahkan parameter cache-busting untuk memastikan data selalu baru
+                const url = new URL(config.url);
+                url.searchParams.append('t', new Date().getTime());
+
+                const response = await fetch(url.toString(), { cache: 'no-cache' });
+
+                if (!response.ok) {
+                    throw new Error(`Gagal mengambil data: Status ${response.status}`);
+                }
+                const csvText = await response.text();
+                if (!csvText || csvText.trim() === '') {
+                    throw new Error("File CSV yang diambil kosong.");
                 }
 
-                const csvText = await response.text();
-                
-                // PERBAIKAN FINAL PADA REGULAR EXPRESSION UNTUK MEMISAHKAN BARIS
+                // --- LOGIKA PARSING BARU YANG LEBIH KUAT DAN SEDERHANA ---
                 const rows = csvText.trim().split(/\r?\n/).slice(1);
-                
                 allOptions = rows.map(row => {
-                    const cleanRow = row.trim().replace(/^"|"$/g, '');
-                    const parts = cleanRow.split(/,(.+)/);
-                    return parts.length > 1 ? parts[1].trim().replace(/^"|"$/g, '') : parts[0].trim();
-                }).filter(Boolean);
+                    const columns = row.split(',');
+                    if (columns.length === 0) return null;
+                    // Ambil kolom terakhir, bersihkan dari spasi dan kutip ganda
+                    return columns[columns.length - 1].trim().replace(/^"|"$/g, '');
+                }).filter(Boolean); // Hapus baris yang kosong atau null
 
                 if (allOptions.length === 0) {
-                    throw new Error("Data berhasil di-fetch, namun hasil parsing kosong. Periksa format file CSV.");
+                    throw new Error("Data berhasil diambil, tapi hasil parsing kosong. Periksa format file CSV Anda.");
                 }
-
                 renderOptions(allOptions);
+
             } catch (error) {
-                console.error(`Gagal mengambil atau memproses data untuk ${config.wrapperId}:`, error);
+                console.error(`Error fatal di fetchData untuk ${config.wrapperId}:`, error);
                 if (statusEl) statusEl.textContent = 'Gagal memuat data.';
             }
         }
