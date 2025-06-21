@@ -115,18 +115,31 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- (FIX #1 & #3) Fungsionalitas Ikon Hapus & Validasi Dikembalikan ---
     // Fungsionalitas Ikon Hapus pada setiap input
     document.querySelectorAll('.input-wrapper .clear-icon').forEach(icon => {
-        const input = icon.parentElement.querySelector('input, textarea');
+        const input = icon.parentElement.querySelector('input, textarea, select');
         if (input) {
             const showOrHideIcon = () => {
-                icon.style.display = input.value ? 'block' : 'none';
+                let hasValue = false;
+                if (input.tagName === 'SELECT') {
+                    hasValue = input.selectedIndex > 0;
+                } else {
+                    hasValue = !!input.value;
+                }
+                icon.style.display = hasValue ? 'block' : 'none';
             };
+
             icon.addEventListener('click', () => {
-                input.value = '';
+                if (input.tagName === 'SELECT') {
+                    input.selectedIndex = 0;
+                } else {
+                    input.value = '';
+                }
                 input.dispatchEvent(new Event('input', { bubbles: true }));
                 input.focus();
                 showOrHideIcon();
             });
+
             input.addEventListener('input', showOrHideIcon);
+            input.addEventListener('change', showOrHideIcon); // Untuk select
             showOrHideIcon();
         }
     });
@@ -176,24 +189,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 wrapper.style.borderColor = 'var(--input-border-color)';
             });
 
-            // 2. Lakukan validasi ulang pada setiap field yang required
+            // 2. Lakukan validasi pada setiap field yang required
             form.querySelectorAll('input[required], textarea[required], select[required]').forEach(field => {
-                let isFieldValid = true;
-                const wrapper = field.closest('.input-wrapper, .searchable-select-wrapper');
-
-                if (field.classList.contains('searchable-select-input')) {
-                    const hiddenField = wrapper.querySelector('input[type="hidden"]');
-                    if (!hiddenField || !hiddenField.value) {
-                        isFieldValid = false;
-                    }
-                } else {
-                    if (!field.checkValidity()) {
-                        isFieldValid = false;
+                if (!field.checkValidity()) {
+                    allValid = false;
+                    const wrapper = field.closest('.input-wrapper, .searchable-select-wrapper');
+                    if (wrapper) {
+                        wrapper.style.borderColor = 'var(--danger-color)';
                     }
                 }
+            });
 
-                if (!isFieldValid) {
+            // 3. Validasi manual untuk dropdown custom
+            ['domisili', 'profesi'].forEach(id => {
+                const wrapper = document.getElementById(`${id}-wrapper`);
+                const hiddenInput = document.getElementById(`${id}-value`);
+                if (wrapper && hiddenInput && !hiddenInput.value) {
                     allValid = false;
+                    wrapper.style.borderColor = 'var(--danger-color)';
+                }
+            });
+
+            // 4. Validasi manual untuk pattern URL (yang tidak required)
+            form.querySelectorAll('input[pattern]').forEach(field => {
+                if (field.value && !field.checkValidity()) { // Hanya validasi jika ada isinya
+                    allValid = false;
+                    const wrapper = field.closest('.input-wrapper');
                     if (wrapper) {
                         wrapper.style.borderColor = 'var(--danger-color)';
                     }
@@ -203,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (allValid) {
                 showConfirmationModal();
             } else {
-                alert('Harap isi semua field yang wajib diisi dengan format yang benar.');
+                alert('Harap isi semua field wajib (*) dan perbaiki isian yang ditandai merah.');
             }
         });
     }
