@@ -186,9 +186,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Validasi Form dan Modal (FINAL FIX)
-    if (form) {
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
+    const submitBtn = form.querySelector('.submit-btn');
+    if (form && submitBtn) {
+        submitBtn.addEventListener('click', function(event) {
             let allValid = true;
 
             // 1. Reset border
