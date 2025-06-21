@@ -409,21 +409,26 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.style.display = 'none';
     });
     
-    // Perbaikan pada logika navigasi keyboard untuk mencegah error
+    // Perbaikan FINAL pada logika navigasi keyboard
     const formElements = Array.from(form.querySelectorAll('input:not([type="hidden"]), textarea, select'));
-    formElements.forEach((element, index) => {
-        element.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') { // Jangan submit jika di textarea
-                e.preventDefault();
-                const nextElement = formElements[index + 1];
-                if (nextElement) {
-                    nextElement.focus();
-                } else {
-                    // Jika elemen terakhir, fokus ke tombol submit utama
-                    form.querySelector('.submit-btn')?.focus();
-                }
+    const submitButton = form.querySelector('button.button'); // Menggunakan selector yang benar
+
+    if (submitButton) {
+        formElements.forEach((element, index) => {
+            if (element) {
+                element.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                        e.preventDefault();
+                        const nextElement = formElements[index + 1];
+                        if (nextElement) {
+                            nextElement.focus();
+                        } else {
+                            submitButton.focus();
+                        }
+                    }
+                });
             }
         });
-    });
+    }
     // --- END OF REVISED MODAL AND SUBMISSION LOGIC ---
 }); 
