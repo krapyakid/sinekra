@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         async function fetchData() {
             try {
+                // Tambahkan parameter cache-busting untuk memastikan data selalu baru
                 const url = new URL(config.url);
                 url.searchParams.append('t', new Date().getTime());
 
@@ -60,16 +61,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     throw new Error("File CSV yang diambil kosong.");
                 }
 
+                // --- LOGIKA PARSING BARU YANG LEBIH KUAT DAN SEDERHANA ---
                 const rows = csvText.trim().split(/\r?\n/).slice(1);
                 allOptions = rows.map(row => {
                     const cleanRow = row.trim();
+                    // Pisahkan pada koma pertama saja
                     const parts = cleanRow.split(/,(.+)/); 
+
+                    // Jika tidak ada koma, ambil seluruh baris.
+                    // Jika ada koma, ambil semua teks SETELAH koma pertama.
                     let value = (parts[1] || parts[0]).trim();
+                    
+                    // Hapus kutip ganda yang mungkin mengapit seluruh nilai.
                     if (value.startsWith('"') && value.endsWith('"')) {
-                        value = value.substring(1, value.length - 1).replace(/""/g, '"');
+                        value = value.substring(1, value.length - 1).replace(/""/g, '"'); // Juga handle kutip ganda di dalam string
                     }
+                    
                     return value;
-                }).filter(Boolean);
+                }).filter(Boolean); // Hapus baris yang kosong atau null
 
                 if (allOptions.length === 0) {
                     throw new Error("Data berhasil diambil, tapi hasil parsing kosong. Periksa format file CSV Anda.");
@@ -126,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetchData();
     }
     
+    // Panggil fungsi-fungsi untuk mengisi data
     populateYearDropdown();
     setupSearchableDropdown({
         wrapperId: 'domisili-wrapper',
@@ -141,6 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // BAGIAN 2: FUNGSI-FUNGSI UNTUK INTERAKSI FORM (IKON HAPUS, VALIDASI, DLL)
     // =================================================================================
 
+    // Fungsi untuk ikon hapus di setiap input
     function setupClearIcons() {
         document.querySelectorAll('.input-wrapper .clear-icon').forEach(icon => {
             const wrapper = icon.closest('.input-wrapper');
@@ -179,11 +190,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (input.tagName === 'SELECT') {
                 input.addEventListener('change', showOrHideIcon);
             }
-            showOrHideIcon();
+            showOrHideIcon(); // Panggil saat inisialisasi
         });
     }
-    setupClearIcons();
+    setupClearIcons(); // Panggil fungsi setup
 
+    // Format input nomor HP
     const phoneInput = document.getElementById('no-hp');
     if (phoneInput) {
         phoneInput.addEventListener('input', (e) => {
@@ -194,6 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // --- LOGIKA BARU: UPLOAD LOGO ---
     const logoUpload = document.getElementById('logo-upload');
     const fileInfo = document.getElementById('file-info');
     const fileNameDisplay = document.getElementById('file-name');
@@ -206,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (file) {
                 if (file.size > 200 * 1024) { // 200KB
                     alert('Ukuran file logo tidak boleh melebihi 200KB.');
-                    this.value = '';
+                    this.value = ''; // Hapus file yang dipilih
                     return;
                 }
                 fileNameDisplay.textContent = file.name;
@@ -216,13 +229,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         fileResetBtn.addEventListener('click', () => {
-            logoUpload.value = '';
+            logoUpload.value = ''; // Hapus file dari input
             fileInfo.style.display = 'none';
             fileNameDisplay.textContent = '';
             uploadButton.style.display = 'inline-block';
         });
     }
 
+    // --- LOGIKA BARU: DYNAMIC ONLINE SHOPS ---
     const shopsContainer = document.getElementById('online-shops-container');
     const addShopBtn = document.getElementById('add-shop-btn');
     const MAX_SHOPS = 5;
@@ -264,13 +278,14 @@ document.addEventListener('DOMContentLoaded', function() {
         platformSelect.addEventListener('change', () => {
             if (platformSelect.value) {
                 urlWrapper.classList.add('visible');
-                urlWrapper.style.display = 'block';
+                urlWrapper.style.display = 'block'; // Pastikan terlihat
             } else {
                 urlWrapper.classList.remove('visible');
-                 urlWrapper.style.display = 'none';
+                 urlWrapper.style.display = 'none'; // Sembunyikan
             }
         });
         
+        // Setup ikon hapus untuk input URL yang baru dibuat
         setupClearIcons();
 
         if (index > 1) {
@@ -300,6 +315,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (addShopBtn) {
         addShopBtn.addEventListener('click', addShop);
+        // Add the first entry automatically on page load
         addShop();
     }
 
@@ -308,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // BAGIAN 3: LOGIKA UTAMA UNTUK VALIDASI DAN SUBMIT
     // =================================================================================
 
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', async function(event) {
         event.preventDefault();
 
         let allValid = true;
@@ -333,7 +349,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         if (allValid) {
-            showConfirmationModal();
+            const submitBtn = form.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span class="spinner"></span> Memuat Info...`;
+            
+            try {
+                const ipResponse = await fetch('https://api.ipify.org?format=json', { cache: 'no-cache' });
+                if (ipResponse.ok) {
+                    const ipData = await ipResponse.json();
+                    document.getElementById('ip-address').value = ipData.ip;
+                }
+            } catch (error) {
+                console.warn("Gagal mengambil info IP:", error);
+                document.getElementById('ip-address').value = 'Gagal dimuat';
+            } finally {
+                document.getElementById('device-info').value = navigator.userAgent;
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Lanjutkan';
+                showConfirmationModal();
+            }
         } else {
             alert('Harap isi semua field wajib (*) dan perbaiki isian yang ditandai merah.');
         }
@@ -365,6 +399,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return el.value || 'Tidak diisi';
         }
 
+        // Data Pribadi & Profesional
         addRow("Nama Lengkap", getDisplayValue('nama_lengkap'));
         addRow("Panggilan", getDisplayValue('panggilan'));
         addRow("Angkatan", getDisplayValue('angkatan'));
@@ -374,11 +409,14 @@ document.addEventListener('DOMContentLoaded', function() {
         addRow("Profesi", getDisplayValue('profesi'));
         addRow("Detail Profesi", getDisplayValue('penjelasan_usaha'));
         addRow("Prospek Kerjasama", getDisplayValue('prospek'));
+
+        // Data Usaha
         addRow("Nama Usaha/Toko", getDisplayValue('nama_usaha'));
         addRow("Tautan Lokasi (Maps)", getDisplayValue('url_gmaps'));
         addRow("Website Usaha", getDisplayValue('website_url'));
         addRow("Logo Usaha", getDisplayValue('logo_upload'));
 
+        // Data Toko Online
         const onlineShops = [];
         document.querySelectorAll('.online-shop-entry').forEach((entry, i) => {
             const platform = entry.querySelector(`select[name="platform_${i+1}"]`).value;
@@ -391,21 +429,28 @@ document.addEventListener('DOMContentLoaded', function() {
             addRow("Toko Online", onlineShops.join('<br>'));
         }
         
+        // Data Tambahan
         addRow("Usulan untuk Sinergi", getDisplayValue('ide'));
         addRow("Lain-Lain", getDisplayValue('lain_lain'));
+
+        // Tampilkan info tambahan di modal
+        addRow("IP Address", document.getElementById('ip-address').value);
+        addRow("Info Perangkat", document.getElementById('device-info').value);
 
         modal.classList.add('visible');
         modalContent.scrollTop = 0;
     }
 
+    // Fungsi handle submit sekarang menjadi sangat sederhana
     function handleSubmit() {
         const submitButton = document.getElementById('confirm-submit');
         submitButton.disabled = true;
         submitButton.innerHTML = `<span class="spinner"></span> Mengirim...`;
         
+        // Langsung kirim form secara native. Backend akan handle redirect.
         form.submit();
     }
     
     cancelSubmitBtn.addEventListener('click', () => modal.classList.remove('visible'));
     confirmSubmitBtn.addEventListener('click', handleSubmit);
-});
+}); 
