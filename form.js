@@ -406,30 +406,39 @@ document.addEventListener('DOMContentLoaded', function() {
             const response = await fetch(form.action, {
                 method: 'POST',
                 body: formData,
-                redirect: 'follow' // Eksplisit, meskipun ini default
             });
 
-            // Google Apps Script sering merespon dengan redirect (status 302)
-            // yang akan menyebabkan !response.ok menjadi true, tapi sebenarnya itu sukses.
-            // Kita anggap semua respons non-error (termasuk redirect) sebagai sukses di sini.
-            // Error sesungguhnya (seperti masalah jaringan) akan ditangkap oleh blok catch.
-
-            alert('Terima kasih! Data Anda telah berhasil dikirim.');
-            form.reset();
-            // Reset semua state kustom setelah submit berhasil
-            document.querySelectorAll('.clear-icon').forEach(icon => icon.style.display = 'none');
-            if(fileResetBtn) fileResetBtn.click(); // Reset tampilan upload file
-            
-            if (shopsContainer) {
-                shopsContainer.innerHTML = '';
-                addShop(); // Tambahkan lagi entry pertama
-                updateAddButtonState();
+            // Logika baru untuk menangani respons Google Script
+            let result;
+            try {
+                // Skrip Google akan mengembalikan JSON jika terjadi error.
+                result = await response.json();
+            } catch (e) {
+                // Jika .json() gagal, itu karena server melakukan redirect,
+                // yang dalam kasus ini menandakan PENGIRIMAN BERHASIL.
+                alert('Terima kasih! Data Anda telah berhasil dikirim.');
+                form.reset();
+                if(fileResetBtn) fileResetBtn.click();
+                if (shopsContainer) {
+                    shopsContainer.innerHTML = '';
+                    addShop();
+                    updateAddButtonState();
+                }
+                return; // Keluar dari fungsi
             }
+
+            // Jika kode sampai di sini, berarti kita menerima JSON, yang menandakan ada error.
+            if (result && result.result === 'error') {
+                // Tampilkan pesan error spesifik dari backend.
+                throw new Error(result.error || 'Terjadi kesalahan pada server backend.');
+            }
+
+            // Fallback untuk kasus tak terduga lainnya.
+            throw new Error('Terjadi respons yang tidak diketahui dari server.');
 
         } catch (error) {
             console.error('Submit error:', error);
-            // Menampilkan pesan error yang lebih informatif jika memungkinkan
-            alert(`Terjadi masalah saat mengirim data. Silakan coba lagi. \nError: ${error.message}`);
+            alert(`Terjadi masalah saat mengirim data: ${error.message}`);
         } finally {
             submitButton.disabled = false;
             submitButton.innerHTML = originalButtonText;
