@@ -1,4 +1,4 @@
- document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     // --- KONFIGURASI ---
     const membersSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGe6AOx8Dsnq--KPToMl0Q4lF20650_IQ6VoLQxyy3heEFW43LSTIqB0UAUeTV0QOvr8O_YnaeU-om/pub?gid=0&output=csv";
     const olshopSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGe6AOx8Dsnq--KPToMl0Q4lF20650_IQ6VoLQxyy3heEFW43LSTIqB0UAUeTV0QOvr8O_YnaeU-om/pub?gid=1048998840&output=csv";
@@ -249,7 +249,14 @@
         const selectedCategory = categoryFilter.value;
         const selectedDomicile = domicileFilter.value;
 
-        filteredMembers = allMembers.filter(member => {
+        let baseMembers = allMembers;
+
+        // Di mode 'usaha', HANYA tampilkan anggota yang punya nama usaha
+        if (currentView === 'usaha') {
+            baseMembers = allMembers.filter(member => member.nama_usaha && member.nama_usaha.trim() !== '');
+        }
+
+        filteredMembers = baseMembers.filter(member => {
             const matchesSearch = searchTerm === '' ||
                 (member.nama_usaha && member.nama_usaha.toLowerCase().includes(searchTerm)) ||
                 (member.nama_lengkap && member.nama_lengkap.toLowerCase().includes(searchTerm));
