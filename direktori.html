@@ -22,13 +22,21 @@
             <img src="assets/banner_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="logo">
         </header>
         
-        <main>
-            <h1 class="coming-soon-title">COMING SOON</h1>
-            <p class="coming-soon-subtitle">Still Cooking with Santri Spirit!</p>
+        <main class="content-container">
+            <h1 class="page-title">Direktori Anggota</h1>
+            <p class="page-subtitle">Jelajahi jaringan profesional dan usaha dari para anggota Sinergi Ekonomi Krapyak.</p>
+            <div id="directory-grid" class="directory-grid-container">
+                <!-- Kartu direktori akan dimuat di sini oleh JavaScript -->
+                <div id="directory-loading" class="directory-status">
+                    <div class="spinner"></div>
+                    <p>Memuat data anggota...</p>
+                </div>
+            </div>
         </main>
 
     </div>
 
     <script src="main.js"></script>
+    <script src="direktori.js"></script>
 </body>
 </html> 
