@@ -429,8 +429,12 @@ textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
-    position: relative;
+    padding: 10px 15px; /* Sesuaikan padding untuk mobile */
+    position: sticky; /* Membuat header menempel */
+    top: 0;
+    z-index: 100;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     margin-bottom: 2rem;
 }
 
@@ -482,19 +486,20 @@ textarea {
 @media (min-width: 768px) {
     .main-header {
         justify-content: center;
-        min-height: 70px; /* Tambahkan tinggi minimum agar tidak tertimpa konten */
+        min-height: 70px;
+        padding: 10px 0; /* Hapus padding horizontal */
     }
     .main-nav {
         display: flex;
         position: absolute;
-        width: 100%;
         justify-content: center;
         align-items: center;
-        left: 0;
-        right: 0;
-        padding-left: 100px; /* Beri ruang untuk logo */
-        padding-right: 100px; /* Beri ruang jika ada item lain */
-        z-index: 1; /* Posisikan nav di belakang logo */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+        width: auto;
+        padding-left: 0;
+        padding-right: 0;
     }
     .logo-link {
         position: absolute;
