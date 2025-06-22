@@ -482,6 +482,7 @@ textarea {
 @media (min-width: 768px) {
     .main-header {
         justify-content: center;
+        min-height: 70px; /* Tambahkan tinggi minimum agar tidak tertimpa konten */
     }
     .main-nav {
         display: flex;
@@ -493,6 +494,7 @@ textarea {
         right: 0;
         padding-left: 100px; /* Beri ruang untuk logo */
         padding-right: 100px; /* Beri ruang jika ada item lain */
+        z-index: 1; /* Posisikan nav di belakang logo */
     }
     .logo-link {
         position: absolute;
