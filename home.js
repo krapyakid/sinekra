@@ -207,14 +207,8 @@ document.addEventListener('DOMContentLoaded', function() {
             let inQuote = false;
             for (let i = 0; i < row.length; i++) {
                 const char = row[i];
-                if (char === '"') {
-                    // Cek untuk escaped quote ("")
-                    if (inQuote && row[i+1] === '"') {
-                        current += '"';
-                        i++; // Lewati quote berikutnya
-                    } else {
-                        inQuote = !inQuote;
-                    }
+                if (char === '"' && !(inQuote && row[i+1] === '"')) {
+                    inQuote = !inQuote;
                 } else if (char === ',' && !inQuote) {
                     result.push(current);
                     current = '';
@@ -230,15 +224,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return lines.slice(1).map(line => {
             if (!line.trim()) return null; // Lewati baris kosong
-            const values = parseLine(line);
-            const entry = {};
-            headers.forEach((header, i) => {
-                let value = values[i] || '';
+            
+            const values = parseLine(line).map(value => {
                 // Hapus tanda kutip ganda di awal dan akhir jika ada
                 if (value.startsWith('"') && value.endsWith('"')) {
-                    value = value.slice(1, -1);
+                    return value.slice(1, -1).replace(/""/g, '"'); // Ganti "" menjadi "
                 }
-                entry[header] = value;
+                return value;
+            });
+
+            const entry = {};
+            headers.forEach((header, i) => {
+                entry[header] = values[i] || '';
             });
             return entry;
         }).filter(Boolean); // Hapus baris kosong yang mungkin ada
