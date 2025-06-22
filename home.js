@@ -199,24 +199,44 @@ document.addEventListener('DOMContentLoaded', function() {
     function parseCsv(csvText) {
         const lines = csvText.trim().split(/\r?\n/);
         if (lines.length < 2) return [];
-        const headers = lines[0].split(',').map(h => h.trim());
+        
+        // Fungsi untuk mem-parsing satu baris, menangani koma dalam tanda kutip
+        const parseLine = (row) => {
+            const result = [];
+            let current = '';
+            let inQuote = false;
+            for (let i = 0; i < row.length; i++) {
+                const char = row[i];
+                if (char === '"') {
+                    // Cek untuk escaped quote ("")
+                    if (inQuote && row[i+1] === '"') {
+                        current += '"';
+                        i++; // Lewati quote berikutnya
+                    } else {
+                        inQuote = !inQuote;
+                    }
+                } else if (char === ',' && !inQuote) {
+                    result.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current);
+            return result;
+        };
+        
+        const headers = parseLine(lines[0]).map(h => h.trim());
 
         return lines.slice(1).map(line => {
-            // Parser CSV yang lebih baik, menangani data yang mengandung koma di dalam tanda kutip
-            const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
-            
+            if (!line.trim()) return null; // Lewati baris kosong
+            const values = parseLine(line);
             const entry = {};
             headers.forEach((header, i) => {
-                let value = values[i] || '';
-                // Hapus tanda kutip ganda di awal dan akhir
-                if (value.startsWith('"') && value.endsWith('"')) {
-                    value = value.slice(1, -1);
-                }
-                // Ganti kutip ganda yang didobel (escape) menjadi satu kutip
-                entry[header] = value.replace(/""/g, '"').trim();
+                entry[header] = values[i] || '';
             });
             return entry;
-        });
+        }).filter(Boolean); // Hapus baris kosong yang mungkin ada
     }
 
     function populateFilters() {
