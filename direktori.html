@@ -23,13 +23,50 @@
         </header>
         
         <main class="content-container">
-            <h1 class="page-title">Direktori Usaha</h1>
-            <p class="page-subtitle">Jelajahi jaringan profesional dan usaha dari para anggota Sinergi Ekonomi Krapyak.</p>
-            <div id="directory-grid" class="directory-grid-container">
-                <!-- Kartu direktori akan dimuat di sini oleh JavaScript -->
+            <div class="direktori-header">
+                <h1 class="page-title">Direktori Anggota</h1>
+                <p class="page-subtitle">Jelajahi jaringan profesional dan usaha dari para anggota Sinergi Ekonomi Krapyak.</p>
+                
+                <div class="search-and-filter-container">
+                    <div class="search-wrapper">
+                        <input type="text" id="search-bar" placeholder="Cari nama usaha, pemilik, atau produk...">
+                    </div>
+                    <div class="filter-wrapper">
+                        <select id="filter-category" class="filter-select">
+                            <option value="">Semua Kategori</option>
+                            <!-- Kategori akan diisi oleh JS -->
+                        </select>
+                        <select id="filter-domicile" class="filter-select">
+                            <option value="">Semua Domisili</option>
+                            <!-- Domisili akan diisi oleh JS -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bagian Rekomendasi -->
+            <div class="recommended-section">
+                <h2 class="section-title">Rekomendasi Pilihan</h2>
+                <div id="recommended-grid" class="directory-grid-container">
+                    <!-- Kartu rekomendasi akan dimuat di sini oleh JavaScript -->
+                </div>
+            </div>
+
+            <!-- Bagian Semua Anggota -->
+            <div class="all-members-section">
+                 <h2 class="section-title">Semua Anggota</h2>
+                <div id="directory-grid" class="directory-grid-container">
+                    <!-- Kartu direktori akan dimuat di sini oleh JavaScript -->
+                </div>
                 <div id="directory-loading" class="directory-status">
                     <div class="spinner"></div>
                     <p>Memuat data anggota...</p>
+                </div>
+                 <div id="no-results" class="directory-status" style="display: none;">
+                    <p>Tidak ada hasil yang cocok dengan pencarian Anda.</p>
+                </div>
+                <div id="pagination-container" class="pagination-container">
+                    <!-- Tombol pagination akan dibuat oleh JS -->
                 </div>
             </div>
         </main>
