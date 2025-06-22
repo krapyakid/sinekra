@@ -424,82 +424,106 @@ textarea {
     color: white;
 }
 
-/* Header and Menu Styles */
+/* === HEADER BARU === */
 .main-header {
-    position: relative;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    width: 100%;
+    padding: 10px 0;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.logo-link {
+    position: relative;
+    z-index: 10;
 }
 
 .logo {
-    margin-bottom: 20px;
-}
-
-.main-header .logo {
-    margin-bottom: 0;
-}
-
-.header-info {
-    position: absolute;
-    right: 0px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.9rem;
-    color: #6c757d;
-}
-
-.menu-wrapper {
-    position: absolute;
-    left: 0px; /* Position to the left edge of the container */
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 101; /* Ensure menu is above other content */
-}
-
-.menu-icon {
-    cursor: pointer;
-    width: 24px;
-    height: 24px;
-    padding: 8px;
+    height: 60px;
+    width: 60px;
     border-radius: 50%;
-    box-sizing: content-box; /* padding doesn't add to width */
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.menu-icon:hover {
-    background-color: #f0f0f0;
+.main-nav {
+    display: none; /* Sembunyikan di mobile, tampilkan di desktop */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    padding: 0 20px;
 }
 
-.kebab-menu-dropdown {
-    display: none; /* Hidden by default */
-    position: absolute;
-    top: calc(100% + 5px); /* Position below the icon with a small gap */
-    left: 0;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    min-width: 180px;
-    z-index: 1000;
-    padding: 8px 0;
-    border: 1px solid #eee;
-}
-
-.kebab-menu-dropdown.show {
-    display: block; /* Class to show the menu */
-}
-
-.kebab-menu-dropdown a {
-    display: block;
-    padding: 10px 20px;
-    color: #333;
+.main-nav a {
     text-decoration: none;
-    font-size: 1rem;
-    white-space: nowrap;
+    color: #555;
+    padding: 10px 15px;
+    font-weight: 500;
+    transition: color 0.2s;
 }
 
-.kebab-menu-dropdown a:hover {
-    background-color: #f5f5f5;
+.main-nav a:hover, .main-nav a.active {
+    color: var(--primary-color);
+}
+
+.mobile-menu-trigger {
+    display: block; /* Tampilkan di mobile */
+    cursor: pointer;
+    z-index: 10;
+}
+
+.mobile-menu-trigger img {
+    width: 32px;
+    height: 32px;
+}
+
+/* Tampilan Desktop */
+@media (min-width: 768px) {
+    .main-header {
+        justify-content: center;
+    }
+    .main-nav {
+        display: flex;
+        position: absolute;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        left: 0;
+        right: 0;
+        padding-left: 100px; /* Beri ruang untuk logo */
+        padding-right: 100px; /* Beri ruang jika ada item lain */
+    }
+    .logo-link {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .mobile-menu-trigger {
+        display: none;
+    }
+}
+
+/* Gaya untuk menu saat tampil di mobile */
+.main-nav.show-mobile {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 70px; /* Posisikan di bawah header */
+    right: 15px; /* Sesuaikan dengan padding container */
+    background-color: white;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 200px;
+    padding: 10px 0;
+}
+
+/* --- Menu lama --- */
+/* Hapus atau komentari gaya menu kebab yang lama */
+.menu-wrapper, .kebab-menu-dropdown {
+    display: none !important;
 }
 
 /* Home Page Content Styles */
@@ -806,10 +830,9 @@ h1.form-title {
 }
 
 .container.construction-page .main-header {
-    position: relative;
-    z-index: 2;
-    padding: 2.5rem 2.5rem 0 2.5rem; /* Memberi padding kembali */
-    background: none; /* Menghapus background jika ada */
+    background: none;
+    padding: 1rem 0; /* Sesuaikan padding header di halaman 'coming soon' */
+    margin-bottom: 1rem;
 }
 
 .container.construction-page main {
