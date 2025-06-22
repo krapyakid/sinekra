@@ -202,57 +202,45 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const parseLine = (row) => {
             const result = [];
-            let current = '';
-            let inQuote = false;
+            let currentField = '';
+            let inQuotes = false;
             for (let i = 0; i < row.length; i++) {
                 const char = row[i];
-                if (inQuote) {
-                    if (char === '"') {
-                        // Cek untuk escaped quote ("")
-                        if (i + 1 < row.length && row[i+1] === '"') {
-                            current += '"';
-                            i++; // Lewati quote berikutnya
-                        } else {
-                            inQuote = false;
-                        }
+                if (char === '"') {
+                    if (inQuotes && i + 1 < row.length && row[i + 1] === '"') {
+                        // Ini adalah escaped quote (""), anggap sebagai bagian dari teks
+                        currentField += '"';
+                        i++; // Lewati quote berikutnya agar tidak dianggap penutup
                     } else {
-                        current += char;
+                        // Ini adalah quote pembuka atau penutup
+                        inQuotes = !inQuotes;
                     }
+                } else if (char === ',' && !inQuotes) {
+                    // Ini adalah pemisah kolom yang valid
+                    result.push(currentField);
+                    currentField = '';
                 } else {
-                    if (char === '"') {
-                        inQuote = true;
-                    } else if (char === ',') {
-                        result.push(current);
-                        current = '';
-                    } else {
-                        current += char;
-                    }
+                    // Ini adalah karakter biasa, tambahkan ke field
+                    currentField += char;
                 }
             }
-            result.push(current);
+            result.push(currentField); // Tambahkan field terakhir
             return result;
         };
 
-        const headers = parseLine(lines[0]).map(h => h.trim());
-        
+        const headers = parseLine(lines[0]).map(h => h.trim().replace(/"/g, ''));
+
         return lines.slice(1).map(line => {
             if (!line.trim()) return null; // Lewati baris kosong
-            
-            const values = parseLine(line);
-            
-            if (values.length < headers.length) {
-                // Jika ada kolom kosong di akhir, csv mungkin tidak menyertakannya. Tambahkan.
-                while (values.length < headers.length) {
-                    values.push('');
-                }
-            }
 
+            const values = parseLine(line);
             const entry = {};
+            
             headers.forEach((header, i) => {
                 entry[header] = values[i] || '';
             });
             return entry;
-        }).filter(Boolean); // Hapus baris kosong yang mungkin ada
+        }).filter(Boolean); // Hapus baris kosong (null)
     }
 
     function populateFilters() {
