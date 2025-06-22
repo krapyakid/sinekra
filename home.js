@@ -199,39 +199,53 @@ document.addEventListener('DOMContentLoaded', function() {
     function parseCsv(csvText) {
         const lines = csvText.trim().split(/\r?\n/);
         if (lines.length < 2) return [];
-        
-        // Fungsi untuk mem-parsing satu baris, menangani koma dalam tanda kutip
+
         const parseLine = (row) => {
             const result = [];
             let current = '';
             let inQuote = false;
             for (let i = 0; i < row.length; i++) {
                 const char = row[i];
-                if (char === '"' && !(inQuote && row[i+1] === '"')) {
-                    inQuote = !inQuote;
-                } else if (char === ',' && !inQuote) {
-                    result.push(current);
-                    current = '';
+                if (inQuote) {
+                    if (char === '"') {
+                        // Cek untuk escaped quote ("")
+                        if (i + 1 < row.length && row[i+1] === '"') {
+                            current += '"';
+                            i++; // Lewati quote berikutnya
+                        } else {
+                            inQuote = false;
+                        }
+                    } else {
+                        current += char;
+                    }
                 } else {
-                    current += char;
+                    if (char === '"') {
+                        inQuote = true;
+                    } else if (char === ',') {
+                        result.push(current);
+                        current = '';
+                    } else {
+                        current += char;
+                    }
                 }
             }
             result.push(current);
             return result;
         };
-        
-        const headers = parseLine(lines[0]).map(h => h.trim());
 
+        const headers = parseLine(lines[0]).map(h => h.trim());
+        
         return lines.slice(1).map(line => {
             if (!line.trim()) return null; // Lewati baris kosong
             
-            const values = parseLine(line).map(value => {
-                // Hapus tanda kutip ganda di awal dan akhir jika ada
-                if (value.startsWith('"') && value.endsWith('"')) {
-                    return value.slice(1, -1).replace(/""/g, '"'); // Ganti "" menjadi "
+            const values = parseLine(line);
+            
+            if (values.length < headers.length) {
+                // Jika ada kolom kosong di akhir, csv mungkin tidak menyertakannya. Tambahkan.
+                while (values.length < headers.length) {
+                    values.push('');
                 }
-                return value;
-            });
+            }
 
             const entry = {};
             headers.forEach((header, i) => {
