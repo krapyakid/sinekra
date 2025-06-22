@@ -233,7 +233,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const values = parseLine(line);
             const entry = {};
             headers.forEach((header, i) => {
-                entry[header] = values[i] || '';
+                let value = values[i] || '';
+                // Hapus tanda kutip ganda di awal dan akhir jika ada
+                if (value.startsWith('"') && value.endsWith('"')) {
+                    value = value.slice(1, -1);
+                }
+                entry[header] = value;
             });
             return entry;
         }).filter(Boolean); // Hapus baris kosong yang mungkin ada
