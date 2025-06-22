@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sinergi Ekonomi Krapyak - Home</title>
+    <title>Sinergi Ekonomi Krapyak - Beranda</title>
     <link rel="icon" href="assets/banner_sinergi_krapyak.jpg" type="image/jpeg">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -16,10 +16,8 @@
                 </a>
                 
                 <nav class="main-nav" id="main-nav">
-                    <a href="index.html">Home</a>
+                    <a href="index.html" class="active">Beranda</a>
                     <a href="statistik.html">Statistik</a>
-                    <a href="direktori.html">Direktori Usaha</a>
-                    <a href="form.html">Form Anggota</a>
                 </nav>
 
                 <div class="mobile-menu-trigger" id="mobile-menu-trigger">
@@ -28,41 +26,61 @@
             </div>
         </header>
         
-        <div class="content-center">
-            <h1 class="page-title">
-                Selamat Datang
-                <span class="sub-heading">Di Platform Sinergi Ekonomi Santri Krapyak</span>
-            </h1>
-            
-            <div class="section">
-                <h2>LATAR BELAKANG</h2>
-                <p>Silaturahmi ini diinisiasi oleh alumni Pondok Pesantren Krapyak, Yogyakarta, sebagai bentuk ikhtiar memperkuat kontribusi alumni dalam kehidupan sosial dan ekonomi bangsa.</p>
-                <p>Acara ini digelar secara daring dan menghadirkan lintas generasi alumni, mulai dari senior hingga gen Z.</p>
-                <blockquote class="quote">
-                    <p>“Menjadi contoh yang bisa dilihat masyarakat kalau pesantren bisa melahirkan hal positif secara bersama.”</p>
-                    <footer>— Afif Muhammad, Pengasuh Ponpes Krapyak</footer>
-                </blockquote>
+        <main class="content-container">
+            <div class="direktori-header">
+                <h1 class="page-title">Jelajahi Jaringan Sinergi Krapyak</h1>
+                <p class="page-subtitle">Temukan usaha, produk, dan para profesional dari jaringan alumni.</p>
+                
+                <div class="view-controls">
+                    <div class="search-and-filter-container">
+                        <div class="search-wrapper">
+                            <input type="text" id="search-bar" placeholder="Cari nama usaha, pemilik, atau produk...">
+                        </div>
+                        <div class="filter-wrapper">
+                            <select id="filter-category" class="filter-select">
+                                <option value="">Semua Kategori</option>
+                                <!-- Kategori akan diisi oleh JS -->
+                            </select>
+                            <select id="filter-domicile" class="filter-select">
+                                <option value="">Semua Domisili</option>
+                                <!-- Domisili akan diisi oleh JS -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="action-buttons-wrapper">
+                        <button id="view-switch-btn" class="secondary-btn">Lihat Daftar Anggota</button>
+                        <a href="form.html" class="primary-btn">Isi Formulir</a>
+                    </div>
+                </div>
             </div>
 
-            <div class="separator"></div>
-
-            <div class="section">
-                <h2>TUJUAN UTAMA</h2>
-                <ol class="custom-ol">
-                    <li>Menguatkan jejaring antar alumni pesantren.</li>
-                    <li>Membuka ruang kontribusi alumni di bidang ekonomi, sosial, dan digital.</li>
-                    <li>Merumuskan langkah konkret kolaborasi ekonomi antar alumni.</li>
-                </ol>
+            <!-- Bagian ini tidak lagi relevan, kita bisa hapus atau sembunyikan -->
+            <div class="recommended-section" style="display: none;">
+                <h2 class="section-title">Rekomendasi Pilihan</h2>
+                <div id="recommended-grid" class="directory-grid-container"></div>
             </div>
 
-            <div class="separator"></div>
-
-            <a href="form.html" class="submit-btn" style="display: inline-block; text-decoration: none; margin: 2rem 0;">Isi Formulir Anggota</a>
-
-        </div>
+            <div class="main-grid-section">
+                <h2 id="grid-title" class="section-title">Daftar Usaha</h2>
+                <div id="directory-grid" class="directory-grid-container">
+                    <!-- Kartu direktori akan dimuat di sini oleh JavaScript -->
+                </div>
+                <div id="directory-loading" class="directory-status">
+                    <div class="spinner"></div>
+                    <p>Memuat data anggota...</p>
+                </div>
+                 <div id="no-results" class="directory-status" style="display: none;">
+                    <p>Tidak ada hasil yang cocok dengan pencarian Anda.</p>
+                </div>
+                <div id="pagination-container" class="pagination-container">
+                    <!-- Tombol pagination akan dibuat oleh JS -->
+                </div>
+            </div>
+        </main>
 
     </div>
 
     <script src="main.js"></script>
+    <script src="home.js"></script>
 </body>
 </html> 
