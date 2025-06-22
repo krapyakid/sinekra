@@ -1,25 +1,25 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Kebab Menu Logic
-    const menuToggle = document.getElementById('menu-toggle');
-    const kebabMenu = document.getElementById('kebab-menu');
+    // Mobile Menu Logic
+    const menuTrigger = document.getElementById('mobile-menu-trigger');
+    const mainNav = document.getElementById('main-nav');
 
-    if (menuToggle && kebabMenu) {
-        menuToggle.addEventListener('click', function(e) {
-            e.stopPropagation(); // Prevent click from bubbling up to the window
-            kebabMenu.classList.toggle('show');
+    if (menuTrigger && mainNav) {
+        menuTrigger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            mainNav.classList.toggle('show-mobile');
         });
 
         // Close the menu if clicked outside
         window.addEventListener('click', function(e) {
-            if (kebabMenu.classList.contains('show') && !kebabMenu.contains(e.target) && e.target !== menuToggle) {
-                kebabMenu.classList.remove('show');
+            if (mainNav.classList.contains('show-mobile') && !mainNav.contains(e.target) && e.target !== menuTrigger) {
+                mainNav.classList.remove('show-mobile');
             }
         });
 
         // Close menu when a link is clicked
-        kebabMenu.addEventListener('click', function(e) {
+        mainNav.addEventListener('click', function(e) {
             if (e.target.tagName === 'A') {
-                kebabMenu.classList.remove('show');
+                mainNav.classList.remove('show-mobile');
             }
         });
     }
