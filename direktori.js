@@ -136,6 +136,12 @@ document.addEventListener('DOMContentLoaded', function() {
             ? `<img src="${member.banner_url}" alt="Banner ${member.nama_usaha}" class="card-banner-img">`
             : `<div class="placeholder">${(member.nama_usaha || 'A').charAt(0)}</div>`;
 
+        // Ambil detail profesi, potong jika terlalu panjang
+        let detailProfesi = member.detail_profesi || '';
+        if (detailProfesi.length > 60) {
+            detailProfesi = detailProfesi.substring(0, 60) + '...';
+        }
+
         const marketplaces = `
             ${member.link_shopee ? `<a href="${member.link_shopee}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/shopee.svg" alt="Shopee" class="marketplace-icon"></a>` : ''}
             ${member.link_tokopedia ? `<a href="${member.link_tokopedia}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/tokopedia.svg" alt="Tokopedia" class="marketplace-icon"></a>` : ''}
@@ -148,8 +154,8 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="member-card">
                 <div class="card-banner">${banner}</div>
                 <div class="card-content">
-                    <h3 class="card-business-name">${member.nama_usaha || 'Nama Usaha'}</h3>
-                    <p class="card-owner-name">${member.nama_lengkap || 'Nama Pemilik'}</p>
+                    <h3 class="card-business-name">${member.nama_usaha || 'Nama Usaha Belum Diisi'}</h3>
+                    <p class="card-owner-name">${detailProfesi}</p>
                     <div class="card-contact-bar">
                         <div class="card-marketplaces">${marketplaces || '<span style="font-size: 0.8rem; color: #999;">Toko online tidak tersedia</span>'}</div>
                         ${waLink ? `<a href="${waLink}" target="_blank" rel="noopener noreferrer"><img src="assets/social/whatsapp.svg" alt="WhatsApp" class="whatsapp-icon"></a>` : ''}
