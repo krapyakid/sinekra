@@ -438,9 +438,18 @@ textarea {
     margin-bottom: 2rem;
 }
 
-.logo-link {
+.header-wrapper {
     position: relative;
-    z-index: 10;
+    width: 100%;
+    max-width: 1200px; /* Batas lebar konten header */
+    margin: 0 auto; /* Pusatkan wrapper */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo-link {
+    position: relative; /* Ubah dari absolute */
 }
 
 .logo {
@@ -484,21 +493,19 @@ textarea {
 
 /* Tampilan Desktop */
 @media (min-width: 768px) {
+    .header-wrapper {
+        justify-content: center; /* Pusatkan item di dalam wrapper */
+    }
+
     .main-header {
-        justify-content: center;
-        min-height: 70px;
-        padding: 10px 0; /* Hapus padding horizontal */
+        padding: 0 15px; /* Tambahkan padding ke header utama */
     }
     .main-nav {
         display: flex;
-        position: absolute;
-        justify-content: center;
-        align-items: center;
-        left: 50%;
-        transform: translateX(-50%);
+        position: static; /* Ubah dari absolute */
+        transform: none; /* Hapus transform */
         z-index: 1;
         width: auto;
-        padding-left: 0;
         padding-right: 0;
     }
     .logo-link {
