@@ -1077,13 +1077,13 @@ h1.form-title {
 
 @media (min-width: 992px) {
     .directory-grid-container {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr); /* 3 kolom untuk tablet */
     }
 }
 
 @media (min-width: 1200px) {
     .directory-grid-container {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(4, 1fr); /* 4 kolom untuk desktop */
     }
 }
 
