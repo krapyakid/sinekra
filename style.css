@@ -815,60 +815,34 @@ h1.form-title {
 
 /* === Coming Soon Page Styles === */
 
-.container.construction-page {
-    padding: 0;
-    position: relative;
-    overflow: hidden;
+.coming-soon-title {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
-.container.construction-page::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('assets/bg_underconstruct.jpg');
-    background-size: cover; 
-    background-position: center;
-    opacity: 0.15; /* Opacity dibuat sangat tipis */
-    z-index: 1;
-    border-radius: 10px; /* Menyamakan dengan radius container */
+.coming-soon-subtitle {
+    font-size: 1.2rem;
+    color: #555;
+    margin-top: 0;
 }
 
-.container.construction-page .main-header {
-    background: none;
-    padding: 1rem 0; /* Sesuaikan padding header di halaman 'coming soon' */
-    margin-bottom: 1rem;
-}
-
-.container.construction-page main {
-    position: relative;
-    z-index: 2;
-    min-height: 60vh;
+.construction-page {
+    text-align: center;
+    min-height: calc(100vh - 150px);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 2.5rem;
+    position: relative;
+    /* Menghapus semua properti background */
 }
 
-.container.construction-page .coming-soon-title, 
-.container.construction-page .coming-soon-subtitle {
-    color: white;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
-}
-
-.container.construction-page .coming-soon-title {
-    font-size: 4rem;
-    font-weight: 700;
-    margin: 0;
-}
-
-.container.construction-page .coming-soon-subtitle {
-    font-size: 1.5rem;
-    font-style: italic;
-    margin-top: 0.5rem;
+.container.construction-page {
+    width: 100%;
+    max-width: none;
 }
 
 /* === HALAMAN DIREKTORI BARU === */
