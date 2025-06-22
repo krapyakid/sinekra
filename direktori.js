@@ -111,12 +111,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const lines = csvText.trim().split(/\r?\n/);
         if (lines.length < 2) return [];
         const headers = lines[0].split(',').map(h => h.trim());
-        
+
         return lines.slice(1).map(line => {
-            const values = line.split(',');
+            // Parser CSV yang lebih baik, menangani data yang mengandung koma di dalam tanda kutip
+            const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+            
             const entry = {};
             headers.forEach((header, i) => {
-                entry[header] = values[i] ? values[i].trim() : '';
+                let value = values[i] || '';
+                // Hapus tanda kutip ganda di awal dan akhir
+                if (value.startsWith('"') && value.endsWith('"')) {
+                    value = value.slice(1, -1);
+                }
+                // Ganti kutip ganda yang didobel (escape) menjadi satu kutip
+                entry[header] = value.replace(/""/g, '"').trim();
             });
             return entry;
         });
