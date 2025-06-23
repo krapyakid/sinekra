@@ -44,8 +44,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const parsedOlshops = parseCsv(olshopCsv);
 
             // Gabungkan data olshop ke data member
-            allMembers = mergeData(parsedMembers, parsedOlshops);
-            console.log(`Total anggota yang berhasil diparsing: ${allMembers.length}`); // DEBUG
+            allMembers = mergeData(parsedMembers, parsedOlshops)
+                .filter(member => member.id_anggota && member.id_anggota.trim() !== ''); // Pastikan hanya baris dengan ID yang valid yang diproses
+
+            console.log(`Total anggota yang berhasil diparsing: ${allMembers.length}`);
             filteredMembers = [...allMembers];
             
             if (allMembers.length > 0) {
