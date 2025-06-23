@@ -228,7 +228,7 @@ textarea {
 /* Specific adjustments for smaller mobile screens */
 @media (max-width: 480px) {
     body {
-        padding: 1rem;
+        padding: 0; /* Hapus padding di body pada mobile */
     }
 
     .container {
@@ -250,6 +250,26 @@ textarea {
 
     .online-shop-row select {
         flex-basis: auto;
+    }
+
+    .hero-content .quote {
+        font-size: 1.5rem;
+        font-weight: 600; /* Dibuat sedikit lebih tebal */
+        margin: 0 auto 1rem;
+        max-width: 700px;
+        line-height: 1.4;
+        color: #0048B8; /* Ubah warna sesuai permintaan */
+        text-shadow: none; /* Hapus bayangan */
+        background-color: transparent; /* Hapus background abu-abu */
+        border: none; /* Hapus border kiri */
+        padding: 0; /* Hapus padding sisa dari background */
+    }
+
+    .hero-content .source {
+        font-size: 1rem;
+        opacity: 1;
+        color: #0048B8;
+        text-shadow: none;
     }
 }
 
