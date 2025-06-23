@@ -84,7 +84,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function createBusinessCard(member) {
         // --- DATA PREPARATION ---
         const waLink = member.no_hp ? `https://wa.me/62${member.no_hp.replace(/[^0-9]/g, '').replace(/^0/, '')}` : null;
-        const ownerName = member.nama_lengkap || 'Nama Pemilik';
+        // Prioritaskan nama panggilan, fallback ke nama lengkap
+        const ownerName = member.panggilan || member.nama_lengkap || 'Nama Pemilik';
         const gmapsUrl = member.url_gmaps || null;
         const locationText = member.domisili || 'Lokasi tidak diketahui';
 
