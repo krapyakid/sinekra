@@ -535,14 +535,16 @@ textarea {
 }
 
 .see-more-link {
-    color: var(--secondary-color);
     text-decoration: none;
+    color: var(--secondary-color);
     font-weight: 500;
+    transition: color 0.3s;
 }
 
 /* Hapus gaya direktori-header dan view-controls yang lama */
 .direktori-header, .view-controls {
-    display: none;
+    display: flex;
+    justify-content: space-between;
 }
 
 /* DESAIN KARTU BARU */
@@ -1122,6 +1124,7 @@ h1.form-title {
     text-align: center;
     padding: 40px 20px;
     color: #666;
+    grid-column: 1 / -1; /* Make sure it spans full width of the grid */
 }
 
 .spinner {
