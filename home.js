@@ -45,9 +45,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Gabungkan data olshop ke data member
             allMembers = mergeData(parsedMembers, parsedOlshops)
-                .filter(member => member.id_anggota && member.id_anggota.trim() !== ''); // Pastikan hanya baris dengan ID yang valid yang diproses
+                .filter(member => member.id_anggota && member.id_anggota.startsWith('SINEKRA-')); // Filter HANYA data dengan ID yang valid
 
-            console.log(`Total anggota yang berhasil diparsing: ${allMembers.length}`);
+            console.log(`Total anggota yang valid: ${allMembers.length}`);
             filteredMembers = [...allMembers];
             
             if (allMembers.length > 0) {
