@@ -541,10 +541,28 @@ textarea {
     transition: color 0.3s;
 }
 
-/* Hapus gaya direktori-header dan view-controls yang lama */
-.direktori-header, .view-controls {
-    display: flex;
-    justify-content: space-between;
+/* Status dan Spinner untuk Grid */
+.directory-status {
+    width: 100%;
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    grid-column: 1 / -1; /* Make sure it spans full width of the grid */
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid var(--secondary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* DESAIN KARTU BARU */
@@ -1117,51 +1135,6 @@ h1.form-title {
     .header-wrapper {
         justify-content: center; /* Pusatkan item di dalam wrapper */
     }
-}
-
-.directory-status {
-    width: 100%;
-    text-align: center;
-    padding: 40px 20px;
-    color: #666;
-    grid-column: 1 / -1; /* Make sure it spans full width of the grid */
-}
-
-.spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid var(--secondary-color);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 15px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Pagination container styles */
-.pagination-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.pagination-link {
-    text-decoration: none;
-    color: var(--primary-color);
-    padding: 8px 16px;
-    border: 1px solid var(--primary-color);
-    border-radius: 5px;
-    margin: 0 4px;
-    transition: background-color 0.3s;
-}
-
-.pagination-link:hover {
-    background-color: var(--primary-color);
-    color: white;
 }
 
 .active-pagination-link {
