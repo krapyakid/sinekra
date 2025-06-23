@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showLoading(isLoading) {
-        loadingIndicator.style.display = isLoading ? 'flex' : 'none';
+        loadingIndicator.style.display = isLoading ? 'block' : 'none';
         if (isLoading) {
             gridContainer.innerHTML = '';
             paginationContainer.innerHTML = '';
