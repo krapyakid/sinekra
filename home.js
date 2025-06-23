@@ -86,10 +86,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // --- IMAGE & PLACEHOLDER ---
         const initial = (member.nama_usaha || 'A').charAt(0).toUpperCase();
-        const placeholderDiv = `<div class="card-img" style="display: flex; align-items: center; justify-content: center; background-color: #e9e9e9; color: #333; font-size: 3rem; font-weight: bold;">${initial}</div>`;
+        // Gunakan single quote untuk HTML di dalam placeholder agar tidak konflik saat dimasukkan ke atribut onerror
+        const placeholderHtml = `<div class='card-img' style='display: flex; align-items: center; justify-content: center; background-color: #e9e9e9; color: #333; font-size: 3rem; font-weight: bold;'>${initial}</div>`;
+        
         const imageHtml = member.id_anggota 
-            ? `<img src="assets/usaha/${member.id_anggota}.jpg" alt="${member.nama_usaha}" class="card-img" onerror="this.onerror=null;this.outerHTML=\`${placeholderDiv}\`;">`
-            : placeholderDiv;
+            ? `<img src="assets/usaha/${member.id_anggota}.jpg" alt="${member.nama_usaha}" class="card-img" onerror="this.onerror=null; this.outerHTML='${placeholderHtml}';">`
+            : placeholderHtml.replace(/'/g, '"'); // Jika tidak ada gambar, gunakan HTML biasa dengan double quotes
 
         // --- SOCIAL & MARKETPLACE ICONS ---
         const socialIcons = [
