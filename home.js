@@ -80,9 +80,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function createBusinessCard(member) {
         const waLink = member.no_hp ? `https://wa.me/${member.no_hp.replace(/[^0-9]/g, '')}` : null;
-        const banner = member.banner_url 
-            ? `<img src="${member.banner_url}" alt="Banner ${member.nama_usaha}" class="card-banner-img">`
-            : `<div class="placeholder">${(member.nama_usaha || 'A').charAt(0)}</div>`;
+        
+        const initial = (member.nama_usaha || 'A').charAt(0).toUpperCase();
+        const placeholderDiv = `<div class="placeholder">${initial}</div>`;
+        
+        // Tampilkan gambar jika ada, jika tidak, tampilkan placeholder.
+        // Onerror akan menangani jika file gambar tidak ditemukan.
+        const banner = member.id_anggota 
+            ? `<img src="assets/usaha/${member.id_anggota}.jpg" alt="Banner ${member.nama_usaha}" class="card-banner-img" onerror="this.onerror=null;this.parentElement.innerHTML='${placeholderDiv.replace(/"/g, '\\"')}';">`
+            : placeholderDiv;
 
         // Ambil detail profesi, potong jika terlalu panjang
         let detailProfesi = member.detail_profesi || '';
