@@ -648,6 +648,7 @@ textarea {
     font-weight: 600;
     margin: 0 0 8px 0;
     color: var(--primary-color);
+    white-space: normal; /* Izinkan judul untuk wrap ke baris baru */
 }
 
 .card-description {
@@ -655,6 +656,7 @@ textarea {
     color: #666;
     margin-bottom: 12px;
     flex-grow: 1;
+    white-space: normal; /* Izinkan deskripsi untuk wrap */
 }
 
 .card-owner {
