@@ -154,18 +154,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function displayCurrentPageItems() {
-        gridContainer.innerHTML = '';
+        let cardsHtml = '';
         const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
         const endIndex = startIndex + ITEMS_PER_PAGE;
         const pageItems = filteredMembers.slice(startIndex, endIndex);
 
         pageItems.forEach(item => {
             if (currentView === 'usaha') {
-                gridContainer.innerHTML += createBusinessCard(item);
+                cardsHtml += createBusinessCard(item);
             } else {
-                gridContainer.innerHTML += createMemberCard(item);
+                cardsHtml += createMemberCard(item);
             }
         });
+        gridContainer.innerHTML = cardsHtml; // Set innerHTML sekali saja
     }
     
     function updateUI() {
@@ -272,20 +273,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function setupPagination() {
-        paginationContainer.innerHTML = '';
         const pageCount = Math.ceil(filteredMembers.length / ITEMS_PER_PAGE);
-        if (pageCount <= 1) return;
+        if (pageCount <= 1) {
+            paginationContainer.innerHTML = '';
+            return;
+        }
 
+        let paginationHtml = '';
         // Tombol Previous
-        paginationContainer.innerHTML += `<button class="pagination-btn" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>Prev</button>`;
+        paginationHtml += `<button class="pagination-btn" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>Prev</button>`;
 
         // Tombol Angka
         for (let i = 1; i <= pageCount; i++) {
-            paginationContainer.innerHTML += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+            paginationHtml += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
         }
         
         // Tombol Next
-        paginationContainer.innerHTML += `<button class="pagination-btn" data-page="${currentPage + 1}" ${currentPage === pageCount ? 'disabled' : ''}>Next</button>`;
+        paginationHtml += `<button class="pagination-btn" data-page="${currentPage + 1}" ${currentPage === pageCount ? 'disabled' : ''}>Next</button>`;
+        
+        paginationContainer.innerHTML = paginationHtml;
     }
 
     function applyFilters() {
