@@ -655,7 +655,6 @@ textarea {
     font-size: 0.8rem;
     color: #666;
     margin-bottom: 12px;
-    height: 2.4em;
     line-height: 1.5;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -663,6 +662,7 @@ textarea {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     white-space: normal;
+    min-height: 2.4em; /* Sediakan ruang minimal untuk 2 baris */
 }
 
 .card-owner {
