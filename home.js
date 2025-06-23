@@ -289,17 +289,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedCategory = categoryFilter.value;
         const selectedDomicile = domicileFilter.value;
 
+        // Hapus filter ketat yang memerlukan `nama_usaha`
+        // Biarkan semua anggota ditampilkan di view 'usaha', 
+        // kartu akan menampilkan fallback jika nama usaha kosong.
         let baseMembers = allMembers;
-
-        // Di mode 'usaha', HANYA tampilkan anggota yang punya nama usaha
-        if (currentView === 'usaha') {
-            baseMembers = allMembers.filter(member => member.nama_usaha && member.nama_usaha.trim() !== '');
-        }
 
         filteredMembers = baseMembers.filter(member => {
             const matchesSearch = searchTerm === '' ||
                 (member.nama_usaha && member.nama_usaha.toLowerCase().includes(searchTerm)) ||
-                (member.nama_lengkap && member.nama_lengkap.toLowerCase().includes(searchTerm));
+                (member.nama_lengkap && member.nama_lengkap.toLowerCase().includes(searchTerm)) ||
+                (member.detail_profesi && member.detail_profesi.toLowerCase().includes(searchTerm));
             
             const matchesCategory = selectedCategory === '' || member.kategori === selectedCategory;
             const matchesDomicile = selectedDomicile === '' || member.domisili === selectedDomicile;
