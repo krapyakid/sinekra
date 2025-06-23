@@ -1145,7 +1145,7 @@ h1.form-title {
     }
 
     .header-wrapper {
-        justify-content: center; /* Pusatkan item di dalam wrapper */
+        justify-content: space-between; /* Alih-alih 'center', gunakan 'space-between' untuk mendorong item ke tepi */
     }
 }
 
