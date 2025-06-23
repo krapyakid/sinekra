@@ -82,9 +82,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function createBusinessCard(member) {
         // --- DATA PREPARATION ---
         const waLink = member.no_hp ? `https://wa.me/62${member.no_hp.replace(/[^0-9]/g, '').replace(/^0/, '')}` : null;
-        const location = member.domisili || 'Lokasi tidak diketahui';
         const ownerName = member.nama_lengkap || 'Nama Pemilik';
-        
+        const gmapsUrl = member.url_gmaps || null;
+        const locationText = member.domisili || 'Lokasi tidak diketahui';
+
+        // Membuat tag lokasi menjadi link jika gmapsUrl ada
+        const locationTag = gmapsUrl 
+            ? `<a href="${gmapsUrl}" target="_blank" rel="noopener noreferrer" class="location-tag"><i class="fas fa-map-marker-alt"></i> ${locationText}</a>`
+            : `<span class="location-tag"><i class="fas fa-map-marker-alt"></i> ${locationText}</span>`;
+
         // --- IMAGE & PLACEHOLDER ---
         const initial = (member.nama_usaha || 'A').charAt(0).toUpperCase();
         // Placeholder HTML yang akan digunakan jika gambar gagal dimuat
@@ -113,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="directory-card">
                 <div class="card-image-container">
                     ${imageHtml}
-                    <span class="location-tag"><i class="fas fa-map-marker-alt"></i> ${location}</span>
+                    ${locationTag}
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">${member.nama_usaha || 'Nama Usaha Belum Diisi'}</h3>
