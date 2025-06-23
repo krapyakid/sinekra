@@ -498,17 +498,26 @@ textarea {
     margin-bottom: 2rem;
 }
 
+.hero-content {
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: transparent;
+    padding: 0;
+}
+
 .hero-content .quote {
     font-size: 1.5rem;
     font-weight: 500;
     margin: 0 auto 1rem;
     max-width: 700px;
     line-height: 1.4;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 .hero-content .source {
     font-size: 1rem;
     opacity: 0.9;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
 /* Main Content Section Header */
@@ -539,8 +548,9 @@ textarea {
 /* DESAIN KARTU BARU */
 .directory-grid-container {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 10px 0;
 }
 
 .directory-card {
@@ -585,6 +595,11 @@ textarea {
     font-weight: 500;
 }
 
+.location-tag:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+}
+
 .card-content {
     padding: 1rem;
     display: flex;
@@ -627,9 +642,22 @@ textarea {
 }
 
 .social-icons a:hover {
-    color: var(--secondary-color);
     transform: scale(1.1);
 }
+
+/* Warna Ikon Spesifik */
+.social-icons .fa-whatsapp { color: #25D366; }
+.social-icons .fa-whatsapp:hover { color: #128C7E; }
+.social-icons .fa-facebook-f { color: #1877F2; }
+.social-icons .fa-facebook-f:hover { color: #1056b2; }
+.social-icons .fa-tiktok { color: #010101; }
+.social-icons .fa-tiktok:hover { color: #555555; }
+.social-icons .fa-shopping-bag { color: #EE4D2D; } /* Shopee */
+.social-icons .fa-shopping-bag:hover { color: #c43e24; }
+.social-icons .fa-store { color: #03AC0E; } /* Tokopedia */
+.social-icons .fa-store:hover { color: #027a0a; }
+.social-icons .fa-globe { color: #4a90e2; } /* Website */
+.social-icons .fa-globe:hover { color: #357ABD; }
 
 /* Hapus gaya .member-card yang lama untuk menghindari konflik */
 .member-card, .card-banner, .card-business-name, .card-owner-name, .card-contact-bar, .card-marketplaces {
@@ -652,6 +680,12 @@ textarea {
 @media (min-width: 992px) {
     .directory-grid-container {
         grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .directory-grid-container {
+        grid-template-columns: 1fr; /* Satu kolom di layar sangat kecil */
     }
 }
 
@@ -1081,4 +1115,53 @@ h1.form-title {
     .header-wrapper {
         justify-content: center; /* Pusatkan item di dalam wrapper */
     }
+}
+
+.directory-status {
+    width: 100%;
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid var(--secondary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Pagination container styles */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination-link {
+    text-decoration: none;
+    color: var(--primary-color);
+    padding: 8px 16px;
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    margin: 0 4px;
+    transition: background-color 0.3s;
+}
+
+.pagination-link:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.active-pagination-link {
+    background-color: var(--primary-color);
+    color: white;
 } 
