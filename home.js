@@ -219,50 +219,44 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function parseCsv(csvText) {
+        // This is a more robust CSV parser that handles quoted fields,
+        // including commas and newlines inside the quotes.
+        const result = [];
         const lines = csvText.trim().split(/\r?\n/);
-        if (lines.length < 2) return [];
+        if (lines.length < 2) return result;
 
-        const parseLine = (row) => {
-            const result = [];
-            let currentField = '';
-            let inQuotes = false;
-            for (let i = 0; i < row.length; i++) {
-                const char = row[i];
-                if (char === '"') {
-                    if (inQuotes && i + 1 < row.length && row[i + 1] === '"') {
-                        // Ini adalah escaped quote (""), anggap sebagai bagian dari teks
-                        currentField += '"';
-                        i++; // Lewati quote berikutnya agar tidak dianggap penutup
-                    } else {
-                        // Ini adalah quote pembuka atau penutup
-                        inQuotes = !inQuotes;
-                    }
-                } else if (char === ',' && !inQuotes) {
-                    // Ini adalah pemisah kolom yang valid
-                    result.push(currentField);
-                    currentField = '';
-                } else {
-                    // Ini adalah karakter biasa, tambahkan ke field
-                    currentField += char;
-                }
-            }
-            result.push(currentField); // Tambahkan field terakhir
-            return result;
-        };
+        const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
 
-        const headers = parseLine(lines[0]).map(h => h.trim().replace(/"/g, ''));
+        const regex = /(?:"([^"]*(?:""[^"]*)*)"|([^,]*?))(?:,|$)/g;
 
-        return lines.slice(1).map(line => {
-            if (!line.trim()) return null; // Lewati baris kosong
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i];
+            if (!line.trim()) continue;
 
-            const values = parseLine(line);
             const entry = {};
+            let headerIndex = 0;
+            let match;
             
-            headers.forEach((header, i) => {
-                entry[header] = values[i] || '';
-            });
-            return entry;
-        }).filter(Boolean); // Hapus baris kosong (null)
+            while ((match = regex.exec(line))) {
+                if (headerIndex >= headers.length) break;
+                
+                // Group 1 is for quoted fields, Group 2 is for unquoted.
+                const value = match[1] !== undefined 
+                    ? match[1].replace(/""/g, '"') // Unescape double quotes
+                    : match[2];
+                
+                entry[headers[headerIndex]] = value.trim();
+                headerIndex++;
+            }
+            // Ensure all headers have a key, even if the value is empty (for trailing commas)
+            while (headerIndex < headers.length) {
+                entry[headers[headerIndex]] = '';
+                headerIndex++;
+            }
+            
+            result.push(entry);
+        }
+        return result;
     }
 
     function populateFilters() {
