@@ -486,6 +486,16 @@ textarea {
     color: var(--secondary-color);
 }
 
+.mobile-menu-trigger {
+    display: none; /* Sembunyikan di desktop secara default */
+    cursor: pointer;
+}
+
+.mobile-menu-trigger img {
+    height: 24px; /* Sesuaikan ukuran ikon menu */
+    width: auto;
+}
+
 /* Hero Section */
 .hero-section {
     background-image: url('assets/hero-bg.jpg'); /* Path sudah disesuaikan */
@@ -720,7 +730,7 @@ textarea {
     }
     
     .mobile-menu-trigger {
-        display: block; /* Tampilkan ikon hamburger */
+        display: block; /* Tampilkan ikon kebab di mobile */
     }
 
     /* Style untuk menu mobile dropdown (awalnya tersembunyi) */
