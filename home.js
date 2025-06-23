@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
             allMembers = mergeData(parsedMembers, parsedOlshops)
                 .filter(member => member.id_anggota && member.id_anggota.startsWith('SINEKRA-')); // Filter HANYA data dengan ID yang valid
 
+            console.log('Data mentah semua anggota yang valid:', JSON.stringify(allMembers, null, 2)); // DEBUG: Tampilkan semua data yang diparsing
             console.log(`Total anggota yang valid: ${allMembers.length}`);
             filteredMembers = [...allMembers];
             
