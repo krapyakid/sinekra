@@ -99,9 +99,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Placeholder HTML yang akan digunakan jika gambar gagal dimuat
         const placeholderDiv = `<div class="card-img" style="display: flex; align-items: center; justify-content: center; background-color: #e9e9e9; color: #333; font-size: 3rem; font-weight: bold;">${initial}</div>`;
         
-        // Cek apakah ada nama file gambar di data
-        const imageHtml = member.foto_usaha
-            ? `<img src="assets/usaha/${member.foto_usaha}" alt="${member.nama_usaha}" class="card-img" onerror="this.onerror=null; this.parentElement.innerHTML = '${placeholderDiv.replace(/"/g, "'")}';">`
+        // Ganti sumber gambar untuk menggunakan id_anggota, dengan fallback ke placeholder
+        const imageHtml = member.id_anggota
+            ? `<img src="assets/usaha/${member.id_anggota}.jpg" alt="${member.nama_usaha}" class="card-img" onerror="this.onerror=null; this.parentElement.innerHTML = '${placeholderDiv.replace(/"/g, "'")}';">`
             : placeholderDiv;
 
         // --- SOCIAL & MARKETPLACE ICONS ---
