@@ -79,40 +79,44 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- FUNGSI TAMPILAN ---
 
     function createBusinessCard(member) {
-        const waLink = member.no_hp ? `https://wa.me/${member.no_hp.replace(/[^0-9]/g, '')}` : null;
+        // --- DATA PREPARATION ---
+        const waLink = member.no_hp ? `https://wa.me/62${member.no_hp.replace(/[^0-9]/g, '').replace(/^0/, '')}` : null;
+        const location = member.domisili || 'Lokasi tidak diketahui';
+        const ownerName = member.nama_lengkap || 'Nama Pemilik';
         
+        // --- IMAGE & PLACEHOLDER ---
         const initial = (member.nama_usaha || 'A').charAt(0).toUpperCase();
-        const placeholderDiv = `<div class="placeholder">${initial}</div>`;
-        
-        // Tampilkan gambar jika ada, jika tidak, tampilkan placeholder.
-        // Onerror akan menangani jika file gambar tidak ditemukan.
-        const banner = member.id_anggota 
-            ? `<img src="assets/usaha/${member.id_anggota}.jpg" alt="Banner ${member.nama_usaha}" class="card-banner-img" onerror="this.onerror=null;this.parentElement.innerHTML='${placeholderDiv.replace(/"/g, '\\"')}';">`
+        const placeholderDiv = `<div class="card-img" style="display: flex; align-items: center; justify-content: center; background-color: #e9e9e9; color: #333; font-size: 3rem; font-weight: bold;">${initial}</div>`;
+        const imageHtml = member.id_anggota 
+            ? `<img src="assets/usaha/${member.id_anggota}.jpg" alt="${member.nama_usaha}" class="card-img" onerror="this.onerror=null;this.outerHTML=\`${placeholderDiv}\`;">`
             : placeholderDiv;
 
-        // Ambil detail profesi, potong jika terlalu panjang
-        let detailProfesi = member.detail_profesi || '';
-        if (detailProfesi.length > 60) {
-            detailProfesi = detailProfesi.substring(0, 60) + '...';
-        }
+        // --- SOCIAL & MARKETPLACE ICONS ---
+        const socialIcons = [
+            { link: waLink, icon: 'fab fa-whatsapp' },
+            { link: member.link_facebook, icon: 'fab fa-facebook-f' },
+            { link: member.link_website, icon: 'fas fa-globe' }, // Cek jika ada kolom 'link_website'
+            { link: member.link_shopee, icon: 'fas fa-shopping-bag' },
+            { link: member.link_tokopedia, icon: 'fas fa-store' },
+            { link: member.link_tiktok, icon: 'fab fa-tiktok' }
+        ]
+        .filter(item => item.link) // Hanya tampilkan ikon yang linknya ada
+        .map(item => `<a href="${item.link}" target="_blank" rel="noopener noreferrer"><i class="${item.icon}"></i></a>`)
+        .join('');
 
-        const marketplaces = `
-            ${member.link_shopee ? `<a href="${member.link_shopee}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/shopee.svg" alt="Shopee" class="marketplace-icon"></a>` : ''}
-            ${member.link_tokopedia ? `<a href="${member.link_tokopedia}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/tokopedia.svg" alt="Tokopedia" class="marketplace-icon"></a>` : ''}
-            ${member.link_bukalapak ? `<a href="${member.link_bukalapak}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/bukalapak.svg" alt="Bukalapak" class="marketplace-icon"></a>` : ''}
-            ${member.link_tiktok ? `<a href="${member.link_tiktok}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/tiktok.svg" alt="TikTok Shop" class="marketplace-icon"></a>` : ''}
-            ${member.link_facebook ? `<a href="${member.link_facebook}" target="_blank" rel="noopener noreferrer"><img src="assets/social/facebook.svg" alt="Facebook" class="marketplace-icon"></a>` : ''}
-        `.trim();
-
+        // --- RENDER HTML CARD ---
         return `
-            <div class="member-card">
-                <div class="card-banner">${banner}</div>
+            <div class="directory-card">
+                <div class="card-image-container">
+                    ${imageHtml}
+                    <span class="location-tag"><i class="fas fa-map-marker-alt"></i> ${location}</span>
+                </div>
                 <div class="card-content">
-                    <h3 class="card-business-name">${member.nama_usaha || 'Nama Usaha Belum Diisi'}</h3>
-                    <p class="card-owner-name">${detailProfesi}</p>
-                    <div class="card-contact-bar">
-                        <div class="card-marketplaces">${marketplaces || '<span style="font-size: 0.8rem; color: #999;">Toko online tidak tersedia</span>'}</div>
-                        ${waLink ? `<a href="${waLink}" target="_blank" rel="noopener noreferrer"><img src="assets/social/whatsapp.svg" alt="WhatsApp" class="whatsapp-icon"></a>` : ''}
+                    <h3 class="card-title">${member.nama_usaha || 'Nama Usaha Belum Diisi'}</h3>
+                    <p class="card-description">${member.detail_profesi || 'Deskripsi usaha tidak tersedia.'}</p>
+                    <p class="card-owner">${ownerName}</p>
+                    <div class="social-icons">
+                        ${socialIcons || '<span style="font-size: 0.8rem; color: #999;">Toko online tidak tersedia</span>'}
                     </div>
                 </div>
             </div>
@@ -122,13 +126,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function createMemberCard(member) {
         // Tampilan kartu anggota yang lebih simpel
         return `
-            <div class="member-card simple">
+            <div class="directory-card simple">
                 <div class="card-content">
-                    <h3 class="card-business-name">${member.nama_lengkap || 'Nama Anggota'}</h3>
-                    <p class="card-owner-name">Angkatan: ${member.angkatan || 'N/A'}</p>
-                    <p class="card-owner-name">Komplek: ${member.komplek || 'N/A'}</p>
-                    <div class="card-contact-bar">
-                         <span style="font-size: 0.8rem; color: #999;">Domisili: ${member.domisili || 'N/A'}</span>
+                    <h3 class="card-title">${member.nama_lengkap || 'Nama Anggota'}</h3>
+                    <p class="card-description">Angkatan: ${member.angkatan || 'N/A'}</p>
+                    <p class="card-owner">Komplek: ${member.komplek || 'N/A'}</p>
+                    <div class="social-icons">
+                         <span style="font-size: 0.9rem; color: #666;"><i class="fas fa-map-marker-alt"></i> ${member.domisili || 'N/A'}</span>
                     </div>
                 </div>
             </div>
@@ -152,15 +156,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function updateUI() {
         if (currentView === 'usaha') {
-            gridTitle.textContent = 'Daftar Usaha';
+            // Judul di header section sudah statis sesuai desain baru
+            // gridTitle.textContent = 'Usaha Santri Terdekat sama Kamu'; 
             viewSwitchBtn.textContent = 'Lihat Daftar Anggota';
-            searchBar.placeholder = 'Cari nama usaha, pemilik, atau produk...';
-            categoryFilter.style.display = '';
+            searchBar.placeholder = 'Cari Nama Usaha';
+            if(categoryFilter) categoryFilter.style.display = '';
         } else {
-            gridTitle.textContent = 'Daftar Anggota';
+            // gridTitle.textContent = 'Daftar Anggota';
             viewSwitchBtn.textContent = 'Lihat Daftar Usaha';
             searchBar.placeholder = 'Cari nama anggota atau domisili...';
-            categoryFilter.style.display = 'none'; // Sembunyikan filter kategori di view anggota
+            if(categoryFilter) categoryFilter.style.display = 'none'; // Sembunyikan filter kategori di view anggota
         }
     }
 
@@ -189,7 +194,8 @@ document.addEventListener('DOMContentLoaded', function() {
             else if (platform === 'lainnya') {
                 if (url.includes('bukalapak.com')) acc[shop.id_anggota].link_bukalapak = url;
                 else if (url.includes('facebook.com')) acc[shop.id_anggota].link_facebook = url;
-                // Bisa ditambahkan kondisi lain di sini
+                // Asumsi link lain adalah website general
+                else acc[shop.id_anggota].link_website = url;
             }
 
             return acc;
@@ -325,7 +331,13 @@ document.addEventListener('DOMContentLoaded', function() {
             currentPage = parseInt(e.target.dataset.page);
             displayCurrentPageItems();
             setupPagination();
-            window.scrollTo(0, document.getElementById('all-members-section').offsetTop);
+            const gridElement = document.getElementById('directory-grid');
+            if (gridElement) {
+                window.scrollTo({
+                    top: gridElement.offsetTop - 100, // Beri sedikit offset karena header sticky
+                    behavior: 'smooth'
+                });
+            }
         }
     });
 
