@@ -6,6 +6,7 @@
     <title>Sinergi Ekonomi Krapyak - Beranda</title>
     <link rel="icon" href="assets/banner_sinergi_krapyak.jpg" type="image/jpeg">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
@@ -15,9 +16,13 @@
                     <img src="assets/banner_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="logo">
                 </a>
                 
+                <div class="search-wrapper header-search">
+                    <input type="text" id="search-bar" placeholder="Cari Nama Usaha">
+                </div>
+
                 <nav class="main-nav" id="main-nav">
-                    <a href="index.html" class="active">Beranda</a>
-                    <a href="statistik.html">Statistik</a>
+                    <button id="view-switch-btn" class="nav-link">Lihat Anggota</button>
+                    <a href="form.html" class="nav-link">Isi Formulir</a>
                 </nav>
 
                 <div class="mobile-menu-trigger" id="mobile-menu-trigger">
@@ -25,43 +30,32 @@
                 </div>
             </div>
         </header>
+
+        <section class="hero-section">
+            <div class="hero-content">
+                <p class="quote">"Menjadi contoh yang bisa dilihat masyarakat kalau pesantren bisa melahirkan hal positif secara bersama."</p>
+                <p class="source">- Alif Muhammad, Pengasuh Ponpes Krapyak -</p>
+            </div>
+        </section>
         
         <main class="content-container">
-            <div class="direktori-header">
-                <h1 class="page-title">Jelajahi Jaringan Sinergi Krapyak</h1>
-                <p class="page-subtitle">Temukan usaha, produk, dan para profesional dari jaringan alumni.</p>
-                
-                <div class="view-controls">
-                    <div class="search-and-filter-container">
-                        <div class="search-wrapper">
-                            <input type="text" id="search-bar" placeholder="Cari nama usaha, pemilik, atau produk...">
-                        </div>
-                        <div class="filter-wrapper">
-                            <select id="filter-category" class="filter-select">
-                                <option value="">Semua Kategori</option>
-                                <!-- Kategori akan diisi oleh JS -->
-                            </select>
-                            <select id="filter-domicile" class="filter-select">
-                                <option value="">Semua Domisili</option>
-                                <!-- Domisili akan diisi oleh JS -->
-                            </select>
-                        </div>
-                    </div>
-                    <div class="action-buttons-wrapper">
-                        <button id="view-switch-btn" class="secondary-btn">Lihat Daftar Anggota</button>
-                        <a href="form.html" class="primary-btn">Isi Formulir</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bagian ini tidak lagi relevan, kita bisa hapus atau sembunyikan -->
-            <div class="recommended-section" style="display: none;">
-                <h2 class="section-title">Rekomendasi Pilihan</h2>
-                <div id="recommended-grid" class="directory-grid-container"></div>
+            <!-- Filter yang disembunyikan, bisa diaktifkan kembali jika perlu -->
+            <div class="filter-wrapper" style="display: none;">
+                <select id="filter-category" class="filter-select">
+                    <option value="">Semua Kategori</option>
+                    <!-- Kategori akan diisi oleh JS -->
+                </select>
+                <select id="filter-domicile" class="filter-select">
+                    <option value="">Semua Domisili</option>
+                    <!-- Domisili akan diisi oleh JS -->
+                </select>
             </div>
 
             <div class="main-grid-section">
-                <h2 id="grid-title" class="section-title">Daftar Usaha</h2>
+                <div class="section-header">
+                    <h2 id="grid-title" class="section-title">Usaha Santri Terdekat sama Kamu</h2>
+                    <a href="#" class="see-more-link">Lihat lainnya</a>
+                </div>
                 <div id="directory-grid" class="directory-grid-container">
                     <!-- Kartu direktori akan dimuat di sini oleh JavaScript -->
                 </div>
