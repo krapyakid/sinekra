@@ -87,9 +87,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // --- IMAGE & PLACEHOLDER ---
         const initial = (member.nama_usaha || 'A').charAt(0).toUpperCase();
+        // Placeholder HTML yang akan digunakan jika gambar gagal dimuat
         const placeholderDiv = `<div class="card-img" style="display: flex; align-items: center; justify-content: center; background-color: #e9e9e9; color: #333; font-size: 3rem; font-weight: bold;">${initial}</div>`;
-        const imageHtml = member.foto_usaha 
-            ? `<img src="assets/usaha/${member.foto_usaha}" alt="${member.nama_usaha}" class="card-img" onerror="this.onerror=null;this.outerHTML=\`${placeholderDiv}\`;">`
+        
+        // Cek apakah ada nama file gambar di data
+        const imageHtml = member.foto_usaha
+            ? `<img src="assets/usaha/${member.foto_usaha}" alt="${member.nama_usaha}" class="card-img" onerror="this.onerror=null; this.parentElement.innerHTML = '${placeholderDiv.replace(/"/g, "'")}';">`
             : placeholderDiv;
 
         // --- SOCIAL & MARKETPLACE ICONS ---
