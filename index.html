@@ -9,28 +9,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <header class="main-header">
-            <div class="header-wrapper">
-                <a href="index.html" class="logo-link">
-                    <img src="assets/logo_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="logo">
-                </a>
-                
-                <div class="search-wrapper header-search">
-                    <input type="text" id="search-bar" placeholder="Cari Nama Usaha">
-                </div>
-
-                <nav class="main-nav" id="main-nav">
-                    <button id="view-switch-btn" class="nav-link">Lihat Anggota</button>
-                    <a href="form.html" class="nav-link">Isi Formulir</a>
-                </nav>
-
-                <div class="mobile-menu-trigger" id="mobile-menu-trigger">
-                    <img src="assets/menu_kebab.svg" alt="Menu">
-                </div>
+    <header class="main-header">
+        <div class="header-wrapper">
+            <a href="index.html" class="logo-link">
+                <img src="assets/logo_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="logo">
+            </a>
+            
+            <div class="search-wrapper header-search">
+                <input type="text" id="search-bar" placeholder="Cari Nama Usaha">
             </div>
-        </header>
 
+            <nav class="main-nav" id="main-nav">
+                <button id="view-switch-btn" class="nav-link">Lihat Anggota</button>
+                <a href="form.html" class="nav-link">Isi Formulir</a>
+            </nav>
+
+            <div class="mobile-menu-trigger" id="mobile-menu-trigger">
+                <img src="assets/menu_kebab.svg" alt="Menu">
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
         <section class="hero-section">
             <div class="hero-content">
                 <p class="quote">"Menjadi contoh yang bisa dilihat masyarakat kalau pesantren bisa melahirkan hal positif secara bersama."</p>
@@ -38,42 +38,39 @@
             </div>
         </section>
         
-        <div class="container">
-            <main class="content-container">
-                <!-- Filter yang disembunyikan, bisa diaktifkan kembali jika perlu -->
-                <div class="filter-wrapper" style="display: none;">
-                    <select id="filter-category" class="filter-select">
-                        <option value="">Semua Kategori</option>
-                        <!-- Kategori akan diisi oleh JS -->
-                    </select>
-                    <select id="filter-domicile" class="filter-select">
-                        <option value="">Semua Domisili</option>
-                        <!-- Domisili akan diisi oleh JS -->
-                    </select>
-                </div>
+        <main class="content-container">
+            <!-- Filter yang disembunyikan, bisa diaktifkan kembali jika perlu -->
+            <div class="filter-wrapper" style="display: none;">
+                <select id="filter-category" class="filter-select">
+                    <option value="">Semua Kategori</option>
+                    <!-- Kategori akan diisi oleh JS -->
+                </select>
+                <select id="filter-domicile" class="filter-select">
+                    <option value="">Semua Domisili</option>
+                    <!-- Domisili akan diisi oleh JS -->
+                </select>
+            </div>
 
-                <div class="main-grid-section">
-                    <div class="section-header">
-                        <h2 id="grid-title" class="section-title">Usaha Santri Terdekat sama Kamu</h2>
-                        <a href="#" class="see-more-link">Lihat lainnya</a>
-                    </div>
-                    <div id="directory-grid" class="directory-grid-container">
-                        <!-- Kartu direktori akan dimuat di sini oleh JavaScript -->
-                    </div>
-                    <div id="directory-loading" class="directory-status">
-                        <div class="spinner"></div>
-                        <p>Memuat data anggota...</p>
-                    </div>
-                     <div id="no-results" class="directory-status" style="display: none;">
-                        <p>Tidak ada hasil yang cocok dengan pencarian Anda.</p>
-                    </div>
-                    <div id="pagination-container" class="pagination-container">
-                        <!-- Tombol pagination akan dibuat oleh JS -->
-                    </div>
+            <div class="main-grid-section">
+                <div class="section-header">
+                    <h2 id="grid-title" class="section-title">Usaha Santri Terdekat sama Kamu</h2>
+                    <a href="#" class="see-more-link">Lihat lainnya</a>
                 </div>
-            </main>
-        </div>
-
+                <div id="directory-grid" class="directory-grid-container">
+                    <!-- Kartu direktori akan dimuat di sini oleh JavaScript -->
+                </div>
+                <div id="directory-loading" class="directory-status">
+                    <div class="spinner"></div>
+                    <p>Memuat data anggota...</p>
+                </div>
+                    <div id="no-results" class="directory-status" style="display: none;">
+                    <p>Tidak ada hasil yang cocok dengan pencarian Anda.</p>
+                </div>
+                <div id="pagination-container" class="pagination-container">
+                    <!-- Tombol pagination akan dibuat oleh JS -->
+                </div>
+            </div>
+        </main>
     </div>
 
     <script src="main.js"></script>
