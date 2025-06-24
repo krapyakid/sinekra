@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingIndicator = document.getElementById('directory-loading');
     const paginationContainer = document.getElementById('pagination-container');
     const searchBar = document.getElementById('search-bar');
+    const mobileSearchBar = document.getElementById('mobile-search-bar');
     const categoryFilter = document.getElementById('filter-category');
     const domicileFilter = document.getElementById('filter-domicile');
     const noResults = document.getElementById('no-results');
@@ -331,6 +332,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function applyFilters() {
         const searchTerm = searchBar.value.toLowerCase();
+        const mobileSearchTerm = mobileSearchBar.value.toLowerCase();
+        const finalSearchTerm = searchTerm || mobileSearchTerm;
+
         const selectedCategory = categoryFilter.value;
         const selectedDomicile = domicileFilter.value;
 
@@ -340,10 +344,10 @@ document.addEventListener('DOMContentLoaded', function() {
         let baseMembers = allMembers;
 
         filteredMembers = baseMembers.filter(member => {
-            const matchesSearch = searchTerm === '' ||
-                (member.nama_usaha && member.nama_usaha.toLowerCase().includes(searchTerm)) ||
-                (member.nama_lengkap && member.nama_lengkap.toLowerCase().includes(searchTerm)) ||
-                (member.detail_profesi && member.detail_profesi.toLowerCase().includes(searchTerm));
+            const matchesSearch = finalSearchTerm === '' ||
+                (member.nama_usaha && member.nama_usaha.toLowerCase().includes(finalSearchTerm)) ||
+                (member.nama_lengkap && member.nama_lengkap.toLowerCase().includes(finalSearchTerm)) ||
+                (member.detail_profesi && member.detail_profesi.toLowerCase().includes(finalSearchTerm));
             
             const matchesCategory = selectedCategory === '' || member.kategori === selectedCategory;
             const matchesDomicile = selectedDomicile === '' || member.domisili === selectedDomicile;
@@ -370,7 +374,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- EVENT LISTENERS ---
     viewSwitchBtn.addEventListener('click', toggleView);
-    searchBar.addEventListener('keyup', renderPage);
+
+    function syncSearchBars(source, destination) {
+        destination.value = source.value;
+    }
+
+    searchBar.addEventListener('keyup', () => {
+        syncSearchBars(searchBar, mobileSearchBar);
+        renderPage();
+    });
+
+    mobileSearchBar.addEventListener('keyup', () => {
+        syncSearchBars(mobileSearchBar, searchBar);
+        renderPage();
+    });
+
     categoryFilter.addEventListener('change', renderPage);
     domicileFilter.addEventListener('change', renderPage);
 
