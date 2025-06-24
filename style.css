@@ -657,7 +657,9 @@ textarea {
     font-weight: 600;
     margin: 0 0 8px 0;
     color: var(--primary-color);
-    white-space: normal; /* Izinkan judul untuk wrap ke baris baru */
+    white-space: nowrap; /* Mencegah judul turun baris */
+    overflow: hidden; /* Sembunyikan teks yang berlebih */
+    text-overflow: ellipsis; /* Tampilkan ... di akhir */
 }
 
 .card-description {
@@ -671,7 +673,8 @@ textarea {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     white-space: normal;
-    min-height: 2.4em; /* Sediakan ruang minimal untuk 2 baris */
+    min-height: 2.4em;
+    flex-grow: 1; /* Pastikan deskripsi mengisi ruang kosong */
 }
 
 .card-owner {
