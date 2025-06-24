@@ -85,24 +85,23 @@ document.addEventListener('DOMContentLoaded', function() {
     function createBusinessCard(member) {
         // --- DATA PREPARATION ---
         const waLink = member.no_hp ? `https://wa.me/62${member.no_hp.replace(/[^0-9]/g, '').replace(/^0/, '')}` : null;
-        // Prioritaskan nama panggilan, fallback ke nama lengkap
         const ownerName = member.panggilan || member.nama_lengkap || 'Nama Pemilik';
         const gmapsUrl = member.url_gmaps || null;
         const locationText = member.domisili || 'Lokasi tidak diketahui';
 
-        // Membuat tag lokasi menjadi link jika gmapsUrl ada
         const locationTag = gmapsUrl 
             ? `<a href="${gmapsUrl}" target="_blank" rel="noopener noreferrer" class="location-tag"><i class="fas fa-map-marker-alt"></i> ${locationText}</a>`
             : `<span class="location-tag"><i class="fas fa-map-marker-alt"></i> ${locationText}</span>`;
 
-        // --- IMAGE & PLACEHOLDER ---
+        // --- IMAGE & PLACEHOLDER (FIXED) ---
         const initial = (member.nama_usaha || 'A').charAt(0).toUpperCase();
-        // Placeholder HTML yang akan digunakan jika gambar gagal dimuat
         const placeholderDiv = `<div class="card-img" style="display: flex; align-items: center; justify-content: center; background-color: #e9e9e9; color: #333; font-size: 3rem; font-weight: bold;">${initial}</div>`;
         
-        // Ganti sumber gambar untuk menggunakan id_anggota, dengan fallback ke placeholder
+        // Versi placeholder yang aman untuk disisipkan ke dalam atribut HTML
+        const escapedPlaceholder = placeholderDiv.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
         const imageHtml = member.id_anggota
-            ? `<img src="assets/usaha/${member.id_anggota}.jpg" alt="${member.nama_usaha}" class="card-img" onerror="this.onerror=null; this.parentElement.innerHTML = '${placeholderDiv.replace(/"/g, "'")}';">`
+            ? `<img src="assets/usaha/${member.id_anggota}.jpg" alt="${member.nama_usaha || ''}" class="card-img" onerror="this.onerror=null; this.parentElement.innerHTML = '${escapedPlaceholder}';">`
             : placeholderDiv;
 
         // --- SOCIAL & MARKETPLACE ICONS ---
@@ -224,43 +223,79 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function parseCsv(csvText) {
-        // This is a more robust CSV parser that handles quoted fields,
-        // including commas and newlines inside the quotes.
+        // Parser CSV yang jauh lebih andal, mampu menangani baris baru dan koma di dalam kolom.
         const result = [];
-        const lines = csvText.trim().split(/\r?\n/);
-        if (lines.length < 2) return result;
+        let pos = 0;
+        let line = 1;
 
-        const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+        // Mendapatkan header
+        const headerMatch = csvText.match(/^.*(\r\n|\n|\r)/);
+        if (!headerMatch) return []; // Tidak ada data
+        const headerLine = headerMatch[0].trim();
+        const headers = headerLine.split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+        pos += headerLine.length;
 
-        const regex = /(?:"([^"]*(?:""[^"]*)*)"|([^,]*?))(?:,|$)/g;
-
-        for (let i = 1; i < lines.length; i++) {
-            const line = lines[i];
-            if (!line.trim()) continue;
-
-            const entry = {};
-            let headerIndex = 0;
-            let match;
-            
-            while ((match = regex.exec(line))) {
-                if (headerIndex >= headers.length) break;
-                
-                // Group 1 is for quoted fields, Group 2 is for unquoted.
-                const value = match[1] !== undefined 
-                    ? match[1].replace(/""/g, '"') // Unescape double quotes
-                    : match[2];
-                
-                entry[headers[headerIndex]] = value.trim();
-                headerIndex++;
+        let row = {};
+        let colIndex = 0;
+        
+        while (pos < csvText.length) {
+            if (colIndex === 0) {
+                row = {}; // Mulai baris baru
             }
-            // Ensure all headers have a key, even if the value is empty (for trailing commas)
-            while (headerIndex < headers.length) {
-                entry[headers[headerIndex]] = '';
-                headerIndex++;
+
+            let value;
+            // Jika field dimulai dengan tanda kutip
+            if (csvText.charAt(pos) === '"') {
+                let endPos = pos + 1;
+                while (endPos < csvText.length) {
+                    if (csvText.charAt(endPos) === '"') {
+                        // Cek apakah ini escaped quote ("")
+                        if (endPos + 1 < csvText.length && csvText.charAt(endPos + 1) === '"') {
+                            endPos++; // Lewati escaped quote
+                        } else {
+                            break; // Ini penutup quote
+                        }
+                    }
+                    endPos++;
+                }
+                value = csvText.substring(pos + 1, endPos).replace(/""/g, '"');
+                pos = endPos + 1;
+            } else { // Jika field tidak diapit tanda kutip
+                let endPos = pos;
+                while (endPos < csvText.length && csvText.charAt(endPos) !== ',' && csvText.charAt(endPos) !== '\n' && csvText.charAt(endPos) !== '\r') {
+                    endPos++;
+                }
+                value = csvText.substring(pos, endPos);
+                pos = endPos;
             }
             
-            result.push(entry);
+            row[headers[colIndex]] = value.trim();
+            colIndex++;
+            
+            // Cek akhir dari field/baris
+            if (pos < csvText.length) {
+                const char = csvText.charAt(pos);
+                if (char === ',') {
+                    pos++;
+                } else if (char === '\r' || char === '\n') {
+                    if (csvText.substring(pos, pos + 2) === '\r\n') {
+                        pos += 2;
+                    } else {
+                        pos++;
+                    }
+                    if (Object.keys(row).length > 0) {
+                        result.push(row);
+                    }
+                    colIndex = 0;
+                    line++;
+                }
+            }
         }
+        // Tambahkan baris terakhir jika ada
+        if (Object.keys(row).length > 0 && colIndex > 0) {
+            result.push(row);
+        }
+
         return result;
     }
 
