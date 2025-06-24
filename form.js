@@ -419,37 +419,42 @@ document.addEventListener('DOMContentLoaded', function() {
         previewGrid.scrollTop = 0;
     }
     
-    async function handleSubmit() {
-        // ... (fungsi submit yang sebenarnya)
-        const submitBtn = form.querySelector('.submit-btn');
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = 'Mengirim...';
+    function handleSubmit() {
+        const overlay = document.getElementById('submission-overlay');
+        overlay.style.display = 'flex'; // Tampilkan loading overlay
 
         const formData = new FormData(form);
-
-        // Bugfix: Pastikan field kosong dikirim sebagai string kosong
+        
+        // Bugfix: Pastikan nilai input diubah sebelum fetch
         const urlGmaps = document.getElementById('url-gmaps').value.trim();
         formData.set('url_gmaps', urlGmaps);
 
-        // Untuk logo, jika tidak ada file, Apps Script akan mengabaikannya secara otomatis
-        // Jadi tidak perlu penanganan khusus di sini, cukup pastikan tidak ada nilai salah yang di-set
-        if (formData.get('logo_upload') && formData.get('logo_upload').size === 0) {
-            formData.delete('logo_upload');
-        }
-
-        try {
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: formData
-            });
-
-            // Redirect dengan status, karena kita tidak bisa membaca response dari Apps Script cross-origin
-            window.location.href = `form.html?status=success`;
-
-        } catch (error) {
-            console.error('Submission error:', error);
-            window.location.href = `form.html?status=error&message=${encodeURIComponent(error.message)}`;
-        }
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            // Hapus header 'Content-Type' agar browser bisa set boundary untuk multipart/form-data
+        })
+        .then(response => {
+             // Cek jika respons bukan JSON atau ada error jaringan
+            if (!response.ok) {
+                 throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success' && data.id_anggota) {
+                // Redirect ke halaman detail jika sukses
+                window.location.href = `detail.html?id=${data.id_anggota}`;
+            } else {
+                // Tampilkan pesan error dari server jika ada
+                throw new Error(data.message || 'Respons tidak valid dari server.');
+            }
+        })
+        .catch(error => {
+            console.error('Submission Error:', error);
+            overlay.style.display = 'none'; // Sembunyikan overlay
+            alert('Terjadi masalah saat mengirim data:\n\n' + error.message);
+        });
     }
     
     form.addEventListener('submit', async function(e) {
