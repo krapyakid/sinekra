@@ -740,6 +740,9 @@ textarea {
     .header-search {
         display: none; /* Sembunyikan search di header pada mobile */
     }
+    .mobile-search-container {
+        display: block; /* Tampilkan di mobile */
+    }
     .main-nav {
         /* Sembunyikan nav desktop, akan dikontrol oleh JS */
         display: none; 
