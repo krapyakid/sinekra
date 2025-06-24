@@ -97,7 +97,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function createBusinessCard(member) {
         // --- DATA PREPARATION ---
-        const waLink = member.no_hp ? `https://wa.me/62${member.no_hp.replace(/[^0-9]/g, '').replace(/^0/, '')}` : null;
+        let phoneNumber = (member.no_hp || '').replace(/[^0-9]/g, '');
+        if (phoneNumber) {
+            if (phoneNumber.startsWith('0')) {
+                phoneNumber = '62' + phoneNumber.substring(1);
+            } else if (!phoneNumber.startsWith('62')) {
+                phoneNumber = '62' + phoneNumber;
+            }
+        }
+        const waLink = phoneNumber ? `https://wa.me/${phoneNumber}` : null;
         const ownerName = member.panggilan || member.nama_lengkap || 'Nama Pemilik';
         const gmapsUrl = member.url_gmaps || null;
         const locationText = member.domisili || 'Lokasi tidak diketahui';
@@ -110,11 +118,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const initial = (member.nama_usaha || 'A').charAt(0).toUpperCase();
         const placeholderDiv = `<div class="card-img" style="display: flex; align-items: center; justify-content: center; background-color: #e9e9e9; color: #333; font-size: 3rem; font-weight: bold;">${initial}</div>`;
         
-        // Versi placeholder yang aman untuk disisipkan ke dalam atribut HTML
-        const escapedPlaceholder = placeholderDiv.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-
-        const imageHtml = member.id_anggota
-            ? `<img src="assets/usaha/${member.id_anggota}.jpg" alt="${member.nama_usaha || ''}" class="card-img" onerror="this.onerror=null; this.parentElement.innerHTML = '${escapedPlaceholder}';">`
+        // Ganti hanya gambar (bukan parent-nya) saat error, agar tag lokasi tidak hilang
+        const imageContent = member.id_anggota
+            ? `<img src="assets/usaha/${member.id_anggota}.jpg" alt="${member.nama_usaha || ''}" class="card-img" onerror="this.outerHTML = '${placeholderDiv}';">`
             : placeholderDiv;
 
         // --- SOCIAL & MARKETPLACE ICONS ---
@@ -134,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return `
             <div class="directory-card">
                 <div class="card-image-container">
-                    ${imageHtml}
+                    ${imageContent}
                     ${locationTag}
                 </div>
                 <div class="card-content">
