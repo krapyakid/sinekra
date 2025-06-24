@@ -538,6 +538,13 @@ textarea {
     text-shadow: none;
 }
 
+.hero-content .source-title {
+    font-size: 0.9rem;
+    color: #0048B8;
+    opacity: 0.9;
+    margin-top: -10px; /* Tarik sedikit ke atas */
+}
+
 /* Main Content Section Header */
 .section-header {
     display: flex;
