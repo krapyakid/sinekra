@@ -1211,4 +1211,33 @@ h1.form-title {
 /* Hapus gaya pagination lama */
 .pagination-link, .active-pagination-link {
     all: unset;
+}
+
+/* Mobile Search Bar Styles */
+.mobile-search-container {
+    display: none; /* Sembunyi di desktop */
+    position: relative;
+    margin: 1.5rem 15px;
+}
+
+.mobile-search-container .search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+}
+
+#mobile-search-bar {
+    width: 100%;
+    padding: 12px 12px 12px 40px; /* Padding kiri untuk ikon */
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
+}
+
+.card-owner {
+    font-size: 0.9rem;
+    font-weight: 600; /* Dibuat lebih tebal */
 } 
