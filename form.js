@@ -405,7 +405,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         document.querySelectorAll('.online-shop-entry').forEach((shop, index) => {
             const platform = shop.querySelector('select').value;
-            const url = shop.querySelector('input[type="url"]').value;
+            const urlInput = shop.querySelector('input[type="url"]'); // Cari inputnya dulu
+            const url = urlInput ? urlInput.value : ''; // Hanya ambil value jika input ada
             if (platform && url) {
                 addRow(`Toko Online ${index + 1}`, `${platform}: ${url}`);
             }
