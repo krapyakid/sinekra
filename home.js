@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Ganti hanya gambar (bukan parent-nya) saat error, agar tag lokasi tidak hilang
         const imageContent = member.id_anggota
-            ? `<img src="assets/usaha/${member.id_anggota}.jpg" alt="${member.nama_usaha || ''}" class="card-img" onerror="this.outerHTML = '${placeholderDiv}';">`
+             ? `<img src="assets/usaha/${member.id_anggota}.jpg" alt="${member.nama_usaha || ''}" class="card-img" onerror="this.outerHTML = \`${placeholderDiv.replace(/"/g, "'")}\`;">`
             : placeholderDiv;
 
         // --- SOCIAL & MARKETPLACE ICONS ---
