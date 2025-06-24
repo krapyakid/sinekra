@@ -26,9 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function loadApp() {
         showLoading(true);
-        
         try {
-            // Ambil data dari kedua sheet secara bersamaan
             const [membersResponse, olshopResponse] = await Promise.all([
                 fetch(membersSheetUrl, { cache: 'no-cache' }),
                 fetch(olshopSheetUrl, { cache: 'no-cache' })
@@ -37,33 +35,47 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!membersResponse.ok || !olshopResponse.ok) {
                 throw new Error(`Gagal mengambil data dari Google Sheets.`);
             }
-            
+
             const membersCsv = await membersResponse.text();
             const olshopCsv = await olshopResponse.text();
-            
             const parsedMembers = parseCsv(membersCsv);
             const parsedOlshops = parseCsv(olshopCsv);
 
-            // Gabungkan data olshop ke data member
             allMembers = mergeData(parsedMembers, parsedOlshops)
-                .filter(member => member.id_anggota && member.id_anggota.startsWith('SINEKRA-')); // Filter HANYA data dengan ID yang valid
+                .filter(member => member.id_anggota && member.id_anggota.startsWith('SINEKRA-'));
 
-            console.log('Data mentah semua anggota yang valid:', JSON.stringify(allMembers, null, 2)); // DEBUG: Tampilkan semua data yang diparsing
-            console.log(`Total anggota yang valid: ${allMembers.length}`);
-            filteredMembers = [...allMembers];
-            
-            if (allMembers.length > 0) {
-                populateFilters();
-                renderPage();
+            // Setelah data siap, coba dapatkan lokasi pengguna
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        // Jika berhasil, urutkan berdasarkan jarak
+                        const userCoords = { lat: position.coords.latitude, lon: position.coords.longitude };
+                        sortMembersByDistance(userCoords);
+                        finishLoading();
+                    },
+                    (error) => {
+                        // Jika gagal (izin ditolak), gunakan urutan default
+                        console.warn(`Geolocation error: ${error.message}.`);
+                        finishLoading();
+                    }
+                );
             } else {
-                showError("Tidak ada data anggota untuk ditampilkan.");
+                // Jika browser tidak mendukung geolocation
+                console.warn("Geolocation is not supported by this browser.");
+                finishLoading();
             }
+
         } catch (error) {
             console.error("Gagal memuat aplikasi:", error);
             showError("Gagal memuat data. Periksa koneksi atau URL sheet.");
-        } finally {
             showLoading(false);
         }
+    }
+    
+    function finishLoading() {
+        populateFilters();
+        renderPage();
+        showLoading(false);
     }
 
     function renderPage() {
@@ -355,7 +367,13 @@ document.addEventListener('DOMContentLoaded', function() {
             return matchesSearch && matchesCategory && matchesDomicile;
         });
         
-        currentPage = 1; // Reset ke halaman pertama setiap kali filter berubah
+        // Jangan reset sorting jika sudah diurutkan berdasarkan jarak
+        // currentPage = 1; // Reset ke halaman pertama setiap kali filter berubah
+        if (filteredMembers.length > 0 && !filteredMembers[0].hasOwnProperty('distance')) {
+            currentPage = 1;
+        } else if (filteredMembers.length === 0) {
+             currentPage = 1;
+        }
     }
 
     function showLoading(isLoading) {
@@ -406,6 +424,44 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // --- FUNGSI GEOLOCATION & SORTING ---
+    function getCoordsFromUrl(url) {
+        if (!url) return null;
+        const match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+        if (match && match.length >= 3) {
+            return { lat: parseFloat(match[1]), lon: parseFloat(match[2]) };
+        }
+        return null;
+    }
+
+    function haversineDistance(coords1, coords2) {
+        const toRad = (x) => x * Math.PI / 180;
+        const R = 6371; // Radius bumi dalam km
+
+        const dLat = toRad(coords2.lat - coords1.lat);
+        const dLon = toRad(coords2.lon - coords1.lon);
+        const lat1 = toRad(coords1.lat);
+        const lat2 = toRad(coords2.lat);
+
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // Jarak dalam km
+    }
+
+    function sortMembersByDistance(userCoords) {
+        allMembers.forEach(member => {
+            const businessCoords = getCoordsFromUrl(member.url_gmaps);
+            if (businessCoords) {
+                member.distance = haversineDistance(userCoords, businessCoords);
+            } else {
+                member.distance = Infinity; // Dorong yang tidak punya lokasi ke paling akhir
+            }
+        });
+
+        allMembers.sort((a, b) => a.distance - b.distance);
+    }
 
     // --- INISIALISASI ---
     loadApp();
