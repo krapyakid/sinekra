@@ -460,19 +460,19 @@ img {
 /* --- STYLING UNTUK HALAMAN FORMULIR (form.html) --- */
 
 .form-container {
-    max-width: 800px;
-    margin: 2rem auto;
     background-color: var(--form-bg-color);
-    padding: 2rem 3rem;
+    padding: 30px 40px;
     border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    box-shadow: var(--card-shadow);
+    max-width: 800px;
+    margin: 40px auto;
 }
 
 .form-header h1 {
     font-size: 2rem;
     color: var(--primary-color);
+    margin-bottom: 10px;
     text-align: center;
-    margin-bottom: 0.5rem;
 }
 
 .form-header p {
