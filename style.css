@@ -222,12 +222,13 @@ img {
 }
 
 .card-banner {
-    height: 150px;
+    height: 160px;
     background-color: #e9ecef;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    overflow: hidden;
 }
 
 .card-banner-img {
@@ -246,68 +247,78 @@ img {
     position: absolute;
     top: 10px;
     left: 10px;
-    background-color: rgba(0, 0, 0, 0.65);
+    background-color: rgba(0, 0, 0, 0.6);
     color: white;
-    padding: 4px 10px;
+    padding: 5px 10px;
     border-radius: 15px;
     font-size: 0.75rem;
-    font-weight: 600;
-    backdrop-filter: blur(2px);
-    border: 1px solid rgba(255,255,255,0.2);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .card-content {
     padding: 15px;
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
 }
 
 .card-business-name {
     font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     color: var(--primary-color);
 }
 
 .card-description {
     font-size: 0.9rem;
-    color: var(--text-color);
-    margin-bottom: 12px;
-    line-height: 1.5;
+    color: var(--light-text-color);
+    margin-bottom: 15px;
+    flex-grow: 1;
 }
 
 .card-owner-name {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 500;
-    color: var(--light-text-color);
-    margin-bottom: 15px;
-    flex-grow: 1; 
+    color: #555;
 }
 
-.card-contact-bar {
+.card-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0;
 }
 
-.card-marketplaces {
+.card-contact-bar {
     display: flex;
+    align-items: center;
     gap: 12px;
 }
 
-.whatsapp-icon, .marketplace-icon {
-    font-size: 1.5rem;
-    color: #a0aec0;
-    transition: color 0.2s;
+.social-icon, .marketplace-icon {
+    height: 24px;
+    width: 24px;
+    transition: transform 0.2s ease;
 }
 
-.whatsapp-icon:hover {
+.social-icon:hover, .marketplace-icon:hover {
+    transform: scale(1.15);
+}
+
+.whatsapp-icon {
+    font-size: 1.4rem;
     color: #25D366;
 }
-.marketplace-icon:hover {
-    color: var(--secondary-color);
+
+.marketplace-icon {
+    opacity: 0.9;
 }
 
 /* Mobile Search Bar */
