@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const olshopSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGe6AOx8Dsnq--KPToMl0Q4lF20650_IQ6VoLQxyy3heEFW43LSTIqB0UAUeTV0QOvr8O_YnaeU-om/pub?gid=1048998840&output=csv";
 
     // --- ELEMEN DOM ---
-    const loadingIndicator = document.getElementById('loading-indicator');
-    const errorMessage = document.getElementById('error-message');
+    const loadingIndicator = document.getElementById('detail-loading');
+    const errorMessage = document.getElementById('detail-error');
     const detailContent = document.getElementById('detail-content');
 
     // --- FUNGSI UTAMA ---
@@ -139,7 +139,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if(loadingIndicator) loadingIndicator.style.display = 'none';
         if(errorMessage) {
             errorMessage.style.display = 'flex'; // Gunakan flex agar bisa center align
-            errorMessage.querySelector('p').textContent = message;
+            const p = errorMessage.querySelector('p');
+            if (p) p.textContent = message;
         }
     }
 
