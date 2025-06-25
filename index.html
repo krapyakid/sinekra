@@ -23,8 +23,13 @@
                 <a href="statistik.html" class="nav-link">Statistik</a>
                 <a href="tentang.html" class="nav-link">Tentang</a>
             </nav>
-            <div class="mobile-menu-trigger" id="mobile-menu-trigger">
-                <img src="assets/menu_kebab.svg" alt="Menu">
+            <div class="header-actions">
+                <button class="mobile-search-trigger" id="mobile-search-trigger">
+                    <i class="fas fa-search"></i>
+                </button>
+                <div class="mobile-menu-trigger" id="mobile-menu-trigger">
+                    <img src="assets/menu_kebab.svg" alt="Menu">
+                </div>
             </div>
         </div>
     </header>
@@ -39,20 +44,43 @@
             </div>
         </section>
 
-        <!-- Search Section - Dihapus sesuai permintaan -->
+        <!-- Search Section -->
+        <section class="search-and-filter-section">
+            <div class="search-bar-wrapper">
+                 <input type="text" id="desktop-search-bar" placeholder="Cari nama usaha, produk, atau alumni...">
+                 <i class="fas fa-search search-icon"></i>
+            </div>
+            <div class="filter-wrapper">
+                 <select id="filter-category" class="filter-select"><option value="">Semua Kategori</option></select>
+                 <select id="filter-domicile" class="filter-select"><option value="">Semua Domisili</option></select>
+            </div>
+        </section>
 
-        <!-- Grid Section -->
-        <section class="main-grid-section">
+        <!-- Grid Section: Terdekat -->
+        <section class="main-grid-section nearby-section">
             <div class="section-header">
                 <h2 class="section-title">Usaha Santri Terdekat</h2>
                 <a href="direktori.html" class="see-more-link">Lihat lainnya</a>
             </div>
+            <div id="nearby-grid" class="directory-grid-container">
+                <!-- Kartu terdekat dimuat oleh JS -->
+            </div>
+        </section>
+
+        <!-- Grid Section: Rekomendasi -->
+        <section class="main-grid-section recommended-section">
+            <div class="section-header">
+                <h2 class="section-title">Rekomendasi</h2>
+                <a href="direktori.html" class="see-more-link">Lihat lainnya</a>
+            </div>
             <div id="recommended-grid" class="directory-grid-container">
-                <!-- Kartu anggota akan dimuat di sini oleh JS -->
+                <!-- Kartu rekomendasi dimuat oleh JS -->
             </div>
         </section>
     </main>
 
+    <div class="menu-overlay" id="menu-overlay"></div>
+    <script src="https://kit.fontawesome.com/941453a1a3.js" crossorigin="anonymous"></script>
     <script src="main.js"></script>
 </body>
 </html> 
