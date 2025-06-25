@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const errorCloseBtn = document.getElementById('error-close-btn');
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvH3uqGJ_cPhOi4147NpUWGVtTzwcl9rWTZns7FYBQgoOGEZEeQEb0CVOIyKubeilS/exec";
-    const DOMISILI_URL = "https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/data/data_domisili.csv";
+    const DOMISILI_URL = "https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/data_domisili.csv";
     const PROFESI_URL = "https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/data/profesi.csv";
 
     // --- INISIALISASI ---
