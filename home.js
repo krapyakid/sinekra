@@ -129,36 +129,64 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function createMemberCard(member) {
         const card = document.createElement('div');
-        card.className = 'directory-card';
+        card.className = 'member-card';
         card.addEventListener('click', e => {
             if (e.target.closest('a')) return;
-            if(member.id_anggota) {
+            if (member.id_anggota) {
                 window.location.href = `detail.html?id=${member.id_anggota}`;
+            } else {
+                console.warn("Anggota ini tidak memiliki ID, tidak bisa membuka halaman detail.", member);
             }
         });
-        
+
         const initial = (member.nama_usaha || member.nama_lengkap || 'A').charAt(0).toUpperCase();
-        const placeholder = `<div class="placeholder-initial">${initial}</div>`;
-        const image = `<img src="assets/usaha/${member.id_anggota}.jpg" alt="${member.nama_usaha}" class="card-img" onerror="this.outerHTML = \`${placeholder}\`;">`;
         
+        const placeholder = `<div class="placeholder">${initial}</div>`;
+        
+        const imageUrl = member.id_anggota 
+            ? `assets/usaha/${member.id_anggota}.jpg` 
+            : (member.banner_url ? `assets/usaha/${member.banner_url}` : '');
+            
+        const image = imageUrl 
+            ? `<img src="${imageUrl}" alt="${member.nama_usaha || 'Banner'}" class="card-banner-img" onerror="this.parentElement.innerHTML = \`${placeholder}\`;">`
+            : placeholder;
+
         let description = member.detail_profesi || 'Deskripsi tidak tersedia.';
-        if(description.length > 80) description = description.substring(0, 80) + '...';
+        if (description.length > 70) description = description.substring(0, 70) + '...';
+
+        const waLink = member.no_hp ? `https://wa.me/${member.no_hp.replace(/[^0-9]/g, '')}` : null;
+        
+        const socialAndMarketplaceIcons = [
+            { key: 'link_tokopedia', iconClass: 'fas fa-store' },
+            { key: 'link_shopee', iconClass: 'fas fa-shopping-bag' },
+            { key: 'link_tiktok', iconClass: 'fab fa-tiktok' },
+            { key: 'link_facebook', iconClass: 'fab fa-facebook-f' }
+        ].map(item => {
+            if (member[item.key]) {
+                try {
+                    new URL(item.key.startsWith('http') ? item.key : `https://${item.key}`);
+                    return `<a href="${member[item.key]}" target="_blank" rel="noopener noreferrer" class="marketplace-icon" onclick="event.stopPropagation()"><i class="${item.iconClass}"></i></a>`;
+                } catch (e) {
+                    return '';
+                }
+            }
+            return '';
+        }).filter(Boolean).join('');
 
         card.innerHTML = `
-            <div class="card-image-container">
+            <div class="card-banner">
                 ${image}
-                ${member.domisili ? `<a href="#" class="location-tag" onclick="event.stopPropagation(); filterByLocation('${member.domisili}')">${member.domisili}</a>` : ''}
+                 ${member.domisili ? `<a href="#" class="location-tag" onclick="event.stopPropagation(); filterByLocation('${member.domisili}')">${member.domisili}</a>` : ''}
             </div>
             <div class="card-content">
-                <h3 class="card-title">${member.nama_usaha || 'Nama Usaha Belum Diisi'}</h3>
+                <h3 class="card-business-name">${member.nama_usaha || 'Nama Usaha Belum Diisi'}</h3>
                 <p class="card-description">${description}</p>
-                <p class="card-owner">${member.nama_lengkap}</p>
-                 <div class="social-icons">
-                    ${member.no_hp ? `<a href="https://wa.me/${member.no_hp.replace(/[^0-9]/g, '')}" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>` : ''}
-                    ${member.link_tokopedia ? `<a href="${member.link_tokopedia}" target="_blank" rel="noopener noreferrer"><i class="fas fa-store"></i></a>` : ''}
-                    ${member.link_shopee ? `<a href="${member.link_shopee}" target="_blank" rel="noopener noreferrer"><i class="fas fa-shopping-bag"></i></a>` : ''}
-                    ${member.link_tiktok ? `<a href="${member.link_tiktok}" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>` : ''}
-                    ${member.link_facebook ? `<a href="${member.link_facebook}" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>` : ''}
+                <p class="card-owner-name">${member.nama_lengkap || ''}</p>
+                <div class="card-contact-bar">
+                    <div class="card-marketplaces">
+                        ${socialAndMarketplaceIcons}
+                    </div>
+                    ${waLink ? `<a href="${waLink}" target="_blank" rel="noopener noreferrer" class="whatsapp-icon" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i></a>` : ''}
                 </div>
             </div>
         `;
