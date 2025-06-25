@@ -174,8 +174,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const locationInfo = `${member.nama_panggilan || ''} - ${member.domisili || ''}`;
 
-        // Deskripsi
-        let description = member.pengembangan_profesi || member.detail_profesi || '';
+        // Deskripsi - prioritaskan detail profesi untuk kebersihan data
+        let description = member.detail_profesi || '';
         if (description.length > 80) {
             description = description.substring(0, 80) + '...';
         }
