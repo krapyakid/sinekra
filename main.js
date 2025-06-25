@@ -142,6 +142,11 @@ document.addEventListener('DOMContentLoaded', function() {
             detailProfesi = detailProfesi.substring(0, 60) + '...';
         }
         
+        let prospek = member.pengembangan_profesi || '';
+        if (prospek.length > 70) {
+            prospek = prospek.substring(0, 70) + '...';
+        }
+
         // Ikon Marketplace
         const marketplaces = `
             ${member.link_shopee ? `<a href="${member.link_shopee}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/shopee.svg" alt="Shopee" class="marketplace-icon"></a>` : ''}
@@ -161,7 +166,8 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="card-banner">${banner}</div>
             <div class="card-content">
                 <h3 class="card-business-name">${member.nama_usaha || 'Nama Usaha Belum Diisi'}</h3>
-                <p class="card-owner-name">${detailProfesi}</p>
+                <p class="card-description">${prospek || detailProfesi}</p>
+                <p class="card-owner-name">${member.nama_lengkap || ''}</p>
                 ${distanceInfo}
                 <div class="card-contact-bar">
                     <div class="card-marketplaces">
