@@ -136,7 +136,7 @@ img {
 }
 
 main.content-container {
-    padding: 0 20px;
+    width: 100%;
 }
 
 /* Hero Section */
@@ -185,18 +185,14 @@ main.content-container {
 /* Search and Filter Section */
 .search-and-filter-section {
     background-color: #ffffff;
-    padding: 20px 15px;
-    border-bottom: 1px solid #e0e0e0;
-}
-.search-and-filter-section .filter-wrapper,
-.search-and-filter-section .search-bar-wrapper {
+    padding: 20px;
+    margin: 20px auto;
     max-width: 1200px;
-    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
     display: flex;
     gap: 20px;
     align-items: center;
-}
-.search-and-filter-section .filter-wrapper{
     justify-content: space-between;
 }
 
@@ -242,7 +238,7 @@ main.content-container {
 /* Grid Section */
 .main-grid-section {
     padding: 20px;
-    max-width: 1240px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 .recommended-section {
@@ -556,23 +552,17 @@ main.content-container {
     }
 
     .search-and-filter-section {
-        display: block;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        width: 100%;
-        background: white;
-        z-index: 999;
+        display: none;
         flex-direction: column;
-        padding: 15px;
-        border-radius: 0;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         margin: 0;
-        border-bottom: 1px solid #eee;
+        padding: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        border-radius: 0;
+        border-top: 1px solid #f0f0f0;
+        border-bottom: 1px solid #f0f0f0;
     }
     .search-and-filter-section.active {
-        display: block;
+        display: flex;
     }
     .filter-wrapper {
         width: 100%;
@@ -598,11 +588,11 @@ main.content-container {
     }
 
     main.content-container {
-        padding: 0 15px;
+        padding: 0;
     }
 
     .main-grid-section {
-      padding: 20px 0; /* Adjust for mobile */
+      padding: 20px 15px; /* Add horizontal padding for mobile */
     }
 
     .section-title {
