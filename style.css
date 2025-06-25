@@ -533,16 +533,23 @@ img {
 }
 
 .form-group input:focus,
+.form-group textarea:focus,
 .form-group select:focus,
-.form-group textarea:focus {
+.searchable-input:focus {
     outline: none;
     border-color: var(--input-focus-color);
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+input:disabled, textarea:disabled, select:disabled {
+    background-color: #e9ecef;
+    opacity: 0.8;
+    cursor: not-allowed;
 }
 
 .form-group textarea {
-    resize: vertical;
     min-height: 80px;
+    resize: vertical;
 }
 
 /* Searchable Select (Dropdown) */
