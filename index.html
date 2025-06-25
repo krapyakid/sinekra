@@ -9,76 +9,58 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header class="main-header">
-        <div class="header-wrapper">
-            <a href="index.html" class="logo-link">
-                <img src="assets/logo_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="logo">
-            </a>
-            
-            <div class="search-wrapper header-search">
-                <input type="text" id="search-bar" placeholder="Cari Nama Usaha">
-            </div>
-
-            <nav class="main-nav" id="main-nav">
-                <button id="view-switch-btn" class="nav-link">Lihat Anggota</button>
-                <a href="form.html" class="nav-link">Isi Formulir</a>
-            </nav>
-
-            <div class="mobile-menu-trigger" id="mobile-menu-trigger">
-                <img src="assets/menu_kebab.svg" alt="Menu">
-            </div>
-        </div>
-    </header>
-
-    <section class="hero-section">
-        <div class="hero-content">
-            <p class="quote">"Menjadi contoh yang bisa dilihat masyarakat kalau pesantren bisa melahirkan hal positif secara bersama."</p>
-            <p class="source">- KH. Afif Muhammad, MA -</p>
-            <p class="source-title">Pengasuh Pondok Pesantren Krapyak</p>
-        </div>
-    </section>
-    
     <div class="container">
-        <main class="content-container">
-            <div class="mobile-search-container">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="mobile-search-bar" placeholder="Cari usaha, produk, atau nama...">
-            </div>
-            <!-- Filter yang disembunyikan, bisa diaktifkan kembali jika perlu -->
-            <div class="filter-wrapper" style="display: none;">
-                <select id="filter-category" class="filter-select">
-                    <option value="">Semua Kategori</option>
-                    <!-- Kategori akan diisi oleh JS -->
-                </select>
-                <select id="filter-domicile" class="filter-select">
-                    <option value="">Semua Domisili</option>
-                    <!-- Domisili akan diisi oleh JS -->
-                </select>
-            </div>
+        <header class="main-header">
+            <div class="header-wrapper">
+                <a href="index.html" class="logo-link">
+                    <img src="assets/logo_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="logo">
+                </a>
+                
+                <nav class="main-nav" id="main-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="statistik.html" class="nav-link">Statistik</a>
+                    <a href="#" class="nav-link">Direktori Usaha</a>
+                    <a href="form.html" class="nav-link">Form Anggota</a>
+                </nav>
 
-            <div class="main-grid-section">
+                <div class="mobile-menu-trigger" id="mobile-menu-trigger">
+                    <img src="assets/profile_icon.svg" alt="Menu">
+                </div>
+            </div>
+        </header>
+
+        <section class="hero-section" id="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Bersama Membangun Ekonomi Santri</h1>
+                <p class="hero-subtitle">Jelajahi jaringan profesional dan usaha dari para anggota Sinergi Ekonomi Krapyak. Temukan peluang, jalin kerjasama, dan dukung pertumbuhan bersama.</p>
+                <a href="#" class="hero-cta">Jelajahi Direktori</a>
+            </div>
+        </section>
+
+        <main class="content-container">
+            <section class="featured-section">
                 <div class="section-header">
-                    <h2 id="grid-title" class="section-title">Usaha Santri Terdekat sama Kamu</h2>
+                    <h2 class="section-title">Usaha Santri Terdekat sama Kamu</h2>
                     <a href="#" class="see-more-link">Lihat lainnya</a>
                 </div>
-                <div id="directory-grid" class="directory-grid-container">
-                    <!-- Kartu direktori akan dimuat di sini oleh JavaScript -->
+                <div id="nearby-grid" class="directory-grid-container">
+                    <!-- Konten nearby akan dimuat oleh main.js -->
                 </div>
-                <div id="directory-loading" class="directory-status">
-                    <div class="spinner"></div>
-                    <p>Memuat data anggota...</p>
+            </section>
+            
+            <section class="featured-section">
+                <div class="section-header">
+                    <h2 class="section-title">Rekomendasi Pilihan</h2>
+                    <a href="#" class="see-more-link">Lihat lainnya</a>
                 </div>
-                    <div id="no-results" class="directory-status" style="display: none;">
-                    <p>Tidak ada hasil yang cocok dengan pencarian Anda.</p>
+                <div id="recommended-grid" class="directory-grid-container">
+                    <!-- Konten rekomendasi akan dimuat oleh main.js -->
                 </div>
-                <div id="pagination-container" class="pagination-container">
-                    <!-- Tombol pagination akan dibuat oleh JS -->
-                </div>
-            </div>
+            </section>
         </main>
+        
     </div>
-
-    <script src="main.js"></script>
+    
     <script src="home.js"></script>
 </body>
 </html> 
