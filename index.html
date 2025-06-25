@@ -29,52 +29,30 @@
         </div>
     </header>
 
-    <section class="hero-section">
-        <div class="hero-content">
-            <p class="quote">"Menjadi contoh yang bisa dilihat masyarakat kalau pesantren bisa melahirkan hal positif secara bersama."</p>
-            <p class="source">- KH. Afif Muhammad, MA -</p>
-            <p class="source-title">Pengasuh Pondok Pesantren Krapyak</p>
-        </div>
-    </section>
-    
-    <div class="container">
-         <main class="content-container">
-            <div class="mobile-search-container">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="mobile-search-bar" placeholder="Cari usaha, produk, atau nama...">
+    <main class="content-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <p class="quote">"Menjadi contoh yang bisa dilihat masyarakat kalau pesantren bisa melahirkan hal positif secara bersama."</p>
+                <p class="source">- KH. Afif Muhammad, MA -</p>
+                <p class="source-title">Pengasuh Pondok Pesantren Krapyak</p>
             </div>
-            
-            <div class="filter-wrapper" style="display: none;">
-                <select id="filter-category" class="filter-select">
-                    <option value="">Semua Kategori</option>
-                </select>
-                <select id="filter-domicile" class="filter-select">
-                    <option value="">Semua Domisili</option>
-                </select>
-            </div>
+        </section>
 
-            <div class="main-grid-section">
-                 <div class="section-header">
-                    <h2 id="grid-title" class="section-title">Usaha Santri Terdekat sama Kamu</h2>
-                    <a href="#" class="see-more-link">Lihat lainnya</a>
-                 </div>
-                <div id="directory-grid" class="directory-grid-container">
-                    <!-- Kartu direktori akan dimuat oleh JavaScript -->
-                </div>
-                <div id="directory-loading" class="directory-status">
-                    <div class="spinner"></div>
-                    <p>Memuat data anggota...</p>
-                </div>
-                <div id="no-results" class="directory-status" style="display: none;">
-                    <p>Tidak ada hasil yang cocok dengan pencarian Anda.</p>
-                 </div>
-                <div id="pagination-container" class="pagination-container">
-                    <!-- Tombol pagination akan dibuat oleh JS -->
-                </div>
-            </div>
-        </main>
-    </div>
+        <!-- Search Section - Dihapus sesuai permintaan -->
 
-    <script src="home.js"></script>
+        <!-- Grid Section -->
+        <section class="main-grid-section">
+            <div class="section-header">
+                <h2 class="section-title">Usaha Santri Terdekat</h2>
+                <a href="direktori.html" class="see-more-link">Lihat lainnya</a>
+            </div>
+            <div id="recommended-grid" class="directory-grid-container">
+                <!-- Kartu anggota akan dimuat di sini oleh JS -->
+            </div>
+        </section>
+    </main>
+
+    <script src="main.js"></script>
 </body>
 </html> 
