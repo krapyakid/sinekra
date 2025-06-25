@@ -14,18 +14,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const memberId = urlParams.get('id');
 
         if (!memberId) {
-            showError();
+            showError("ID anggota tidak ditemukan di URL.");
             return;
         }
 
         try {
+            // Tampilkan loading saat mulai fetch
+            if(loadingIndicator) loadingIndicator.style.display = 'flex';
+            if(errorMessage) errorMessage.style.display = 'none';
+
             const [membersResponse, olshopResponse] = await Promise.all([
                 fetch(membersSheetUrl, { cache: 'no-cache' }),
                 fetch(olshopSheetUrl, { cache: 'no-cache' })
             ]);
             
             if (!membersResponse.ok || !olshopResponse.ok) {
-                throw new Error('Gagal mengambil data.');
+                throw new Error('Gagal mengambil data dari Google Sheets.');
             }
 
             const membersCsv = await membersResponse.text();
@@ -37,18 +41,24 @@ document.addEventListener('DOMContentLoaded', function() {
             if (member) {
                 displayMember(member);
             } else {
-                showError();
+                showError(`Anggota dengan ID "${memberId}" tidak ditemukan.`);
             }
 
         } catch (error) {
             console.error("Error loading member details:", error);
-            showError();
+            showError("Terjadi kesalahan saat memuat data. Periksa konsol untuk detail.");
         }
     }
 
     function displayMember(member) {
-        loadingIndicator.style.display = 'none';
-        detailContent.style.display = 'block';
+        // Sembunyikan indikator loading
+        if(loadingIndicator) loadingIndicator.style.display = 'none';
+        
+        // Pastikan kontainer ada sebelum mengisi
+        if (!detailContent) {
+            console.error("Elemen 'detail-content' tidak ditemukan.");
+            return;
+        }
 
         const placeholderDiv = `<div class="main-image-placeholder">${(member.nama_usaha || member.nama_lengkap || 'A').charAt(0)}</div>`;
 
@@ -68,41 +78,41 @@ document.addEventListener('DOMContentLoaded', function() {
         // Toko Online
         let olshopsHtml = '';
         const olshopPlatforms = {
-            link_shopee: { name: 'Shopee', icon: 'fa-shopping-bag', color: '#EE4D2D' },
-            link_tokopedia: { name: 'Tokopedia', icon: 'fa-store', color: '#03AC0E' },
-            link_tiktok: { name: 'TikTok Shop', icon: 'fa-tiktok', color: '#010101' },
-            link_bukalapak: { name: 'Bukalapak', icon: 'fa-store-alt', color: '#E31E52' },
-            link_facebook: { name: 'Facebook', icon: 'fa-facebook-f', color: '#1877F2' }
+            link_shopee: { name: 'Shopee', icon: 'fa-shopping-bag' },
+            link_tokopedia: { name: 'Tokopedia', icon: 'fa-store' },
+            link_tiktok: { name: 'TikTok Shop', icon: 'fa-tiktok' },
+            link_bukalapak: { name: 'Bukalapak', icon: 'fa-store-alt' },
+            link_facebook: { name: 'Facebook', icon: 'fa-facebook-f' }
         };
 
+        let olshopLinks = '';
         for (const key in olshopPlatforms) {
             if (member[key]) {
                 const platform = olshopPlatforms[key];
-                olshopsHtml += `
+                olshopLinks += `
                     <a href="${member[key]}" class="olshop-link" target="_blank" rel="noopener noreferrer">
-                        <i class="fab ${platform.icon}" style="color: ${platform.color};"></i>
-                        <span>${platform.name}</span>
-                    </a>
-                `;
+                        <i class="fab ${platform.icon}"></i> <span>${platform.name}</span>
+                    </a>`;
             }
         }
-        if (olshopsHtml) {
-            olshopsHtml = `<div class="detail-section"><h3>Toko Online</h3><div class="olshop-container">${olshopsHtml}</div></div>`;
+        if (olshopLinks) {
+            olshopsHtml = `<div class="detail-section"><h3>Toko Online & Media Sosial</h3><div class="olshop-container">${olshopLinks}</div></div>`;
         }
         
-        const bannerSrc = member.banner_url ? `assets/usaha/${member.banner_url}` : `assets/usaha/${member.id_anggota}.jpg`;
+        const bannerSrc = member.id_anggota ? `assets/usaha/${member.id_anggota}.jpg` : (member.banner_url || '');
 
+        // Langsung isi innerHTML dari 'detail-content'
         detailContent.innerHTML = `
             <div class="product-gallery">
                 <div class="main-image">
-                    <img src="${bannerSrc}" alt="${member.nama_usaha || ''}" onerror="this.outerHTML = \`${placeholderDiv}\`;">
+                    <img src="${bannerSrc}" alt="${member.nama_usaha || ''}" onerror="this.parentElement.innerHTML = \`${placeholderDiv}\`;">
                 </div>
             </div>
             <div class="product-details">
                 <h1 class="detail-title">${member.nama_usaha || 'Usaha Belum Bernama'}</h1>
-                <p class="detail-owner">Oleh: <strong>${member.nama_lengkap}</strong> (${member.angkatan})</p>
+                <p class="detail-owner">Oleh: <strong>${member.nama_lengkap || 'N/A'}</strong> (Angkatan: ${member.angkatan || 'N/A'})</p>
                 
-                <div class="contact-buttons">${contactButtonsHtml}</div>
+                <div class="contact-buttons">${contactButtonsHtml || '<p>Tidak ada kontak yang bisa dihubungi.</p>'}</div>
 
                 <div class="detail-section">
                     <h3>Deskripsi</h3>
@@ -125,9 +135,12 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 
-    function showError() {
-        loadingIndicator.style.display = 'none';
-        errorMessage.style.display = 'block';
+    function showError(message = "Gagal memuat data atau anggota tidak ditemukan.") {
+        if(loadingIndicator) loadingIndicator.style.display = 'none';
+        if(errorMessage) {
+            errorMessage.style.display = 'flex'; // Gunakan flex agar bisa center align
+            errorMessage.querySelector('p').textContent = message;
+        }
     }
 
 
