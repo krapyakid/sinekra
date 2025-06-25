@@ -1,15 +1,15 @@
- document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     // --- KONFIGURASI ---
     const membersSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGe6AOx8Dsnq--KPToMl0Q4lF20650_IQ6VoLQxyy3heEFW43LSTIqB0UAUeTV0QOvr8O_YnaeU-om/pub?gid=0&output=csv";
     const olshopSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGe6AOx8Dsnq--KPToMl0Q4lF20650_IQ6VoLQxyy3heEFW43LSTIqB0UAUeTV0QOvr8O_YnaeU-om/pub?gid=1048998840&output=csv";
 
     // --- ELEMEN DOM ---
-    const loadingIndicator = document.getElementById('detail-loading');
-    const contentContainer = document.getElementById('detail-content');
-    const errorIndicator = document.getElementById('detail-error');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const errorMessage = document.getElementById('error-message');
+    const detailContent = document.getElementById('detail-content');
 
     // --- FUNGSI UTAMA ---
-    async function loadProfile() {
+    async function loadMemberDetail() {
         const urlParams = new URLSearchParams(window.location.search);
         const memberId = urlParams.get('id');
 
@@ -23,9 +23,9 @@
                 fetch(membersSheetUrl, { cache: 'no-cache' }),
                 fetch(olshopSheetUrl, { cache: 'no-cache' })
             ]);
-
+            
             if (!membersResponse.ok || !olshopResponse.ok) {
-                throw new Error('Gagal mengambil data dari Google Sheets.');
+                throw new Error('Gagal mengambil data.');
             }
 
             const membersCsv = await membersResponse.text();
@@ -35,115 +35,145 @@
             const member = allMembers.find(m => m.id_anggota === memberId);
 
             if (member) {
-                displayProfile(member);
-                showContent();
+                displayMember(member);
             } else {
                 showError();
             }
 
         } catch (error) {
-            console.error("Gagal memuat profil:", error);
+            console.error("Error loading member details:", error);
             showError();
         }
     }
-    
-    function displayProfile(member) {
-        // Set Judul Halaman
-        document.title = `${member.nama_usaha || member.nama_lengkap} - Sinergi Ekonomi Krapyak`;
 
-        // 1. Gambar/Logo Usaha
-        const imageContainer = document.getElementById('detail-image');
-        if (member.id_anggota) {
-             const initial = (member.nama_usaha || member.nama_lengkap || 'A').charAt(0).toUpperCase();
-             const placeholderDiv = `<div class="placeholder-initial">${initial}</div>`;
-             imageContainer.innerHTML = `<img src="assets/usaha/${member.id_anggota}.jpg" alt="${member.nama_usaha || ''}" onerror="this.outerHTML = \`${placeholderDiv}\`;">`;
-        } else {
-             imageContainer.innerHTML = `<div class="placeholder-initial">A</div>`;
-        }
+    function displayMember(member) {
+        loadingIndicator.style.display = 'none';
+        detailContent.style.display = 'block';
 
-        // 2. Info Dasar
-        document.getElementById('detail-title').textContent = member.nama_usaha || 'Nama Usaha Belum Diisi';
-        document.getElementById('detail-owner-name').textContent = member.nama_lengkap || 'Nama Pemilik';
-        
-        // 3. Tombol Kontak
-        const contactButtons = document.getElementById('contact-buttons');
-        contactButtons.innerHTML = ''; // Clear existing
-        
-        let phoneNumber = (member.no_hp || '').replace(/[^0-9]/g, '');
-        if (phoneNumber) {
-            if (phoneNumber.startsWith('0')) phoneNumber = '62' + phoneNumber.substring(1);
-            else if (!phoneNumber.startsWith('62')) phoneNumber = '62' + phoneNumber;
-            contactButtons.innerHTML += `<a href="https://wa.me/${phoneNumber}" target="_blank" rel="noopener noreferrer" class="contact-btn whatsapp"><i class="fab fa-whatsapp"></i> Hubungi via WhatsApp</a>`;
+        const placeholderDiv = `<div class="main-image-placeholder">${(member.nama_usaha || member.nama_lengkap || 'A').charAt(0)}</div>`;
+
+        // Kontak dan Tombol Aksi
+        let contactButtonsHtml = '';
+        if (member.no_hp) {
+            const phoneNumber = member.no_hp.replace(/\D/g, ''); // Hapus semua non-digit
+            contactButtonsHtml += `<a href="https://wa.me/${phoneNumber}" class="contact-btn whatsapp" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i> Hubungi via WhatsApp</a>`;
         }
         if (member.url_gmaps) {
-            contactButtons.innerHTML += `<a href="${member.url_gmaps}" target="_blank" rel="noopener noreferrer" class="contact-btn gmaps"><i class="fas fa-map-marker-alt"></i> Lihat di Google Maps</a>`;
+            contactButtonsHtml += `<a href="${member.url_gmaps}" class="contact-btn gmaps" target="_blank" rel="noopener noreferrer"><i class="fas fa-map-marker-alt"></i> Lihat di Google Maps</a>`;
         }
-        if (member.link_website) {
-            contactButtons.innerHTML += `<a href="${member.link_website}" target="_blank" rel="noopener noreferrer" class="contact-btn website"><i class="fas fa-globe"></i> Kunjungi Website</a>`;
+        if (member.website_url) {
+            contactButtonsHtml += `<a href="${member.website_url}" class="contact-btn website" target="_blank" rel="noopener noreferrer"><i class="fas fa-globe"></i> Kunjungi Website</a>`;
+        }
+
+        // Toko Online
+        let olshopsHtml = '';
+        const olshopPlatforms = {
+            link_shopee: { name: 'Shopee', icon: 'fa-shopping-bag', color: '#EE4D2D' },
+            link_tokopedia: { name: 'Tokopedia', icon: 'fa-store', color: '#03AC0E' },
+            link_tiktok: { name: 'TikTok Shop', icon: 'fa-tiktok', color: '#010101' },
+            link_bukalapak: { name: 'Bukalapak', icon: 'fa-store-alt', color: '#E31E52' },
+            link_facebook: { name: 'Facebook', icon: 'fa-facebook-f', color: '#1877F2' }
+        };
+
+        for (const key in olshopPlatforms) {
+            if (member[key]) {
+                const platform = olshopPlatforms[key];
+                olshopsHtml += `
+                    <a href="${member[key]}" class="olshop-link" target="_blank" rel="noopener noreferrer">
+                        <i class="fab ${platform.icon}" style="color: ${platform.color};"></i>
+                        <span>${platform.name}</span>
+                    </a>
+                `;
+            }
+        }
+        if (olshopsHtml) {
+            olshopsHtml = `<div class="detail-section"><h3>Toko Online</h3><div class="olshop-container">${olshopsHtml}</div></div>`;
         }
         
-        // 4. Deskripsi dan Info Lainnya
-        document.getElementById('detail-description').textContent = member.detail_profesi || 'Tidak ada deskripsi.';
-        document.getElementById('detail-prospect').textContent = member.prospek || 'Tidak ada informasi prospek/kerjasama.';
-        document.getElementById('detail-domicile').textContent = member.domisili || 'N/A';
-        document.getElementById('detail-angkatan').textContent = member.angkatan || 'N/A';
-        document.getElementById('detail-komplek').textContent = member.komplek || 'N/A';
+        const bannerSrc = member.banner_url ? `assets/usaha/${member.banner_url}` : `assets/usaha/${member.id_anggota}.jpg`;
+
+        detailContent.innerHTML = `
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img src="${bannerSrc}" alt="${member.nama_usaha || ''}" onerror="this.outerHTML = \`${placeholderDiv}\`;">
+                </div>
+            </div>
+            <div class="product-details">
+                <h1 class="detail-title">${member.nama_usaha || 'Usaha Belum Bernama'}</h1>
+                <p class="detail-owner">Oleh: <strong>${member.nama_lengkap}</strong> (${member.angkatan})</p>
+                
+                <div class="contact-buttons">${contactButtonsHtml}</div>
+
+                <div class="detail-section">
+                    <h3>Deskripsi</h3>
+                    <p class="detail-description">${member.detail_profesi || 'Tidak ada deskripsi.'}</p>
+                </div>
+
+                 <div class="detail-section">
+                    <h3>Prospek & Kerjasama</h3>
+                    <p class="detail-description">${member.prospek_kerjasama || 'Tidak ada informasi prospek.'}</p>
+                </div>
+
+                ${olshopsHtml}
+
+                <div class="detail-section">
+                    <h3>Info Tambahan</h3>
+                    <p><strong>Domisili:</strong> ${member.domisili || 'N/A'}</p>
+                    <p><strong>Komplek:</strong> ${member.komplek || 'N/A'}</p>
+                </div>
+            </div>
+        `;
     }
 
-    // --- FUNGSI HELPER TAMPILAN ---
-    function showLoading() {
-        loadingIndicator.style.display = 'block';
-        contentContainer.style.display = 'none';
-        errorIndicator.style.display = 'none';
-    }
-
-    function showContent() {
-        loadingIndicator.style.display = 'none';
-        contentContainer.style.display = 'grid';
-        errorIndicator.style.display = 'none';
-    }
-    
     function showError() {
         loadingIndicator.style.display = 'none';
-        contentContainer.style.display = 'none';
-        errorIndicator.style.display = 'block';
+        errorMessage.style.display = 'block';
     }
-    
-    // --- FUNGSI PARSING & MERGE (diambil dari home.js) ---
+
+
+    // --- FUNGSI UTILITAS (DUPLIKAT DARI main.js) ---
+    // NOTE: Dalam proyek nyata, ini sebaiknya ada di file utilitas terpisah
     function parseCsv(csvText) {
-        const result = [];
         const lines = csvText.trim().split(/\r?\n/);
         if (lines.length < 2) return [];
-        const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-        
-        for (let i = 1; i < lines.length; i++) {
-            const values = lines[i].split(',');
-            const row = {};
-            for (let j = 0; j < headers.length; j++) {
-                row[headers[j]] = (values[j] || '').trim().replace(/^"|"$/g, '');
+        const headers = lines[0].split(',').map(h => h.trim());
+        return lines.slice(1).map(line => {
+            const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+            const entry = {};
+            headers.forEach((header, i) => {
+                let value = values[i] || '';
+                if (value.startsWith('"') && value.endsWith('"')) {
+                    value = value.slice(1, -1);
+                }
+                entry[header] = value.replace(/""/g, '"').trim();
+            });
+            if (!entry.id_anggota) {
+                entry.id_anggota = 'gen_' + Math.random().toString(36).substr(2, 9);
             }
-            result.push(row);
-        }
-        return result;
+            return entry;
+        });
     }
 
     function mergeData(members, olshops) {
         const olshopMap = olshops.reduce((acc, shop) => {
             if (!shop.id_anggota) return acc;
-            if (!acc[shop.id_anggota]) acc[shop.id_anggota] = {};
+            if (!acc[shop.id_anggota]) {
+                acc[shop.id_anggota] = {};
+            }
             const platform = (shop.platform || '').toLowerCase();
             const url = shop.url || '';
             if (platform === 'shopee') acc[shop.id_anggota].link_shopee = url;
             else if (platform === 'tokopedia') acc[shop.id_anggota].link_tokopedia = url;
+            else if (platform === 'tiktok shop') acc[shop.id_anggota].link_tiktok = url;
             else if (platform === 'lainnya') {
-                if(url.includes('facebook.com')) acc[shop.id_anggota].link_facebook = url;
-                else acc[shop.id_anggota].link_website = url;
+                if (url.includes('bukalapak.com')) acc[shop.id_anggota].link_bukalapak = url;
+                else if (url.includes('facebook.com')) acc[shop.id_anggota].link_facebook = url;
             }
             return acc;
         }, {});
-        return members.map(member => ({...member, ...olshopMap[member.id_anggota]}));
+        return members.map(member => ({ ...member, ...(olshopMap[member.id_anggota] || {}) }));
     }
 
-    // --- INISIALISASI ---
-    loadProfile();
+    // --- Mulai proses ---
+    loadMemberDetail();
 }); 
