@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         overlay.addEventListener('click', closeMenu);
-        mainNav.addEventListener('click', (event) => event.stopPropagation());
     }
 
     // Mobile Search Logic
@@ -174,8 +173,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const locationInfo = `${member.nama_panggilan || ''} - ${member.domisili || ''}`;
 
-        // Deskripsi - prioritaskan detail profesi untuk kebersihan data
-        let description = member.detail_profesi || '';
+        // Deskripsi - prioritaskan pengembangan profesi, lalu detail
+        let description = member.pengembangan_profesi || member.detail_profesi || '';
         if (description.length > 80) {
             description = description.substring(0, 80) + '...';
         }
