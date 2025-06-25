@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Event listener untuk membuat kartu bisa diklik
         card.addEventListener('click', (event) => {
+            // Cek jika target klik BUKAN sebuah link <a> atau elemen di dalam link
             if (!event.target.closest('a') && member.id_anggota) {
                 window.location.href = `detail.html?id=${member.id_anggota}`;
             }
@@ -188,6 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 entry[header] = value.replace(/""/g, '"').trim();
             });
+            // Fallback jika id_anggota tidak ada
             if (!entry.id_anggota) {
                 entry.id_anggota = 'gen_' + Math.random().toString(36).substr(2, 9);
             }
