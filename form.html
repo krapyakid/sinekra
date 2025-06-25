@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Data Anggota Sinergi Ekonomi Krapyak</title>
+    <title>Formulir Data Anggota - Sinergi Ekonomi Krapyak</title>
     <link rel="icon" href="assets/logo_sinergi_krapyak.jpg" type="image/jpeg">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -14,12 +14,10 @@
             <a href="index.html" class="logo-link">
                 <img src="assets/logo_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="logo">
             </a>
-            
             <nav class="main-nav" id="main-nav">
                 <a href="index.html" class="nav-link">Home</a>
                 <button id="view-switch-btn" class="nav-link">Lihat Anggota</button>
             </nav>
-
             <div class="mobile-menu-trigger" id="mobile-menu-trigger">
                 <img src="assets/menu_kebab.svg" alt="Menu">
             </div>
@@ -27,189 +25,137 @@
     </header>
 
     <div class="container">
-        <h1 class="form-title">Form Data Anggota Sinergi Ekonomi Santri Krapyak</h1>
-        <form id="alumni-form" class="form-grid" action="https://script.google.com/macros/s/AKfycbwKF9Cc1yQi4jKtZdNq2NlsVd92zy13K2Rvip0btYPsIRmtBq2iPRblEA-1b7_5LeA0Fw/exec" method="POST" enctype="multipart/form-data" novalidate>
-            
-            <div class="form-group">
-                <label for="nama-lengkap">Nama Lengkap<span class="required-indicator">*</span></label>
-                <div class="input-wrapper">
-                    <input type="text" id="nama-lengkap" name="nama_lengkap" required maxlength="80">
-                    <span class="clear-icon" title="Hapus"></span>
-                </div>
-                <small class="char-limit-info">Maksimal 80 karakter</small>
-            </div>
-
-            <div class="form-group">
-                <label for="panggilan">Nama Panggilan<span class="required-indicator">*</span></label>
-                <div class="input-wrapper">
-                    <input type="text" id="panggilan" name="panggilan" required maxlength="30">
-                    <span class="clear-icon" title="Hapus"></span>
-                </div>
-                <small class="char-limit-info">Maksimal 30 karakter</small>
-            </div>
-
-            <div class="form-group">
-                <label for="angkatan">Angkatan Tahun<span class="required-indicator">*</span></label>
-                <div class="input-wrapper">
-                    <select id="angkatan" name="angkatan" required>
-                        <option value="" selected disabled>Pilih Tahun Angkatan</option>
-                        <!-- Opsi tahun akan diisi oleh JavaScript -->
-                    </select>
-                    <span class="clear-icon" title="Hapus"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="komplek">Komplek<span class="required-indicator">*</span></label>
-                <div class="input-wrapper">
-                    <input type="text" id="komplek" name="komplek" required maxlength="30">
-                    <span class="clear-icon" title="Hapus"></span>
-                </div>
-                <small class="char-limit-info">Maksimal 30 karakter</small>
+        <div class="form-container">
+            <div class="form-header">
+                <h1>Formulir Data Anggota</h1>
+                <p>Isi data Anda untuk menjadi bagian dari direktori Sinergi Ekonomi Krapyak.</p>
             </div>
             
-            <div class="form-group">
-                <label for="domisili-search">Domisili Saat Ini<span class="required-indicator">*</span></label>
-                <div class="searchable-select-wrapper" id="domisili-wrapper">
-                    <input type="text" id="domisili-search" class="searchable-select-input" placeholder="Ketik untuk mencari domisili..." autocomplete="off">
-                    <span class="clear-icon" title="Hapus"></span>
-                    <div class="searchable-select-dropdown">
-                        <div class="searchable-select-status">Memuat data...</div>
-                    </div>
-                    <input type="hidden" name="domisili" id="domisili-value">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="no-hp">No. HP/WA<span class="required-indicator">*</span></label>
-                <div class="input-wrapper">
-                    <input type="tel" id="no-hp" name="no_hp" required placeholder="Contoh: +6281234567890" pattern="^\+62[0-9]{9,15}$">
-                    <span class="clear-icon" title="Hapus"></span>
-                </div>
-                <small class="char-limit-info">Maksimal 16 karakter</small>
-            </div>
-
-            <div class="form-group full-width">
-                <label for="profesi-search">Profesi/Aktifitas Saat Ini<span class="required-indicator">*</span></label>
-                <div class="searchable-select-wrapper" id="profesi-wrapper">
-                    <input type="text" id="profesi-search" class="searchable-select-input" placeholder="Ketik untuk mencari profesi..." autocomplete="off">
-                    <span class="clear-icon" title="Hapus"></span>
-                    <div class="searchable-select-dropdown">
-                        <div class="searchable-select-status">Memuat data...</div>
-                    </div>
-                    <input type="hidden" name="profesi" id="profesi-value">
-                </div>
-            </div>
-
-            <div class="form-group full-width">
-                <label for="penjelasan-usaha">Detail Profesi/Aktifitas</label>
-                <div class="input-wrapper">
-                    <textarea id="penjelasan-usaha" name="penjelasan_usaha" maxlength="300"></textarea>
-                    <span class="clear-icon" title="Hapus"></span>
-                </div>
-            </div>
-
-            <div class="form-group full-width">
-                <label for="prospek">Prospek/Kerjasama yang Ditawarkan</label>
-                <div class="input-wrapper">
-                    <textarea id="prospek" name="prospek" maxlength="150" placeholder="Contoh : Mencari reseller, Butuh mitra distribusi, Ingin bergabung koperasi, Open rekrutmen atau pembinaan, dll"></textarea>
-                    <span class="clear-icon" title="Hapus"></span>
-                </div>
-            </div>
-
-            <div class="form-group full-width">
-                <label for="nama-usaha">Nama Toko/Usaha <small class="optional-indicator">(Jika Ada)</small></label>
-                <div class="input-wrapper">
-                    <input type="text" id="nama-usaha" name="nama_usaha" maxlength="80">
-                    <span class="clear-icon" title="Hapus"></span>
-                </div>
-                <small class="char-limit-info">Maksimal 80 karakter</small>
-            </div>
-
-            <div class="form-group full-width">
-                <label for="url-gmaps">Tautan Lokasi Usaha di Google Maps</label>
-                <div class="input-wrapper">
-                    <input type="text" id="url-gmaps" name="url_gmaps" placeholder="Contoh: https://maps.app.goo.gl/xxxx" title="Harap masukkan URL Google Maps yang valid.">
-                    <span class="clear-icon" title="Hapus"></span>
-                </div>
-            </div>
-
-            <div class="form-group full-width">
-                <label for="website-usaha">Website Usaha <small class="optional-indicator">(Jika Ada)</small></label>
-                <div class="input-wrapper">
-                    <input type="text" id="website-usaha" name="website_url" placeholder="Contoh: https://namausaha.com" pattern="https?://.+" title="Harap masukkan URL yang valid.">
-                    <span class="clear-icon" title="Hapus"></span>
-                </div>
-            </div>
-
-            <div class="form-group full-width">
-                <label for="logo-upload">Upload Logo Usaha <small class="optional-indicator">(Jika Ada)</small></label>
-                <div class="input-wrapper file-upload-wrapper">
-                    <input type="file" name="logo_upload" id="logo-upload" accept="image/png, image/jpeg, image/gif" style="display: none;">
-                    <label for="logo-upload" class="file-upload-btn">Pilih File</label>
-                    <div id="file-info" style="display: none;">
-                        <span id="file-name" class="file-name-display"></span>
-                        <button type="button" id="file-reset" class="file-reset-btn">&times;</button>
+            <form id="alumni-form" novalidate>
+                
+                <div class="form-section">
+                    <h2>Informasi Pribadi</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="nama-lengkap">Nama Lengkap</label>
+                            <input type="text" id="nama-lengkap" name="nama_lengkap" required maxlength="80">
+                        </div>
+                        <div class="form-group">
+                            <label for="panggilan">Nama Panggilan</label>
+                            <input type="text" id="panggilan" name="panggilan" required maxlength="30">
+                        </div>
+                        <div class="form-group">
+                            <label for="angkatan">Angkatan Tahun</label>
+                            <select id="angkatan" name="angkatan" required>
+                                <option value="" disabled selected>Pilih Tahun</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="komplek">Komplek</label>
+                            <input type="text" id="komplek" name="komplek" required maxlength="30">
+                        </div>
+                        <div class="form-group">
+                            <label for="domisili-search">Domisili Saat Ini</label>
+                            <input type="text" id="domisili-search" name="domisili" placeholder="Cari kota/kabupaten..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="no-hp">No. HP/WA</label>
+                            <input type="tel" id="no-hp" name="no_hp" required placeholder="+6281234...">
+                        </div>
                     </div>
                 </div>
-                <small class="char-limit-info">Maks. 200KB. Format: JPG, PNG, GIF.</small>
-            </div>
 
-            <div class="form-group full-width">
-                <label>Toko Online <small class="optional-indicator">(Jika Ada, maks. 5)</small></label>
-                <div id="online-shops-container">
-                    <!-- Konten dinamis untuk toko online akan ditambahkan di sini oleh JavaScript -->
+                <div class="form-section">
+                    <h2>Informasi Profesional</h2>
+                    <div class="form-grid">
+                         <div class="form-group form-group-full">
+                            <label for="profesi-search">Profesi/Aktivitas Saat Ini</label>
+                             <input type="text" id="profesi-search" name="profesi" placeholder="Contoh: Pengusaha, Karyawan, Mahasiswa..." required>
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label for="penjelasan-usaha">Deskripsi Detail Profesi/Usaha</label>
+                            <textarea id="penjelasan-usaha" name="penjelasan_usaha" maxlength="300" rows="3"></textarea>
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label for="prospek">Prospek & Peluang Kerjasama</label>
+                            <textarea id="prospek" name="prospek" maxlength="150" rows="3" placeholder="Contoh: Mencari reseller, butuh mitra distribusi, dll."></textarea>
+                        </div>
+                    </div>
                 </div>
-                <button type="button" id="add-shop-btn" class="add-btn mt-2">Tambah Link Olshop</button>
-            </div>
 
-            <div class="form-group full-width">
-                <label for="ide">Usulan untuk Sinergi Ekonomi Krapyak</label>
-                <div class="input-wrapper">
-                    <textarea id="ide" name="ide" maxlength="200" placeholder="Ide, Saran, Kritik, atau Tawaran Kontribusi"></textarea>
-                    <span class="clear-icon" title="Hapus"></span>
+                <div class="form-section">
+                    <h2>Informasi Usaha (Opsional)</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="nama-usaha">Nama Toko/Usaha</label>
+                            <input type="text" id="nama-usaha" name="nama_usaha" maxlength="80">
+                        </div>
+                        <div class="form-group">
+                            <label for="url-gmaps">URL Google Maps</label>
+                            <input type="url" id="url-gmaps" name="url_gmaps" placeholder="https://maps.app.goo.gl/...">
+                        </div>
+                         <div class="form-group form-group-full">
+                            <label for="website-usaha">Website/Portofolio</label>
+                            <input type="url" id="website-usaha" name="website_url" placeholder="https://usaha-anda.com">
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group full-width">
-                <label for="lain-lain">Lain-Lain</label>
-                <div class="input-wrapper">
-                    <textarea id="lain-lain" name="lain_lain" maxlength="200"></textarea>
-                    <span class="clear-icon" title="Hapus"></span>
+                <div class="form-section">
+                    <h2>Toko Online & Media Sosial (Opsional)</h2>
+                    <div id="online-shops-container">
+                        <!-- Input dinamis untuk toko online -->
+                    </div>
+                    <button type="button" id="add-shop-btn" class="add-btn">
+                        <i class="fas fa-plus"></i> Tambah Link
+                    </button>
                 </div>
-            </div>
 
-            <div class="form-group full-width button-group">
-                <button type="reset" class="reset-btn">Reset</button>
-                <button type="submit" class="submit-btn">Lanjutkan</button>
-            </div>
-
-            <!-- Hidden fields for extra data -->
-            <input type="hidden" id="ip-address" name="ip_by">
-            <input type="hidden" id="device-info" name="device">
-
-        </form>
-    </div>
-
-    <div id="confirmation-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h2>Konfirmasi Data</h2>
-            <div class="modal-preview-grid">
-                <!-- Data preview akan disisipkan oleh JavaScript -->
-            </div>
-            <div class="modal-button-group">
-                <button type="button" id="cancel-submit" class="modal-btn modal-btn-cancel">Perbaiki</button>
-                <button type="button" id="confirm-submit" class="modal-btn modal-btn-confirm">Kirim Data Final</button>
-            </div>
+                <div class="form-actions">
+                    <button type="reset" class="btn btn-secondary">Reset</button>
+                    <button type="submit" class="btn btn-primary">Kirim Data</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <script src="main.js"></script>
-    <script src="form.js"></script>
-
-    <div id="submission-overlay" class="modal-overlay" style="display: none; justify-content: center; align-items: center; flex-direction: column; text-align: center;">
-        <div class="spinner" style="border-top-color: #fff;"></div>
-        <p style="color: white; font-size: 1.2rem; margin-top: 1rem;">Sedang menyimpan Data...</p>
+    <!-- Modal Konfirmasi -->
+    <div id="confirmation-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <h2>Konfirmasi Data</h2>
+            <p>Mohon periksa kembali data yang Anda masukkan sebelum mengirim.</p>
+            <div id="modal-preview-grid" class="modal-preview-grid">
+                <!-- Data preview akan disisipkan di sini -->
+            </div>
+            <div class="modal-button-group">
+                <button type="button" id="modal-edit-btn" class="btn btn-secondary">Edit Kembali</button>
+                <button type="button" id="modal-submit-btn" class="btn btn-primary">Ya, Kirim Sekarang</button>
+            </div>
+        </div>
     </div>
+    
+    <!-- Modal Status Pengiriman -->
+    <div id="status-modal" class="modal-overlay" style="display:none;">
+         <div class="modal-content">
+             <div id="submission-loading">
+                <div class="spinner"></div>
+                <p>Mengirim data...</p>
+             </div>
+             <div id="submission-success" style="display:none;">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h2>Terima Kasih!</h2>
+                <p>Data Anda telah berhasil dikirim.</p>
+                <a href="index.html" class="btn btn-primary">Kembali ke Direktori</a>
+             </div>
+             <div id="submission-error" style="display:none;">
+                <i class="fas fa-times-circle error-icon"></i>
+                <h2>Gagal Mengirim</h2>
+                <p>Terjadi kesalahan. Silakan coba lagi nanti.</p>
+                <button type="button" id="error-close-btn" class="btn btn-secondary">Tutup</button>
+             </div>
+         </div>
+    </div>
+
+    <script src="form.js"></script>
 </body>
 </html> 
