@@ -545,6 +545,37 @@ img {
     min-height: 80px;
 }
 
+/* Searchable Select (Dropdown) */
+.searchable-select {
+    position: relative;
+}
+.searchable-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid var(--input-border-color);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    box-shadow: 0 8px 10px rgba(0,0,0,0.1);
+}
+.dropdown-item {
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.dropdown-item:hover {
+    background-color: #f4f7f6;
+}
+.dropdown-item:not(:last-child) {
+    border-bottom: 1px solid #e9ecef;
+}
+
 /* Tombol */
 .btn, .add-btn, .remove-shop-btn {
     padding: 0.8rem 1.5rem;
