@@ -120,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function createMemberCard(member, options = {}) {
         const card = document.createElement('div');
         card.className = 'member-card';
+        card.dataset.id = member.id_anggota;
 
         // Event listener untuk membuat kartu bisa diklik
         card.addEventListener('click', (event) => {
@@ -129,51 +130,53 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        const waLink = member.no_hp ? `https://wa.me/${member.no_hp.replace(/[^0-9]/g, '')}` : null;
+        const waLink = member.no_hp_wa ? `https://wa.me/${member.no_hp_wa.replace(/[^0-9]/g, '')}` : null;
         
         // Banner
-        const banner = member.banner_url 
-            ? `<img src="assets/usaha/${member.banner_url}" alt="Banner ${member.nama_usaha}" class="card-banner-img">`
+        const banner = member.foto_usaha_path
+            ? `<img src="assets/usaha/${member.foto_usaha_path}" alt="Banner ${member.nama_usaha}" class="card-banner-img">`
             : `<div class="placeholder">${(member.nama_usaha || 'A').charAt(0)}</div>`;
 
-        // Detail Profesi (Deskripsi)
-        let detailProfesi = member.detail_profesi || '';
-        if (detailProfesi.length > 60) {
-            detailProfesi = detailProfesi.substring(0, 60) + '...';
+        const locationInfo = `${member.nama_panggilan || ''} - ${member.domisili || ''}`;
+
+        // Deskripsi
+        let description = member.pengembangan_profesi || member.detail_profesi || '';
+        if (description.length > 80) {
+            description = description.substring(0, 80) + '...';
         }
         
-        let prospek = member.pengembangan_profesi || '';
-        if (prospek.length > 70) {
-            prospek = prospek.substring(0, 70) + '...';
-        }
-
         // Ikon Marketplace
         const marketplaces = `
-            ${member.link_shopee ? `<a href="${member.link_shopee}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/shopee.svg" alt="Shopee" class="marketplace-icon"></a>` : ''}
-            ${member.link_tokopedia ? `<a href="${member.link_tokopedia}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/tokopedia.svg" alt="Tokopedia" class="marketplace-icon"></a>` : ''}
-            ${member.link_bukalapak ? `<a href="${member.link_bukalapak}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/bukalapak.svg" alt="Bukalapak" class="marketplace-icon"></a>` : ''}
-            ${member.link_tiktok ? `<a href="${member.link_tiktok}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/tiktok.svg" alt="TikTok Shop" class="marketplace-icon"></a>` : ''}
+            ${member.link_shopee ? `<a href="${member.link_shopee}" target="_blank" rel="noopener noreferrer"><img src="assets/social/shopee.svg" alt="Shopee" class="marketplace-icon"></a>` : ''}
+            ${member.link_tokopedia ? `<a href="${member.link_tokopedia}" target="_blank" rel="noopener noreferrer"><img src="assets/social/tokopedia.svg" alt="Tokopedia" class="marketplace-icon"></a>` : ''}
+            ${member.link_tiktok ? `<a href="${member.link_tiktok}" target="_blank" rel="noopener noreferrer"><img src="assets/social/tiktok.svg" alt="TikTok Shop" class="marketplace-icon"></a>` : ''}
             ${member.link_facebook ? `<a href="${member.link_facebook}" target="_blank" rel="noopener noreferrer"><img src="assets/social/facebook.svg" alt="Facebook" class="marketplace-icon"></a>` : ''}
+            ${member.link_instagram ? `<a href="${member.link_instagram}" target="_blank" rel="noopener noreferrer"><img src="assets/social/instagram.svg" alt="Instagram" class="marketplace-icon"></a>` : ''}
+            ${member.link_website ? `<a href="${member.link_website}" target="_blank" rel="noopener noreferrer"><img src="assets/social/website.svg" alt="Website" class="marketplace-icon"></a>` : ''}
         `.trim();
         
         // Tampilkan jarak jika diminta
         let distanceInfo = '';
         if (options.showDistance && member.distance !== Infinity) {
-            distanceInfo = `<p class="card-distance">~ ${member.distance.toFixed(1)} km dari lokasi Anda</p>`;
+            distanceInfo = `<p class="card-distance">~ ${member.distance.toFixed(1)} km</p>`;
         }
 
         card.innerHTML = `
-            <div class="card-banner">${banner}</div>
+            <div class="card-banner">
+                ${banner}
+                <div class="location-tag">
+                    <i class="fas fa-map-marker-alt"></i> ${locationInfo}
+                </div>
+            </div>
             <div class="card-content">
                 <h3 class="card-business-name">${member.nama_usaha || 'Nama Usaha Belum Diisi'}</h3>
-                <p class="card-description">${prospek || detailProfesi}</p>
-                <p class="card-owner-name">${member.nama_lengkap || ''}</p>
-                ${distanceInfo}
-                <div class="card-contact-bar">
-                    <div class="card-marketplaces">
-                        ${marketplaces || '<span style="font-size: 0.8rem; color: #999;">Toko online tidak tersedia</span>'}
+                <p class="card-description">${description}</p>
+                <div class="card-footer">
+                    <p class="card-owner-name">${member.nama_lengkap}</p>
+                    <div class="card-contact-bar">
+                        ${waLink ? `<a href="${waLink}" class="social-icon whatsapp-icon" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>` : ''}
+                        ${marketplaces}
                     </div>
-                    ${waLink ? `<a href="${waLink}" target="_blank" rel="noopener noreferrer"><img src="assets/social/whatsapp.svg" alt="WhatsApp" class="whatsapp-icon"></a>` : ''}
                 </div>
             </div>
         `;
@@ -209,15 +212,16 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!acc[shop.id_anggota]) {
                 acc[shop.id_anggota] = {};
             }
-            const platform = (shop.platform || '').toLowerCase();
+            const platform = (shop.platform || '').toLowerCase().replace(' ', '_');
             const url = shop.url || '';
+
             if (platform === 'shopee') acc[shop.id_anggota].link_shopee = url;
             else if (platform === 'tokopedia') acc[shop.id_anggota].link_tokopedia = url;
-            else if (platform === 'tiktok shop') acc[shop.id_anggota].link_tiktok = url;
-            else if (platform === 'lainnya') {
-                if (url.includes('bukalapak.com')) acc[shop.id_anggota].link_bukalapak = url;
-                else if (url.includes('facebook.com')) acc[shop.id_anggota].link_facebook = url;
-            }
+            else if (platform === 'tiktok_shop') acc[shop.id_anggota].link_tiktok = url;
+            else if (platform === 'facebook') acc[shop.id_anggota].link_facebook = url;
+            else if (platform === 'instagram') acc[shop.id_anggota].link_instagram = url;
+            else if (platform === 'website') acc[shop.id_anggota].link_website = url;
+            
             return acc;
         }, {});
         return members.map(member => ({ ...member, ...(olshopMap[member.id_anggota] || {}) }));
