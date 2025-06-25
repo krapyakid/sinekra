@@ -427,11 +427,12 @@ img {
         right: 0;
         width: 280px;
         height: 100%;
-        background-color: var(--header-bg);
+        background-color: rgba(10, 20, 30, 0.85);
+        backdrop-filter: blur(8px);
         flex-direction: column;
         align-items: flex-start;
         padding-top: 80px;
-        box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+        box-shadow: -3px 0 15px rgba(0,0,0,0.2);
         transform: translateX(100%);
         transition: transform 0.35s ease-in-out;
         z-index: 1100;
@@ -447,9 +448,14 @@ img {
         width: 100%;
         text-align: left;
         border-radius: 0;
-        border-bottom: 1px solid #f0f0f0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
     }
     
+    .main-nav .nav-link:hover, .main-nav .nav-link.active {
+        background-color: rgba(255, 255, 255, 0.08);
+    }
+
     .main-nav .nav-link:last-child {
         border-bottom: none;
     }
