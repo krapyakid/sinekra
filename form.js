@@ -19,10 +19,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const errorCloseBtn = document.getElementById('error-close-btn');
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvH3uqGJ_cPhOi4147NpUWGVtTzwcl9rWTZns7FYBQgoOGEZEeQEb0CVOIyKubeilS/exec";
+    const DOMISILI_URL = "https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/data/data_domisili.csv";
+    const PROFESI_URL = "https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/data/profesi.csv";
 
     // --- INISIALISASI ---
     populateYearDropdown();
     addInitialShopEntry();
+    initializeSearchableSelect('domisili-search', DOMISILI_URL);
+    initializeSearchableSelect('profesi-search', PROFESI_URL);
 
     // --- EVENT LISTENERS ---
     form.addEventListener('submit', handleFormSubmit);
@@ -37,6 +41,66 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // --- FUNGSI-FUNGSI ---
+
+    function initializeSearchableSelect(inputId, dataUrl) {
+        const input = document.getElementById(inputId);
+        const container = input.parentElement;
+        const dropdown = container.querySelector('.searchable-dropdown');
+        let options = [];
+
+        async function fetchData() {
+            try {
+                const response = await fetch(dataUrl);
+                const csvText = await response.text();
+                options = csvText.split('\n').map(row => row.trim()).filter(Boolean);
+                // Mungkin ada header, jadi kita bisa hapus jika perlu, contoh:
+                if (options[0].toLowerCase() === 'domisili' || options[0].toLowerCase() === 'profesi') {
+                    options.shift();
+                }
+            } catch (error) {
+                console.error(`Gagal memuat data untuk ${inputId}:`, error);
+                dropdown.innerHTML = `<div class="dropdown-item">Gagal memuat data</div>`;
+            }
+        }
+
+        function filterAndShowDropdown(query) {
+            dropdown.innerHTML = '';
+            const filteredOptions = options.filter(opt => opt.toLowerCase().includes(query.toLowerCase()));
+            
+            if (filteredOptions.length === 0) {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            filteredOptions.slice(0, 50).forEach(opt => { // Batasi 50 untuk performa
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+                item.textContent = opt;
+                item.addEventListener('click', () => {
+                    input.value = opt;
+                    dropdown.style.display = 'none';
+                });
+                dropdown.appendChild(item);
+            });
+            dropdown.style.display = 'block';
+        }
+        
+        input.addEventListener('focus', fetchData);
+        input.addEventListener('input', () => {
+            const query = input.value;
+            if (query.length > 1) {
+                filterAndShowDropdown(query);
+            } else {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!container.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    }
 
     function populateYearDropdown() {
         const currentYear = new Date().getFullYear();
