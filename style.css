@@ -146,8 +146,10 @@ main.content-container {
 /* Hero Section */
 .hero-section {
     background-image: url('assets/hero-bg.jpg');
-    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
     background-position: center;
+    background-color: #fff;
     padding: 80px 20px;
     text-align: center;
     min-height: 400px;
@@ -157,15 +159,9 @@ main.content-container {
     position: relative;
 }
 
+/* Hapus overlay */
 .hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.3); 
-    z-index: 1;
+    display: none !important;
 }
 
 .hero-content {
