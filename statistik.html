@@ -8,9 +8,26 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-    .mobile-search-trigger {
-        display: none !important;
-    }
+        .statistik-illustration-wrapper {
+            max-width: 600px;
+            margin: 60px auto 0 auto;
+            text-align: center;
+        }
+        .statistik-illustration-wrapper img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(52,48,139,0.08);
+        }
+        @media (max-width: 600px) {
+            .statistik-illustration-wrapper {
+                margin: 32px auto 0 auto;
+                padding: 0 4vw;
+            }
+        }
+        .mobile-search-trigger {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -38,10 +55,8 @@
         </div>
     </header>
     <main class="content-container">
-        <div class="comingsoon-wrapper" style="text-align:center; max-width:600px; margin:40px auto 0 auto;">
-            <img src="assets/comingsoon_ilustrasi.jpg" alt="Coming Soon" style="max-width:100%;height:auto;margin-bottom:32px;">
-            <h1 style="font-size:2.5rem; font-weight:700; margin-bottom:12px;">COMING SOON</h1>
-            <p style="font-size:1.1rem; color:#555; margin-bottom:8px;">Still Cooking with Santri Spirit!</p>
+        <div class="statistik-illustration-wrapper">
+            <img src="assets/coomingsoonpage.png" alt="Statistik Coming Soon Illustration">
         </div>
     </main>
     <script src="main.js"></script>
