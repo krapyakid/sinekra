@@ -32,10 +32,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Klik di luar untuk menutup search/menu
     document.addEventListener('click', (event) => {
-        // Tutup menu jika klik di luar
-        if (mainNav && mainNav.classList.contains('active') && !mainNav.contains(event.target)) {
-            mainNav.classList.remove('active');
-            overlay.classList.remove('active');
+        // Pastikan target klik bukan di dalam menu navigasi atau pemicu menu
+        if (mainNav && mainNav.classList.contains('active') && !mainNav.contains(event.target) && !menuTrigger.contains(event.target)) {
+            closeMenu();
         }
         // Tutup search jika klik di luar
         if (searchSection && searchSection.classList.contains('active') && !searchSection.contains(event.target) && !mobileSearchTrigger.contains(event.target)) {
