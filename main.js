@@ -93,7 +93,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const directoryGrid = document.getElementById('directory-grid');
         if (!directoryGrid) return;
         
-        directoryGrid.innerHTML = '<p>Memuat data usaha...</p>';
+        directoryGrid.innerHTML = `
+            <div class="loading-container">
+                <div class="spinner"></div>
+                <p>Memuat data usaha...</p>
+            </div>
+        `;
 
         const members = await fetchData();
         
