@@ -61,7 +61,8 @@ img {
 /* Header */
 .main-header {
     background-color: var(--card-bg);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     padding: 15px 0;
     position: sticky;
     top: 0;
@@ -139,6 +140,7 @@ img {
 
 main.content-container {
     width: 100%;
+    padding-top: 0; /* Menghilangkan jarak atas */
 }
 
 /* Hero Section */
