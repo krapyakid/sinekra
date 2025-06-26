@@ -156,67 +156,56 @@ document.addEventListener('DOMContentLoaded', function() {
         card.className = 'member-card';
         card.dataset.id = member.id_anggota;
 
-        // Event listener untuk membuat kartu bisa diklik
+        // Fallback untuk data yang mungkin kosong
+        const namaUsaha = member.nama_usaha || 'Nama Usaha Belum Diisi';
+        const namaLengkap = member.nama_lengkap || '';
+        const deskripsi = (member.pengembangan_profesi || member.detail_profesi || '').substring(0, 80) + '...';
+        const lokasi = [member.nama_panggilan, member.domisili].filter(Boolean).join(' - ');
+        
+        // Banner Image or Placeholder
+        const placeholderChar = namaUsaha.charAt(0);
+        const placeholderDiv = `<div class="placeholder">${placeholderChar}</div>`;
+        const bannerImg = member.id_anggota 
+            ? `<img src="assets/usaha/${member.id_anggota}.jpg" class="card-banner-img" alt="${namaUsaha}" onerror="this.outerHTML = '${placeholderDiv.replace(/'/g, "\\'")}';">`
+            : placeholderDiv;
+
+        // Social & Marketplace Links
+        const waLink = member.no_hp_wa ? `https://wa.me/${member.no_hp_wa.replace(/[^0-9]/g, '')}` : null;
+        const socialIcons = [
+            { link: waLink, icon: 'fab fa-whatsapp', color: '#25D366' },
+            // Tambahkan link sosial lainnya di sini jika ada di data
+        ].filter(item => item.link).map(item => `
+            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="social-icon" style="color: ${item.color};">
+                <i class="${item.icon}"></i>
+            </a>
+        `).join('');
+
+        card.innerHTML = `
+            <div class="card-banner">
+                ${bannerImg}
+                <div class="location-tag">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>${lokasi}</span>
+                </div>
+            </div>
+            <div class="card-content">
+                <h3 class="card-business-name">${namaUsaha}</h3>
+                <p class="card-description">${deskripsi}</p>
+                <div class="card-footer">
+                    <p class="card-owner-name">${namaLengkap}</p>
+                    <div class="card-contact-bar">
+                        ${socialIcons}
+                    </div>
+                </div>
+            </div>
+        `;
+
         card.addEventListener('click', (event) => {
-            // Cek jika target klik BUKAN sebuah link <a> atau elemen di dalam link
             if (!event.target.closest('a') && member.id_anggota) {
                 window.location.href = `detail.html?id=${member.id_anggota}`;
             }
         });
 
-        const waLink = member.no_hp_wa ? `https://wa.me/${member.no_hp_wa.replace(/[^0-9]/g, '')}` : null;
-        
-        // Banner
-        const placeholderChar = (member.nama_usaha || 'A').charAt(0);
-        const placeholderDiv = `<div class="placeholder">${placeholderChar}</div>`;
-        const banner = member.id_anggota
-            ? `<img src="assets/usaha/${member.id_anggota}.jpg" alt="Banner ${member.nama_usaha}" class="card-banner-img" onerror="this.outerHTML = '${placeholderDiv.replace(/'/g, "\\'")}';">`
-            : placeholderDiv;
-
-        const locationInfo = [member.nama_panggilan, member.domisili].filter(Boolean).join(' - ');
-
-        // Deskripsi - prioritaskan pengembangan profesi, lalu detail
-        let description = member.pengembangan_profesi || member.detail_profesi || '';
-        if (description.length > 80) {
-            description = description.substring(0, 80) + '...';
-        }
-        
-        // Ikon Marketplace
-        const marketplaces = `
-            ${member.link_shopee ? `<a href="${member.link_shopee}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/icon-shopee.svg" alt="Shopee" class="marketplace-icon"></a>` : ''}
-            ${member.link_tokopedia ? `<a href="${member.link_tokopedia}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/icon-tokopedia.svg" alt="Tokopedia" class="marketplace-icon"></a>` : ''}
-            ${member.link_tiktok ? `<a href="${member.link_tiktok}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/icon-tiktok.svg" alt="TikTok Shop" class="marketplace-icon"></a>` : ''}
-            ${member.link_facebook ? `<a href="${member.link_facebook}" target="_blank" rel="noopener noreferrer"><img src="assets/icon-facebook.svg" alt="Facebook" class="marketplace-icon"></a>` : ''}
-            ${member.link_instagram ? `<a href="${member.link_instagram}" target="_blank" rel="noopener noreferrer"><img src="assets/icon-instagram.svg" alt="Instagram" class="marketplace-icon"></a>` : ''}
-            ${member.link_website ? `<a href="${member.link_website}" target="_blank" rel="noopener noreferrer"><img src="assets/webicon.svg" alt="Website" class="marketplace-icon"></a>` : ''}
-        `.trim();
-        
-        // Tampilkan jarak jika diminta
-        let distanceInfo = '';
-        if (options.showDistance && member.distance !== Infinity) {
-            distanceInfo = `<p class="card-distance">~ ${member.distance.toFixed(1)} km</p>`;
-        }
-
-        card.innerHTML = `
-            <div class="card-banner">
-                ${banner}
-                <div class="location-tag">
-                    <i class="fas fa-map-marker-alt"></i> 
-                    <span>${locationInfo}</span>
-                </div>
-            </div>
-            <div class="card-content">
-                <h3 class="card-business-name">${member.nama_usaha || 'Nama Usaha Belum Diisi'}</h3>
-                <p class="card-description">${description}</p>
-                <div class="card-footer">
-                    <p class="card-owner-name">${member.nama_lengkap}</p>
-                    <div class="card-contact-bar">
-                        ${waLink ? `<a href="${waLink}" class="social-icon whatsapp-icon" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>` : ''}
-                        ${marketplaces}
-                    </div>
-                </div>
-            </div>
-        `;
         return card;
     }
 
