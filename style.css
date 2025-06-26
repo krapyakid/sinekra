@@ -1,7 +1,7 @@
 :root {
     --primary-color: #2c3e50;
     --secondary-color: #3498db;
-    --background-color: #f4f7f6;
+    --background-color: #ffffff;
     --form-bg-color: #ffffff;
     --input-border-color: #ccc;
     --input-focus-color: #3498db;
@@ -80,6 +80,7 @@ img {
 .header-right {
     display: flex;
     align-items: center;
+    margin-left: auto;
     gap: 15px;
 }
 
@@ -200,16 +201,17 @@ main.content-container {
 
 /* Search and Filter Section */
 .search-and-filter-section {
-    background-color: #ffffff;
+    background-color: transparent;
     padding: 20px;
-    margin: 20px auto;
+    margin: 0 auto;
     max-width: 1200px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+    border-radius: 0;
+    box-shadow: none;
     display: flex;
     gap: 20px;
     align-items: center;
     justify-content: space-between;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .search-bar-wrapper {
