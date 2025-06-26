@@ -17,13 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         overlay.addEventListener('click', closeMenu);
-
-        // Perbaikan: Menutup menu saat link di dalamnya diklik
-        mainNav.addEventListener('click', function(event) {
-            if (event.target.tagName === 'A') {
-                closeMenu();
-            }
-        });
     }
 
     // Mobile Search Logic
