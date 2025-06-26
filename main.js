@@ -151,10 +151,17 @@ document.addEventListener('DOMContentLoaded', function() {
             bannerImg.src = `assets/usaha/${member.id_anggota}.jpg`;
             bannerImg.alt = namaUsaha;
             bannerImg.className = 'card-banner-img';
-            bannerImg.onerror = () => banner.replaceChild(placeholder, bannerImg);
+            bannerImg.onerror = function() {
+                this.onerror = null;
+                this.src = 'assets/usaha/default_image_usaha.jpg';
+            };
             banner.appendChild(bannerImg);
         } else {
-            banner.appendChild(placeholder);
+            const defaultImg = document.createElement('img');
+            defaultImg.src = 'assets/usaha/default_image_usaha.jpg';
+            defaultImg.alt = namaUsaha;
+            defaultImg.className = 'card-banner-img';
+            banner.appendChild(defaultImg);
         }
         banner.appendChild(locationTag);
         
