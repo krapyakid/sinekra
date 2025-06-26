@@ -903,4 +903,36 @@ input:disabled, textarea:disabled, select:disabled {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.directory-grid-container .loading-container {
+    grid-column: 1 / -1; /* Membuat container loading membentang di semua kolom grid */
+}
+
+/* Grid Section */
+.main-grid-section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.recommended-section {
+    padding-top: 0;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.see-more-link {
+    font-weight: 600;
 } 
