@@ -17,6 +17,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         overlay.addEventListener('click', closeMenu);
+
+        // Perbaikan: Menambahkan event listener pada setiap link nav
+        const navLinks = mainNav.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                // Biarkan navigasi berjalan, hanya tutup menu
+                setTimeout(closeMenu, 100); 
+            });
+        });
     }
 
     // Mobile Search Logic
