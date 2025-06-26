@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Mobile Menu Logic
-    const menuTrigger = document.getElementById('mobile-menu-trigger');
+    const menuTrigger = document.getElementById('burger-menu-trigger');
     const mainNav = document.getElementById('main-nav');
     const overlay = document.getElementById('menu-overlay');
 
