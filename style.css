@@ -423,9 +423,9 @@ main.content-container {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    border-left-color: var(--secondary-color);
-    animation: spin 1s ease infinite;
+    border-left-color: var(--primary-color);
     margin-bottom: 15px;
+    animation: spin 1s ease infinite;
 }
 
 @keyframes spin {
@@ -872,5 +872,35 @@ input:disabled, textarea:disabled, select:disabled {
     .search-and-filter-section {
         flex-direction: column;
         align-items: stretch;
+    }
+}
+
+/* Loading Spinner */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: var(--primary-color);
+    margin-bottom: 15px;
+    animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 } 
