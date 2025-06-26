@@ -121,8 +121,12 @@ img {
 
 .nav-link.active {
     font-weight: 600;
-    color: var(--secondary-color);
-    border-bottom: 2px solid var(--secondary-color);
+    color: #0048B8;
+    border-bottom: 2px solid #0048B8;
+}
+
+.nav-link:not(.active) {
+    color: #5396FF;
 }
 
 .mobile-menu-trigger {
@@ -143,11 +147,11 @@ main.content-container {
 .hero-section {
     background: url('assets/hero-bg.jpg') no-repeat center center/cover;
     text-align: center;
-    padding: 50px 20px;
+    padding: 40px 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 35vh;
+    min-height: auto;
 }
 
 .hero-content {
@@ -158,28 +162,29 @@ main.content-container {
     backdrop-filter: none;
 }
 
+.hero-content .quote,
+.hero-content .source,
+.hero-content .source-title {
+    color: #0048B8;
+    text-shadow: 0px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
 .hero-content .quote {
     font-size: 1.5rem;
     font-weight: 500;
     margin-bottom: 20px;
     line-height: 1.4;
-    color: var(--secondary-color);
-    text-shadow: 0px 1px 3px rgba(255, 255, 255, 0.4);
 }
 
 .hero-content .source {
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--secondary-color);
-    text-shadow: 0px 1px 3px rgba(255, 255, 255, 0.4);
 }
 
 .hero-content .source-title {
     font-size: 0.9rem;
     font-weight: 400;
     opacity: 0.9;
-    color: var(--secondary-color);
-    text-shadow: 0px 1px 3px rgba(255, 255, 255, 0.4);
 }
 
 /* Search and Filter Section */
@@ -199,6 +204,7 @@ main.content-container {
 .search-bar-wrapper {
     position: relative;
     flex-grow: 1;
+    margin-bottom: 15px;
 }
 
 #desktop-search-bar {
@@ -212,6 +218,10 @@ main.content-container {
 #desktop-search-bar:focus {
     border-color: var(--secondary-color);
     box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
+}
+
+#desktop-search-bar::placeholder {
+    color: #b0bec5;
 }
 
 .search-bar-wrapper .search-icon {
@@ -233,6 +243,7 @@ main.content-container {
     border-radius: 8px;
     background-color: #f9f9f9;
     min-width: 150px;
+    color: #b0bec5;
 }
 
 /* Grid Section */
@@ -255,7 +266,7 @@ main.content-container {
 .section-title {
     font-size: 1.5rem;
     color: var(--primary-color);
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .see-more-link {
@@ -341,7 +352,7 @@ main.content-container {
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 8px;
-    color: var(--primary-color);
+    color: #438DFF;
 }
 
 .card-description {
