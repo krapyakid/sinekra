@@ -156,50 +156,55 @@ document.addEventListener('DOMContentLoaded', function() {
         card.className = 'member-card';
         card.dataset.id = member.id_anggota;
 
-        // Fallback untuk data yang mungkin kosong
+        // Data fallbacks
         const namaUsaha = member.nama_usaha || 'Nama Usaha Belum Diisi';
-        const namaLengkap = member.nama_lengkap || '';
-        const deskripsi = (member.pengembangan_profesi || member.detail_profesi || '').substring(0, 80) + '...';
-        const lokasi = [member.nama_panggilan, member.domisili].filter(Boolean).join(' - ');
-        
+        const deskripsi = member.detail_profesi ? member.detail_profesi.substring(0, 100) + (member.detail_profesi.length > 100 ? '...' : '') : 'Deskripsi usaha tidak tersedia.';
+        const lokasiText = [member.nama_panggilan, member.domisili].filter(Boolean).join(' - ');
+        const gmapsUrl = member.url_gmaps || null;
+
         // Banner Image or Placeholder
         const placeholderChar = namaUsaha.charAt(0);
         const placeholderDiv = `<div class="placeholder">${placeholderChar}</div>`;
         const bannerImg = member.id_anggota 
             ? `<img src="assets/usaha/${member.id_anggota}.jpg" class="card-banner-img" alt="${namaUsaha}" onerror="this.outerHTML = '${placeholderDiv.replace(/'/g, "\\'")}';">`
             : placeholderDiv;
+        
+        // Location Tag (can be a link)
+        const locationTagContent = `<i class="fas fa-map-marker-alt"></i><span>${lokasiText}</span>`;
+        const locationTag = gmapsUrl 
+            ? `<a href="${gmapsUrl}" target="_blank" rel="noopener noreferrer" class="location-tag">${locationTagContent}</a>`
+            : `<div class="location-tag">${locationTagContent}</div>`;
 
-        // Social & Marketplace Links
-        const waLink = member.no_hp_wa ? `https://wa.me/${member.no_hp_wa.replace(/[^0-9]/g, '')}` : null;
-        const socialIcons = [
-            { link: waLink, icon: 'fab fa-whatsapp', color: '#25D366' },
-            // Tambahkan link sosial lainnya di sini jika ada di data
+        // Social & Marketplace Icons
+        const icons = [
+            { link: member.no_hp_wa ? `https://wa.me/${member.no_hp_wa.replace(/[^0-9]/g, '')}` : null, asset: 'assets/icon-whatsapp.svg' },
+            { link: member.link_facebook, asset: 'assets/icon-facebook.svg' },
+            { link: member.link_shopee, asset: 'assets/marketplace/icon-shopee.svg' },
+            { link: member.link_tokopedia, asset: 'assets/marketplace/icon-tokopedia.svg' },
+            { link: member.link_tiktok, asset: 'assets/marketplace/icon-tiktok.svg' },
+            { link: member.link_website, asset: 'assets/webicon.svg' },
         ].filter(item => item.link).map(item => `
-            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="social-icon" style="color: ${item.color};">
-                <i class="${item.icon}"></i>
+            <a href="${item.link}" target="_blank" rel="noopener noreferrer">
+                <img src="${item.asset}" class="marketplace-icon" />
             </a>
         `).join('');
 
         card.innerHTML = `
             <div class="card-banner">
                 ${bannerImg}
-                <div class="location-tag">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>${lokasi}</span>
-                </div>
+                ${locationTag}
             </div>
             <div class="card-content">
                 <h3 class="card-business-name">${namaUsaha}</h3>
                 <p class="card-description">${deskripsi}</p>
                 <div class="card-footer">
-                    <p class="card-owner-name">${namaLengkap}</p>
                     <div class="card-contact-bar">
-                        ${socialIcons}
+                        ${icons}
                     </div>
                 </div>
             </div>
         `;
-
+        
         card.addEventListener('click', (event) => {
             if (!event.target.closest('a') && member.id_anggota) {
                 window.location.href = `detail.html?id=${member.id_anggota}`;
