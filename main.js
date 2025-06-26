@@ -181,12 +181,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Ikon Marketplace
         const marketplaces = `
-            ${member.link_shopee ? `<a href="${member.link_shopee}" target="_blank" rel="noopener noreferrer"><img src="assets/social/shopee.svg" alt="Shopee" class="marketplace-icon"></a>` : ''}
-            ${member.link_tokopedia ? `<a href="${member.link_tokopedia}" target="_blank" rel="noopener noreferrer"><img src="assets/social/tokopedia.svg" alt="Tokopedia" class="marketplace-icon"></a>` : ''}
-            ${member.link_tiktok ? `<a href="${member.link_tiktok}" target="_blank" rel="noopener noreferrer"><img src="assets/social/tiktok.svg" alt="TikTok Shop" class="marketplace-icon"></a>` : ''}
-            ${member.link_facebook ? `<a href="${member.link_facebook}" target="_blank" rel="noopener noreferrer"><img src="assets/social/facebook.svg" alt="Facebook" class="marketplace-icon"></a>` : ''}
-            ${member.link_instagram ? `<a href="${member.link_instagram}" target="_blank" rel="noopener noreferrer"><img src="assets/social/instagram.svg" alt="Instagram" class="marketplace-icon"></a>` : ''}
-            ${member.link_website ? `<a href="${member.link_website}" target="_blank" rel="noopener noreferrer"><img src="assets/social/website.svg" alt="Website" class="marketplace-icon"></a>` : ''}
+            ${member.link_shopee ? `<a href="${member.link_shopee}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/icon-shopee.svg" alt="Shopee" class="marketplace-icon"></a>` : ''}
+            ${member.link_tokopedia ? `<a href="${member.link_tokopedia}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/icon-tokopedia.svg" alt="Tokopedia" class="marketplace-icon"></a>` : ''}
+            ${member.link_tiktok ? `<a href="${member.link_tiktok}" target="_blank" rel="noopener noreferrer"><img src="assets/marketplace/icon-tiktok.svg" alt="TikTok Shop" class="marketplace-icon"></a>` : ''}
+            ${member.link_facebook ? `<a href="${member.link_facebook}" target="_blank" rel="noopener noreferrer"><img src="assets/icon-facebook.svg" alt="Facebook" class="marketplace-icon"></a>` : ''}
+            ${member.link_instagram ? `<a href="${member.link_instagram}" target="_blank" rel="noopener noreferrer"><img src="assets/icon-instagram.svg" alt="Instagram" class="marketplace-icon"></a>` : ''}
+            ${member.link_website ? `<a href="${member.link_website}" target="_blank" rel="noopener noreferrer"><img src="assets/webicon.svg" alt="Website" class="marketplace-icon"></a>` : ''}
         `.trim();
         
         // Tampilkan jarak jika diminta
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="card-footer">
                     <p class="card-owner-name">${member.nama_lengkap}</p>
                     <div class="card-contact-bar">
-                        ${waLink ? `<a href="${waLink}" class="social-icon whatsapp-icon" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>` : ''}
+                        <a href="${waLink}" class="social-icon whatsapp-icon" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>
                         ${marketplaces}
                     </div>
                 </div>
