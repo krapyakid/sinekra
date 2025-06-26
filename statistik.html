@@ -8,21 +8,28 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .statistik-illustration-wrapper {
-            max-width: 600px;
-            margin: 60px auto 0 auto;
-            text-align: center;
+        body {
+            background: #fff;
         }
-        .statistik-illustration-wrapper img {
+        .statistik-img-center {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 60vh;
+            margin-top: 48px;
+        }
+        .statistik-img-center img {
             max-width: 100%;
             height: auto;
-            border-radius: 18px;
-            box-shadow: 0 4px 24px rgba(52,48,139,0.08);
+            display: block;
+            box-shadow: none;
+            border-radius: 0;
         }
         @media (max-width: 600px) {
-            .statistik-illustration-wrapper {
-                margin: 32px auto 0 auto;
-                padding: 0 4vw;
+            .statistik-img-center {
+                margin-top: 24px;
+                min-height: 40vh;
+                padding: 0 2vw;
             }
         }
         .mobile-search-trigger {
@@ -55,7 +62,7 @@
         </div>
     </header>
     <main class="content-container">
-        <div class="statistik-illustration-wrapper">
+        <div class="statistik-img-center">
             <img src="assets/coomingsoonpage.png" alt="Statistik Coming Soon Illustration">
         </div>
     </main>
