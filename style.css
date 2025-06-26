@@ -192,8 +192,25 @@ main.content-container {
     margin-bottom: 40px;
 }
 
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 300px; /* Tinggi disesuaikan untuk mobile */
+    }
+    .search-and-filter-section {
+        margin-top: 20px; /* Reset margin untuk mobile */
+        margin-bottom: 20px;
+    }
+    .search-and-filter-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .hero-content .quote {
+        font-size: 1.5rem;
+    }
+}
+
 .search-and-filter-container {
-    max-width: 1100px;
+    max-width: 1100px; /* Diperlebar */
     margin: 0 auto;
     background-color: white;
     border-radius: 12px;
