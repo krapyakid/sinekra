@@ -167,11 +167,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const waLink = member.no_hp_wa ? `https://wa.me/${member.no_hp_wa.replace(/[^0-9]/g, '')}` : null;
         
         // Banner
-        const banner = member.foto_usaha_path
-            ? `<img src="assets/usaha/${member.foto_usaha_path}" alt="Banner ${member.nama_usaha}" class="card-banner-img">`
-            : `<div class="placeholder">${(member.nama_usaha || 'A').charAt(0)}</div>`;
+        const placeholderChar = (member.nama_usaha || 'A').charAt(0);
+        const placeholderDiv = `<div class="placeholder">${placeholderChar}</div>`;
+        const banner = member.id_anggota
+            ? `<img src="assets/usaha/${member.id_anggota}.jpg" alt="Banner ${member.nama_usaha}" class="card-banner-img" onerror="this.outerHTML = '${placeholderDiv.replace(/'/g, "\\'")}';">`
+            : placeholderDiv;
 
-        const locationInfo = `${member.nama_panggilan || ''} - ${member.domisili || ''}`;
+        const locationInfo = [member.nama_panggilan, member.domisili].filter(Boolean).join(' - ');
 
         // Deskripsi - prioritaskan pengembangan profesi, lalu detail
         let description = member.pengembangan_profesi || member.detail_profesi || '';
@@ -223,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (lines.length < 2) return [];
         const headers = lines[0].split(',').map(h => h.trim());
         return lines.slice(1).map(line => {
-            const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+            const values = line.match(/(".*?"|[^",]*)(?=\s*,|\s*$)/g) || [];
             const entry = {};
             headers.forEach((header, i) => {
                 let value = values[i] || '';
