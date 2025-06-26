@@ -89,10 +89,9 @@ img {
     align-items: center;
     gap: 10px;
     color: #757575;
-    border: 1px solid #e0e0e0;
-    border-radius: 25px;
-    background-color: #ffffff;
-    min-width: 150px;
+    border: none;
+    background-color: transparent;
+    min-width: auto;
 }
 
 .mobile-search-trigger {
