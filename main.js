@@ -73,81 +73,32 @@ document.addEventListener('DOMContentLoaded', function() {
             return allMembers;
         } catch (error) {
             console.error("Gagal memuat data:", error);
-            // Mengembalikan array kosong jika terjadi error
             return [];
         }
     }
     
     // --- Logika untuk Halaman Beranda (index.html) ---
-    if (document.getElementById('nearby-grid') && document.getElementById('recommended-grid')) {
-        displayHomepageSections();
+    if (document.getElementById('directory-grid')) {
+        displayDirectory();
     }
 
-    async function displayHomepageSections() {
-        const nearbyGrid = document.getElementById('nearby-grid');
-        const recommendedGrid = document.getElementById('recommended-grid');
+    async function displayDirectory() {
+        const directoryGrid = document.getElementById('directory-grid');
+        if (!directoryGrid) return;
         
-        // Tampilkan placeholder loading sederhana
-        nearbyGrid.innerHTML = '<p>Mencari usaha terdekat...</p>';
-        recommendedGrid.innerHTML = '<p>Memuat rekomendasi...</p>';
+        directoryGrid.innerHTML = '<p>Memuat data usaha...</p>';
 
         const members = await fetchData();
         
         if (members.length === 0) {
-            nearbyGrid.innerHTML = '<p>Gagal memuat data usaha.</p>';
-            recommendedGrid.innerHTML = '<p>Gagal memuat data usaha.</p>';
+            directoryGrid.innerHTML = '<p>Gagal memuat data usaha atau tidak ada data.</p>';
             return;
         }
 
-        // Tampilkan Rekomendasi (4 acak)
-        const shuffled = [...members].sort(() => 0.5 - Math.random());
-        const recommended = shuffled.slice(0, 4);
-        recommendedGrid.innerHTML = ''; // Hapus loading
-        recommended.forEach(member => {
-            recommendedGrid.appendChild(createMemberCard(member));
+        directoryGrid.innerHTML = '';
+        members.forEach(member => {
+            directoryGrid.appendChild(createMemberCard(member));
         });
-
-        // Tampilkan Terdekat (jika geolokasi diizinkan)
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const userLat = position.coords.latitude;
-                    const userLon = position.coords.longitude;
-                    
-                    const membersWithDistance = members.map(member => {
-                        if (member.latitude && member.longitude) {
-                            member.distance = getDistance(userLat, userLon, member.latitude, member.longitude);
-                        } else {
-                            member.distance = Infinity;
-                        }
-                        return member;
-                    });
-                    
-                    const sortedByDistance = membersWithDistance.sort((a, b) => a.distance - b.distance);
-                    const nearby = sortedByDistance.slice(0, 4);
-                    
-                    nearbyGrid.innerHTML = ''; // Hapus loading
-                    nearby.forEach(member => {
-                        nearbyGrid.appendChild(createMemberCard(member, { showDistance: true }));
-                    });
-                },
-                () => {
-                    // Jika user menolak geolokasi, tampilkan 4 anggota acak lainnya
-                    nearbyGrid.innerHTML = '';
-                    const randomNearby = shuffled.slice(4, 8); // Ambil 4 berikutnya dari list acak
-                    randomNearby.forEach(member => {
-                        nearbyGrid.appendChild(createMemberCard(member));
-                    });
-                }
-            );
-        } else {
-            // Jika browser tidak support, tampilkan 4 acak
-            nearbyGrid.innerHTML = '';
-             const randomNearby = shuffled.slice(4, 8);
-             randomNearby.forEach(member => {
-                nearbyGrid.appendChild(createMemberCard(member));
-            });
-        }
     }
 
     // --- FUNGSI PEMBUATAN KARTU ---
