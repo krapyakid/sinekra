@@ -162,6 +162,7 @@ main.content-container {
     justify-content: center;
     position: relative;
     box-sizing: border-box;
+    margin-top: 0;
 }
 
 .hero-content {
@@ -170,6 +171,10 @@ main.content-container {
     max-width: 800px;
     width: 100%;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .hero-content .quote {
@@ -238,13 +243,11 @@ main.content-container {
 
 /* Search and Filter Section */
 .search-and-filter-section {
-    /* This section is now visually hidden, but we keep styles for mobile */
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 20px;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 100%;
     display: flex;
-    gap: 15px;
-    align-items: center;
+    justify-content: center;
 }
 
 /* Grid Section */
