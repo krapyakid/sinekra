@@ -81,7 +81,7 @@ img {
     display: flex;
     align-items: center;
     margin-left: auto;
-    gap: 15px;
+    gap: 20px;
 }
 
 .header-actions {
@@ -186,8 +186,60 @@ main.content-container {
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
+/* New styles for search container inside hero */
+.search-and-filter-container {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 900px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    padding: 20px;
+    gap: 15px;
+    z-index: 3;
+}
+
+/* Adjustments for items inside the new container */
+.search-and-filter-container .search-bar-wrapper {
+    flex-grow: 1;
+    position: relative;
+}
+
+.search-and-filter-container .filter-wrapper {
+    display: flex;
+    gap: 15px;
+}
+
+.search-and-filter-container #desktop-search-bar,
+.search-and-filter-container .filter-select {
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 0;
+    padding: 12px 10px;
+    background-color: transparent;
+    height: 100%;
+}
+.search-and-filter-container #desktop-search-bar:focus,
+.search-and-filter-container .filter-select:focus {
+    outline: none;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.search-and-filter-container .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--light-text-color);
+}
+
 /* Search and Filter Section */
 .search-and-filter-section {
+    /* This section is now visually hidden, but we keep styles for mobile */
     max-width: 1240px;
     margin: 0 auto;
     padding: 20px;
@@ -196,35 +248,13 @@ main.content-container {
     align-items: center;
 }
 
-.search-bar-wrapper {
-    flex-grow: 1;
-}
-
-#desktop-search-bar {
-    width: 100%;
-    padding: 12px 20px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-}
-
-.filter-wrapper {
-    display: flex;
-    gap: 15px;
-}
-
-.filter-select {
-    padding: 12px 15px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background-color: #f9f9f9;
-}
-
 /* Grid Section */
 .main-grid-section {
     max-width: 1240px;
-    margin: 0 auto;
+    margin: 80px auto 0; /* Adjusted top margin to account for search container */
     padding: 20px;
 }
+
 .recommended-section {
     padding-top: 0;
 }
