@@ -18,13 +18,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         overlay.addEventListener('click', closeMenu);
 
-        // Perbaikan: Menambahkan event listener pada setiap link nav
-        const navLinks = mainNav.querySelectorAll('a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                // Biarkan navigasi berjalan, hanya tutup menu
-                setTimeout(closeMenu, 100); 
-            });
+        // Perbaikan: Menutup menu saat link di dalamnya diklik
+        mainNav.addEventListener('click', function(event) {
+            if (event.target.tagName === 'A') {
+                closeMenu();
+            }
         });
     }
 
