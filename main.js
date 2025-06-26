@@ -201,7 +201,8 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="card-banner">
                 ${banner}
                 <div class="location-tag">
-                    <i class="fas fa-map-marker-alt"></i> ${locationInfo}
+                    <i class="fas fa-map-marker-alt"></i> 
+                    <span>${locationInfo}</span>
                 </div>
             </div>
             <div class="card-content">
@@ -210,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="card-footer">
                     <p class="card-owner-name">${member.nama_lengkap}</p>
                     <div class="card-contact-bar">
-                        <a href="${waLink}" class="social-icon whatsapp-icon" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>
+                        ${waLink ? `<a href="${waLink}" class="social-icon whatsapp-icon" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>` : ''}
                         ${marketplaces}
                     </div>
                 </div>
