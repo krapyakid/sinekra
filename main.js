@@ -103,30 +103,71 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- FUNGSI PEMBUATAN KARTU ---
     function createMemberCard(member, options = {}) {
+        // --- Create Elements ---
         const card = document.createElement('div');
         card.className = 'member-card';
         card.dataset.id = member.id_anggota;
 
-        // Data fallbacks
-        const namaUsaha = member.nama_usaha || 'Nama Usaha Belum Diisi';
-        const deskripsi = member.detail_profesi ? member.detail_profesi.substring(0, 100) + (member.detail_profesi.length > 100 ? '...' : '') : 'Deskripsi usaha tidak tersedia.';
-        const lokasiText = [member.nama_panggilan, member.domisili].filter(Boolean).join(' - ');
-        const gmapsUrl = member.url_gmaps || null;
+        const banner = document.createElement('div');
+        banner.className = 'card-banner';
 
+        const content = document.createElement('div');
+        content.className = 'card-content';
+
+        const businessName = document.createElement('h3');
+        businessName.className = 'card-business-name';
+
+        const description = document.createElement('p');
+        description.className = 'card-description';
+
+        const footer = document.createElement('div');
+        footer.className = 'card-footer';
+
+        const contactBar = document.createElement('div');
+        contactBar.className = 'card-contact-bar';
+
+        // --- Populate Data ---
+        const namaUsaha = member.nama_usaha || 'Nama Usaha Belum Diisi';
+        businessName.textContent = namaUsaha;
+        
+        const deskripsiText = member.detail_profesi || 'Deskripsi usaha tidak tersedia.';
+        description.textContent = deskripsiText.length > 100 ? deskripsiText.substring(0, 100) + '...' : deskripsiText;
+
+        const gmapsUrl = member.url_gmaps || null;
+        const lokasiText = [member.nama_panggilan, member.domisili].filter(Boolean).join(' - ');
+        const locationTagContent = `<i class="fas fa-map-marker-alt"></i><span>${lokasiText}</span>`;
+        const locationTag = gmapsUrl ? document.createElement('a') : document.createElement('div');
+        if (gmapsUrl) {
+            locationTag.href = gmapsUrl;
+            locationTag.target = '_blank';
+            locationTag.rel = 'noopener noreferrer';
+        }
+        locationTag.className = 'location-tag';
+        locationTag.innerHTML = locationTagContent;
+        
         // Banner Image or Placeholder
         const placeholderChar = namaUsaha.charAt(0);
-        const placeholderDiv = `<div class="placeholder">${placeholderChar}</div>`;
-        const bannerImg = member.id_anggota 
-            ? `<img src="assets/usaha/${member.id_anggota}.jpg" class="card-banner-img" alt="${namaUsaha}" onerror="this.outerHTML = '${placeholderDiv.replace(/'/g, "\\'")}';">`
-            : placeholderDiv;
-        
-        // Location Tag (can be a link)
-        const locationTagContent = `<i class="fas fa-map-marker-alt"></i><span>${lokasiText}</span>`;
-        const locationTag = gmapsUrl 
-            ? `<a href="${gmapsUrl}" target="_blank" rel="noopener noreferrer" class="location-tag">${locationTagContent}</a>`
-            : `<div class="location-tag">${locationTagContent}</div>`;
+        const placeholderDiv = document.createElement('div');
+        placeholderDiv.className = 'placeholder';
+        placeholderDiv.textContent = placeholderChar;
 
-        // Social & Marketplace Icons
+        if (member.id_anggota) {
+            const bannerImg = document.createElement('img');
+            bannerImg.src = `assets/usaha/${member.id_anggota}.jpg`;
+            bannerImg.alt = namaUsaha;
+            bannerImg.className = 'card-banner-img';
+            bannerImg.onerror = () => {
+                if (bannerImg.parentNode) {
+                    bannerImg.parentNode.replaceChild(placeholderDiv, bannerImg);
+                }
+            };
+            banner.appendChild(bannerImg);
+        } else {
+            banner.appendChild(placeholderDiv);
+        }
+        banner.appendChild(locationTag);
+        
+        // Social Icons
         const icons = [
             { link: member.no_hp_wa ? `https://wa.me/${member.no_hp_wa.replace(/[^0-9]/g, '')}` : null, asset: 'assets/icon-whatsapp.svg' },
             { link: member.link_facebook, asset: 'assets/icon-facebook.svg' },
@@ -134,27 +175,26 @@ document.addEventListener('DOMContentLoaded', function() {
             { link: member.link_tokopedia, asset: 'assets/marketplace/icon-tokopedia.svg' },
             { link: member.link_tiktok, asset: 'assets/marketplace/icon-tiktok.svg' },
             { link: member.link_website, asset: 'assets/webicon.svg' },
-        ].filter(item => item.link).map(item => `
-            <a href="${item.link}" target="_blank" rel="noopener noreferrer">
-                <img src="${item.asset}" class="marketplace-icon" />
-            </a>
-        `).join('');
+        ];
 
-        card.innerHTML = `
-            <div class="card-banner">
-                ${bannerImg}
-                ${locationTag}
-            </div>
-            <div class="card-content">
-                <h3 class="card-business-name">${namaUsaha}</h3>
-                <p class="card-description">${deskripsi}</p>
-                <div class="card-footer">
-                    <div class="card-contact-bar">
-                        ${icons}
-                    </div>
-                </div>
-            </div>
-        `;
+        icons.forEach(item => {
+            if (item.link) {
+                const anchor = document.createElement('a');
+                anchor.href = item.link;
+                anchor.target = '_blank';
+                anchor.rel = 'noopener noreferrer';
+                const iconImg = document.createElement('img');
+                iconImg.src = item.asset;
+                iconImg.className = 'marketplace-icon';
+                anchor.appendChild(iconImg);
+                contactBar.appendChild(anchor);
+            }
+        });
+
+        // --- Assemble Card ---
+        footer.appendChild(contactBar);
+        content.append(businessName, description, footer);
+        card.append(banner, content);
         
         card.addEventListener('click', (event) => {
             if (!event.target.closest('a') && member.id_anggota) {
