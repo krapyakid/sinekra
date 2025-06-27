@@ -1,489 +1,488 @@
-id_domisili,domisili_name
-DOM001,"Aceh Barat Daya, Nanggroe Aceh Darussalam (NAD)"
-DOM002,"Aceh Barat, Nanggroe Aceh Darussalam (NAD)"
-DOM003,"Aceh Besar, Nanggroe Aceh Darussalam (NAD)"
-DOM004,"Aceh Jaya, Nanggroe Aceh Darussalam (NAD)"
-DOM005,"Aceh Selatan, Nanggroe Aceh Darussalam (NAD)"
-DOM006,"Aceh Singkil, Nanggroe Aceh Darussalam (NAD)"
-DOM007,"Aceh Tamiang, Nanggroe Aceh Darussalam (NAD)"
-DOM008,"Aceh Tengah, Nanggroe Aceh Darussalam (NAD)"
-DOM009,"Aceh Tenggara, Nanggroe Aceh Darussalam (NAD)"
-DOM010,"Aceh Timur, Nanggroe Aceh Darussalam (NAD)"
-DOM011,"Aceh Utara, Nanggroe Aceh Darussalam (NAD)"
-DOM012,"Agam, Sumatera Barat"
-DOM013,"Alor, Nusa Tenggara Timur (NTT)"
-DOM014,"Ambon, Maluku"
-DOM015,"Asahan, Sumatera Utara"
-DOM016,"Asmat, Papua"
-DOM017,"Badung, Bali"
-DOM018,"Balangan, Kalimantan Selatan"
-DOM019,"Balikpapan, Kalimantan Timur"
-DOM020,"Banda Aceh, Nanggroe Aceh Darussalam (NAD)"
-DOM021,"Bandar Lampung, Lampung"
-DOM022,"Bandung Barat, Jawa Barat"
-DOM023,"Bandung, Jawa Barat"
-DOM024,"Banggai Kepulauan, Sulawesi Tengah"
-DOM025,"Banggai Laut, Sulawesi Tengah"
-DOM026,"Banggai, Sulawesi Tengah"
-DOM027,"Bangka Barat, Bangka Belitung"
-DOM028,"Bangka Selatan, Bangka Belitung"
-DOM029,"Bangka Tengah, Bangka Belitung"
-DOM030,"Bangka, Bangka Belitung"
-DOM031,"Bangkalan, Jawa Timur"
-DOM032,"Bangli, Bali"
-DOM033,"Banjar, Jawa Barat"
-DOM034,"Banjar, Kalimantan Selatan"
-DOM035,"Banjarbaru, Kalimantan Selatan"
-DOM036,"Banjarmasin, Kalimantan Selatan"
-DOM037,"Banjarnegara, Jawa Tengah"
-DOM038,"Bantaeng, Sulawesi Selatan"
-DOM039,"Bantul, DI Yogyakarta"
-DOM040,"Banyuasin, Sumatera Selatan"
-DOM041,"Banyumas, Jawa Tengah"
-DOM042,"Banyuwangi, Jawa Timur"
-DOM043,"Barito Kuala, Kalimantan Selatan"
-DOM044,"Barito Selatan, Kalimantan Tengah"
-DOM045,"Barito Timur, Kalimantan Tengah"
-DOM046,"Barito Utara, Kalimantan Tengah"
-DOM047,"Barru, Sulawesi Selatan"
-DOM048,"Batam, Kepulauan Riau"
-DOM049,"Batang Hari, Jambi"
-DOM050,"Batang, Jawa Tengah"
-DOM051,"Batu Bara, Sumatera Utara"
-DOM052,"Batu, Jawa Timur"
-DOM053,"Bau-Bau, Sulawesi Tenggara"
-DOM054,"Bekasi, Jawa Barat"
-DOM055,"Belitung Timur, Bangka Belitung"
-DOM056,"Belitung, Bangka Belitung"
-DOM057,"Belu, Nusa Tenggara Timur (NTT)"
-DOM058,"Bener Meriah, Nanggroe Aceh Darussalam (NAD)"
-DOM059,"Bengkalis, Riau"
-DOM060,"Bengkayang, Kalimantan Barat"
-DOM061,"Bengkulu Selatan, Bengkulu"
-DOM062,"Bengkulu Tengah, Bengkulu"
-DOM063,"Bengkulu Utara, Bengkulu"
-DOM064,"Bengkulu, Bengkulu"
-DOM065,"Berau, Kalimantan Timur"
-DOM066,"Biak Numfor, Papua"
-DOM067,"Bima, Nusa Tenggara Barat (NTB)"
-DOM068,"Binjai, Sumatera Utara"
-DOM069,"Bintan, Kepulauan Riau"
-DOM070,"Bireuen, Nanggroe Aceh Darussalam (NAD)"
-DOM071,"Bitung, Sulawesi Utara"
-DOM072,"Blitar, Jawa Timur"
-DOM073,"Blora, Jawa Tengah"
-DOM074,"Boalemo, Gorontalo"
-DOM075,"Bogor, Jawa Barat"
-DOM076,"Bojonegoro, Jawa Timur"
-DOM077,"Bolaang Mongondow Selatan, Sulawesi Utara"
-DOM078,"Bolaang Mongondow Timur, Sulawesi Utara"
-DOM079,"Bolaang Mongondow Utara, Sulawesi Utara"
-DOM080,"Bolaang Mongondow, Sulawesi Utara"
-DOM081,"Bombana, Sulawesi Tenggara"
-DOM082,"Bondowoso, Jawa Timur"
-DOM083,"Bone Bolango, Gorontalo"
-DOM084,"Bone, Sulawesi Selatan"
-DOM085,"Bontang, Kalimantan Timur"
-DOM086,"Boven Digoel, Papua"
-DOM087,"Boyolali, Jawa Tengah"
-DOM088,"Brebes, Jawa Tengah"
-DOM089,"Bukittinggi, Sumatera Barat"
-DOM090,"Buleleng, Bali"
-DOM091,"Bulukumba, Sulawesi Selatan"
-DOM092,"Bulungan, Kalimantan Utara"
-DOM093,"Bungo, Jambi"
-DOM094,"Buol, Sulawesi Tengah"
-DOM095,"Buru Selatan, Maluku"
-DOM096,"Buru, Maluku"
-DOM097,"Buton Selatan, Sulawesi Tenggara"
-DOM098,"Buton Tengah, Sulawesi Tenggara"
-DOM099,"Buton Utara, Sulawesi Tenggara"
-DOM100,"Buton, Sulawesi Tenggara"
-DOM101,"Ciamis, Jawa Barat"
-DOM102,"Cianjur, Jawa Barat"
-DOM103,"Cilacap, Jawa Tengah"
-DOM104,"Cilegon, Banten"
-DOM105,"Cimahi, Jawa Barat"
-DOM106,"Cirebon, Jawa Barat"
-DOM107,"Dairi, Sumatera Utara"
-DOM108,"Deiyai, Papua"
-DOM109,"Deli Serdang, Sumatera Utara"
-DOM110,"Demak, Jawa Tengah"
-DOM111,"Denpasar, Bali"
-DOM112,"Depok, Jawa Barat"
-DOM113,"Dharmasraya, Sumatera Barat"
-DOM114,"Dogiyai, Papua"
-DOM115,"Dompu, Nusa Tenggara Barat (NTB)"
-DOM116,"Donggala, Sulawesi Tengah"
-DOM117,"Dumai, Riau"
-DOM118,"Empat Lawang, Sumatera Selatan"
-DOM119,"Ende, Nusa Tenggara Timur (NTT)"
-DOM120,"Enrekang, Sulawesi Selatan"
-DOM121,"Fakfak, Papua Barat"
-DOM122,"Flores Timur, Nusa Tenggara Timur (NTT)"
-DOM123,"Garut, Jawa Barat"
-DOM124,"Gayo Lues, Nanggroe Aceh Darussalam (NAD)"
-DOM125,"Gianyar, Bali"
-DOM126,"Gorontalo Utara, Gorontalo"
-DOM127,"Gorontalo, Gorontalo"
-DOM128,"Gowa, Sulawesi Selatan"
-DOM129,"Gresik, Jawa Timur"
-DOM130,"Grobogan, Jawa Tengah"
-DOM131,"Gunung Kidul, DI Yogyakarta"
-DOM132,"Gunung Mas, Kalimantan Tengah"
-DOM133,"Gunungsitoli, Sumatera Utara"
-DOM134,"Halmahera Barat, Maluku Utara"
-DOM135,"Halmahera Selatan, Maluku Utara"
-DOM136,"Halmahera Tengah, Maluku Utara"
-DOM137,"Halmahera Timur, Maluku Utara"
-DOM138,"Halmahera Utara, Maluku Utara"
-DOM139,"Hulu Sungai Selatan, Kalimantan Selatan"
-DOM140,"Hulu Sungai Tengah, Kalimantan Selatan"
-DOM141,"Hulu Sungai Utara, Kalimantan Selatan"
-DOM142,"Humbang Hasundutan, Sumatera Utara"
-DOM143,"Indragiri Hilir, Riau"
-DOM144,"Indragiri Hulu, Riau"
-DOM145,"Indramayu, Jawa Barat"
-DOM146,"Intan Jaya, Papua"
-DOM147,"Jakarta Barat, DKI Jakarta"
-DOM148,"Jakarta Pusat, DKI Jakarta"
-DOM149,"Jakarta Selatan, DKI Jakarta"
-DOM150,"Jakarta Timur, DKI Jakarta"
-DOM151,"Jakarta Utara, DKI Jakarta"
-DOM152,"Jambi, Jambi"
-DOM153,"Jayapura, Papua"
-DOM154,"Jayawijaya, Papua"
-DOM155,"Jember, Jawa Timur"
-DOM156,"Jembrana, Bali"
-DOM157,"Jeneponto, Sulawesi Selatan"
-DOM158,"Jepara, Jawa Tengah"
-DOM159,"Jombang, Jawa Timur"
-DOM160,"Kaimana, Papua Barat"
-DOM161,"Kampar, Riau"
-DOM162,"Kapuas Hulu, Kalimantan Barat"
-DOM163,"Kapuas, Kalimantan Tengah"
-DOM164,"Karanganyar, Jawa Tengah"
-DOM165,"Karangasem, Bali"
-DOM166,"Karawang, Jawa Barat"
-DOM167,"Karimun, Kepulauan Riau"
-DOM168,"Karo, Sumatera Utara"
-DOM169,"Katingan, Kalimantan Tengah"
-DOM170,"Kaur, Bengkulu"
-DOM171,"Kayong Utara, Kalimantan Barat"
-DOM172,"Kebumen, Jawa Tengah"
-DOM173,"Kediri, Jawa Timur"
-DOM174,"Keerom, Papua"
-DOM175,"Kendal, Jawa Tengah"
-DOM176,"Kendari, Sulawesi Tenggara"
-DOM177,"Kepahiang, Bengkulu"
-DOM178,"Kepulauan Anambas, Kepulauan Riau"
-DOM179,"Kepulauan Aru, Maluku"
-DOM180,"Kepulauan Mentawai, Sumatera Barat"
-DOM181,"Kepulauan Meranti, Riau"
-DOM182,"Kepulauan Sangihe, Sulawesi Utara"
-DOM183,"Kepulauan Selayar, Sulawesi Selatan"
-DOM184,"Kepulauan Seribu, DKI Jakarta"
-DOM185,"Kepulauan Siau Tagulandang Biaro (Sitaro), Sulawesi Utara"
-DOM186,"Kepulauan Sula, Maluku Utara"
-DOM187,"Kepulauan Talaud, Sulawesi Utara"
-DOM188,"Kepulauan Yapen, Papua"
-DOM189,"Kerinci, Jambi"
-DOM190,"Ketapang, Kalimantan Barat"
-DOM191,"Klaten, Jawa Tengah"
-DOM192,"Klungkung, Bali"
-DOM193,"Kolaka Timur, Sulawesi Tenggara"
-DOM194,"Kolaka Utara, Sulawesi Tenggara"
-DOM195,"Kolaka, Sulawesi Tenggara"
-DOM196,"Konawe Kepulauan, Sulawesi Tenggara"
-DOM197,"Konawe Selatan, Sulawesi Tenggara"
-DOM198,"Konawe Utara, Sulawesi Tenggara"
-DOM199,"Konawe, Sulawesi Tenggara"
-DOM200,"Kotabaru, Kalimantan Selatan"
-DOM201,"Kotamobagu, Sulawesi Utara"
-DOM202,"Kotawaringin Barat, Kalimantan Tengah"
-DOM203,"Kotawaringin Timur, Kalimantan Tengah"
-DOM204,"Kuantan Singingi, Riau"
-DOM205,"Kubu Raya, Kalimantan Barat"
-DOM206,"Kudus, Jawa Tengah"
-DOM207,"Kulon Progo, DI Yogyakarta"
-DOM208,"Kuningan, Jawa Barat"
-DOM209,"Kupang, Nusa Tenggara Timur (NTT)"
-DOM210,"Kutai Barat, Kalimantan Timur"
-DOM211,"Kutai Kartanegara, Kalimantan Timur"
-DOM212,"Kutai Timur, Kalimantan Timur"
-DOM213,"Labuhanbatu Selatan, Sumatera Utara"
-DOM214,"Labuhanbatu Utara, Sumatera Utara"
-DOM215,"Labuhanbatu, Sumatera Utara"
-DOM216,"Lahat, Sumatera Selatan"
-DOM217,"Lamandau, Kalimantan Tengah"
-DOM218,"Lamongan, Jawa Timur"
-DOM219,"Lampung Barat, Lampung"
-DOM220,"Lampung Selatan, Lampung"
-DOM221,"Lampung Tengah, Lampung"
-DOM222,"Lampung Timur, Lampung"
-DOM223,"Lampung Utara, Lampung"
-DOM224,"Landak, Kalimantan Barat"
-DOM225,"Langkat, Sumatera Utara"
-DOM226,"Lanny Jaya, Papua"
-DOM227,"Lebak, Banten"
-DOM228,"Lebong, Bengkulu"
-DOM229,"Lembata, Nusa Tenggara Timur (NTT)"
-DOM230,"Lhokseumawe, Nanggroe Aceh Darussalam (NAD)"
-DOM231,"Lima Puluh Kota, Sumatera Barat"
-DOM232,"Lingga, Kepulauan Riau"
-DOM233,"Lombok Barat, Nusa Tenggara Barat (NTB)"
-DOM234,"Lombok Tengah, Nusa Tenggara Barat (NTB)"
-DOM235,"Lombok Timur, Nusa Tenggara Barat (NTB)"
-DOM236,"Lombok Utara, Nusa Tenggara Barat (NTB)"
-DOM237,"Lubuk Linggau, Sumatera Selatan"
-DOM238,"Lumajang, Jawa Timur"
-DOM239,"Luwu Timur, Sulawesi Selatan"
-DOM240,"Luwu Utara, Sulawesi Selatan"
-DOM241,"Luwu, Sulawesi Selatan"
-DOM242,"Madiun, Jawa Timur"
-DOM243,"Magelang, Jawa Tengah"
-DOM244,"Magetan, Jawa Timur"
-DOM245,"Mahakam Ulu, Kalimantan Timur"
-DOM246,"Majalengka, Jawa Barat"
-DOM247,"Majene, Sulawesi Barat"
-DOM248,"Makassar, Sulawesi Selatan"
-DOM249,"Malaka, Nusa Tenggara Timur (NTT)"
-DOM250,"Malang, Jawa Timur"
-DOM251,"Malinau, Kalimantan Utara"
-DOM252,"Maluku Barat Daya, Maluku"
-DOM253,"Maluku Tengah, Maluku"
-DOM254,"Maluku Tenggara Barat, Maluku"
-DOM255,"Maluku Tenggara, Maluku"
-DOM256,"Mamasa, Sulawesi Barat"
-DOM257,"Mamberamo Raya, Papua"
-DOM258,"Mamberamo Tengah, Papua"
-DOM259,"Mamuju Tengah, Sulawesi Barat"
-DOM260,"Mamuju Utara, Sulawesi Barat"
-DOM261,"Mamuju, Sulawesi Barat"
-DOM262,"Manado, Sulawesi Utara"
-DOM263,"Mandailing Natal, Sumatera Utara"
-DOM264,"Manggarai Barat, Nusa Tenggara Timur (NTT)"
-DOM265,"Manggarai Timur, Nusa Tenggara Timur (NTT)"
-DOM266,"Manggarai, Nusa Tenggara Timur (NTT)"
-DOM267,"Manokwari Selatan, Papua Barat"
-DOM268,"Manokwari, Papua Barat"
-DOM269,"Mappi, Papua"
-DOM270,"Maros, Sulawesi Selatan"
-DOM271,"Mataram, Nusa Tenggara Barat (NTB)"
-DOM272,"Maybrat, Papua Barat"
-DOM273,"Medan, Sumatera Utara"
-DOM274,"Melawi, Kalimantan Barat"
-DOM275,"Mempawah, Kalimantan Barat"
-DOM276,"Merangin, Jambi"
-DOM277,"Merauke, Papua"
-DOM278,"Mesuji, Lampung"
-DOM279,"Metro, Lampung"
-DOM280,"Mimika, Papua"
-DOM281,"Minahasa Selatan, Sulawesi Utara"
-DOM282,"Minahasa Tenggara, Sulawesi Utara"
-DOM283,"Minahasa Utara, Sulawesi Utara"
-DOM284,"Minahasa, Sulawesi Utara"
-DOM285,"Mojokerto, Jawa Timur"
-DOM286,"Morowali Utara, Sulawesi Tengah"
-DOM287,"Morowali, Sulawesi Tengah"
-DOM288,"Muara Enim, Sumatera Selatan"
-DOM289,"Muaro Jambi, Jambi"
-DOM290,"Muko Muko, Bengkulu"
-DOM291,"Muna Barat, Sulawesi Tenggara"
-DOM292,"Muna, Sulawesi Tenggara"
-DOM293,"Murung Raya, Kalimantan Tengah"
-DOM294,"Musi Banyuasin, Sumatera Selatan"
-DOM295,"Musi Rawas Utara, Sumatera Selatan"
-DOM296,"Musi Rawas, Sumatera Selatan"
-DOM297,"Nabire, Papua"
-DOM298,"Nagan Raya, Nanggroe Aceh Darussalam (NAD)"
-DOM299,"Nagekeo, Nusa Tenggara Timur (NTT)"
-DOM300,"Natuna, Kepulauan Riau"
-DOM301,"Nduga, Papua"
-DOM302,"Ngada, Nusa Tenggara Timur (NTT)"
-DOM303,"Nganjuk, Jawa Timur"
-DOM304,"Ngawi, Jawa Timur"
-DOM305,"Nias Barat, Sumatera Utara"
-DOM306,"Nias Selatan, Sumatera Utara"
-DOM307,"Nias Utara, Sumatera Utara"
-DOM308,"Nias, Sumatera Utara"
-DOM309,"Nunukan, Kalimantan Utara"
-DOM310,"Ogan Ilir, Sumatera Selatan"
-DOM311,"Ogan Komering Ilir, Sumatera Selatan"
-DOM312,"Ogan Komering Ulu Selatan, Sumatera Selatan"
-DOM313,"Ogan Komering Ulu Timur, Sumatera Selatan"
-DOM314,"Ogan Komering Ulu, Sumatera Selatan"
-DOM315,"Pacitan, Jawa Timur"
-DOM316,"Padang Lawas Utara, Sumatera Utara"
-DOM317,"Padang Lawas, Sumatera Utara"
-DOM318,"Padang Panjang, Sumatera Barat"
-DOM319,"Padang Pariaman, Sumatera Barat"
-DOM320,"Padang Sidempuan, Sumatera Utara"
-DOM321,"Padang, Sumatera Barat"
-DOM322,"Pagar Alam, Sumatera Selatan"
-DOM323,"Pakpak Bharat, Sumatera Utara"
-DOM324,"Palangka Raya, Kalimantan Tengah"
-DOM325,"Palembang, Sumatera Selatan"
-DOM326,"Palopo, Sulawesi Selatan"
-DOM327,"Palu, Sulawesi Tengah"
-DOM328,"Pamekasan, Jawa Timur"
-DOM329,"Pandeglang, Banten"
-DOM330,"Pangandaran, Jawa Barat"
-DOM331,"Pangkajene Kepulauan, Sulawesi Selatan"
-DOM332,"Pangkal Pinang, Bangka Belitung"
-DOM333,"Paniai, Papua"
-DOM334,"Parepare, Sulawesi Selatan"
-DOM335,"Pariaman, Sumatera Barat"
-DOM336,"Parigi Moutong, Sulawesi Tengah"
-DOM337,"Pasaman Barat, Sumatera Barat"
-DOM338,"Pasaman, Sumatera Barat"
-DOM339,"Paser, Kalimantan Timur"
-DOM340,"Pasuruan, Jawa Timur"
-DOM341,"Pati, Jawa Tengah"
-DOM342,"Payakumbuh, Sumatera Barat"
-DOM343,"Pegunungan Arfak, Papua Barat"
-DOM344,"Pegunungan Bintang, Papua"
-DOM345,"Pekalongan, Jawa Tengah"
-DOM346,"Pekanbaru, Riau"
-DOM347,"Pelalawan, Riau"
-DOM348,"Pemalang, Jawa Tengah"
-DOM349,"Pematang Siantar, Sumatera Utara"
-DOM350,"Penajam Paser Utara, Kalimantan Timur"
-DOM351,"Penukal Abab Lematang Ilir, Sumatera Selatan"
-DOM352,"Pesawaran, Lampung"
-DOM353,"Pesisir Barat, Lampung"
-DOM354,"Pesisir Selatan, Sumatera Barat"
-DOM355,"Pidie Jaya, Nanggroe Aceh Darussalam (NAD)"
-DOM356,"Pidie, Nanggroe Aceh Darussalam (NAD)"
-DOM357,"Pinrang, Sulawesi Selatan"
-DOM358,"Pohuwato, Gorontalo"
-DOM359,"Polewali Mandar, Sulawesi Barat"
-DOM360,"Ponorogo, Jawa Timur"
-DOM361,"Pontianak, Kalimantan Barat"
-DOM362,"Poso, Sulawesi Tengah"
-DOM363,"Prabumulih, Sumatera Selatan"
-DOM364,"Pringsewu, Lampung"
-DOM365,"Probolinggo, Jawa Timur"
-DOM366,"Pulang Pisau, Kalimantan Tengah"
-DOM367,"Pulau Morotai, Maluku Utara"
-DOM368,"Pulau Taliabu, Maluku Utara"
-DOM369,"Puncak Jaya, Papua"
-DOM370,"Puncak, Papua"
-DOM371,"Purbalingga, Jawa Tengah"
-DOM372,"Purwakarta, Jawa Barat"
-DOM373,"Purworejo, Jawa Tengah"
-DOM374,"Raja Ampat, Papua Barat"
-DOM375,"Rejang Lebong, Bengkulu"
-DOM376,"Rembang, Jawa Tengah"
-DOM377,"Rokan Hilir, Riau"
-DOM378,"Rokan Hulu, Riau"
-DOM379,"Rote Ndao, Nusa Tenggara Timur (NTT)"
-DOM380,"Sabang, Nanggroe Aceh Darussalam (NAD)"
-DOM381,"Sabu Raijua, Nusa Tenggara Timur (NTT)"
-DOM382,"Salatiga, Jawa Tengah"
-DOM383,"Samarinda, Kalimantan Timur"
-DOM384,"Sambas, Kalimantan Barat"
-DOM385,"Samosir, Sumatera Utara"
-DOM386,"Sampang, Jawa Timur"
-DOM387,"Sanggau, Kalimantan Barat"
-DOM388,"Sarmi, Papua"
-DOM389,"Sarolangun, Jambi"
-DOM390,"Sawah Lunto, Sumatera Barat"
-DOM391,"Sekadau, Kalimantan Barat"
-DOM392,"Seluma, Bengkulu"
-DOM393,"Semarang, Jawa Tengah"
-DOM394,"Seram Bagian Barat, Maluku"
-DOM395,"Seram Bagian Timur, Maluku"
-DOM396,"Serang, Banten"
-DOM397,"Serdang Bedagai, Sumatera Utara"
-DOM398,"Seruyan, Kalimantan Tengah"
-DOM399,"Siak, Riau"
-DOM400,"Sibolga, Sumatera Utara"
-DOM401,"Sidenreng Rappang, Sulawesi Selatan"
-DOM402,"Sidoarjo, Jawa Timur"
-DOM403,"Sigi, Sulawesi Tengah"
-DOM404,"Sijunjung, Sumatera Barat"
-DOM405,"Sikka, Nusa Tenggara Timur (NTT)"
-DOM406,"Simalungun, Sumatera Utara"
-DOM407,"Simeulue, Nanggroe Aceh Darussalam (NAD)"
-DOM408,"Singkawang, Kalimantan Barat"
-DOM409,"Sinjai, Sulawesi Selatan"
-DOM410,"Sintang, Kalimantan Barat"
-DOM411,"Situbondo, Jawa Timur"
-DOM412,"Sleman, DI Yogyakarta"
-DOM413,"Solok Selatan, Sumatera Barat"
-DOM414,"Solok, Sumatera Barat"
-DOM415,"Soppeng, Sulawesi Selatan"
-DOM416,"Sorong Selatan, Papua Barat"
-DOM417,"Sorong, Papua Barat"
-DOM418,"Sragen, Jawa Tengah"
-DOM419,"Subang, Jawa Barat"
-DOM420,"Subulussalam, Nanggroe Aceh Darussalam (NAD)"
-DOM421,"Sukabumi, Jawa Barat"
-DOM422,"Sukamara, Kalimantan Tengah"
-DOM423,"Sukoharjo, Jawa Tengah"
-DOM424,"Sumba Barat Daya, Nusa Tenggara Timur (NTT)"
-DOM425,"Sumba Barat, Nusa Tenggara Timur (NTT)"
-DOM426,"Sumba Tengah, Nusa Tenggara Timur (NTT)"
-DOM427,"Sumba Timur, Nusa Tenggara Timur (NTT)"
-DOM428,"Sumbawa Barat, Nusa Tenggara Barat (NTB)"
-DOM429,"Sumbawa, Nusa Tenggara Barat (NTB)"
-DOM430,"Sumedang, Jawa Barat"
-DOM431,"Sumenep, Jawa Timur"
-DOM432,"Sungaipenuh, Jambi"
-DOM433,"Supiori, Papua"
-DOM434,"Surabaya, Jawa Timur"
-DOM435,"Surakarta, Jawa Tengah"
-DOM436,"Tabalong, Kalimantan Selatan"
-DOM437,"Tabanan, Bali"
-DOM438,"Takalar, Sulawesi Selatan"
-DOM439,"Tambrauw, Papua Barat"
-DOM440,"Tana Tidung, Kalimantan Utara"
-DOM441,"Tana Toraja, Sulawesi Selatan"
-DOM442,"Tanah Bumbu, Kalimantan Selatan"
-DOM443,"Tanah Datar, Sumatera Barat"
-DOM444,"Tanah Laut, Kalimantan Selatan"
-DOM445,"Tangerang Selatan, Banten"
-DOM446,"Tangerang, Banten"
-DOM447,"Tanggamus, Lampung"
-DOM448,"Tanjung Balai, Sumatera Utara"
-DOM449,"Tanjung Jabung Barat, Jambi"
-DOM450,"Tanjung Jabung Timur, Jambi"
-DOM451,"Tanjung Pinang, Kepulauan Riau"
-DOM452,"Tapanuli Selatan, Sumatera Utara"
-DOM453,"Tapanuli Tengah, Sumatera Utara"
-DOM454,"Tapanuli Utara, Sumatera Utara"
-DOM455,"Tapin, Kalimantan Selatan"
-DOM456,"Tarakan, Kalimantan Utara"
-DOM457,"Tasikmalaya, Jawa Barat"
-DOM458,"Tebing Tinggi, Sumatera Utara"
-DOM459,"Tebo, Jambi"
-DOM460,"Tegal, Jawa Tengah"
-DOM461,"Teluk Bintuni, Papua Barat"
-DOM462,"Teluk Wondama, Papua Barat"
-DOM463,"Temanggung, Jawa Tengah"
-DOM464,"Ternate, Maluku Utara"
-DOM465,"Tidore Kepulauan, Maluku Utara"
-DOM466,"Timor Tengah Selatan, Nusa Tenggara Timur (NTT)"
-DOM467,"Timor Tengah Utara, Nusa Tenggara Timur (NTT)"
-DOM468,"Toba Samosir, Sumatera Utara"
-DOM469,"Tojo Una-Una, Sulawesi Tengah"
-DOM470,"Toli-Toli, Sulawesi Tengah"
-DOM471,"Tolikara, Papua"
-DOM472,"Tomohon, Sulawesi Utara"
-DOM473,"Toraja Utara, Sulawesi Selatan"
-DOM474,"Trenggalek, Jawa Timur"
-DOM475,"Tual, Maluku"
-DOM476,"Tuban, Jawa Timur"
-DOM477,"Tulang Bawang Barat, Lampung"
-DOM478,"Tulang Bawang, Lampung"
-DOM479,"Tulungagung, Jawa Timur"
-DOM480,"Wajo, Sulawesi Selatan"
-DOM481,"Wakatobi, Sulawesi Tenggara"
-DOM482,"Waropen, Papua"
-DOM483,"Way Kanan, Lampung"
-DOM484,"Wonogiri, Jawa Tengah"
-DOM485,"Wonosobo, Jawa Tengah"
-DOM486,"Yahukimo, Papua"
-DOM487,"Yalimo, Papua"
-DOM488,"Yogyakarta, DI Yogyakarta"
+Aceh Barat Daya, Nanggroe Aceh Darussalam (NAD)
+Aceh Barat, Nanggroe Aceh Darussalam (NAD)
+Aceh Besar, Nanggroe Aceh Darussalam (NAD)
+Aceh Jaya, Nanggroe Aceh Darussalam (NAD)
+Aceh Selatan, Nanggroe Aceh Darussalam (NAD)
+Aceh Singkil, Nanggroe Aceh Darussalam (NAD)
+Aceh Tamiang, Nanggroe Aceh Darussalam (NAD)
+Aceh Tengah, Nanggroe Aceh Darussalam (NAD)
+Aceh Tenggara, Nanggroe Aceh Darussalam (NAD)
+Aceh Timur, Nanggroe Aceh Darussalam (NAD)
+Aceh Utara, Nanggroe Aceh Darussalam (NAD)
+Agam, Sumatera Barat
+Alor, Nusa Tenggara Timur (NTT)
+Ambon, Maluku
+Asahan, Sumatera Utara
+Asmat, Papua
+Badung, Bali
+Balangan, Kalimantan Selatan
+Balikpapan, Kalimantan Timur
+Banda Aceh, Nanggroe Aceh Darussalam (NAD)
+Bandar Lampung, Lampung
+Bandung Barat, Jawa Barat
+Bandung, Jawa Barat
+Banggai Kepulauan, Sulawesi Tengah
+Banggai Laut, Sulawesi Tengah
+Banggai, Sulawesi Tengah
+Bangka Barat, Bangka Belitung
+Bangka Selatan, Bangka Belitung
+Bangka Tengah, Bangka Belitung
+Bangka, Bangka Belitung
+Bangkalan, Jawa Timur
+Bangli, Bali
+Banjar, Jawa Barat
+Banjar, Kalimantan Selatan
+Banjarbaru, Kalimantan Selatan
+Banjarmasin, Kalimantan Selatan
+Banjarnegara, Jawa Tengah
+Bantaeng, Sulawesi Selatan
+Bantul, DI Yogyakarta
+Banyuasin, Sumatera Selatan
+Banyumas, Jawa Tengah
+Banyuwangi, Jawa Timur
+Barito Kuala, Kalimantan Selatan
+Barito Selatan, Kalimantan Tengah
+Barito Timur, Kalimantan Tengah
+Barito Utara, Kalimantan Tengah
+Barru, Sulawesi Selatan
+Batam, Kepulauan Riau
+Batang Hari, Jambi
+Batang, Jawa Tengah
+Batu Bara, Sumatera Utara
+Batu, Jawa Timur
+Bau-Bau, Sulawesi Tenggara
+Bekasi, Jawa Barat
+Belitung Timur, Bangka Belitung
+Belitung, Bangka Belitung
+Belu, Nusa Tenggara Timur (NTT)
+Bener Meriah, Nanggroe Aceh Darussalam (NAD)
+Bengkalis, Riau
+Bengkayang, Kalimantan Barat
+Bengkulu Selatan, Bengkulu
+Bengkulu Tengah, Bengkulu
+Bengkulu Utara, Bengkulu
+Bengkulu, Bengkulu
+Berau, Kalimantan Timur
+Biak Numfor, Papua
+Bima, Nusa Tenggara Barat (NTB)
+Binjai, Sumatera Utara
+Bintan, Kepulauan Riau
+Bireuen, Nanggroe Aceh Darussalam (NAD)
+Bitung, Sulawesi Utara
+Blitar, Jawa Timur
+Blora, Jawa Tengah
+Boalemo, Gorontalo
+Bogor, Jawa Barat
+Bojonegoro, Jawa Timur
+Bolaang Mongondow Selatan, Sulawesi Utara
+Bolaang Mongondow Timur, Sulawesi Utara
+Bolaang Mongondow Utara, Sulawesi Utara
+Bolaang Mongondow, Sulawesi Utara
+Bombana, Sulawesi Tenggara
+Bondowoso, Jawa Timur
+Bone Bolango, Gorontalo
+Bone, Sulawesi Selatan
+Bontang, Kalimantan Timur
+Boven Digoel, Papua
+Boyolali, Jawa Tengah
+Brebes, Jawa Tengah
+Bukittinggi, Sumatera Barat
+Buleleng, Bali
+Bulukumba, Sulawesi Selatan
+Bulungan, Kalimantan Utara
+Bungo, Jambi
+Buol, Sulawesi Tengah
+Buru Selatan, Maluku
+Buru, Maluku
+Buton Selatan, Sulawesi Tenggara
+Buton Tengah, Sulawesi Tenggara
+Buton Utara, Sulawesi Tenggara
+Buton, Sulawesi Tenggara
+Ciamis, Jawa Barat
+Cianjur, Jawa Barat
+Cilacap, Jawa Tengah
+Cilegon, Banten
+Cimahi, Jawa Barat
+Cirebon, Jawa Barat
+Dairi, Sumatera Utara
+Deiyai, Papua
+Deli Serdang, Sumatera Utara
+Demak, Jawa Tengah
+Denpasar, Bali
+Depok, Jawa Barat
+Dharmasraya, Sumatera Barat
+Dogiyai, Papua
+Dompu, Nusa Tenggara Barat (NTB)
+Donggala, Sulawesi Tengah
+Dumai, Riau
+Empat Lawang, Sumatera Selatan
+Ende, Nusa Tenggara Timur (NTT)
+Enrekang, Sulawesi Selatan
+Fakfak, Papua Barat
+Flores Timur, Nusa Tenggara Timur (NTT)
+Garut, Jawa Barat
+Gayo Lues, Nanggroe Aceh Darussalam (NAD)
+Gianyar, Bali
+Gorontalo Utara, Gorontalo
+Gorontalo, Gorontalo
+Gowa, Sulawesi Selatan
+Gresik, Jawa Timur
+Grobogan, Jawa Tengah
+Gunung Kidul, DI Yogyakarta
+Gunung Mas, Kalimantan Tengah
+Gunungsitoli, Sumatera Utara
+Halmahera Barat, Maluku Utara
+Halmahera Selatan, Maluku Utara
+Halmahera Tengah, Maluku Utara
+Halmahera Timur, Maluku Utara
+Halmahera Utara, Maluku Utara
+Hulu Sungai Selatan, Kalimantan Selatan
+Hulu Sungai Tengah, Kalimantan Selatan
+Hulu Sungai Utara, Kalimantan Selatan
+Humbang Hasundutan, Sumatera Utara
+Indragiri Hilir, Riau
+Indragiri Hulu, Riau
+Indramayu, Jawa Barat
+Intan Jaya, Papua
+Jakarta Barat, DKI Jakarta
+Jakarta Pusat, DKI Jakarta
+Jakarta Selatan, DKI Jakarta
+Jakarta Timur, DKI Jakarta
+Jakarta Utara, DKI Jakarta
+Jambi, Jambi
+Jayapura, Papua
+Jayawijaya, Papua
+Jember, Jawa Timur
+Jembrana, Bali
+Jeneponto, Sulawesi Selatan
+Jepara, Jawa Tengah
+Jombang, Jawa Timur
+Kaimana, Papua Barat
+Kampar, Riau
+Kapuas Hulu, Kalimantan Barat
+Kapuas, Kalimantan Tengah
+Karanganyar, Jawa Tengah
+Karangasem, Bali
+Karawang, Jawa Barat
+Karimun, Kepulauan Riau
+Karo, Sumatera Utara
+Katingan, Kalimantan Tengah
+Kaur, Bengkulu
+Kayong Utara, Kalimantan Barat
+Kebumen, Jawa Tengah
+Kediri, Jawa Timur
+Keerom, Papua
+Kendal, Jawa Tengah
+Kendari, Sulawesi Tenggara
+Kepahiang, Bengkulu
+Kepulauan Anambas, Kepulauan Riau
+Kepulauan Aru, Maluku
+Kepulauan Mentawai, Sumatera Barat
+Kepulauan Meranti, Riau
+Kepulauan Sangihe, Sulawesi Utara
+Kepulauan Selayar, Sulawesi Selatan
+Kepulauan Seribu, DKI Jakarta
+Kepulauan Siau Tagulandang Biaro (Sitaro), Sulawesi Utara
+Kepulauan Sula, Maluku Utara
+Kepulauan Talaud, Sulawesi Utara
+Kepulauan Yapen, Papua
+Kerinci, Jambi
+Ketapang, Kalimantan Barat
+Klaten, Jawa Tengah
+Klungkung, Bali
+Kolaka Timur, Sulawesi Tenggara
+Kolaka Utara, Sulawesi Tenggara
+Kolaka, Sulawesi Tenggara
+Konawe Kepulauan, Sulawesi Tenggara
+Konawe Selatan, Sulawesi Tenggara
+Konawe Utara, Sulawesi Tenggara
+Konawe, Sulawesi Tenggara
+Kotabaru, Kalimantan Selatan
+Kotamobagu, Sulawesi Utara
+Kotawaringin Barat, Kalimantan Tengah
+Kotawaringin Timur, Kalimantan Tengah
+Kuantan Singingi, Riau
+Kubu Raya, Kalimantan Barat
+Kudus, Jawa Tengah
+Kulon Progo, DI Yogyakarta
+Kuningan, Jawa Barat
+Kupang, Nusa Tenggara Timur (NTT)
+Kutai Barat, Kalimantan Timur
+Kutai Kartanegara, Kalimantan Timur
+Kutai Timur, Kalimantan Timur
+Labuhanbatu Selatan, Sumatera Utara
+Labuhanbatu Utara, Sumatera Utara
+Labuhanbatu, Sumatera Utara
+Lahat, Sumatera Selatan
+Lamandau, Kalimantan Tengah
+Lamongan, Jawa Timur
+Lampung Barat, Lampung
+Lampung Selatan, Lampung
+Lampung Tengah, Lampung
+Lampung Timur, Lampung
+Lampung Utara, Lampung
+Landak, Kalimantan Barat
+Langkat, Sumatera Utara
+Lanny Jaya, Papua
+Lebak, Banten
+Lebong, Bengkulu
+Lembata, Nusa Tenggara Timur (NTT)
+Lhokseumawe, Nanggroe Aceh Darussalam (NAD)
+Lima Puluh Kota, Sumatera Barat
+Lingga, Kepulauan Riau
+Lombok Barat, Nusa Tenggara Barat (NTB)
+Lombok Tengah, Nusa Tenggara Barat (NTB)
+Lombok Timur, Nusa Tenggara Barat (NTB)
+Lombok Utara, Nusa Tenggara Barat (NTB)
+Lubuk Linggau, Sumatera Selatan
+Lumajang, Jawa Timur
+Luwu Timur, Sulawesi Selatan
+Luwu Utara, Sulawesi Selatan
+Luwu, Sulawesi Selatan
+Madiun, Jawa Timur
+Magelang, Jawa Tengah
+Magetan, Jawa Timur
+Mahakam Ulu, Kalimantan Timur
+Majalengka, Jawa Barat
+Majene, Sulawesi Barat
+Makassar, Sulawesi Selatan
+Malaka, Nusa Tenggara Timur (NTT)
+Malang, Jawa Timur
+Malinau, Kalimantan Utara
+Maluku Barat Daya, Maluku
+Maluku Tengah, Maluku
+Maluku Tenggara Barat, Maluku
+Maluku Tenggara, Maluku
+Mamasa, Sulawesi Barat
+Mamberamo Raya, Papua
+Mamberamo Tengah, Papua
+Mamuju Tengah, Sulawesi Barat
+Mamuju Utara, Sulawesi Barat
+Mamuju, Sulawesi Barat
+Manado, Sulawesi Utara
+Mandailing Natal, Sumatera Utara
+Manggarai Barat, Nusa Tenggara Timur (NTT)
+Manggarai Timur, Nusa Tenggara Timur (NTT)
+Manggarai, Nusa Tenggara Timur (NTT)
+Manokwari Selatan, Papua Barat
+Manokwari, Papua Barat
+Mappi, Papua
+Maros, Sulawesi Selatan
+Mataram, Nusa Tenggara Barat (NTB)
+Maybrat, Papua Barat
+Medan, Sumatera Utara
+Melawi, Kalimantan Barat
+Mempawah, Kalimantan Barat
+Merangin, Jambi
+Merauke, Papua
+Mesuji, Lampung
+Metro, Lampung
+Mimika, Papua
+Minahasa Selatan, Sulawesi Utara
+Minahasa Tenggara, Sulawesi Utara
+Minahasa Utara, Sulawesi Utara
+Minahasa, Sulawesi Utara
+Mojokerto, Jawa Timur
+Morowali Utara, Sulawesi Tengah
+Morowali, Sulawesi Tengah
+Muara Enim, Sumatera Selatan
+Muaro Jambi, Jambi
+Muko Muko, Bengkulu
+Muna Barat, Sulawesi Tenggara
+Muna, Sulawesi Tenggara
+Murung Raya, Kalimantan Tengah
+Musi Banyuasin, Sumatera Selatan
+Musi Rawas Utara, Sumatera Selatan
+Musi Rawas, Sumatera Selatan
+Nabire, Papua
+Nagan Raya, Nanggroe Aceh Darussalam (NAD)
+Nagekeo, Nusa Tenggara Timur (NTT)
+Natuna, Kepulauan Riau
+Nduga, Papua
+Ngada, Nusa Tenggara Timur (NTT)
+Nganjuk, Jawa Timur
+Ngawi, Jawa Timur
+Nias Barat, Sumatera Utara
+Nias Selatan, Sumatera Utara
+Nias Utara, Sumatera Utara
+Nias, Sumatera Utara
+Nunukan, Kalimantan Utara
+Ogan Ilir, Sumatera Selatan
+Ogan Komering Ilir, Sumatera Selatan
+Ogan Komering Ulu Selatan, Sumatera Selatan
+Ogan Komering Ulu Timur, Sumatera Selatan
+Ogan Komering Ulu, Sumatera Selatan
+Pacitan, Jawa Timur
+Padang Lawas Utara, Sumatera Utara
+Padang Lawas, Sumatera Utara
+Padang Panjang, Sumatera Barat
+Padang Pariaman, Sumatera Barat
+Padang Sidempuan, Sumatera Utara
+Padang, Sumatera Barat
+Pagar Alam, Sumatera Selatan
+Pakpak Bharat, Sumatera Utara
+Palangka Raya, Kalimantan Tengah
+Palembang, Sumatera Selatan
+Palopo, Sulawesi Selatan
+Palu, Sulawesi Tengah
+Pamekasan, Jawa Timur
+Pandeglang, Banten
+Pangandaran, Jawa Barat
+Pangkajene Kepulauan, Sulawesi Selatan
+Pangkal Pinang, Bangka Belitung
+Paniai, Papua
+Parepare, Sulawesi Selatan
+Pariaman, Sumatera Barat
+Parigi Moutong, Sulawesi Tengah
+Pasaman Barat, Sumatera Barat
+Pasaman, Sumatera Barat
+Paser, Kalimantan Timur
+Pasuruan, Jawa Timur
+Pati, Jawa Tengah
+Payakumbuh, Sumatera Barat
+Pegunungan Arfak, Papua Barat
+Pegunungan Bintang, Papua
+Pekalongan, Jawa Tengah
+Pekanbaru, Riau
+Pelalawan, Riau
+Pemalang, Jawa Tengah
+Pematang Siantar, Sumatera Utara
+Penajam Paser Utara, Kalimantan Timur
+Penukal Abab Lematang Ilir, Sumatera Selatan
+Pesawaran, Lampung
+Pesisir Barat, Lampung
+Pesisir Selatan, Sumatera Barat
+Pidie Jaya, Nanggroe Aceh Darussalam (NAD)
+Pidie, Nanggroe Aceh Darussalam (NAD)
+Pinrang, Sulawesi Selatan
+Pohuwato, Gorontalo
+Polewali Mandar, Sulawesi Barat
+Ponorogo, Jawa Timur
+Pontianak, Kalimantan Barat
+Poso, Sulawesi Tengah
+Prabumulih, Sumatera Selatan
+Pringsewu, Lampung
+Probolinggo, Jawa Timur
+Pulang Pisau, Kalimantan Tengah
+Pulau Morotai, Maluku Utara
+Pulau Taliabu, Maluku Utara
+Puncak Jaya, Papua
+Puncak, Papua
+Purbalingga, Jawa Tengah
+Purwakarta, Jawa Barat
+Purworejo, Jawa Tengah
+Raja Ampat, Papua Barat
+Rejang Lebong, Bengkulu
+Rembang, Jawa Tengah
+Rokan Hilir, Riau
+Rokan Hulu, Riau
+Rote Ndao, Nusa Tenggara Timur (NTT)
+Sabang, Nanggroe Aceh Darussalam (NAD)
+Sabu Raijua, Nusa Tenggara Timur (NTT)
+Salatiga, Jawa Tengah
+Samarinda, Kalimantan Timur
+Sambas, Kalimantan Barat
+Samosir, Sumatera Utara
+Sampang, Jawa Timur
+Sanggau, Kalimantan Barat
+Sarmi, Papua
+Sarolangun, Jambi
+Sawah Lunto, Sumatera Barat
+Sekadau, Kalimantan Barat
+Seluma, Bengkulu
+Semarang, Jawa Tengah
+Seram Bagian Barat, Maluku
+Seram Bagian Timur, Maluku
+Serang, Banten
+Serdang Bedagai, Sumatera Utara
+Seruyan, Kalimantan Tengah
+Siak, Riau
+Sibolga, Sumatera Utara
+Sidenreng Rappang, Sulawesi Selatan
+Sidoarjo, Jawa Timur
+Sigi, Sulawesi Tengah
+Sijunjung, Sumatera Barat
+Sikka, Nusa Tenggara Timur (NTT)
+Simalungun, Sumatera Utara
+Simeulue, Nanggroe Aceh Darussalam (NAD)
+Singkawang, Kalimantan Barat
+Sinjai, Sulawesi Selatan
+Sintang, Kalimantan Barat
+Situbondo, Jawa Timur
+Sleman, DI Yogyakarta
+Solok Selatan, Sumatera Barat
+Solok, Sumatera Barat
+Soppeng, Sulawesi Selatan
+Sorong Selatan, Papua Barat
+Sorong, Papua Barat
+Sragen, Jawa Tengah
+Subang, Jawa Barat
+Subulussalam, Nanggroe Aceh Darussalam (NAD)
+Sukabumi, Jawa Barat
+Sukamara, Kalimantan Tengah
+Sukoharjo, Jawa Tengah
+Sumba Barat Daya, Nusa Tenggara Timur (NTT)
+Sumba Barat, Nusa Tenggara Timur (NTT)
+Sumba Tengah, Nusa Tenggara Timur (NTT)
+Sumba Timur, Nusa Tenggara Timur (NTT)
+Sumbawa Barat, Nusa Tenggara Barat (NTB)
+Sumbawa, Nusa Tenggara Barat (NTB)
+Sumedang, Jawa Barat
+Sumenep, Jawa Timur
+Sungaipenuh, Jambi
+Supiori, Papua
+Surabaya, Jawa Timur
+Surakarta, Jawa Tengah
+Tabalong, Kalimantan Selatan
+Tabanan, Bali
+Takalar, Sulawesi Selatan
+Tambrauw, Papua Barat
+Tana Tidung, Kalimantan Utara
+Tana Toraja, Sulawesi Selatan
+Tanah Bumbu, Kalimantan Selatan
+Tanah Datar, Sumatera Barat
+Tanah Laut, Kalimantan Selatan
+Tangerang Selatan, Banten
+Tangerang, Banten
+Tanggamus, Lampung
+Tanjung Balai, Sumatera Utara
+Tanjung Jabung Barat, Jambi
+Tanjung Jabung Timur, Jambi
+Tanjung Pinang, Kepulauan Riau
+Tapanuli Selatan, Sumatera Utara
+Tapanuli Tengah, Sumatera Utara
+Tapanuli Utara, Sumatera Utara
+Tapin, Kalimantan Selatan
+Tarakan, Kalimantan Utara
+Tasikmalaya, Jawa Barat
+Tebing Tinggi, Sumatera Utara
+Tebo, Jambi
+Tegal, Jawa Tengah
+Teluk Bintuni, Papua Barat
+Teluk Wondama, Papua Barat
+Temanggung, Jawa Tengah
+Ternate, Maluku Utara
+Tidore Kepulauan, Maluku Utara
+Timor Tengah Selatan, Nusa Tenggara Timur (NTT)
+Timor Tengah Utara, Nusa Tenggara Timur (NTT)
+Toba Samosir, Sumatera Utara
+Tojo Una-Una, Sulawesi Tengah
+Toli-Toli, Sulawesi Tengah
+Tolikara, Papua
+Tomohon, Sulawesi Utara
+Toraja Utara, Sulawesi Selatan
+Trenggalek, Jawa Timur
+Tual, Maluku
+Tuban, Jawa Timur
+Tulang Bawang Barat, Lampung
+Tulang Bawang, Lampung
+Tulungagung, Jawa Timur
+Wajo, Sulawesi Selatan
+Wakatobi, Sulawesi Tenggara
+Waropen, Papua
+Way Kanan, Lampung
+Wonogiri, Jawa Tengah
+Wonosobo, Jawa Tengah
+Yahukimo, Papua
+Yalimo, Papua
+Yogyakarta, DI Yogyakarta
