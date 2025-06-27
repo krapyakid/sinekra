@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('data-form');
     const businessListContainer = document.getElementById('business-list-container');
     const addBusinessBtn = document.getElementById('add-business-btn');
+    const angkatanSelect = document.getElementById('angkatan');
+    const aiButtons = document.querySelectorAll('.ai-btn');
     
     // === TEMPLATE ===
     const businessTemplate = document.getElementById('business-entry-template');
@@ -13,11 +15,35 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', handleFormSubmit);
     // Listener untuk tombol hapus dinamis
     businessListContainer.addEventListener('click', handleDynamicClicks);
+    aiButtons.forEach(button => {
+        button.addEventListener('click', handleAiButtonClick);
+    });
 
     // --- INISIALISASI ---
     addBusinessEntry(); // Tambahkan satu blok usaha saat halaman dimuat
+    populateAngkatanDropdown();
 
     // === FUNGSI-FUNGSI ===
+
+    function populateAngkatanDropdown() {
+        if (!angkatanSelect) return;
+        const currentYear = new Date().getFullYear();
+        for (let year = currentYear - 1; year >= 1951; year--) {
+            angkatanSelect.add(new Option(year, year));
+        }
+    }
+
+    function handleAiButtonClick(event) {
+        const targetId = event.target.dataset.target;
+        const targetTextarea = document.getElementById(targetId);
+        const prompts = {
+            pengembangan_profesi: "Saya ingin berkolaborasi dengan sesama alumni untuk membuat program pelatihan kewirausahaan digital bagi santri. Fokusnya pada skill praktis seperti digital marketing dan manajemen e-commerce, memanfaatkan platform yang sudah ada untuk menciptakan dampak ekonomi yang nyata dan terukur di lingkungan pesantren.",
+            ide: "Saya mengusulkan sebuah platform 'Sinergi Bisnis Santri' yang terintegrasi, di mana anggota bisa memetakan keahlian, menawarkan jasa, dan mencari mitra untuk proyek bersama. Platform ini bisa menjadi inkubator ide, memfasilitasi kolaborasi dari tahap gagasan hingga eksekusi dengan semangat gotong royong."
+        };
+        if (targetTextarea && prompts[targetId]) {
+            targetTextarea.value = prompts[targetId];
+        }
+    }
 
     function addBusinessEntry() {
         const businessClone = businessTemplate.content.cloneNode(true);
@@ -69,13 +95,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 1. Kumpulkan data anggota
         data.anggota = {
-            id_anggota: 'ANG-' + Date.now() + Math.random().toString(36).substr(2, 5), // Generate Unique ID
-            nama_lengkap: form.querySelector('#nama_lengkap').value,
-            nama_panggilan: form.querySelector('#nama_panggilan').value,
-            no_hp_anggota: form.querySelector('#no_hp_anggota').value,
-            domisili: form.querySelector('#domisili').value,
-            detail_alamat: form.querySelector('#detail_alamat').value,
-            // Tambahkan field lain dari sheet anggota jika ada di form
+            id_anggota: 'ANG-' + Date.now() + Math.random().toString(36).substr(2, 5),
+            nama_lengkap: form.querySelector('#nama_lengkap')?.value || '',
+            nama_panggilan: form.querySelector('#nama_panggilan')?.value || '',
+            alumni: form.querySelector('#alumni')?.value || '',
+            angkatan: form.querySelector('#angkatan')?.value || '',
+            komplek: form.querySelector('#komplek')?.value || '',
+            domisili: form.querySelector('#domisili')?.value || '',
+            detail_alamat: form.querySelector('#detail_alamat')?.value || '',
+            alamat_active: form.querySelector('#alamat_active')?.checked || false,
+            no_hp_anggota: form.querySelector('#no_hp_anggota')?.value || '',
+            no_hp_active: form.querySelector('#no_hp_active')?.checked || false,
+            profesi: form.querySelector('#profesi')?.value || '',
+            detail_profesi: form.querySelector('#detail_profesi')?.value || '',
+            pengembangan_profesi: form.querySelector('#pengembangan_profesi')?.value || '',
+            ide: form.querySelector('#ide')?.value || '',
+            lain_lain: form.querySelector('#lain_lain')?.value || '',
         };
 
         // 2. Kumpulkan data dari setiap blok usaha
