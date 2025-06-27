@@ -693,19 +693,26 @@ input:checked + .slider:before {
     background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
-    font-size: 0.8rem;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font-size: 1.2rem;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 
 .ai-btn:hover {
     background-color: #29256a;
+    transform: scale(1.1);
 }
 
 .ai-group textarea {
-    padding-right: 140px; /* Ruang untuk tombol */
+    padding-right: 50px;
 }
 
 /* Searchable Select (Dropdown) */
@@ -891,12 +898,11 @@ input:checked + .slider:before {
         grid-template-columns: 1fr;
     }
     .ai-group textarea {
-        padding-right: 1rem;
-        padding-bottom: 50px;
+        padding-right: 50px;
+        padding-bottom: 1rem;
     }
     .ai-btn {
-        width: calc(100% - 24px);
-        left: 12px;
+        /* Tidak perlu style khusus mobile, akan mengikuti style desktop */
     }
 }
 
