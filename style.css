@@ -506,6 +506,7 @@ main.content-container {
 
     .main-nav.active {
         transform: translateX(0);
+        z-index: 1050;
     }
 
     .main-nav .nav-link {
@@ -536,11 +537,11 @@ main.content-container {
     }
 
     .section-title {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
     }
 
     .see-more-link {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
 
     .directory-grid-container {
@@ -589,6 +590,7 @@ main.content-container {
     .menu-overlay.active {
         opacity: 1;
         visibility: visible;
+        z-index: 1040;
     }
 
     main.content-container {
@@ -600,7 +602,7 @@ main.content-container {
     }
 
     .section-title {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
     }
 }
 
