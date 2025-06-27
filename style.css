@@ -173,7 +173,7 @@ main.content-container {
 }
 
 .hero-content .quote {
-    font-size: 1.9rem;
+    font-size: 1.5rem;
     font-weight: 500;
     color: var(--primary-color);
     margin-bottom: 20px;
@@ -213,11 +213,8 @@ main.content-container {
     .hero-content .quote {
         font-size: 1.5rem;
     }
-    .section-title {
-        font-size: 1.1rem;
-    }
     .see-more-link {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
 }
 
@@ -288,7 +285,7 @@ main.content-container {
 }
 
 .section-title {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     font-weight: 500;
     margin-bottom: 20px;
 }
@@ -538,10 +535,6 @@ main.content-container {
         font-size: 1.5rem;
     }
 
-    .section-title {
-        font-size: 1.05rem;
-    }
-
     .see-more-link {
         font-size: 0.8rem;
     }
@@ -604,7 +597,7 @@ main.content-container {
     }
 
     .section-title {
-        font-size: 1.15rem;
+        font-size: 1.1rem;
     }
 }
 
@@ -946,7 +939,7 @@ input:disabled, textarea:disabled, select:disabled {
 }
 
 .section-title {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     font-weight: 500;
     margin-bottom: 20px;
 }
