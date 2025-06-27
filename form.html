@@ -55,24 +55,94 @@
                         <label for="nama_panggilan">Nama Panggilan</label>
                         <input type="text" id="nama_panggilan" name="nama_panggilan">
                     </div>
-                    <div class="form-group">
-                        <label for="no_hp_anggota">No. HP (WhatsApp)</label>
-                        <input type="tel" id="no_hp_anggota" name="no_hp_anggota" placeholder="Contoh: 628123456789">
+                     <div class="form-group">
+                        <label for="alumni">Alumni</label>
+                        <input type="text" id="alumni" name="alumni" value="Pondok Pesantren Krapyak Yogyakarta" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="domisili">Domisili</label>
+                        <label for="angkatan">Angkatan (Tahun Masuk)</label>
+                        <select id="angkatan" name="angkatan" required>
+                            <option value="" disabled selected>Pilih Tahun</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="komplek">Komplek</label>
+                        <select id="komplek" name="komplek" required>
+                            <option value="" disabled selected>Pilih Komplek</option>
+                            <option value="Al-Munawwir">Al-Munawwir</option>
+                            <option value="Ali Maksum">Ali Maksum</option>
+                            <option value="Nurussalam">Nurussalam</option>
+                            <option value="Asrama Barat">Asrama Barat</option>
+                            <option value="Gedung Putih">Gedung Putih</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="domisili">Domisili (Kota/Kabupaten)</label>
                         <input type="text" id="domisili" name="domisili">
                     </div>
                     <div class="form-group form-group-full">
                         <label for="detail_alamat">Alamat Lengkap</label>
-                        <textarea id="detail_alamat" name="detail_alamat" rows="3"></textarea>
+                        <textarea id="detail_alamat" name="detail_alamat" rows="3" placeholder="Contoh: Jl. KH Ahmad Dahlan No. 21, RT 04 RW 02..."></textarea>
                     </div>
+                     <div class="form-group">
+                        <label>Tampilkan Alamat di Publik?</label>
+                        <label class="switch">
+                            <input type="checkbox" id="alamat_active" name="alamat_active" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <!-- Kontak & Profesi -->
+            <fieldset class="form-section">
+                <legend class="form-section-title">2. Kontak & Profesi</legend>
+                 <div class="form-grid">
+                    <div class="form-group">
+                        <label for="no_hp_anggota">No. HP (WhatsApp)</label>
+                        <input type="tel" id="no_hp_anggota" name="no_hp_anggota" placeholder="Contoh: 08123456789" required>
+                    </div>
+                     <div class="form-group">
+                        <label>Tampilkan No. HP di Publik?</label>
+                        <label class="switch">
+                            <input type="checkbox" id="no_hp_active" name="no_hp_active" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="profesi">Profesi Utama</label>
+                         <input type="text" id="profesi" name="profesi" placeholder="Contoh: Pengusaha, Dokter, Programmer" required>
+                    </div>
+                     <div class="form-group form-group-full">
+                        <label for="detail_profesi">Deskripsi Detail Profesi</label>
+                        <textarea id="detail_profesi" name="detail_profesi" rows="3" placeholder="Contoh: Praktik di RSUD Sleman, menangani pasien umum & BPJS sejak 2017"></textarea>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Ide & Kontribusi -->
+            <fieldset class="form-section">
+                 <legend class="form-section-title">3. Ide & Kontribusi</legend>
+                 <div class="form-group ai-group">
+                    <label for="pengembangan_profesi">Rencana pengembangan profesi/keahlian</label>
+                    <textarea id="pengembangan_profesi" name="pengembangan_profesi" rows="4" placeholder="Contoh: Ingin memperluas layanan ke bidang edukasi kesehatan masyarakat"></textarea>
+                    <button type="button" class="ai-btn" data-target="pengembangan_profesi">Generate dengan AI ✨</button>
+                </div>
+                <div class="form-group ai-group">
+                    <label for="ide">Ide/gagasan untuk SINEKRA</label>
+                    <textarea id="ide" name="ide" rows="4" placeholder="Tulis ide atau kontribusi Anda untuk pengembangan ekonomi santri..."></textarea>
+                    <button type="button" class="ai-btn" data-target="ide">Generate dengan AI ✨</button>
+                </div>
+                 <div class="form-group">
+                    <label for="lain_lain">Lain-lain</label>
+                    <textarea id="lain_lain" name="lain_lain" rows="3" placeholder="Informasi tambahan yang relevan..."></textarea>
                 </div>
             </fieldset>
 
             <!-- Bagian Usaha (Dinamis) -->
             <fieldset class="form-section">
-                <legend class="form-section-title">2. Informasi Usaha</legend>
+                <legend class="form-section-title">4. Informasi Usaha</legend>
                 <div id="business-list-container">
                     <!-- Blok usaha akan ditambahkan di sini oleh JS -->
                 </div>
