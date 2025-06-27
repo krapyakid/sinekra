@@ -25,16 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Mobile Search Logic
-    const mobileSearchTrigger = document.getElementById('mobile-search-trigger');
-    const searchSection = document.querySelector('.search-and-filter-section');
-
-    if (mobileSearchTrigger && searchSection) {
-        mobileSearchTrigger.addEventListener('click', (event) => {
-            event.stopPropagation();
-            searchSection.classList.toggle('active');
-        });
-    }
+    // Mobile Search Logic (REMOVED as it's now always visible)
     
     // --- FUNGSI GLOBAL & DATA BERSAMA ---
     const membersSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGe6AOx8Dsnq--KPToMl0Q4lF20650_IQ6VoLQxyy3heEFW43LSTIqB0UAUeTV0QOvr8O_YnaeU-om/pub?gid=0&output=csv";
