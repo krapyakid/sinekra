@@ -194,13 +194,14 @@ main.content-container {
 
 @media (max-width: 768px) {
     .hero-section {
-        min-height: auto; /* Biarkan tinggi hero menyesuaikan konten di mobile */
+        min-height: auto;
         padding: 40px 20px;
     }
     .search-and-filter-section {
-        margin-top: 0; /* Reset margin sepenuhnya untuk mobile */
-        padding: 0 15px; /* Atur padding mobile */
+        margin-top: 20px;
+        position: static;
         margin-bottom: 20px;
+        padding: 0 15px;
     }
     .search-and-filter-container {
         flex-direction: column;
@@ -209,6 +210,12 @@ main.content-container {
     }
     .hero-content .quote {
         font-size: 1.5rem;
+    }
+    .section-title {
+        font-size: 1.25rem;
+    }
+    .see-more-link {
+        font-size: 0.9rem;
     }
 }
 
