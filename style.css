@@ -194,15 +194,18 @@ main.content-container {
 
 @media (max-width: 768px) {
     .hero-section {
-        min-height: 300px; /* Tinggi disesuaikan untuk mobile */
+        min-height: auto; /* Biarkan tinggi hero menyesuaikan konten di mobile */
+        padding: 40px 20px;
     }
     .search-and-filter-section {
-        margin-top: 20px; /* Reset margin untuk mobile */
+        margin-top: 0; /* Reset margin sepenuhnya untuk mobile */
+        padding: 0 15px; /* Atur padding mobile */
         margin-bottom: 20px;
     }
     .search-and-filter-container {
         flex-direction: column;
-        gap: 10px;
+        gap: 15px;
+        padding: 15px;
     }
     .hero-content .quote {
         font-size: 1.5rem;
