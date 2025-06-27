@@ -74,6 +74,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function initFormInteractions() {
         form.addEventListener('input', function(e) {
             const target = e.target;
+
+            // Memaksa input hanya angka untuk nomor HP
+            if (target.id === 'no_hp_anggota') {
+                target.value = target.value.replace(/\D/g, '');
+            }
+
             // Character Counter
             if (target.matches('input[maxlength], textarea[maxlength]')) {
                 const maxLength = target.getAttribute('maxlength');
