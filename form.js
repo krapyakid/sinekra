@@ -1,9 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const DOMISILI_URL = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/data_domisili.csv';
+    const PROFESI_URL = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/profesi.csv';
+
     // === ELEMEN UTAMA ===
     const form = document.getElementById('data-form');
     const businessListContainer = document.getElementById('business-list-container');
     const addBusinessBtn = document.getElementById('add-business-btn');
     const angkatanSelect = document.getElementById('angkatan');
+    const domisiliSelect = document.getElementById('domisili');
+    const profesiSelect = document.getElementById('profesi');
     const aiButtons = document.querySelectorAll('.ai-btn');
     
     // === TEMPLATE ===
@@ -13,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // === EVENT LISTENERS ===
     addBusinessBtn.addEventListener('click', addBusinessEntry);
     form.addEventListener('submit', handleFormSubmit);
+    form.addEventListener('reset', handleFormReset);
     // Listener untuk tombol hapus dinamis
     businessListContainer.addEventListener('click', handleDynamicClicks);
     aiButtons.forEach(button => {
@@ -21,16 +27,87 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- INISIALISASI ---
     addBusinessEntry(); // Tambahkan satu blok usaha saat halaman dimuat
-    populateAngkatanDropdown();
+    populateAngkatan();
+    populateDropdownFromCSV(domisiliSelect, DOMISILI_URL, 'Pilih Domisili');
+    populateDropdownFromCSV(profesiSelect, PROFESI_URL, 'Pilih Profesi');
+    initFormInteractions(); // Untuk clear icon dan char counter
 
     // === FUNGSI-FUNGSI ===
 
-    function populateAngkatanDropdown() {
+    function populateAngkatan() {
         if (!angkatanSelect) return;
         const currentYear = new Date().getFullYear();
-        for (let year = currentYear - 1; year >= 1951; year--) {
-            angkatanSelect.add(new Option(year, year));
+        for (let year = currentYear; year >= 1980; year--) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            angkatanSelect.appendChild(option);
         }
+    }
+
+    async function populateDropdownFromCSV(selectElement, url, placeholder) {
+        if (!selectElement) return;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Gagal memuat data: ${response.statusText}`);
+            }
+            const data = await response.text();
+            const items = data.split('\n').filter(Boolean).map(item => item.trim());
+
+            selectElement.innerHTML = `<option value="" disabled selected>${placeholder}</option>`; // Reset
+            
+            items.forEach(item => {
+                if (item) { // Pastikan tidak ada string kosong
+                    const option = document.createElement('option');
+                    option.value = item;
+                    option.textContent = item;
+                    selectElement.appendChild(option);
+                }
+            });
+
+        } catch (error) {
+            console.error(`Error populating dropdown for ${selectElement.id}:`, error);
+            selectElement.innerHTML = `<option value="" disabled selected>Gagal memuat data</option>`;
+        }
+    }
+
+    function initFormInteractions() {
+        form.addEventListener('input', function(e) {
+            const target = e.target;
+            // Character Counter
+            if (target.matches('input[maxlength], textarea[maxlength]')) {
+                const maxLength = target.getAttribute('maxlength');
+                const currentLength = target.value.length;
+                const counter = target.closest('.form-group, .form-group-full')?.querySelector('.char-counter');
+                if (counter) {
+                    counter.textContent = `${currentLength} / ${maxLength}`;
+                }
+            }
+             // Toggle clear icon visibility
+            if (target.matches('input[type="text"], input[type="tel"], textarea')) {
+                const wrapper = target.closest('.input-wrapper');
+                const clearIcon = wrapper?.querySelector('.clear-icon');
+                if (clearIcon) {
+                    clearIcon.style.display = target.value.length > 0 ? 'block' : 'none';
+                }
+            }
+        });
+
+        form.addEventListener('click', function(e) {
+            // Clear Icon
+            if (e.target.matches('.clear-icon')) {
+                const inputWrapper = e.target.closest('.input-wrapper');
+                if (inputWrapper) {
+                   const input = inputWrapper.querySelector('input, textarea');
+                   if (input) {
+                       input.value = '';
+                       input.dispatchEvent(new Event('input', { bubbles: true })); // Trigger update untuk counter & clear icon
+                       input.focus();
+                   }
+                }
+            }
+        });
     }
 
     function handleAiButtonClick(event) {
@@ -80,94 +157,58 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleFormSubmit(e) {
         e.preventDefault();
         
-        // Validasi form dasar
         if (!form.checkValidity()) {
             form.reportValidity();
-            alert('Harap isi semua kolom yang wajib diisi (ditandai dengan required).');
+            alert('Harap isi semua field yang wajib diisi (bertanda *).');
             return;
         }
 
-        // Membangun objek data dari form
-        const data = {
-            anggota: {},
-            usaha: []
-        };
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
 
-        // 1. Kumpulkan data anggota
-        data.anggota = {
-            id_anggota: 'ANG-' + Date.now() + Math.random().toString(36).substr(2, 5),
-            nama_lengkap: form.querySelector('#nama_lengkap')?.value || '',
-            nama_panggilan: form.querySelector('#nama_panggilan')?.value || '',
-            alumni: form.querySelector('#alumni')?.value || '',
-            angkatan: form.querySelector('#angkatan')?.value || '',
-            komplek: form.querySelector('#komplek')?.value || '',
-            domisili: form.querySelector('#domisili')?.value || '',
-            detail_alamat: form.querySelector('#detail_alamat')?.value || '',
-            alamat_active: form.querySelector('#alamat_active')?.checked || false,
-            no_hp_anggota: form.querySelector('#no_hp_anggota')?.value || '',
-            no_hp_active: form.querySelector('#no_hp_active')?.checked || false,
-            profesi: form.querySelector('#profesi')?.value || '',
-            detail_profesi: form.querySelector('#detail_profesi')?.value || '',
-            pengembangan_profesi: form.querySelector('#pengembangan_profesi')?.value || '',
-            ide: form.querySelector('#ide')?.value || '',
-            lain_lain: form.querySelector('#lain_lain')?.value || '',
-        };
+        // Handle checkboxes (switches)
+        data.alamat_active = document.getElementById('alamat_active').checked;
+        data.no_hp_active = document.getElementById('no_hp_active').checked;
+        
+        // Gabungkan nomor HP
+        if (data.no_hp_anggota) {
+            data.no_hp_anggota = `+62${data.no_hp_anggota}`;
+        }
 
-        // 2. Kumpulkan data dari setiap blok usaha
-        const businessEntries = businessListContainer.querySelectorAll('.business-entry-card');
-        businessEntries.forEach(card => {
-            const businessId = 'USH-' + Date.now() + Math.random().toString(36).substr(2, 5); // Generate Unique ID
+        // Kumpulkan data usaha
+        data.usaha = [];
+        document.querySelectorAll('.business-block').forEach(block => {
             const businessData = {
-                id_usaha: businessId,
-                id_anggota: data.anggota.id_anggota, // Tautkan ke ID Anggota
-                nama_usaha: card.querySelector('[name="nama_usaha"]').value,
-                kategori_usaha: card.querySelector('[name="kategori_usaha"]').value,
-                jenis_usaha: card.querySelector('[name="jenis_usaha"]').value,
-                detail_usaha: card.querySelector('[name="detail_usaha"]').value,
-                url_gmaps_perusahaan: card.querySelector('[name="url_gmaps_perusahaan"]').value,
-                is_active: 1, // Default ke 1 (Aktif)
-                olshop: [],
-                sosmed: []
+                nama_usaha: block.querySelector('[name="nama_usaha"]').value,
+                bidang_usaha: block.querySelector('[name="bidang_usaha"]').value,
+                detail_usaha: block.querySelector('[name="detail_usaha"]').value,
+                omset_bulanan: block.querySelector('[name="omset_bulanan"]').value,
+                alamat_usaha: block.querySelector('[name="alamat_usaha"]').value,
+                shopee: block.querySelector('[name="shopee"]').value,
+                tokopedia: block.querySelector('[name="tokopedia"]').value,
+                lainnya: block.querySelector('[name="lainnya"]').value,
+                instagram: block.querySelector('[name="instagram"]').value,
+                facebook: block.querySelector('[name="facebook"]').value,
+                tiktok: block.querySelector('[name="tiktok"]').value,
+                website: block.querySelector('[name="website"]').value
             };
-
-            // 2a. Kumpulkan data toko online untuk usaha ini
-            card.querySelector('.shop-list-container').querySelectorAll('.link-entry').forEach(link => {
-                const platform = link.querySelector('[name="platform"]').value;
-                const url = link.querySelector('[name="url"]').value;
-                if (platform && url) {
-                    businessData.olshop.push({
-                        id_olshop: 'OLS-' + Date.now() + Math.random().toString(36).substr(2, 5),
-                        id_usaha: businessId,
-                        id_anggota: data.anggota.id_anggota,
-                        platform_olshop: platform,
-                        url_olshop: url
-                    });
-                }
-            });
-
-            // 2b. Kumpulkan data media sosial untuk usaha ini
-            card.querySelector('.social-list-container').querySelectorAll('.link-entry').forEach(link => {
-                const platform = link.querySelector('[name="platform"]').value;
-                const url = link.querySelector('[name="url"]').value;
-                if (platform && url) {
-                    businessData.sosmed.push({
-                        id_sosmed: 'SOS-' + Date.now() + Math.random().toString(36).substr(2, 5),
-                        id_usaha: businessId,
-                        id_anggota: data.anggota.id_anggota,
-                        platform_sosmed: platform,
-                        url_sosmed: url
-                    });
-                }
-            });
-
             data.usaha.push(businessData);
         });
 
-        console.log("Data yang akan dikirim:", JSON.stringify(data, null, 2));
-        alert("Data telah disiapkan! Cek console log (F12) untuk melihat struktur JSON. Langkah selanjutnya adalah mengirim data ini.");
+        console.log("Data siap dikirim:", JSON.stringify(data, null, 2));
+        alert('Data berhasil divalidasi dan siap untuk dikirim! Cek console log untuk melihat struktur data JSON.');
+    }
 
-        // Di sinilah kita akan memanggil fungsi untuk mengirim data ke Google Apps Script
-        // sendDataToGoogleScript(data);
+    function handleFormReset(e) {
+        e.preventDefault();
+        const confirmed = window.confirm("Anda yakin ingin mengosongkan semua isian pada formulir?");
+        if (confirmed) {
+            form.reset();
+            // Reset semua counter karakter dan clear icons
+            form.querySelectorAll('input, textarea').forEach(input => {
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+            });
+        }
     }
 
     /*
