@@ -98,7 +98,7 @@ img {
 }
 
 .mobile-search-trigger {
-    display: none; /* Sembunyikan di desktop */
+    display: none;
     background: none;
     border: none;
     color: var(--primary-color);
@@ -131,7 +131,7 @@ img {
 }
 
 .mobile-menu-trigger {
-    display: none; /* Sembunyikan di desktop */
+    display: none;
     cursor: pointer;
 }
 
@@ -173,7 +173,7 @@ main.content-container {
 }
 
 .hero-content .quote {
-    font-size: 1.5rem;
+    font-size: 1.9rem;
     font-weight: 500;
     color: var(--primary-color);
     margin-bottom: 20px;
@@ -194,32 +194,8 @@ main.content-container {
     margin-bottom: 40px;
 }
 
-@media (max-width: 768px) {
-    .hero-section {
-        min-height: auto;
-        padding: 40px 20px;
-    }
-    .search-and-filter-section {
-        margin-top: 20px;
-        position: static;
-        margin-bottom: 20px;
-        padding: 0 15px;
-    }
-    .search-and-filter-container {
-        flex-direction: column;
-        gap: 15px;
-        padding: 15px;
-    }
-    .hero-content .quote {
-        font-size: 1.5rem;
-    }
-    .see-more-link {
-        font-size: 0.8rem;
-    }
-}
-
 .search-and-filter-container {
-    max-width: 1100px; /* Diperlebar */
+    max-width: 1100px;
     margin: 0 auto;
     background-color: white;
     border-radius: 12px;
@@ -273,10 +249,6 @@ main.content-container {
     padding: 20px;
 }
 
-.recommended-section {
-    padding-top: 0;
-}
-
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -285,9 +257,8 @@ main.content-container {
 }
 
 .section-title {
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     font-weight: 500;
-    margin-bottom: 20px;
 }
 
 .see-more-link {
@@ -376,55 +347,16 @@ main.content-container {
     transform: scale(1.15);
 }
 
-.whatsapp-icon {
-    font-size: 1.4rem;
-    color: #25D366;
-}
-
-.marketplace-icon {
-    opacity: 0.9;
-}
-
-/* Mobile Search Bar */
-.mobile-search-container {
-    display: none;
-    margin-bottom: 20px;
-    position: relative;
-}
-
-.mobile-search-container .search-icon {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--light-text-color);
-}
-
-#mobile-search-bar {
-    width: 100%;
-    padding: 12px 15px 12px 40px;
-    border-radius: 25px;
-    border: 1px solid var(--input-border-color);
-    font-size: 1rem;
-    background: var(--card-bg);
-}
-
-#mobile-search-bar:focus {
-    outline: none;
-    border-color: var(--input-focus-color);
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-}
-
 /* Status Loading dan Error */
-.directory-status {
-    text-align: center;
-    padding: 40px 20px;
+.loading-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    color: var(--light-text-color);
-    min-height: 200px;
+    align-items: center;
+    padding: 50px 20px;
+    text-align: center;
+    width: 100%;
+    grid-column: 1 / -1;
 }
 
 .spinner {
@@ -442,49 +374,33 @@ main.content-container {
     100% { transform: rotate(360deg); }
 }
 
-/* Pagination */
-.pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px 0;
-    gap: 8px;
-}
-
-.pagination-btn {
-    padding: 8px 12px;
-    border: 1px solid var(--input-border-color);
-    background-color: white;
-    color: var(--primary-color);
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.pagination-btn:hover {
-    background-color: #e9ecef;
-}
-
-.pagination-btn:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-.pagination-btn.active {
-    background-color: var(--secondary-color);
-    color: white;
-    border-color: var(--secondary-color);
+/* Media Queries untuk Tablet */
+@media (max-width: 992px) {
+    .search-and-filter-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
 
 
-/* Media Queries untuk Responsif */
+/* Media Queries untuk Mobile */
 @media (max-width: 768px) {
+    body {
+        font-size: 15px;
+    }
+
     .header-wrapper {
         padding: 0 15px;
     }
-    .search-wrapper {
+    
+    .header-actions {
+        gap: 0;
+    }
+
+    .mobile-search-trigger {
         display: none;
     }
+
     .main-nav {
         position: fixed;
         top: 0;
@@ -499,13 +415,11 @@ main.content-container {
         box-shadow: -3px 0 15px rgba(0,0,0,0.2);
         transform: translateX(100%);
         transition: transform 0.35s ease-in-out;
-        z-index: 1020;
-        display: flex;
+        z-index: 1050;
     }
 
     .main-nav.active {
         transform: translateX(0);
-        z-index: 1050;
     }
 
     .main-nav .nav-link {
@@ -530,45 +444,7 @@ main.content-container {
         z-index: 1200; 
         position: relative; 
     }
-
-    .hero-content .quote {
-        font-size: 1.5rem;
-    }
-
-    .see-more-link {
-        font-size: 0.8rem;
-    }
-
-    .directory-grid-container {
-        grid-template-columns: 1fr;
-    }
-
-    .header-actions {
-        gap: 0;
-    }
-    .mobile-search-trigger {
-        display: block;
-        padding: 10px;
-    }
-
-    .search-and-filter-section {
-        display: none;
-        flex-direction: column;
-        margin: 0;
-        padding: 15px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        border-radius: 0;
-        border-top: 1px solid #f0f0f0;
-        border-bottom: 1px solid #f0f0f0;
-    }
-    .search-and-filter-section.active {
-        display: flex;
-    }
-    .filter-wrapper {
-        width: 100%;
-        flex-direction: column;
-    }
-
+    
     .menu-overlay {
         position: fixed;
         top: 0;
@@ -579,25 +455,62 @@ main.content-container {
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.35s, visibility 0.35s;
-        z-index: 1010;
+        z-index: 1040;
     }
 
     .menu-overlay.active {
         opacity: 1;
         visibility: visible;
-        z-index: 1040;
+    }
+
+    .hero-section {
+        min-height: auto;
+        padding: 40px 20px;
+    }
+
+    .hero-content .quote {
+        font-size: 1.5rem;
     }
 
     main.content-container {
         padding: 0;
     }
+    
+    .search-and-filter-section {
+        margin-top: 20px;
+        position: static;
+        margin-bottom: 20px;
+        padding: 0;
+    }
+    .search-and-filter-container {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+        border-radius: 0;
+        box-shadow: none;
+        border-top: 1px solid #f0f0f0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .filter-wrapper {
+        width: 100%;
+        flex-direction: column;
+    }
 
     .main-grid-section {
-      padding: 20px 15px; /* Add horizontal padding for mobile */
+      padding: 20px 15px;
     }
 
     .section-title {
         font-size: 1.1rem;
+    }
+
+    .see-more-link {
+        font-size: 0.8rem;
+    }
+
+    .directory-grid-container {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -678,8 +591,7 @@ main.content-container {
 
 .form-group input:focus,
 .form-group textarea:focus,
-.form-group select:focus,
-.searchable-input:focus {
+.form-group select:focus {
     outline: none;
     border-color: var(--input-focus-color);
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
@@ -696,38 +608,6 @@ input:disabled, textarea:disabled, select:disabled {
     resize: vertical;
 }
 
-/* Searchable Select (Dropdown) */
-.searchable-select {
-    position: relative;
-}
-.searchable-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: white;
-    border: 1px solid var(--input-border-color);
-    border-top: none;
-    border-radius: 0 0 8px 8px;
-    z-index: 10;
-    max-height: 200px;
-    overflow-y: auto;
-    display: none;
-    box-shadow: 0 8px 10px rgba(0,0,0,0.1);
-}
-.dropdown-item {
-    padding: 0.8rem 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-.dropdown-item:hover {
-    background-color: #f4f7f6;
-}
-.dropdown-item:not(:last-child) {
-    border-bottom: 1px solid #e9ecef;
-}
-
-/* Tombol */
 .btn, .add-btn, .remove-shop-btn {
     padding: 0.8rem 1.5rem;
     border: none;
@@ -749,15 +629,6 @@ input:disabled, textarea:disabled, select:disabled {
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-.btn-secondary {
-    background-color: #e9ecef;
-    color: var(--text-color);
-    border: 1px solid #ced4da;
-}
-.btn-secondary:hover {
-    background-color: #dee2e6;
-}
-
 .form-actions {
     display: flex;
     justify-content: flex-end;
@@ -767,185 +638,15 @@ input:disabled, textarea:disabled, select:disabled {
     border-top: 1px solid #e9ecef;
 }
 
-/* Toko Online Section */
-.online-shop-entry {
-    align-items: end;
-    gap: 1rem;
-}
-.online-shop-entry .form-group {
-    margin-bottom: 0;
-}
-.shop-entry-actions {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding-bottom: 0.8rem;
-}
-.remove-shop-btn {
-    background-color: transparent;
-    color: var(--danger-color);
-    font-size: 1.5rem;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-}
-.remove-shop-btn:hover {
-    color: #c0392b;
-}
-
-.add-btn {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-}
-.add-btn:hover {
-    background-color: #c8e6c9;
-}
-
-
-/* Modal Styles */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-    backdrop-filter: blur(4px);
-}
-.modal-content {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    max-width: 600px;
-    width: 90%;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    text-align: center;
-}
-.modal-content h2 {
-    margin-bottom: 1rem;
-}
-.modal-preview-grid {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0.75rem 1.5rem;
-    text-align: left;
-    margin: 2rem 0;
-    max-height: 60vh;
-    overflow-y: auto;
-    padding: 1rem;
-    background: #f9f9f9;
-    border-radius: 8px;
-}
-.preview-label {
-    font-weight: 600;
-    color: var(--light-text-color);
-}
-.preview-value {
-    color: var(--text-color);
-}
-.modal-button-group {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-.success-icon {
-    font-size: 4rem;
-    color: var(--success-color);
-    margin-bottom: 1rem;
-}
-.error-icon {
-    font-size: 4rem;
-    color: var(--danger-color);
-    margin-bottom: 1rem;
-}
-
 /* Responsiveness for Form */
 @media (max-width: 768px) {
     .form-container {
         padding: 1.5rem;
+        margin: 20px 0;
     }
     .form-grid {
         grid-template-columns: 1fr;
     }
-}
-
-@media (max-width: 992px) {
-    .search-and-filter-section {
-        flex-direction: column;
-        align-items: stretch;
-    }
-}
-
-/* Loading Spinner */
-.loading-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 50px 20px;
-    text-align: center;
-    width: 100%;
-}
-
-.spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border-left-color: var(--primary-color);
-    margin-bottom: 15px;
-    animation: spin 1s ease infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.directory-grid-container .loading-container {
-    grid-column: 1 / -1; /* Membuat container loading membentang di semua kolom grid */
-}
-
-/* Grid Section */
-.main-grid-section {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.recommended-section {
-    padding-top: 0;
-}
-
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 20px;
-}
-
-.section-title {
-    font-size: 1.1rem;
-    font-weight: 500;
-    margin-bottom: 20px;
-}
-
-.see-more-link {
-    font-weight: 600;
 }
 
 /* Styling untuk Halaman Direktori Anggota */
@@ -979,4 +680,4 @@ input:disabled, textarea:disabled, select:disabled {
 .member-details {
     font-size: 0.95rem;
     color: var(--light-text-color);
-} 
+}
