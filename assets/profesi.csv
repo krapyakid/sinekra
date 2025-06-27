@@ -1,103 +1,103 @@
-id_profesi,profesi_name
-PRO001,Ahli Geologi
-PRO002,Ahli Kehutanan
-PRO003,Aktor/Aktris
-PRO004,Akuntan
-PRO005,Anggota DPD
-PRO006,Anggota DPR
-PRO007,Anggota DPRD Kabupaten/Kota
-PRO008,Anggota DPRD Provinsi
-PRO009,Apoteker
-PRO010,Artis
-PRO011,Auditor
-PRO012,Banker
-PRO013,Belum/Tidak Bekerja
-PRO014,Bidan
-PRO015,Buruh Harian Lepas
-PRO016,Buruh Industri
-PRO017,Buruh Nelayan/Perikanan
-PRO018,Buruh Peternakan
-PRO019,Buruh Tani/Perkebunan
-PRO020,Chef
-PRO021,Content Creator
-PRO022,Desainer Grafis
-PRO023,Diplomat
-PRO024,Dokter
-PRO025,Dosen
-PRO026,Dropshipper
-PRO027,Editor Video
-PRO028,Fotografer
-PRO029,Franchise Owner
-PRO030,Guru
-PRO031,Hakim
-PRO032,Ibu Rumah Tangga
-PRO033,Imam Masjid
-PRO034,Insinyur Elektro
-PRO035,Insinyur Mesin
-PRO036,Insinyur Perminyakan
-PRO037,Insinyur Teknik Sipil
-PRO038,Jaksa
-PRO039,Jurnalis
-PRO040,Kepolisian RI (Polri)
-PRO041,Konselor
-PRO042,Konsultan Keuangan
-PRO043,Lain-lain
-PRO044,Lurah
-PRO045,Manajer Hotel
-PRO046,Manajer Investasi
-PRO047,Masinis
-PRO048,Mekanik
-PRO049,Montir
-PRO050,Nelayan/Perikanan
-PRO051,Notaris
-PRO052,Pedagang
-PRO053,Pegawai Negeri Sipil (PNS)
-PRO054,Pegawai Pemerintah dengan Perjanjian Kerja (PPPK)
-PRO055,Pekerja Sosial
-PRO056,Pekerja Tambang
-PRO057,Pelajar/Mahasiswa
-PRO058,Pelaut
-PRO059,Penata Busana
-PRO060,Penata Rias
-PRO061,Peneliti
-PRO062,Pengacara
-PRO063,Pengrajin
-PRO064,Pengusaha
-PRO065,Pensiunan
-PRO066,Penulis
-PRO067,Penyanyi
-PRO068,Penyiar
-PRO069,Penyuluh Pertanian
-PRO070,Perangkat Desa
-PRO071,Perawat
-PRO072,Petani
-PRO073,Petani/Pekebun
-PRO074,Peternak
-PRO075,Pilot
-PRO076,Polisi
-PRO077,Politikus
-PRO078,Pramugari/Pramugara
-PRO079,Programmer/Software Developer
-PRO080,Psikolog
-PRO081,Public Relations
-PRO082,Relawan NGO
-PRO083,Resepsionis
-PRO084,Seniman
-PRO085,"Seniman (Pelukis, Pemahat)"
-PRO086,Supir
-PRO087,Teknisi Jaringan
-PRO088,Tenaga Laboratorium Medis
-PRO089,Tentara Nasional Indonesia (TNI)
-PRO090,Tour Guide
-PRO091,Trainer/Pelatih
-PRO092,Tukang Batu
-PRO093,Tukang Cukur
-PRO094,Tukang Jahit
-PRO095,Tukang Kayu
-PRO096,Tukang Las/Pandai Besi
-PRO097,Tukang Listrik
-PRO098,Tukang Sol Sepatu
-PRO099,Tutor/Bimbingan Belajar
-PRO100,Ustaz/Ustazah
-PRO101,Wartawan
-PRO102,Wiraswasta
+Ahli Geologi
+Ahli Kehutanan
+Aktor/Aktris
+Akuntan
+Anggota DPD
+Anggota DPR
+Anggota DPRD Kabupaten/Kota
+Anggota DPRD Provinsi
+Apoteker
+Artis
+Auditor
+Banker
+Belum/Tidak Bekerja
+Bidan
+Buruh Harian Lepas
+Buruh Industri
+Buruh Nelayan/Perikanan
+Buruh Peternakan
+Buruh Tani/Perkebunan
+Chef
+Content Creator
+Desainer Grafis
+Diplomat
+Dokter
+Dosen
+Dropshipper
+Editor Video
+Fotografer
+Franchise Owner
+Guru
+Hakim
+Ibu Rumah Tangga
+Imam Masjid
+Insinyur Elektro
+Insinyur Mesin
+Insinyur Perminyakan
+Insinyur Teknik Sipil
+Jaksa
+Jurnalis
+Kepolisian RI (Polri)
+Konselor
+Konsultan Keuangan
+Lain-lain
+Lurah
+Manajer Hotel
+Manajer Investasi
+Masinis
+Mekanik
+Montir
+Nelayan/Perikanan
+Notaris
+Pedagang
+Pegawai Negeri Sipil (PNS)
+Pegawai Pemerintah dengan Perjanjian Kerja (PPPK)
+Pekerja Sosial
+Pekerja Tambang
+Pelajar/Mahasiswa
+Pelaut
+Penata Busana
+Penata Rias
+Peneliti
+Pengacara
+Pengrajin
+Pengusaha
+Pensiunan
+Penulis
+Penyanyi
+Penyiar
+Penyuluh Pertanian
+Perangkat Desa
+Perawat
+Petani
+Petani/Pekebun
+Peternak
+Pilot
+Polisi
+Politikus
+Pramugari/Pramugara
+Programmer/Software Developer
+Psikolog
+Public Relations
+Relawan NGO
+Resepsionis
+Seniman
+Seniman (Pelukis, Pemahat)
+Supir
+Teknisi Jaringan
+Tenaga Laboratorium Medis
+Tentara Nasional Indonesia (TNI)
+Tour Guide
+Trainer/Pelatih
+Tukang Batu
+Tukang Cukur
+Tukang Jahit
+Tukang Kayu
+Tukang Las/Pandai Besi
+Tukang Listrik
+Tukang Sol Sepatu
+Tutor/Bimbingan Belajar
+Ustaz/Ustazah
+Wartawan
+Wiraswasta
+Wirausaha
