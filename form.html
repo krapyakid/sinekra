@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulir Pendataan Anggota & Usaha Sinergi Ekonomi Krapyak</title>
+    <title>Formulir Pendaftaran Anggota Sinergi Ekonomi Krapyak</title>
     <link rel="icon" href="assets/logo_sinergi_krapyak.jpg" type="image/jpeg">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -39,43 +39,61 @@
     <main class="container">
         <form id="data-form" class="form-container">
             <div class="form-header">
-                <h1>Formulir Pendataan Anggota & Usaha</h1>
-                <p>Silakan isi data diri dan usaha Anda selengkap mungkin.</p>
+                <h1>Mari Berkenalan & Bergabung Bersama SINEKRA</h1>
+                <p>Bagikan sedikit tentang diri Anda. Informasi yang Anda berikan akan membantu kita untuk saling terhubung dan bersinergi.</p>
             </div>
 
-            <!-- Bagian Data Anggota -->
+            <!-- Informasi Calon Anggota (Gabungan) -->
             <fieldset class="form-section">
-                <legend class="form-section-title">1. Informasi Pribadi Anggota</legend>
+                <legend class="form-section-title">Ceritakan Tentang Diri Anda</legend>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="nama_lengkap">Nama Lengkap</label>
-                        <input type="text" id="nama_lengkap" name="nama_lengkap" required>
+                        <label for="nama_lengkap">Nama Lengkap <span class="mandatory-star">*</span></label>
+                        <div class="input-wrapper">
+                            <input type="text" id="nama_lengkap" name="nama_lengkap" required maxlength="80">
+                            <span class="clear-icon">&times;</span>
+                        </div>
+                        <div class="char-counter">0 / 80</div>
                     </div>
                     <div class="form-group">
                         <label for="nama_panggilan">Nama Panggilan</label>
-                        <input type="text" id="nama_panggilan" name="nama_panggilan">
+                        <div class="input-wrapper">
+                            <input type="text" id="nama_panggilan" name="nama_panggilan" maxlength="30">
+                            <span class="clear-icon">&times;</span>
+                        </div>
+                        <div class="char-counter">0 / 30</div>
                     </div>
                      <div class="form-group">
-                        <label for="alumni">Alumni</label>
+                        <label for="alumni">Alumni <span class="mandatory-star">*</span></label>
                         <input type="text" id="alumni" name="alumni" value="Pondok Pesantren Krapyak Yogyakarta" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="angkatan">Angkatan (Tahun Masuk)</label>
+                        <label for="angkatan">Angkatan (Tahun Masuk) <span class="mandatory-star">*</span></label>
                         <select id="angkatan" name="angkatan" required>
                             <option value="" disabled selected>Pilih Tahun</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="komplek">Komplek</label>
-                        <input type="text" id="komplek" name="komplek" required maxlength="30">
+                        <label for="komplek">Komplek <span class="mandatory-star">*</span></label>
+                        <div class="input-wrapper">
+                            <input type="text" id="komplek" name="komplek" required maxlength="30">
+                             <span class="clear-icon">&times;</span>
+                        </div>
+                         <div class="char-counter">0 / 30</div>
                     </div>
                     <div class="form-group">
-                        <label for="domisili">Domisili (Kota/Kabupaten)</label>
-                        <input type="text" id="domisili" name="domisili">
+                        <label for="domisili">Domisili (Kota/Kabupaten) <span class="mandatory-star">*</span></label>
+                        <select id="domisili" name="domisili" required>
+                            <option value="" disabled selected>Memuat data...</option>
+                        </select>
                     </div>
                     <div class="form-group form-group-full">
-                        <label for="detail_alamat">Alamat Lengkap</label>
-                        <textarea id="detail_alamat" name="detail_alamat" rows="3" placeholder="Contoh: Jl. KH Ahmad Dahlan No. 21, RT 04 RW 02..."></textarea>
+                        <label for="detail_alamat">Detail Alamat</label>
+                        <div class="input-wrapper">
+                            <textarea id="detail_alamat" name="detail_alamat" rows="3" placeholder="Contoh: Jl. KH Ahmad Dahlan No. 21, RT 04 RW 02..." maxlength="300"></textarea>
+                            <span class="clear-icon">&times;</span>
+                        </div>
+                        <div class="char-counter">0 / 300</div>
                     </div>
                      <div class="form-group">
                         <label>Tampilkan Alamat di Publik?</label>
@@ -84,16 +102,12 @@
                             <span class="slider"></span>
                         </label>
                     </div>
-                </div>
-            </fieldset>
-            
-            <!-- Kontak & Profesi -->
-            <fieldset class="form-section">
-                <legend class="form-section-title">2. Kontak & Profesi</legend>
-                 <div class="form-grid">
-                    <div class="form-group">
-                        <label for="no_hp_anggota">No. HP (WhatsApp)</label>
-                        <input type="tel" id="no_hp_anggota" name="no_hp_anggota" placeholder="Contoh: 08123456789" required>
+                     <div class="form-group">
+                        <label for="no_hp_anggota">No. HP (WhatsApp) <span class="mandatory-star">*</span></label>
+                        <div class="phone-input-wrapper">
+                            <span class="phone-prefix">+62</span>
+                            <input type="tel" id="no_hp_anggota" name="no_hp_anggota" placeholder="81234567890" required pattern="[0-9]{9,13}">
+                        </div>
                     </div>
                      <div class="form-group">
                         <label>Tampilkan No. HP di Publik?</label>
@@ -104,18 +118,18 @@
                     </div>
                     <div class="form-group">
                         <label for="profesi">Profesi Utama</label>
-                         <input type="text" id="profesi" name="profesi" placeholder="Contoh: Pengusaha, Dokter, Programmer" required>
+                         <select id="profesi" name="profesi">
+                            <option value="" disabled selected>Memuat data...</option>
+                        </select>
                     </div>
                      <div class="form-group form-group-full">
                         <label for="detail_profesi">Deskripsi Detail Profesi</label>
-                        <textarea id="detail_profesi" name="detail_profesi" rows="3" placeholder="Contoh: Praktik di RSUD Sleman, menangani pasien umum & BPJS sejak 2017"></textarea>
+                        <div class="input-wrapper">
+                            <textarea id="detail_profesi" name="detail_profesi" rows="3" placeholder="Contoh: Praktik di RSUD Sleman, menangani pasien umum & BPJS sejak 2017" maxlength="300"></textarea>
+                            <span class="clear-icon">&times;</span>
+                        </div>
+                        <div class="char-counter">0 / 300</div>
                     </div>
-                </div>
-            </fieldset>
-
-            <!-- Ide & Kontribusi -->
-            <fieldset class="form-section">
-                 <legend class="form-section-title">3. Ide & Kontribusi</legend>
                  <div class="form-group ai-group">
                     <label for="pengembangan_profesi">Rencana pengembangan profesi/keahlian</label>
                     <textarea id="pengembangan_profesi" name="pengembangan_profesi" rows="4" placeholder="Contoh: Ingin memperluas layanan ke bidang edukasi kesehatan masyarakat"></textarea>
@@ -128,13 +142,17 @@
                 </div>
                  <div class="form-group">
                     <label for="lain_lain">Lain-lain</label>
-                    <textarea id="lain_lain" name="lain_lain" rows="3" placeholder="Informasi tambahan yang relevan..."></textarea>
+                     <div class="input-wrapper">
+                        <textarea id="lain_lain" name="lain_lain" rows="3" placeholder="Informasi tambahan yang relevan..."></textarea>
+                        <span class="clear-icon">&times;</span>
+                    </div>
+                </div>
                 </div>
             </fieldset>
 
             <!-- Bagian Usaha (Dinamis) -->
             <fieldset class="form-section">
-                <legend class="form-section-title">4. Informasi Usaha</legend>
+                <legend class="form-section-title">Informasi Usaha (Opsional)</legend>
                 <div id="business-list-container">
                     <!-- Blok usaha akan ditambahkan di sini oleh JS -->
                 </div>
@@ -142,6 +160,7 @@
             </fieldset>
 
             <div class="form-actions">
+                <button type="reset" class="btn btn-secondary">Reset</button>
                 <button type="submit" class="btn btn-primary">Kirim Data</button>
             </div>
         </form>
