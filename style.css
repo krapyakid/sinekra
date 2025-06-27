@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
     --primary-color: #34308b;
     --secondary-color: #5396FF;
@@ -12,7 +14,7 @@
     --card-shadow: 0 4px 8px rgba(0,0,0,0.08);
     --danger-color: #e74c3c;
     --success-color: #2ecc71;
-    --font-main: 'Poppins', sans-serif;
+    --font-main: 'Inter', sans-serif;
     --border-color: #e0e0e0;
 }
 
@@ -537,7 +539,7 @@ main.content-container {
     }
 
     .section-title {
-        font-size: 1.15rem;
+        font-size: 1.05rem;
     }
 
     .see-more-link {
@@ -951,4 +953,37 @@ input:disabled, textarea:disabled, select:disabled {
 
 .see-more-link {
     font-weight: 600;
+}
+
+/* Styling untuk Halaman Direktori Anggota */
+.direktori-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.member-list-item {
+    background-color: var(--card-bg);
+    padding: 18px 22px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.member-list-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.member-name {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.member-details {
+    font-size: 0.95rem;
+    color: var(--light-text-color);
 } 
