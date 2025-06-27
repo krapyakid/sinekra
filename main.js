@@ -11,12 +11,18 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         menuTrigger.addEventListener('click', (event) => {
-            event.stopPropagation();
-            mainNav.classList.add('active');
-            overlay.classList.add('active');
+            event.stopPropagation(); // Mencegah klik trigger ikut menutup menu
+            mainNav.classList.toggle('active');
+            overlay.classList.toggle('active');
         });
 
-        overlay.addEventListener('click', closeMenu);
+        // Event listener global untuk menutup menu jika klik di luar
+        document.addEventListener('click', (event) => {
+            // Cek apakah menu aktif dan klik terjadi di luar menu dan bukan pada pemicu
+            if (mainNav.classList.contains('active') && !mainNav.contains(event.target) && !menuTrigger.contains(event.target)) {
+                closeMenu();
+            }
+        });
     }
 
     // Mobile Search Logic
@@ -30,18 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Klik di luar untuk menutup search/menu
-    document.addEventListener('click', (event) => {
-        // Pastikan target klik bukan di dalam menu navigasi atau pemicu menu
-        if (mainNav && mainNav.classList.contains('active') && !mainNav.contains(event.target) && !menuTrigger.contains(event.target)) {
-            closeMenu();
-        }
-        // Tutup search jika klik di luar
-        if (searchSection && searchSection.classList.contains('active') && !searchSection.contains(event.target) && !mobileSearchTrigger.contains(event.target)) {
-            searchSection.classList.remove('active');
-        }
-    });
-
     // --- FUNGSI GLOBAL & DATA BERSAMA ---
     const membersSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGe6AOx8Dsnq--KPToMl0Q4lF20650_IQ6VoLQxyy3heEFW43LSTIqB0UAUeTV0QOvr8O_YnaeU-om/pub?gid=0&output=csv";
     const olshopSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGe6AOx8Dsnq--KPToMl0Q4lF20650_IQ6VoLQxyy3heEFW43LSTIqB0UAUeTV0QOvr8O_YnaeU-om/pub?gid=1048998840&output=csv";
