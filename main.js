@@ -72,7 +72,27 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // --- Logika untuk Halaman Beranda (index.html) ---
     if (document.getElementById('directory-grid')) {
+        let currentView = 'usaha'; // 'usaha' or 'anggota'
+        const gridTitle = document.getElementById('grid-title');
+        const viewToggleLink = document.getElementById('view-toggle-link');
+
+        // Panggil tampilan awal
         displayDirectory();
+
+        viewToggleLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentView === 'usaha') {
+                currentView = 'anggota';
+                gridTitle.textContent = 'Daftar Seluruh Anggota';
+                viewToggleLink.textContent = 'Lihat Daftar Usaha';
+                displayAllMembers();
+            } else {
+                currentView = 'usaha';
+                gridTitle.textContent = 'Daftar Usaha Santri';
+                viewToggleLink.textContent = 'Lihat Daftar Anggota';
+                displayDirectory();
+            }
+        });
     }
 
     // --- Logika untuk Halaman Direktori (direktori.html) ---
@@ -92,15 +112,39 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         const members = await fetchData();
+        const businessMembers = members.filter(member => member.nama_usaha && member.nama_usaha.trim() !== '');
         
-        if (members.length === 0) {
+        if (businessMembers.length === 0) {
             directoryGrid.innerHTML = '<p>Gagal memuat data usaha atau tidak ada data.</p>';
             return;
         }
 
         directoryGrid.innerHTML = '';
-        members.forEach(member => {
+        businessMembers.forEach(member => {
             directoryGrid.appendChild(createMemberCard(member));
+        });
+    }
+
+    async function displayAllMembers() {
+        const directoryGrid = document.getElementById('directory-grid');
+        if (!directoryGrid) return;
+
+        directoryGrid.innerHTML = `
+            <div class="loading-container">
+                <div class="spinner"></div>
+                <p>Memuat data anggota...</p>
+            </div>
+        `;
+
+        const members = await fetchData();
+        if (members.length === 0) {
+            directoryGrid.innerHTML = '<p>Gagal memuat data anggota atau tidak ada data.</p>';
+            return;
+        }
+
+        directoryGrid.innerHTML = '';
+        members.forEach(member => {
+            directoryGrid.appendChild(createSimpleMemberCard(member));
         });
     }
 
@@ -150,6 +194,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- FUNGSI PEMBUATAN KARTU ---
+    function createSimpleMemberCard(member) {
+        const card = document.createElement('div');
+        card.className = 'member-card'; // Re-use styling
+
+        const content = document.createElement('div');
+        content.className = 'card-content';
+
+        const name = document.createElement('h3');
+        name.className = 'card-business-name';
+        name.textContent = member.nama_lengkap || 'Nama Tidak Tersedia';
+
+        const description = document.createElement('p');
+        description.className = 'card-description';
+        const detailParts = [
+            member.detail_profesi,
+            member.domisili
+        ].filter(Boolean).join(' • ');
+        description.textContent = detailParts || 'Informasi tidak tersedia.';
+
+        content.append(name, description);
+        card.append(content);
+        return card;
+    }
+
     function createMemberCard(member) {
         // --- Create Elements ---
         const card = document.createElement('div');
