@@ -1,214 +1,172 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // --- ELEMEN DOM ---
-    const form = document.getElementById('alumni-form');
-    const angkatanSelect = document.getElementById('angkatan');
-    const addShopBtn = document.getElementById('add-shop-btn');
-    const shopsContainer = document.getElementById('online-shops-container');
+    // === ELEMEN UTAMA ===
+    const form = document.getElementById('data-form');
+    const businessListContainer = document.getElementById('business-list-container');
+    const addBusinessBtn = document.getElementById('add-business-btn');
     
-    // Modal Konfirmasi
-    const confirmationModal = document.getElementById('confirmation-modal');
-    const modalPreviewGrid = document.getElementById('modal-preview-grid');
-    const modalEditBtn = document.getElementById('modal-edit-btn');
-    const modalSubmitBtn = document.getElementById('modal-submit-btn');
+    // === TEMPLATE ===
+    const businessTemplate = document.getElementById('business-entry-template');
+    const linkTemplate = document.getElementById('link-entry-template');
 
-    // Modal Status
-    const statusModal = document.getElementById('status-modal');
-    const submissionLoading = document.getElementById('submission-loading');
-    const submissionSuccess = document.getElementById('submission-success');
-    const submissionError = document.getElementById('submission-error');
-    const errorCloseBtn = document.getElementById('error-close-btn');
-
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvH3uqGJ_cPhOi4147NpUWGVtTzwcl9rWTZns7FYBQgoOGEZEeQEb0CVOIyKubeilS/exec";
-    const DOMISILI_URL = "https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/data_domisili.csv";
-    const PROFESI_URL = "https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/data/profesi.csv";
+    // === EVENT LISTENERS ===
+    addBusinessBtn.addEventListener('click', addBusinessEntry);
+    form.addEventListener('submit', handleFormSubmit);
+    // Listener untuk tombol hapus dinamis
+    businessListContainer.addEventListener('click', handleDynamicClicks);
 
     // --- INISIALISASI ---
-    populateYearDropdown();
-    addInitialShopEntry();
-    initializeSearchableSelect('domisili-search', DOMISILI_URL);
-    initializeSearchableSelect('profesi-search', PROFESI_URL);
+    addBusinessEntry(); // Tambahkan satu blok usaha saat halaman dimuat
 
-    // --- EVENT LISTENERS ---
-    form.addEventListener('submit', handleFormSubmit);
-    form.addEventListener('reset', () => setTimeout(setupInitialFormState, 0));
-    addShopBtn.addEventListener('click', addShopEntry);
-    shopsContainer.addEventListener('click', handleShopContainerClick);
-    
-    // Modal listeners
-    modalEditBtn.addEventListener('click', () => confirmationModal.style.display = 'none');
-    modalSubmitBtn.addEventListener('click', submitForm);
-    errorCloseBtn.addEventListener('click', () => statusModal.style.display = 'none');
+    // === FUNGSI-FUNGSI ===
 
-
-    // --- FUNGSI-FUNGSI ---
-
-    function initializeSearchableSelect(inputId, dataUrl) {
-        const input = document.getElementById(inputId);
-        const container = input.parentElement;
-        const dropdown = container.querySelector('.searchable-dropdown');
-        let options = [];
-
-        async function fetchData() {
-            try {
-                const response = await fetch(dataUrl);
-                const csvText = await response.text();
-                options = csvText.split('\n').map(row => row.trim()).filter(Boolean);
-                // Mungkin ada header, jadi kita bisa hapus jika perlu, contoh:
-                if (options[0].toLowerCase() === 'domisili' || options[0].toLowerCase() === 'profesi') {
-                    options.shift();
-                }
-            } catch (error) {
-                console.error(`Gagal memuat data untuk ${inputId}:`, error);
-                dropdown.innerHTML = `<div class="dropdown-item">Gagal memuat data</div>`;
-            }
-        }
-
-        function filterAndShowDropdown(query) {
-            dropdown.innerHTML = '';
-            const filteredOptions = options.filter(opt => opt.toLowerCase().includes(query.toLowerCase()));
-            
-            if (filteredOptions.length === 0) {
-                dropdown.style.display = 'none';
-                return;
-            }
-
-            filteredOptions.slice(0, 50).forEach(opt => { // Batasi 50 untuk performa
-                const item = document.createElement('div');
-                item.className = 'dropdown-item';
-                item.textContent = opt;
-                item.addEventListener('click', () => {
-                    input.value = opt;
-                    dropdown.style.display = 'none';
-                });
-                dropdown.appendChild(item);
-            });
-            dropdown.style.display = 'block';
-        }
-        
-        input.addEventListener('focus', fetchData);
-        input.addEventListener('input', () => {
-            const query = input.value;
-            if (query.length > 1) {
-                filterAndShowDropdown(query);
-            } else {
-                dropdown.style.display = 'none';
-            }
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!container.contains(e.target)) {
-                dropdown.style.display = 'none';
-            }
-        });
+    function addBusinessEntry() {
+        const businessClone = businessTemplate.content.cloneNode(true);
+        businessListContainer.appendChild(businessClone);
     }
 
-    function populateYearDropdown() {
-        const currentYear = new Date().getFullYear();
-        for (let year = currentYear; year >= 1940; year--) {
-            angkatanSelect.add(new Option(year, year));
-        }
-    }
-
-    function addInitialShopEntry() {
-        shopsContainer.innerHTML = '';
-        addShopEntry();
-    }
-
-    function setupInitialFormState() {
-        // Hapus semua kecuali satu baris toko online
-        addInitialShopEntry();
+    function addLinkEntry(container, type) {
+        const linkClone = linkTemplate.content.cloneNode(true);
+        // Di sini kita bisa menyesuaikan 'platform' jika perlu, tapi untuk sekarang kita gabung
+        container.appendChild(linkClone);
     }
     
-    function addShopEntry() {
-        const entryCount = shopsContainer.children.length;
-        if (entryCount >= 5) return;
-
-        const div = document.createElement('div');
-        div.className = 'online-shop-entry form-grid';
-        div.innerHTML = `
-            <div class="form-group">
-                <label for="platform_${entryCount}">Platform</label>
-                <select name="platform_${entryCount}" id="platform_${entryCount}">
-                    <option value="" disabled selected>Pilih Platform</option>
-                    <option value="shopee">Shopee</option>
-                    <option value="tokopedia">Tokopedia</option>
-                    <option value="tiktok_shop">TikTok Shop</option>
-                    <option value="facebook">Facebook</option>
-                    <option value="instagram">Instagram</option>
-                    <option value="website">Website Lain</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="url_${entryCount}">URL Lengkap</label>
-                <input type="url" name="url_${entryCount}" id="url_${entryCount}" placeholder="https://...">
-            </div>
-            <div class="shop-entry-actions">
-                ${entryCount > 0 ? '<button type="button" class="remove-shop-btn">&times;</button>' : ''}
-            </div>
-        `;
-        shopsContainer.appendChild(div);
-    }
-
-    function handleShopContainerClick(e) {
-        if (e.target.classList.contains('remove-shop-btn')) {
-            e.target.closest('.online-shop-entry').remove();
+    function handleDynamicClicks(e) {
+        // Hapus blok usaha
+        if (e.target.classList.contains('remove-business-btn')) {
+            e.target.closest('.business-entry-card').remove();
+        }
+        // Tambah entri toko
+        if (e.target.classList.contains('add-shop-btn')) {
+            const shopContainer = e.target.previousElementSibling;
+            addLinkEntry(shopContainer, 'shop');
+        }
+        // Tambah entri sosmed
+        if (e.target.classList.contains('add-social-btn')) {
+            const socialContainer = e.target.previousElementSibling;
+            addLinkEntry(socialContainer, 'social');
+        }
+        // Hapus entri link (toko atau sosmed)
+        if (e.target.classList.contains('remove-link-btn')) {
+            e.target.closest('.link-entry').remove();
         }
     }
 
-    async function handleFormSubmit(e) {
+    function handleFormSubmit(e) {
         e.preventDefault();
+        
+        // Validasi form dasar
         if (!form.checkValidity()) {
             form.reportValidity();
+            alert('Harap isi semua kolom yang wajib diisi (ditandai dengan required).');
             return;
         }
 
-        const formData = new FormData(form);
-        modalPreviewGrid.innerHTML = ''; // Kosongkan preview
-        
-        for (let [key, value] of formData.entries()) {
-            const fieldName = form.querySelector(`[name="${key}"]`);
-            const label = fieldName ? fieldName.closest('.form-group').querySelector('label').textContent : key;
-            if (value) {
-                modalPreviewGrid.innerHTML += `
-                    <div class="preview-item">
-                        <span class="preview-label">${label}</span>
-                        <span class="preview-value">${value}</span>
-                    </div>
-                `;
-            }
-        }
-        confirmationModal.style.display = 'flex';
-    }
+        // Membangun objek data dari form
+        const data = {
+            anggota: {},
+            usaha: []
+        };
 
-    async function submitForm() {
-        confirmationModal.style.display = 'none';
-        statusModal.style.display = 'flex';
-        submissionLoading.style.display = 'flex';
-        submissionSuccess.style.display = 'none';
-        submissionError.style.display = 'none';
+        // 1. Kumpulkan data anggota
+        data.anggota = {
+            id_anggota: 'ANG-' + Date.now() + Math.random().toString(36).substr(2, 5), // Generate Unique ID
+            nama_lengkap: form.querySelector('#nama_lengkap').value,
+            nama_panggilan: form.querySelector('#nama_panggilan').value,
+            no_hp_anggota: form.querySelector('#no_hp_anggota').value,
+            domisili: form.querySelector('#domisili').value,
+            detail_alamat: form.querySelector('#detail_alamat').value,
+            // Tambahkan field lain dari sheet anggota jika ada di form
+        };
 
-        try {
-            const formData = new FormData(form);
-            // Tambah data ekstra
-            formData.append('ip_by', 'N/A'); // IP tracking bisa lebih kompleks
-            formData.append('device', navigator.userAgent);
-            
-            const response = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: formData
+        // 2. Kumpulkan data dari setiap blok usaha
+        const businessEntries = businessListContainer.querySelectorAll('.business-entry-card');
+        businessEntries.forEach(card => {
+            const businessId = 'USH-' + Date.now() + Math.random().toString(36).substr(2, 5); // Generate Unique ID
+            const businessData = {
+                id_usaha: businessId,
+                id_anggota: data.anggota.id_anggota, // Tautkan ke ID Anggota
+                nama_usaha: card.querySelector('[name="nama_usaha"]').value,
+                kategori_usaha: card.querySelector('[name="kategori_usaha"]').value,
+                jenis_usaha: card.querySelector('[name="jenis_usaha"]').value,
+                detail_usaha: card.querySelector('[name="detail_usaha"]').value,
+                url_gmaps_perusahaan: card.querySelector('[name="url_gmaps_perusahaan"]').value,
+                is_active: 1, // Default ke 1 (Aktif)
+                olshop: [],
+                sosmed: []
+            };
+
+            // 2a. Kumpulkan data toko online untuk usaha ini
+            card.querySelector('.shop-list-container').querySelectorAll('.link-entry').forEach(link => {
+                const platform = link.querySelector('[name="platform"]').value;
+                const url = link.querySelector('[name="url"]').value;
+                if (platform && url) {
+                    businessData.olshop.push({
+                        id_olshop: 'OLS-' + Date.now() + Math.random().toString(36).substr(2, 5),
+                        id_usaha: businessId,
+                        id_anggota: data.anggota.id_anggota,
+                        platform_olshop: platform,
+                        url_olshop: url
+                    });
+                }
             });
 
-            if (response.ok) {
-                submissionLoading.style.display = 'none';
-                submissionSuccess.style.display = 'flex';
+            // 2b. Kumpulkan data media sosial untuk usaha ini
+            card.querySelector('.social-list-container').querySelectorAll('.link-entry').forEach(link => {
+                const platform = link.querySelector('[name="platform"]').value;
+                const url = link.querySelector('[name="url"]').value;
+                if (platform && url) {
+                    businessData.sosmed.push({
+                        id_sosmed: 'SOS-' + Date.now() + Math.random().toString(36).substr(2, 5),
+                        id_usaha: businessId,
+                        id_anggota: data.anggota.id_anggota,
+                        platform_sosmed: platform,
+                        url_sosmed: url
+                    });
+                }
+            });
+
+            data.usaha.push(businessData);
+        });
+
+        console.log("Data yang akan dikirim:", JSON.stringify(data, null, 2));
+        alert("Data telah disiapkan! Cek console log (F12) untuk melihat struktur JSON. Langkah selanjutnya adalah mengirim data ini.");
+
+        // Di sinilah kita akan memanggil fungsi untuk mengirim data ke Google Apps Script
+        // sendDataToGoogleScript(data);
+    }
+
+    /*
+    async function sendDataToGoogleScript(data) {
+        const SCRIPT_URL = "URL_GOOGLE_SCRIPT_ANDA"; // Ganti dengan URL Anda nanti
+
+        // Tampilkan loading spinner
+        console.log("Mengirim data...");
+        
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8', // Apps Script seringkali lebih mudah dengan text/plain
+                },
+                body: JSON.stringify(data) // Kirim data sebagai string JSON
+            });
+
+            const result = await response.json();
+
+            if (result.status === "success") {
+                console.log("Pengiriman berhasil!", result.message);
+                alert("Data berhasil dikirim!");
                 form.reset();
             } else {
-                throw new Error('Server response was not OK.');
+                throw new Error(result.message || "Terjadi kesalahan yang tidak diketahui.");
             }
         } catch (error) {
-            console.error('Submission error:', error);
-            submissionLoading.style.display = 'none';
-            submissionError.style.display = 'flex';
+            console.error('Gagal mengirim data:', error);
+            alert(`Gagal mengirim data: ${error.message}`);
+        } finally {
+            // Sembunyikan loading spinner
         }
     }
+    */
 }); 
