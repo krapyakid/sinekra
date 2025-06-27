@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulir Data Anggota - Sinergi Ekonomi Krapyak</title>
+    <title>Formulir Pendataan Anggota & Usaha Sinergi Ekonomi Krapyak</title>
     <link rel="icon" href="assets/logo_sinergi_krapyak.jpg" type="image/jpeg">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -36,115 +36,134 @@
         </div>
     </header>
 
-    <div class="container">
-        <div class="form-container">
+    <main class="container">
+        <form id="data-form" class="form-container">
             <div class="form-header">
-                <h1>Formulir Data Anggota</h1>
-                <p>Lengkapi data Anda dan jadilah bagian dari jaringan ekonomi alumni Krapyak</p>
+                <h1>Formulir Pendataan Anggota & Usaha</h1>
+                <p>Silakan isi data diri dan usaha Anda selengkap mungkin.</p>
+            </div>
+
+            <!-- Bagian Data Anggota -->
+            <fieldset class="form-section">
+                <legend class="form-section-title">1. Informasi Pribadi Anggota</legend>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="nama_lengkap">Nama Lengkap</label>
+                        <input type="text" id="nama_lengkap" name="nama_lengkap" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nama_panggilan">Nama Panggilan</label>
+                        <input type="text" id="nama_panggilan" name="nama_panggilan">
+                    </div>
+                    <div class="form-group">
+                        <label for="no_hp_anggota">No. HP (WhatsApp)</label>
+                        <input type="tel" id="no_hp_anggota" name="no_hp_anggota" placeholder="Contoh: 628123456789">
+                    </div>
+                    <div class="form-group">
+                        <label for="domisili">Domisili</label>
+                        <input type="text" id="domisili" name="domisili">
+                    </div>
+                    <div class="form-group form-group-full">
+                        <label for="detail_alamat">Alamat Lengkap</label>
+                        <textarea id="detail_alamat" name="detail_alamat" rows="3"></textarea>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Bagian Usaha (Dinamis) -->
+            <fieldset class="form-section">
+                <legend class="form-section-title">2. Informasi Usaha</legend>
+                <div id="business-list-container">
+                    <!-- Blok usaha akan ditambahkan di sini oleh JS -->
+                </div>
+                <button type="button" id="add-business-btn" class="add-btn"><i class="fas fa-plus-circle"></i> Tambah Usaha</button>
+            </fieldset>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Kirim Data</button>
+            </div>
+        </form>
+    </main>
+
+    <!-- TEMPLATE UNTUK BLOK USAHA -->
+    <template id="business-entry-template">
+        <div class="business-entry-card">
+            <button type="button" class="remove-btn remove-business-btn" aria-label="Hapus Usaha">&times;</button>
+            <div class="form-grid">
+                <div class="form-group form-group-full">
+                    <label>Nama Usaha</label>
+                    <input type="text" name="nama_usaha" required>
+                </div>
+                <div class="form-group">
+                    <label>Kategori Usaha</label>
+                    <input type="text" name="kategori_usaha">
+                </div>
+                <div class="form-group">
+                    <label>Jenis Usaha</label>
+                    <input type="text" name="jenis_usaha">
+                </div>
+                <div class="form-group form-group-full">
+                    <label>Detail/Deskripsi Usaha</label>
+                    <textarea name="detail_usaha" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>URL Google Maps</label>
+                    <input type="url" name="url_gmaps_perusahaan" placeholder="https://maps.app.goo.gl/...">
+                </div>
             </div>
             
-            <form id="alumni-form" novalidate>
-                
-                <div class="form-section">
-                    <h2>Informasi Pribadi</h2>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="nama-lengkap">Nama Lengkap</label>
-                            <input type="text" id="nama-lengkap" name="nama_lengkap" required maxlength="80">
-                        </div>
-                        <div class="form-group">
-                            <label for="panggilan">Nama Panggilan</label>
-                            <input type="text" id="panggilan" name="nama_panggilan" required maxlength="30">
-                        </div>
-                        <div class="form-group">
-                            <label for="alumni">Alumni</label>
-                            <input type="text" id="alumni" name="alumni" value="Pondok Pesantren Krapyak YOGYAKARTA" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="angkatan">Angkatan Tahun</label>
-                            <select id="angkatan" name="angkatan" required>
-                                <option value="" disabled selected>Pilih Tahun</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="komplek">Komplek</label>
-                            <input type="text" id="komplek" name="komplek" required maxlength="30">
-                        </div>
-                        <div class="form-group">
-                            <label for="domisili-search">Domisili Saat Ini</label>
-                            <div class="searchable-select">
-                                <input type="text" id="domisili-search" class="searchable-input" name="domisili" placeholder="Cari kota/kabupaten..." required autocomplete="off">
-                                <div class="searchable-dropdown"></div>
-                            </div>
-                        </div>
-                        <div class="form-group form-group-full">
-                            <label for="detail-alamat">Detail Alamat</label>
-                            <textarea id="detail-alamat" name="detail_alamat" maxlength="300" rows="3" placeholder="Nama jalan, nomor rumah, kelurahan, kecamatan, atau ancer-ancer..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="no-hp">No. HP/WA</label>
-                            <input type="tel" id="no-hp" name="no_hp_wa" required placeholder="+6281234...">
-                        </div>
-                    </div>
+            <!-- Sub-section untuk Toko Online -->
+            <div class="sub-section">
+                <h4 class="sub-section-title">Toko Online (Marketplace)</h4>
+                <div class="shop-list-container">
+                    <!-- Isian toko online akan ditambahkan di sini -->
                 </div>
+                <button type="button" class="add-btn add-shop-btn"><i class="fas fa-plus"></i> Tambah Toko</button>
+            </div>
 
-                <div class="form-section">
-                    <h2>Informasi Profesional</h2>
-                    <div class="form-grid">
-                         <div class="form-group form-group-full">
-                            <label for="profesi-search">Profesi/Aktivitas Saat Ini</label>
-                            <div class="searchable-select">
-                                <input type="text" id="profesi-search" class="searchable-input" name="profesi" placeholder="Contoh: Pengusaha, Karyawan, Mahasiswa..." required autocomplete="off">
-                                <div class="searchable-dropdown"></div>
-                            </div>
-                        </div>
-                        <div class="form-group form-group-full">
-                            <label for="penjelasan-usaha">Deskripsi Detail Profesi/Usaha</label>
-                            <textarea id="penjelasan-usaha" name="penjelasan_usaha" maxlength="300" rows="3"></textarea>
-                        </div>
-                        <div class="form-group form-group-full">
-                            <label for="prospek">Prospek & Peluang Kerjasama</label>
-                            <textarea id="prospek" name="prospek" maxlength="150" rows="3" placeholder="Contoh: Mencari reseller, butuh mitra distribusi, dll."></textarea>
-                        </div>
-                    </div>
+            <!-- Sub-section untuk Media Sosial -->
+            <div class="sub-section">
+                <h4 class="sub-section-title">Media Sosial</h4>
+                <div class="social-list-container">
+                    <!-- Isian media sosial akan ditambahkan di sini -->
                 </div>
-
-                <div class="form-section">
-                    <h2>Informasi Usaha (Opsional)</h2>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="nama-usaha">Nama Toko/Usaha</label>
-                            <input type="text" id="nama-usaha" name="nama_usaha" maxlength="80">
-                        </div>
-                        <div class="form-group">
-                            <label for="url-gmaps">URL Google Maps</label>
-                            <input type="url" id="url-gmaps" name="url_gmaps" placeholder="https://maps.app.goo.gl/...">
-                        </div>
-                         <div class="form-group form-group-full">
-                            <label for="website-usaha">Website/Portofolio</label>
-                            <input type="url" id="website-usaha" name="website_url" placeholder="https://usaha-anda.com">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h2>Toko Online & Media Sosial (Opsional)</h2>
-                    <div id="online-shops-container">
-                        <!-- Input dinamis untuk toko online -->
-                    </div>
-                    <button type="button" id="add-shop-btn" class="add-btn">
-                        <i class="fas fa-plus"></i> Tambah Link
-                    </button>
-                </div>
-
-                <div class="form-actions">
-                    <button type="reset" class="btn btn-secondary">Reset</button>
-                    <button type="submit" class="btn btn-primary">Kirim Data</button>
-                </div>
-            </form>
+                <button type="button" class="add-btn add-social-btn"><i class="fas fa-plus"></i> Tambah Sosmed</button>
+            </div>
         </div>
-    </div>
+    </template>
 
+    <!-- TEMPLATE UNTUK ISIAN TOKO ONLINE/SOSMED -->
+    <template id="link-entry-template">
+        <div class="link-entry">
+            <div class="form-group">
+                <label>Platform</label>
+                <select name="platform">
+                    <option value="">Pilih Platform</option>
+                    <optgroup label="Toko Online">
+                        <option value="Shopee">Shopee</option>
+                        <option value="Tokopedia">Tokopedia</option>
+                        <option value="Lazada">Lazada</option>
+                        <option value="TikTok Shop">TikTok Shop</option>
+                        <option value="Blibli">Blibli</option>
+                    </optgroup>
+                    <optgroup label="Media Sosial">
+                        <option value="Instagram">Instagram</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="TikTok">TikTok</option>
+                        <option value="Website">Website</option>
+                        <option value="YouTube">YouTube</option>
+                    </optgroup>
+                    <option value="Lainnya">Lainnya</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>URL</label>
+                <input type="url" name="url" placeholder="https://..." required>
+            </div>
+            <button type="button" class="remove-btn remove-link-btn" aria-label="Hapus">&times;</button>
+        </div>
+    </template>
+    
     <!-- Modal Konfirmasi -->
     <div id="confirmation-modal" class="modal-overlay" style="display:none;">
         <div class="modal-content">
