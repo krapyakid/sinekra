@@ -566,22 +566,20 @@ main.content-container {
     font-size: 1.1rem;
 }
 
-.form-section {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    padding: 2rem 2.5rem;
-    border-radius: 12px;
+fieldset.form-section {
+    border: none;
+    padding: 2rem;
+    border-radius: 8px;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    background-color: var(--background-light);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .form-section-title {
     font-size: 1.5rem;
     color: var(--primary-color);
     margin-bottom: 1.5rem;
-    border-bottom: 2px solid var(--accent-color);
-    padding-bottom: 0.5rem;
-    width: 100%;
+    margin-top: 4px;
 }
 
 .form-grid {
@@ -1169,4 +1167,8 @@ input:checked + .slider:before {
 
 .form-group-full {
     grid-column: 1 / -1;
+}
+
+.ai-group .char-counter {
+    padding-right: 45px;
 } 
