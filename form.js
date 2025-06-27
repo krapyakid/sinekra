@@ -25,12 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', handleAiButtonClick);
     });
 
-    // --- INISIALISASI ---
-    addBusinessEntry(); // Tambahkan satu blok usaha saat halaman dimuat
-    populateAngkatan();
-    populateDropdownFromCSV(domisiliSelect, DOMISILI_URL, 'Pilih Domisili');
-    populateDropdownFromCSV(profesiSelect, PROFESI_URL, 'Pilih Profesi');
-    initFormInteractions(); // Untuk clear icon dan char counter
+    // === VARIABEL ===
+    let domisiliChoice, profesiChoice;
 
     // === FUNGSI-FUNGSI ===
 
@@ -55,20 +51,23 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.text();
             const items = data.split('\n').filter(Boolean).map(item => item.trim());
 
-            selectElement.innerHTML = `<option value="" disabled selected>${placeholder}</option>`; // Reset
-            
-            items.forEach(item => {
-                if (item) { // Pastikan tidak ada string kosong
-                    const option = document.createElement('option');
-                    option.value = item;
-                    option.textContent = item;
-                    selectElement.appendChild(option);
-                }
-            });
+            // Menggunakan API dari Choices.js untuk set pilihan
+            if (selectElement.choices) {
+                 selectElement.choices.clearStore();
+                 selectElement.choices.setChoices(
+                    items.map(item => ({ value: item, label: item })),
+                    'value',
+                    'label',
+                    true
+                );
+            }
 
         } catch (error) {
             console.error(`Error populating dropdown for ${selectElement.id}:`, error);
-            selectElement.innerHTML = `<option value="" disabled selected>Gagal memuat data</option>`;
+            if (selectElement.choices) {
+                 selectElement.choices.clearStore();
+                 selectElement.choices.setChoices([{ value: '', label: 'Gagal memuat data', disabled: true }]);
+            }
         }
     }
 
@@ -245,4 +244,32 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     */
+
+    // --- Panggil Fungsi Inisialisasi ---
+    populateAngkatan();
+    
+    // Inisialisasi Choices.js pada elemen select
+    domisiliChoice = new Choices(domisiliSelect, {
+        searchEnabled: true,
+        placeholder: true,
+        placeholderValue: 'Pilih Domisili',
+        searchPlaceholderValue: 'Ketik untuk mencari...',
+        itemSelectText: 'Tekan untuk memilih',
+    });
+    profesiChoice = new Choices(profesiSelect, {
+        searchEnabled: true,
+        placeholder: true,
+        placeholderValue: 'Pilih Profesi',
+        searchPlaceholderValue: 'Ketik untuk mencari...',
+        itemSelectText: 'Tekan untuk memilih',
+    });
+
+    // Kaitkan elemen select dengan instance Choices agar bisa diakses di fungsi lain
+    domisiliSelect.choices = domisiliChoice;
+    profesiSelect.choices = profesiChoice;
+
+    populateDropdownFromCSV(domisiliSelect, DOMISILI_URL);
+    populateDropdownFromCSV(profesiSelect, PROFESI_URL);
+    
+    initFormInteractions();
 }); 
