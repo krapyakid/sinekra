@@ -1104,11 +1104,10 @@ input:checked + .slider:before {
 
 .phone-input-wrapper {
     display: flex;
-    align-items: center;
     border: 1px solid #ccc;
     border-radius: 4px;
-    padding: 0;
     background-color: #fff;
+    overflow: hidden; /* Penting untuk clipping border-radius */
 }
 
 .phone-input-wrapper:focus-within {
@@ -1117,22 +1116,55 @@ input:checked + .slider:before {
 }
 
 .phone-prefix {
-    padding: 0 12px;
-    background-color: #eee;
-    color: #333;
+    padding: 12px;
+    background-color: #f0f0f0;
+    color: #555;
     border-right: 1px solid #ccc;
-    height: 100%;
     display: flex;
     align-items: center;
-    align-self: stretch;
 }
 
 .phone-input-wrapper input[type="tel"] {
     border: none;
     flex-grow: 1;
-    padding: 10px;
+    padding: 12px;
     box-shadow: none;
     outline: none;
+    background: transparent;
+}
+
+.field-privacy-switch {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    gap: 8px;
+}
+
+.switch-label {
+    font-size: 0.85rem;
+    color: #555;
+    cursor: pointer;
+}
+
+/* Mengecilkan ukuran switch */
+.field-privacy-switch .switch {
+  width: 38px;
+  height: 20px;
+}
+
+.field-privacy-switch .switch input:checked + .slider {
+  background-color: var(--primary-color);
+}
+
+.field-privacy-switch .slider:before {
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+}
+
+.field-privacy-switch .switch input:checked + .slider:before {
+  transform: translateX(18px);
 }
 
 .form-group-full {
