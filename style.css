@@ -212,10 +212,10 @@ main.content-container {
         font-size: 1.5rem;
     }
     .section-title {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
     }
     .see-more-link {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
 }
 
@@ -532,11 +532,15 @@ main.content-container {
     }
 
     .hero-content .quote {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
     }
 
     .section-title {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
+    }
+
+    .see-more-link {
+        font-size: 0.85rem;
     }
 
     .directory-grid-container {
@@ -596,7 +600,7 @@ main.content-container {
     }
 
     .section-title {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
     }
 }
 
