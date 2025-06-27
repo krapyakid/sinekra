@@ -1136,7 +1136,7 @@ input:checked + .slider:before {
 .field-privacy-switch {
     display: flex;
     align-items: center;
-    margin-top: 8px;
+    margin-top: 6px;
     gap: 8px;
 }
 
