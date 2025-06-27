@@ -75,6 +75,11 @@ document.addEventListener('DOMContentLoaded', function() {
         displayDirectory();
     }
 
+    // --- Logika untuk Halaman Direktori (direktori.html) ---
+    if (document.getElementById('direktori-list-container')) {
+        displayMemberList();
+    }
+
     async function displayDirectory() {
         const directoryGrid = document.getElementById('directory-grid');
         if (!directoryGrid) return;
@@ -97,6 +102,51 @@ document.addEventListener('DOMContentLoaded', function() {
         members.forEach(member => {
             directoryGrid.appendChild(createMemberCard(member));
         });
+    }
+
+    async function displayMemberList() {
+        const listContainer = document.getElementById('direktori-list-container');
+        if (!listContainer) return;
+
+        listContainer.innerHTML = `
+            <div class="loading-container">
+                <div class="spinner"></div>
+                <p>Memuat data anggota...</p>
+            </div>`;
+
+        const members = await fetchData();
+        
+        if (members.length === 0) {
+            listContainer.innerHTML = '<p>Gagal memuat data atau tidak ada anggota.</p>';
+            return;
+        }
+
+        listContainer.innerHTML = '';
+        members.forEach(member => {
+            listContainer.appendChild(createMemberListItem(member));
+        });
+    }
+
+    // --- FUNGSI PEMBUATAN ITEM LIST ANGGOTA ---
+    function createMemberListItem(member) {
+        const item = document.createElement('div');
+        item.className = 'member-list-item';
+
+        const name = document.createElement('h3');
+        name.className = 'member-name';
+        name.textContent = member.nama_lengkap || 'Nama Tidak Tersedia';
+
+        const details = document.createElement('p');
+        details.className = 'member-details';
+        const detailParts = [
+            member.nama_panggilan ? `(${member.nama_panggilan})` : '',
+            member.detail_profesi,
+            member.domisili
+        ].filter(Boolean).join(' • '); // Menyaring nilai kosong
+        details.textContent = detailParts || 'Informasi tidak tersedia';
+
+        item.append(name, details);
+        return item;
     }
 
     // --- FUNGSI PEMBUATAN KARTU ---
