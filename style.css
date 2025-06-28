@@ -221,16 +221,12 @@ main.content-container {
     width: 100%;
 }
 
-.filter-wrapper {
-    display: flex;
-    gap: 15px;
-    flex-grow: 0;
-    flex-basis: 300px;
-    justify-content: flex-end;
+.search-and-filter-container .filter-select {
+    flex-basis: 180px; /* Beri basis lebar agar rapi saat wrap */
 }
 
 .search-bar-wrapper input,
-.filter-wrapper .filter-select {
+.search-and-filter-container .filter-select {
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 12px 15px;
@@ -242,7 +238,7 @@ main.content-container {
 }
 
 .search-bar-wrapper input:focus,
-.filter-wrapper .filter-select:focus {
+.search-and-filter-container .filter-select:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(52, 48, 139, 0.1);
@@ -262,9 +258,8 @@ main.content-container {
         justify-content: center;
     }
 
-    .filter-wrapper {
-        justify-content: center;
-        width: 100%;
+    .search-and-filter-container .filter-select {
+        width: 100%; /* Buat filter mengisi lebar di mobile */
     }
 
     .search-bar-wrapper {
@@ -289,11 +284,6 @@ main.content-container {
         flex-direction: column;
         gap: 12px;
         padding: 16px;
-    }
-    .filter-wrapper {
-        flex-direction: column;
-        gap: 12px;
-        justify-content: flex-start;
     }
     .hero-content .quote {
         font-size: 1.5rem;
