@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +6,7 @@
     <title>Detail Anggota - Sinergi Ekonomi Krapyak</title>
     <link rel="icon" href="assets/logo_sinergi_krapyak.jpg" type="image/jpeg">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Gaya spesifik untuk halaman detail */
         .detail-container {
@@ -119,63 +119,41 @@
             <a href="index.html" class="logo-link">
                 <img src="assets/logo_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="logo">
             </a>
-            <nav class="main-nav" id="main-nav">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="form.html" class="nav-link">Isi Formulir</a>
-            </nav>
-            <div class="mobile-menu-trigger" id="mobile-menu-trigger">
-                <img src="assets/menu_kebab.svg" alt="Menu">
+            <div class="header-right">
+                <nav class="main-nav" id="main-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="form.html" class="nav-link">Isi Form</a>
+                    <a href="statistik.html" class="nav-link">Statistik</a>
+                    <a href="tentang.html" class="nav-link">Tentang</a>
+                </nav>
+                <div class="header-actions">
+                    <button class="mobile-search-trigger" id="mobile-search-trigger" style="display: none !important;"></button>
+                    <div class="mobile-menu-trigger" id="burger-menu-trigger">
+                        <img src="assets/menu_kebab.svg" alt="Menu">
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
-    <main class="container">
+    <div class="container">
+        <!-- Elemen loading dan error dipisahkan dari kontainer konten -->
         <div id="detail-loading" class="directory-status">
             <div class="spinner"></div>
-            <p>Memuat data profil...</p>
+            <p>Memuat data anggota...</p>
         </div>
-
-        <div id="detail-content" class="detail-container" style="display: none;">
-            <!-- Kolom Kiri: Galeri Gambar -->
-            <div class="product-gallery">
-                <div id="detail-image" class="main-image">
-                    <!-- Gambar atau Inisial akan diisi oleh JS -->
-                </div>
-            </div>
-
-            <!-- Kolom Kanan: Detail Produk -->
-            <div class="product-details">
-                <h1 id="detail-title" class="detail-title">Nama Usaha/Produk</h1>
-                <p class="detail-owner">Oleh: <span id="detail-owner-name">Nama Pemilik</span></p>
-
-                <div class="contact-buttons" id="contact-buttons">
-                    <!-- Tombol kontak (WA, GMaps, dll) akan diisi oleh JS -->
-                </div>
-
-                <div class="detail-section">
-                    <h3>Deskripsi</h3>
-                    <p id="detail-description" class="detail-description">Deskripsi lengkap mengenai usaha atau profesi akan muncul di sini.</p>
-                </div>
-
-                 <div class="detail-section">
-                    <h3>Prospek & Kerjasama</h3>
-                    <p id="detail-prospect" class="detail-description">Informasi mengenai prospek atau kerjasama yang ditawarkan.</p>
-                </div>
-
-                <div class="detail-section">
-                    <h3>Info Kontak & Lokasi</h3>
-                    <p><strong>Domisili:</strong> <span id="detail-domicile"></span></p>
-                    <p><strong>Angkatan:</strong> <span id="detail-angkatan"></span></p>
-                    <p><strong>Komplek:</strong> <span id="detail-komplek"></span></p>
-                </div>
-            </div>
-        </div>
-        
         <div id="detail-error" class="directory-status" style="display: none;">
-             <p>Gagal memuat profil. Anggota tidak ditemukan atau terjadi kesalahan.</p>
+            <p>Gagal memuat data atau anggota tidak ditemukan.</p>
+            <a href="index.html" class="btn btn-primary">Kembali ke Direktori</a>
         </div>
-    </main>
 
+        <!-- Konten akan diisi di sini oleh JS -->
+        <main id="detail-content" class="detail-container" style="display: none;">
+            <!-- Content will be injected by detail.js -->
+        </main>
+    </div>
+
+    <!-- main.js untuk fungsionalitas menu, detail.js untuk konten halaman -->
     <script src="main.js"></script>
     <script src="detail.js"></script>
 </body>
