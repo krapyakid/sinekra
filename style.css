@@ -322,6 +322,7 @@ main.content-container {
     .main-nav.active {
         transform: translateX(0);
         z-index: 1050;
+        position: fixed;
     }
 
     .main-nav .nav-link {
