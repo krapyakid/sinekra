@@ -66,6 +66,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        // Tampilkan kontainer konten
+        detailContent.style.display = 'grid';
+
         const placeholderDiv = `<div class="main-image-placeholder">${(member.nama_usaha || member.nama_lengkap || 'A').charAt(0)}</div>`;
 
         // Kontak dan Tombol Aksi
@@ -143,6 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showError(message = "Gagal memuat data atau anggota tidak ditemukan.") {
         if(loadingIndicator) loadingIndicator.style.display = 'none';
+        if(detailContent) detailContent.style.display = 'none'; // Pastikan konten disembunyikan
         if(errorMessage) {
             errorMessage.style.display = 'flex'; // Gunakan flex agar bisa center align
             const p = errorMessage.querySelector('p');
