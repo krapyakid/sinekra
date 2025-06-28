@@ -245,12 +245,14 @@ main.content-container {
 .search-bar-wrapper .search-icon {
     position: absolute;
     right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
     color: #999;
     pointer-events: none;
-    height: 48px;
-    line-height: 48px;
 }
 
 @media (max-width: 992px) {
@@ -265,8 +267,8 @@ main.content-container {
 
     .search-bar-wrapper {
         width: 100%;
-        height: auto;
-        min-height: 48px;
+        height: 48px;
+        min-height: unset;
     }
 }
 
