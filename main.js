@@ -11,20 +11,17 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         menuTrigger.addEventListener('click', (event) => {
-            event.stopPropagation(); // Mencegah klik trigger ikut menutup menu
+            event.stopPropagation();
             mainNav.classList.toggle('active');
             overlay.classList.toggle('active');
         });
 
-        // Event listener global untuk menutup menu jika klik di luar
-        document.addEventListener('click', (event) => {
-            // Cek apakah menu aktif dan klik terjadi di luar menu dan bukan pada pemicu
-            if (mainNav.classList.contains('active') && !mainNav.contains(event.target) && !menuTrigger.contains(event.target)) {
-                closeMenu();
-            }
-        });
+        // Event listener untuk tombol close 'X' di dalam menu
+        const closeBtn = document.getElementById('nav-close-btn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeMenu);
+        }
 
-        // BUGFIX: Tutup menu saat link di menu mobile diklik
         mainNav.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', function() {
                 closeMenu();
