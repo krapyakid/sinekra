@@ -321,7 +321,7 @@ main.content-container {
 
     .main-nav.active {
         transform: translateX(0);
-        z-index: 1050;
+        z-index: 1050 !important;
         position: fixed;
     }
 
