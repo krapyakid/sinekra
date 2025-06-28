@@ -287,12 +287,12 @@ main.content-container {
     }
     .search-and-filter-container {
         flex-direction: column;
-        gap: 16px;
+        gap: 12px;
         padding: 16px;
     }
     .filter-wrapper {
         flex-direction: column;
-        gap: 16px;
+        gap: 12px;
         justify-content: flex-start;
     }
     .hero-content .quote {
