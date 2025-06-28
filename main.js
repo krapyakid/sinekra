@@ -23,6 +23,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 closeMenu();
             }
         });
+
+        // BUGFIX: Tutup menu saat link di menu mobile diklik
+        mainNav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function() {
+                closeMenu();
+            });
+        });
     }
 
     // Mobile Search Logic (REMOVED as it's now always visible)
