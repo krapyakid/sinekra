@@ -188,6 +188,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function createSimpleMemberCard(member) {
         const card = document.createElement('div');
         card.className = 'member-card'; // Re-use styling
+        card.style.cursor = 'pointer'; // Menambahkan kursor pointer
+        card.addEventListener('click', () => {
+            if (member.id_anggota) {
+                window.location.href = `detail.html?id=${member.id_anggota}`;
+            }
+        });
 
         const content = document.createElement('div');
         content.className = 'card-content';
@@ -213,6 +219,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // --- Create Elements ---
         const card = document.createElement('div');
         card.className = 'member-card';
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', (e) => {
+            // Jangan navigasi jika yang diklik adalah link (seperti gmaps atau no wa)
+            if (e.target.closest('a')) return;
+            
+            if (member.id_anggota) {
+                window.location.href = `detail.html?id=${member.id_anggota}`;
+            }
+        });
 
         const banner = document.createElement('div');
         banner.className = 'card-banner';
@@ -245,6 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (gmapsUrl) {
             locationTag.href = gmapsUrl;
             locationTag.target = '_blank';
+            locationTag.addEventListener('click', (e) => e.stopPropagation()); // Hentikan event bubbling
         }
         locationTag.className = 'location-tag';
         locationTag.innerHTML = `<i class="fas fa-map-marker-alt"></i><span>${lokasiText}</span>`;
