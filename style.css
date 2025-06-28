@@ -210,7 +210,7 @@ main.content-container {
 
 .search-bar-wrapper {
     position: relative;
-    flex-grow: 0;
+    flex-grow: 1;
     min-width: 250px;
     flex-basis: 300px;
     display: flex;
