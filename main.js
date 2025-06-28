@@ -23,9 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         mainNav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', function() {
-                closeMenu();
-            });
+            link.addEventListener('click', closeMenu);
         });
     }
 
