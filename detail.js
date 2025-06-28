@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        console.log(`Mencari anggota dengan ID: ${memberId}`); // Log untuk debugging
+
         try {
             // Tampilkan loading saat mulai fetch
             if(loadingIndicator) loadingIndicator.style.display = 'flex';
@@ -36,11 +38,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const olshopCsv = await olshopResponse.text();
             const allMembers = mergeData(parseCsv(membersCsv), parseCsv(olshopCsv));
             
+            console.log("Total anggota setelah merge:", allMembers.length); // Log untuk debugging
+
             const member = allMembers.find(m => m.id_anggota === memberId);
 
             if (member) {
+                console.log("Anggota ditemukan:", member); // Log untuk debugging
                 displayMember(member);
             } else {
+                console.error(`Anggota dengan ID "${memberId}" tidak ditemukan dalam data.`); // Log error
                 showError(`Anggota dengan ID "${memberId}" tidak ditemukan.`);
             }
 
@@ -152,13 +158,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (lines.length < 2) return [];
         const headers = lines[0].split(',').map(h => h.trim());
         return lines.slice(1).map(line => {
-            const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+            // Regex yang lebih andal untuk menangani koma di dalam field yang dikutip
+            const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
             const entry = {};
             headers.forEach((header, i) => {
                 let value = values[i] || '';
+                // Membersihkan tanda kutip di awal dan akhir jika ada
                 if (value.startsWith('"') && value.endsWith('"')) {
                     value = value.slice(1, -1);
                 }
+                // Mengganti tanda kutip ganda (escape) dengan satu tanda kutip
                 entry[header] = value.replace(/""/g, '"').trim();
             });
             if (!entry.id_anggota) {
