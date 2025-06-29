@@ -46,75 +46,85 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error("Elemen 'detail-content' tidak ditemukan.");
             return;
         }
-        detailContent.style.display = 'block'; // Menggunakan block, bukan grid
+        detailContent.innerHTML = ''; // Kosongkan konten sebelumnya
+        detailContent.style.display = 'block';
 
-        // --- Data Utama Anggota ---
-        const memberInfoHtml = `
-            <div class="detail-header">
-                <div class="detail-header-image">
-                    ${(member.nama_lengkap || 'A').charAt(0)}
+        // Tampilkan info jika anggota tidak punya usaha
+        if (!member.usaha || member.usaha.length === 0) {
+            detailContent.innerHTML = `
+                <div class="detail-header">
+                     <div class="detail-header-image">${(member.nama_lengkap || 'A').charAt(0)}</div>
+                     <div class="detail-header-info">
+                        <h1>${member.nama_lengkap}</h1>
+                        <p>${member.profesi || 'Profesi tidak diisi'}</p>
+                     </div>
                 </div>
-                <div class="detail-header-info">
-                    <h1>${member.nama_lengkap}</h1>
-                    <p>${member.profesi || 'Profesi tidak diisi'}</p>
-                    <div class="info-tags">
-                        <span><i class="fas fa-calendar-alt"></i> Angkatan: ${member.th_masuk || 'N/A'}</span>
-                        <span><i class="fas fa-map-marker-alt"></i> Domisili: ${member.domisili || 'N/A'}</span>
-                        <span><i class="fas fa-building"></i> Komplek: ${member.komplek || 'N/A'}</span>
+                <p>Anggota ini belum mendaftarkan usahanya.</p>
+            `;
+            return;
+        }
+
+        // Loop untuk setiap usaha dan buat tampilan produk
+        member.usaha.forEach(usaha => {
+            const defaultImgUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/default_image_usaha.jpg';
+            const usahaImgUrl = `assets/usaha/${usaha.id_usaha}.jpg`;
+
+            const olshopLinks = usaha.toko_online.map(shop => 
+                `<a href="${shop.url_olshop}" target="_blank" class="contact-link-item"><i class="fas fa-shopping-cart"></i> ${shop.platform_olshop}</a>`
+            ).join('');
+            
+            const sosmedLinks = usaha.media_sosial.map(social => {
+                let iconClass = 'fa-share-alt'; // default icon
+                const platform = social.platform_sosmed.toLowerCase();
+                if (platform.includes('facebook')) iconClass = 'fa-facebook-f';
+                else if (platform.includes('instagram')) iconClass = 'fa-instagram';
+                else if (platform.includes('tiktok')) iconClass = 'fa-tiktok';
+                else if (platform.includes('youtube')) iconClass = 'fa-youtube';
+                return `<a href="${social.url_sosmed}" target="_blank" class="contact-link-item"><i class="fab ${iconClass}"></i> ${social.platform_sosmed}</a>`;
+            }).join('');
+
+            const businessHtml = `
+                <div class="product-view-container">
+                    <div class="product-gallery-pane">
+                        <img src="${usahaImgUrl}" alt="Gambar produk ${usaha.nama_usaha}" onerror="this.onerror=null;this.src='${defaultImgUrl}';">
                     </div>
-                </div>
-            </div>
-            <div class="detail-section">
-                <h3>Informasi Kontak</h3>
-                <p><strong>No. HP:</strong> ${member.no_hp_anggota && member.no_hp_active == 1 ? `<a href="https://wa.me/${String(member.no_hp_anggota).replace(/\D/g, '')}">${member.no_hp_anggota}</a>` : 'Tidak ditampilkan'}</p>
-                <p><strong>Alamat:</strong> ${member.detail_alamat && member.alamat_active == 1 ? member.detail_alamat : 'Tidak ditampilkan'}</p>
-            </div>
-            <div class="detail-section">
-                <h3>Gagasan & Pengembangan Diri</h3>
-                <p><strong>Rencana Pengembangan:</strong> ${member.pengembangan_profesi || 'Tidak ada'}</p>
-                <p><strong>Ide untuk Komunitas:</strong> ${member.ide || 'Tidak ada'}</p>
-            </div>
-        `;
-        
-        detailContent.innerHTML = memberInfoHtml;
+                    <div class="product-details-pane">
+                        <span class="product-category">${usaha.kategori_usaha || 'Kategori'}</span>
+                        <h1 class="product-title">${usaha.nama_usaha}</h1>
 
-        // --- Tampilkan Daftar Usaha ---
-        if (member.usaha && member.usaha.length > 0) {
-            let usahaHtml = '<div class="detail-section"><h2>Daftar Usaha</h2>';
-            member.usaha.forEach(u => {
-                
-                // Toko Online & Sosmed untuk usaha ini
-                const olshopLinks = u.toko_online.map(shop => 
-                    `<a href="${shop.url_olshop}" target="_blank" class="social-link"><i class="fas fa-shopping-cart"></i> ${shop.platform_olshop}</a>`
-                ).join('');
-                const sosmedLinks = u.media_sosial.map(social => 
-                    `<a href="${social.url_sosmed}" target="_blank" class="social-link"><i class="fas fa-share-alt"></i> ${social.platform_sosmed}</a>`
-                ).join('');
-
-                usahaHtml += `
-                    <div class="business-card">
-                        <h3>${u.nama_usaha}</h3>
-                        <p class="category-tag">${u.kategori_usaha || ''}</p>
-                        <p>${u.detail_usaha || 'Tidak ada deskripsi usaha.'}</p>
-                        <div class="business-contact">
-                            ${u.no_hp_perusahaan ? `<span><i class="fas fa-phone"></i> ${u.no_hp_perusahaan}</span>` : ''}
-                            ${u.website_perusahaan ? `<span><i class="fas fa-globe"></i> <a href="${u.website_perusahaan}" target="_blank">Website</a></span>` : ''}
-                            ${u.url_gmaps_perusahaan ? `<span><i class="fas fa-map-marked-alt"></i> <a href="${u.url_gmaps_perusahaan}" target="_blank">Google Maps</a></span>` : ''}
+                        <div class="seller-info-box">
+                             <div class="seller-avatar">${member.nama_lengkap.charAt(0)}</div>
+                             <div class="seller-details">
+                                 <strong>${member.nama_lengkap}</strong>
+                                 <span><i class="fas fa-map-marker-alt"></i> ${member.domisili}</span>
+                             </div>
+                             <div class="seller-actions">
+                                 ${usaha.no_hp_perusahaan ? `<a href="https://wa.me/${String(usaha.no_hp_perusahaan).replace(/\D/g, '')}" class="btn-action primary" target="_blank">Chat</a>` : ''}
+                             </div>
                         </div>
-                        <div class="business-socials">
+
+                        <div class="separator"></div>
+
+                        <h3>Deskripsi Usaha</h3>
+                        <p class="product-description">${usaha.detail_usaha || 'Tidak ada deskripsi.'}</p>
+
+                        <h3>Prospek Kerjasama</h3>
+                        <p class="product-prospects">${usaha.prospek_kerjasama_penawaran || 'Tidak ada informasi.'}</p>
+                        
+                        <div class="separator"></div>
+
+                        <h3>Toko Online & Tautan</h3>
+                        <div class="contact-links-grid">
                             ${olshopLinks}
                             ${sosmedLinks}
-                        </div>
-                         <div class="prospect-section">
-                            <strong>Prospek Kerjasama:</strong>
-                            <p>${u.prospek_kerjasama_penawaran || 'Tidak ada informasi.'}</p>
+                            ${usaha.url_gmaps_perusahaan ? `<a href="${usaha.url_gmaps_perusahaan}" target="_blank" class="contact-link-item"><i class="fas fa-map-marked-alt"></i> Google Maps</a>` : ''}
+                            ${usaha.website_perusahaan ? `<a href="${usaha.website_perusahaan}" target="_blank" class="contact-link-item"><i class="fas fa-globe"></i> Website</a>` : ''}
                         </div>
                     </div>
-                `;
-            });
-            usahaHtml += '</div>';
-            detailContent.innerHTML += usahaHtml;
-        }
+                </div>
+            `;
+            detailContent.innerHTML += businessHtml;
+        });
     }
 
     function showError(message = "Gagal memuat data atau anggota tidak ditemukan.") {
