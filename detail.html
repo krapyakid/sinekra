@@ -9,54 +9,154 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Gaya spesifik untuk halaman detail */
-        .detail-container {
+        .product-view-container {
             max-width: 1100px;
             margin: 2rem auto;
             padding: 1rem;
             display: grid;
             grid-template-columns: 1fr;
             gap: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 2rem;
         }
 
-        .product-gallery .main-image {
+        .product-view-container:last-child {
+            border-bottom: none;
+        }
+
+        .product-gallery-pane img {
             width: 100%;
+            height: auto;
             aspect-ratio: 1 / 1;
-            background-color: #f0f0f0;
+            object-fit: cover;
             border-radius: 12px;
+            background-color: #f0f0f0;
+        }
+
+        .product-details-pane .product-category {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #4a90e2; /* Blue from buttons */
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .product-details-pane .product-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .seller-info-box {
+            background-color: #f9f9f9;
+            border: 1px solid #e5e5e5;
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .seller-info-box .seller-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #4a90e2;
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-        }
-
-        .product-gallery .main-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .product-gallery .main-image .placeholder-initial {
-            font-size: 5rem;
+            font-size: 1.8rem;
             font-weight: bold;
-            color: #ccc;
+            flex-shrink: 0;
         }
 
-        .product-details .detail-title {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+        .seller-info-box .seller-details {
+            flex-grow: 1;
         }
 
-        .product-details .detail-owner {
+        .seller-info-box .seller-details strong {
+            display: block;
             font-size: 1.1rem;
-            color: #555;
-            margin-bottom: 1rem;
+        }
+
+        .seller-info-box .seller-details span {
+            font-size: 0.9rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .seller-info-box .btn-action.primary {
+            background-color: #25D366;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .separator {
+            border-bottom: 1px solid #e5e5e5;
+            margin: 1.5rem 0;
+        }
+
+        .product-details-pane h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
         }
         
-        .product-details .detail-owner span {
-            font-weight: 600;
+        .product-description, .product-prospects {
+            line-height: 1.7;
+            color: #444;
+        }
+        
+        .contact-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.75rem;
         }
 
+        .contact-link-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            background-color: #f5f5f5;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .contact-link-item:hover {
+            background-color: #e9e9e9;
+        }
+
+        .contact-link-icon {
+            width: 24px;
+            height: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .product-view-container {
+                grid-template-columns: 350px 1fr;
+                gap: 3rem;
+            }
+
+            .product-details-pane .product-title {
+                font-size: 2.8rem;
+            }
+        }
+        
+        /* Keep breadcrumb styles from before */
         .breadcrumb-nav {
             padding: 0.75rem 0;
             margin-bottom: 1rem;
@@ -102,61 +202,6 @@
             color: #333;
             font-weight: 600;
         }
-
-        .detail-section {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .detail-section h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-        }
-        
-        .detail-description {
-            line-height: 1.7;
-            color: #444;
-        }
-        
-        .contact-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .contact-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            border: 1px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .contact-btn i {
-            font-size: 1.2rem;
-        }
-
-        .contact-btn.whatsapp { background-color: #25D366; color: white; }
-        .contact-btn.whatsapp:hover { background-color: #128C7E; }
-        
-        .contact-btn.gmaps { background-color: #EA4335; color: white; }
-        .contact-btn.gmaps:hover { background-color: #c52213; }
-
-        .contact-btn.website { background-color: #4a90e2; color: white; }
-        .contact-btn.website:hover { background-color: #357ABD; }
-
-        @media (min-width: 768px) {
-            .detail-container {
-                grid-template-columns: 350px 1fr;
-            }
-        }
     </style>
 </head>
 <body>
@@ -201,7 +246,7 @@
         </div>
 
         <!-- Konten akan diisi di sini oleh JS -->
-        <div id="detail-content" class="detail-container" style="display: none;">
+        <div id="detail-content">
             <!-- Content will be injected by detail.js -->
         </div>
     </main>
