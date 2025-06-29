@@ -1619,6 +1619,13 @@ input:checked + .slider:before {
     margin-right: 8px;
 }
 
+.contact-link-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
 /* Responsive untuk Desktop */
 @media (min-width: 768px) {
     #detail-content .product-view-container {
