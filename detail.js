@@ -69,20 +69,23 @@ document.addEventListener('DOMContentLoaded', function() {
             const defaultImgUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/default_image_usaha.jpg';
             const usahaImgUrl = `assets/usaha/${usaha.id_usaha}.jpg`;
 
-            // --- Logika Ikon Baru ---
-            const iconBaseUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/marketplace/';
+            // --- Logika Ikon Baru (dengan Path yang Benar) ---
+            const iconBaseUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/';
             const platformIcons = {
-                'shopee': { name: 'Shopee', icon: 'shopee.png' },
-                'tokopedia': { name: 'Tokopedia', icon: 'tokopedia.png' },
-                'lazada': { name: 'Lazada', icon: 'lazada.png' },
-                'tiktok shop': { name: 'TikTok Shop', icon: 'tiktok.png' },
-                'blibli': { name: 'Blibli', icon: 'blibli.png' },
-                'facebook': { name: 'Facebook', icon: 'facebook.png' },
-                'instagram': { name: 'Instagram', icon: 'instagram.png' },
-                'tiktok': { name: 'TikTok', icon: 'tiktok.png' },
-                'youtube': { name: 'YouTube', icon: 'youtube.png' },
+                // Marketplace icons (dalam subfolder /marketplace)
+                'shopee':      { name: 'Shopee',      icon: 'marketplace/shopee.png' },
+                'tokopedia':   { name: 'Tokopedia',   icon: 'marketplace/tokopedia.png' },
+                'lazada':      { name: 'Lazada',      icon: 'marketplace/lazada.png' },
+                'tiktok shop': { name: 'TikTok Shop', icon: 'marketplace/tiktok.png' },
+                'blibli':      { name: 'Blibli',      icon: 'marketplace/blibli.png' },
+                
+                // Social & Other icons (langsung di dalam /assets)
+                'facebook':    { name: 'Facebook',    icon: 'facebook.png' },
+                'instagram':   { name: 'Instagram',   icon: 'instagram.png' },
+                'tiktok':      { name: 'TikTok',      icon: 'tiktok.png' },
+                'youtube':     { name: 'YouTube',     icon: 'youtube.png' },
                 'google maps': { name: 'Google Maps', icon: 'gmaps.png' },
-                'website': { name: 'Website', icon: 'website.png' }
+                'website':     { name: 'Website',     icon: 'website.png' }
             };
 
             const allLinks = [];
@@ -92,12 +95,14 @@ document.addEventListener('DOMContentLoaded', function() {
             if (usaha.website_perusahaan) allLinks.push({ key: 'Website', url: usaha.website_perusahaan });
             
             const linksHtml = allLinks.map(link => {
+                if (!link.key) return ''; // Lewati jika tidak ada key
                 const platformInfo = platformIcons[link.key.toLowerCase()];
                 if (!platformInfo) return ''; // Jangan tampilkan jika ikon tidak ada
+                
                 const iconUrl = iconBaseUrl + platformInfo.icon;
                 return `
                     <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="contact-link-item">
-                        <img src="${iconUrl}" class="contact-link-icon" alt="${platformInfo.name} icon">
+                        <img src="${iconUrl}" class="contact-link-icon" alt="${platformInfo.name}">
                         <span>${platformInfo.name}</span>
                     </a>
                 `;
