@@ -221,7 +221,10 @@
                 </div>
                 <div class="form-group">
                     <label>URL Google Maps</label>
-                    <input type="url" name="url_gmaps_perusahaan" placeholder="https://maps.app.goo.gl/...">
+                    <div class="url-input-wrapper">
+                        <span class="url-prefix">https://maps.app.goo.gl/</span>
+                        <input type="text" name="url_gmaps_perusahaan" placeholder="abcDeFgHiJkLmN">
+                    </div>
                 </div>
             </div>
             
@@ -248,7 +251,7 @@
     <!-- TEMPLATE UNTUK ISIAN TOKO ONLINE/SOSMED -->
     <template id="link-entry-template">
         <div class="link-entry">
-            <div class="form-group">
+            <div class="form-group platform-selector">
                 <label>Platform</label>
                 <select name="platform">
                     <option value="">Pilih Platform</option>
@@ -269,9 +272,14 @@
                     <option value="Lainnya">Lainnya</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group url-input">
                 <label>URL</label>
-                <input type="url" name="url" placeholder="https://..." required>
+                 <div class="url-input-wrapper">
+                    <span class="url-prefix">https://</span>
+                    <input type="text" name="url" placeholder="..." required>
+                </div>
+                <!-- This input is for "Lainnya", hidden by default -->
+                <input type="url" name="plain_url" class="plain-url-input" placeholder="https://..." style="display:none;">
             </div>
             <button type="button" class="remove-btn remove-link-btn" aria-label="Hapus">&times;</button>
         </div>
