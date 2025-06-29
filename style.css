@@ -723,9 +723,14 @@ fieldset.form-section {
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
 }
 
+.form-group input.input-error,
+.form-group select.input-error {
+    border-color: var(--danger-color) !important;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important;
+}
+
 input:disabled, textarea:disabled, select:disabled {
-    background-color: #e9ecef;
-    opacity: 0.8;
+    background-color: #f5f5f5;
     cursor: not-allowed;
 }
 
@@ -1086,30 +1091,67 @@ input:checked + .slider:before {
     text-align: left;
 }
 .modal-content h2 {
-    margin-bottom: 1rem;
+    margin-bottom: 10px;
 }
 .modal-preview-grid {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0.75rem 1.5rem;
-    text-align: left;
-    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin: 25px 0;
     max-height: 60vh;
     overflow-y: auto;
-    padding: 1rem;
-    background: #f9f9f9;
-    border-radius: 8px;
+    padding-right: 15px;
 }
+
+.preview-section h3 {
+    color: var(--primary-color);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.preview-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.preview-item:last-child {
+    border-bottom: none;
+}
+
 .preview-label {
-    font-weight: 600;
-    color: var(--light-text-color);
+    font-weight: 500;
+    color: #555;
+    padding-right: 15px;
 }
 .preview-value {
-    color: var(--text-color);
+    text-align: right;
+    color: #333;
 }
+
+.captcha-challenge {
+    margin: 25px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    font-size: 1.1rem;
+}
+
+#captcha-answer {
+    padding: 10px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 8px;
+    width: 100px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
 .modal-button-group {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     gap: 1rem;
     margin-top: 1.5rem;
 }
