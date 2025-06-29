@@ -30,14 +30,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === FUNGSI-FUNGSI ===
 
-    function populateAngkatan() {
-        if (!angkatanSelect) return;
+    function populateYearDropdowns() {
+        const thMasukSelect = document.getElementById('th_masuk');
+        const thKeluarSelect = document.getElementById('th_keluar');
         const currentYear = new Date().getFullYear();
-        for (let year = currentYear; year >= 1980; year--) {
-            const option = document.createElement('option');
-            option.value = year;
-            option.textContent = year;
-            angkatanSelect.appendChild(option);
+        const startYear = 1980;
+
+        if (!thMasukSelect || !thKeluarSelect) return;
+
+        // Clear existing options except the first placeholder
+        thMasukSelect.innerHTML = '<option value="" disabled selected>Pilih Tahun</option>';
+        thKeluarSelect.innerHTML = '<option value="" disabled selected>Pilih Tahun</option>';
+
+        for (let year = currentYear; year >= startYear; year--) {
+            thMasukSelect.add(new Option(year, year));
+            thKeluarSelect.add(new Option(year, year));
         }
     }
 
@@ -252,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
     */
 
     // --- Panggil Fungsi Inisialisasi ---
-    populateAngkatan();
+    populateYearDropdowns();
     
     // Inisialisasi Choices.js pada elemen select
     domisiliChoice = new Choices(domisiliSelect, {
