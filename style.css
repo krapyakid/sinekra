@@ -1406,4 +1406,5 @@ input:checked + .slider:before {
 
 .category-description strong {
     color: var(--primary-color);
+    font-weight: 500;
 }
