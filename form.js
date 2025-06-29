@@ -111,7 +111,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     const select = selectWrapper.querySelector('select');
                     if (select) {
                         select.value = ''; // Set value to empty to select the placeholder
-                        select.selectedIndex = 0; // Reset to the placeholder option
+                        // Dispatch a change event to ensure UI libraries or other listeners update
+                        select.dispatchEvent(new Event('change', { bubbles: true }));
                     }
                 }
             }
