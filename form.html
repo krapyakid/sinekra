@@ -420,7 +420,6 @@
 
                     // Ambil data final dan URL Apps Script (GANTI URL INI)
                     const dataToSubmit = window.finalData;
-                    const idAnggota = dataToSubmit.anggota_data.id_anggota;
                     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoMsFJL64MOaMDdeUPii-pKxMKQ4ZU_5k99bMlq7uhzIVIJep_Tz68HXwlOp5qEbli/exec";
 
                      // Kirim data ke Google Apps Script
@@ -438,9 +437,9 @@
                         if (data.status === "success") {
                             document.getElementById('submission-loading').style.display = 'none';
                             document.getElementById('submission-success').style.display = 'block';
-                            // Redirect ke halaman detail setelah 2 detik
+                            // Redirect ke halaman detail setelah 2 detik menggunakan ID dari server
                             setTimeout(() => {
-                                window.location.href = `detail.html?id=${idAnggota}`;
+                                window.location.href = `detail.html?id=${data.id_anggota}`;
                             }, 2000);
                         } else {
                             throw new Error(data.message || 'Terjadi kesalahan dari server.');
@@ -455,6 +454,11 @@
                 } else {
                     alert('Jawaban verifikasi salah. Silakan coba lagi.');
                 }
+            });
+
+            // Tambahkan listener untuk tombol tutup pada modal error
+            document.getElementById('error-close-btn').addEventListener('click', () => {
+                document.getElementById('status-modal').style.display = 'none';
             });
         });
     </script>
