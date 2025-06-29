@@ -104,18 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     clearIcon.style.display = target.value.length > 0 ? 'block' : 'none';
                 }
             }
-             // Clear select icon
-            if (e.target.matches('.clear-select-icon')) {
-                const selectWrapper = e.target.closest('.select-with-clear');
-                if (selectWrapper) {
-                    const select = selectWrapper.querySelector('select');
-                    if (select) {
-                        select.value = ''; // Set value to empty to select the placeholder
-                        // Dispatch a change event to ensure UI libraries or other listeners update
-                        select.dispatchEvent(new Event('change', { bubbles: true }));
-                    }
-                }
-            }
         });
 
         form.addEventListener('click', function(e) {
