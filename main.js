@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const description = document.createElement('p');
         description.className = 'card-description';
-        description.textContent = businessData.detail_usaha || 'Tidak ada deskripsi usaha.';
+        description.textContent = businessData.jenis_usaha || 'Jenis usaha tidak tersedia.';
 
         const owner = document.createElement('p');
         owner.className = 'card-owner';
