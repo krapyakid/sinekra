@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         detailContent.innerHTML = ''; // Kosongkan konten sebelumnya
-        detailContent.style.display = 'grid'; // Changed from 'block' to 'grid' to match container style
 
         // Tampilkan info jika anggota tidak punya usaha
         if (!member.usaha || member.usaha.length === 0) {
