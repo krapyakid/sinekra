@@ -1608,6 +1608,8 @@ input:checked + .slider:before {
     border-radius: 20px;
     font-size: 0.9rem;
     transition: background-color 0.3s, color 0.3s;
+    display: inline-flex;
+    align-items: center;
 }
 
 .contact-link-item:hover {
@@ -1623,7 +1625,6 @@ input:checked + .slider:before {
     width: 18px;
     height: 18px;
     margin-right: 8px;
-    vertical-align: middle;
 }
 
 /* Responsive untuk Desktop */
