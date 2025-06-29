@@ -349,10 +349,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- FUNGSI BARU UNTUK VALIDASI, POPUP, DAN SUBMISI ---
 
-    function generateUniqueId(prefix = 'id') {
-        return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    async function getIpAddress() {
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            if (!response.ok) throw new Error('Gagal mendapatkan alamat IP');
+            const data = await response.json();
+            return data.ip;
+        } catch (error) {
+            console.error('Error fetching IP address:', error);
+            return 'Error'; // Fallback value
+        }
     }
-
+    
     function validateForm() {
         let firstInvalidField = null;
         const requiredFields = form.querySelectorAll('[required]');
@@ -427,37 +435,47 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(form);
         const allData = {};
         
+        // Dapatkan IP Address di awal
+        const ipAddress = await getIpAddress();
+
         // Data Anggota
-        const idAnggota = generateUniqueId('anggota');
+        // Format ID Anggota baru: MMBR-timestamp-random
+        const idAnggota = `MMBR_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        
         allData.anggota_data = {
             id_anggota: idAnggota,
             nama_lengkap: formData.get('nama_lengkap'),
             nama_panggilan: formData.get('nama_panggilan'),
-            alumni: formData.get('alumni'),
+            alumni: document.getElementById('alumni_krapyak').checked ? 1 : 0, // Mengambil dari checkbox dan konversi ke 1/0
             th_masuk: formData.get('th_masuk'),
             th_keluar: formData.get('th_keluar'),
             komplek: formData.get('komplek'),
             domisili: formData.get('domisili'),
             detail_alamat: formData.get('detail_alamat'),
-            alamat_active: document.getElementById('alamat_active').checked,
+            alamat_active: document.getElementById('alamat_active').checked ? 1 : 0, // Konversi boolean ke 1/0
             no_hp_anggota: `+62${formData.get('no_hp_anggota')}`,
-            no_hp_active: document.getElementById('no_hp_active').checked,
+            no_hp_active: document.getElementById('no_hp_active').checked ? 1 : 0, // Konversi boolean ke 1/0
             profesi: formData.get('profesi'),
             detail_profesi: formData.get('detail_profesi'),
             pengembangan_profesi: formData.get('pengembangan_profesi'),
             ide: formData.get('ide'),
             lain_lain: formData.get('lain_lain'),
             timestamp: new Date().toISOString(),
-            ip_by: 'AUTO', // Akan diganti oleh Apps Script
-            device: 'webform'
+            ip_by: ipAddress, // Menggunakan IP yang sudah didapat
+            device: navigator.userAgent // Mengambil info device dari user agent
         };
 
         // Data Usaha
         allData.usaha_list = [];
+        let usahaCounter = 0;
         document.querySelectorAll('.business-entry-card').forEach(card => {
-            const idUsaha = generateUniqueId('usaha');
+            usahaCounter++;
+            const idUsaha = `USH-${usahaCounter}`;
             const gmapsPrefix = card.querySelector('input[name="url_gmaps_perusahaan"]').previousElementSibling.textContent;
             const websitePrefix = card.querySelector('input[name="website_perusahaan"]').previousElementSibling.textContent;
+
+            let olshopCounter = 0;
+            let sosmedCounter = 0;
 
             const businessData = {
                 id_usaha: idUsaha,
@@ -483,8 +501,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const fullUrl = urlInput && urlInput.value ? prefix + urlInput.value : '';
 
                 if (platform && fullUrl) {
+                    olshopCounter++;
                     businessData.toko_online.push({
-                        id_olshop: generateUniqueId('olshop'),
+                        id_olshop: `OLSHP-${olshopCounter}`,
                         id_usaha: idUsaha,
                         id_anggota: idAnggota,
                         platform_olshop: platform,
@@ -501,8 +520,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const fullUrl = urlInput && urlInput.value ? prefix + urlInput.value : '';
 
                 if (platform && fullUrl) {
+                    sosmedCounter++;
                      businessData.media_sosial.push({
-                        id_sosmed: generateUniqueId('sosmed'),
+                        id_sosmed: `SSMD-${sosmedCounter}`,
                         id_usaha: idUsaha,
                         id_anggota: idAnggota,
                         platform_sosmed: platform,
