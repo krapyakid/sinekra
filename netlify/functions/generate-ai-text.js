@@ -1,5 +1,5 @@
 // Mengimpor library Groq
-import Groq from 'groq-sdk';
+const Groq = require('groq-sdk');
 
 // Inisialisasi Groq dengan kunci API yang diambil dari environment variables Netlify
 const groq = new Groq({
@@ -7,7 +7,7 @@ const groq = new Groq({
 });
 
 // Handler utama untuk serverless function
-export const handler = async (event) => {
+exports.handler = async (event) => {
     // Memastikan hanya metode POST yang diterima
     if (event.httpMethod !== 'POST') {
         return {
@@ -50,10 +50,10 @@ export const handler = async (event) => {
         };
     } catch (error) {
         // Menangani jika terjadi error
-        console.error('Error calling Groq API:', error);
+        console.error('Error in Groq function:', error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Failed to generate AI completion.' }),
+            body: JSON.stringify({ error: 'Failed to communicate with AI service.', details: error.message }),
         };
     }
 }; 
