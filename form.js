@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function populateYearDropdowns() {
         const thMasukSelect = document.getElementById('th_masuk');
         const thKeluarSelect = document.getElementById('th_keluar');
-        const currentYear = new Date().getFullYear();
-        const startYear = 1980;
+        const endYear = new Date().getFullYear() - 1;
+        const startYear = 1951;
 
         if (!thMasukSelect || !thKeluarSelect) return;
 
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
         thMasukSelect.innerHTML = '<option value="" disabled selected>Pilih Tahun</option>';
         thKeluarSelect.innerHTML = '<option value="" disabled selected>Pilih Tahun</option>';
 
-        for (let year = currentYear; year >= startYear; year--) {
+        for (let year = endYear; year >= startYear; year--) {
             thMasukSelect.add(new Option(year, year));
             thKeluarSelect.add(new Option(year, year));
         }
@@ -104,6 +104,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     clearIcon.style.display = target.value.length > 0 ? 'block' : 'none';
                 }
             }
+             // Clear select icon
+            if (e.target.matches('.clear-select-icon')) {
+                const selectWrapper = e.target.closest('.select-with-clear');
+                if (selectWrapper) {
+                    const select = selectWrapper.querySelector('select');
+                    if (select) {
+                        select.value = '';
+                    }
+                }
+            }
         });
 
         form.addEventListener('click', function(e) {
@@ -120,6 +130,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
+
+        // Listener untuk perubahan platform di Toko Online/Sosmed (Event Delegation)
+        form.addEventListener('change', function(e) {
+            if (e.target.matches('select[name="platform"]')) {
+                const platform = e.target.value;
+                const linkEntry = e.target.closest('.link-entry');
+                const urlInput = linkEntry.querySelector('input[name="url"]');
+
+                const platformPatterns = {
+                    'Shopee': 'https://shopee.co.id/username',
+                    'Tokopedia': 'https://www.tokopedia.com/namatoko',
+                    'Lazada': 'https://www.lazada.co.id/shop/namatoko',
+                    'TikTok Shop': 'https://www.tiktok.com/@username',
+                    'Blibli': 'https://www.blibli.com/merchant/nama-toko/TOS-XXXXX',
+                    'Instagram': 'https://www.instagram.com/username',
+                    'Facebook': 'https://www.facebook.com/username',
+                    'TikTok': 'https://www.tiktok.com/@username',
+                    'Website': 'https://www.namadomain.com',
+                    'YouTube': 'https://www.youtube.com/c/channelname'
+                };
+
+                if (urlInput) {
+                    urlInput.placeholder = platformPatterns[platform] || 'https://...';
+                }
+            }
+        });
     }
 
     function handleAiButtonClick(event) {
@@ -127,10 +163,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const targetTextarea = document.getElementById(targetId);
         const prompts = {
             pengembangan_profesi: "Saya ingin berkolaborasi dengan sesama alumni untuk membuat program pelatihan kewirausahaan digital bagi santri. Fokusnya pada skill praktis seperti digital marketing dan manajemen e-commerce, memanfaatkan platform yang sudah ada untuk menciptakan dampak ekonomi yang nyata dan terukur di lingkungan pesantren.",
-            ide: "Saya mengusulkan sebuah platform 'Sinergi Bisnis Santri' yang terintegrasi, di mana anggota bisa memetakan keahlian, menawarkan jasa, dan mencari mitra untuk proyek bersama. Platform ini bisa menjadi inkubator ide, memfasilitasi kolaborasi dari tahap gagasan hingga eksekusi dengan semangat gotong royong."
+            ide: "Saya mengusulkan sebuah platform 'Sinergi Bisnis Santri' yang terintegrasi, di mana anggota bisa memetakan keahlian, menawarkan jasa, dan mencari mitra untuk proyek bersama. Platform ini bisa menjadi inkubator ide, memfasilitasi kolaborasi dari tahap gagasan hingga eksekusi dengan semangat gotong royong.",
+            lain_lain: "Saya memiliki keahlian di bidang desain grafis dan video editing, siap berkontribusi untuk kebutuhan visual promosi kegiatan Sinergi Ekonomi. Saya juga tertarik untuk berbagi pengetahuan melalui workshop kecil."
         };
         if (targetTextarea && prompts[targetId]) {
             targetTextarea.value = prompts[targetId];
+            // Trigger input event to update char counter
+            targetTextarea.dispatchEvent(new Event('input', { bubbles: true }));
         }
     }
 
