@@ -173,7 +173,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const prompts = {
             pengembangan_profesi: "Saya ingin berkolaborasi dengan sesama alumni untuk membuat program pelatihan kewirausahaan digital bagi santri. Fokusnya pada skill praktis seperti digital marketing dan manajemen e-commerce, memanfaatkan platform yang sudah ada untuk menciptakan dampak ekonomi yang nyata dan terukur di lingkungan pesantren.",
             ide: "Saya mengusulkan sebuah platform 'Sinergi Bisnis Santri' yang terintegrasi, di mana anggota bisa memetakan keahlian, menawarkan jasa, dan mencari mitra untuk proyek bersama. Platform ini bisa menjadi inkubator ide, memfasilitasi kolaborasi dari tahap gagasan hingga eksekusi dengan semangat gotong royong.",
-            lain_lain: "Saya memiliki keahlian di bidang desain grafis dan video editing, siap berkontribusi untuk kebutuhan visual promosi kegiatan Sinergi Ekonomi. Saya juga tertarik untuk berbagi pengetahuan melalui workshop kecil."
+            lain_lain: "Saya memiliki keahlian di bidang desain grafis dan video editing, siap berkontribusi untuk kebutuhan visual promosi kegiatan Sinergi Ekonomi. Saya juga tertarik untuk berbagi pengetahuan melalui workshop kecil.",
+            detail_usaha: "Kami adalah kedai kopi yang berfokus pada biji kopi asli Indonesia dengan proses roasting mandiri. Selain menyajikan kopi, kami juga menyediakan ruang bagi komunitas untuk berkumpul dan berdiskasi.",
+            prospek_kerjasama_penawaran: "Kami mencari mitra untuk distribusi produk kopi bubuk kami ke kafe atau kantor di seluruh Indonesia. Kami menawarkan skema bagi hasil yang menarik dan dukungan branding."
         };
         if (targetTextarea && prompts[targetId]) {
             targetTextarea.value = prompts[targetId];
@@ -254,14 +256,20 @@ document.addEventListener('DOMContentLoaded', function() {
         // Kumpulkan data usaha
         data.usaha = [];
         document.querySelectorAll('.business-entry-card').forEach(card => {
-            const gmapsPrefix = card.querySelector('.url-prefix')?.textContent || 'https://maps.app.goo.gl/';
+            const gmapsPrefix = card.querySelector('input[name="url_gmaps_perusahaan"]').previousElementSibling.textContent;
             const gmapsInput = card.querySelector('input[name="url_gmaps_perusahaan"]');
+            const websitePrefix = card.querySelector('input[name="website_perusahaan"]').previousElementSibling.textContent;
+            const websiteInput = card.querySelector('input[name="website_perusahaan"]');
+            const noHpPerusahaanInput = card.querySelector('input[name="no_hp_perusahaan"]');
 
             const businessData = {
                 nama_usaha: card.querySelector('[name="nama_usaha"]').value,
                 kategori_usaha: card.querySelector('[name="kategori_usaha"]').value,
                 jenis_usaha: card.querySelector('[name="jenis_usaha"]').value,
                 detail_usaha: card.querySelector('[name="detail_usaha"]').value,
+                no_hp_perusahaan: noHpPerusahaanInput && noHpPerusahaanInput.value ? `+62${noHpPerusahaanInput.value}` : '',
+                prospek_kerjasama_penawaran: card.querySelector('[name="prospek_kerjasama_penawaran"]').value,
+                website_perusahaan: websiteInput && websiteInput.value ? websitePrefix + websiteInput.value : '',
                 url_gmaps_perusahaan: gmapsInput && gmapsInput.value ? gmapsPrefix + gmapsInput.value : '',
                 toko_online: [],
                 media_sosial: []
