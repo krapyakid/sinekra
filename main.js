@@ -350,13 +350,21 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const img = document.createElement('img');
         const baseRepoUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/';
-        img.src = `${baseRepoUrl}${businessData.id_usaha}.jpg`;
         const defaultImgUrl = `${baseRepoUrl}default_image_usaha.jpg`;
-        img.onerror = function() {
-            this.onerror = null;
-            this.src = defaultImgUrl;
-        };
+
+        // --- [FIX] Mencoba id_usaha, lalu id_anggota, lalu default ---
+        img.src = `${baseRepoUrl}${businessData.id_usaha}.jpg`;
         img.alt = `Gambar usaha ${businessData.nama_usaha}`;
+
+        img.onerror = function() {
+            // Jika id_usaha gagal, coba id_anggota
+            this.src = `${baseRepoUrl}${businessData.id_anggota}.jpg`;
+            this.onerror = function() {
+                // Jika id_anggota juga gagal, gunakan default
+                this.onerror = null; // Mencegah loop tak terbatas
+                this.src = defaultImgUrl;
+            };
+        };
         
         // --- Overlay Lokasi ---
         const locationOverlay = document.createElement(businessData.url_gmaps_perusahaan ? 'a' : 'div');
