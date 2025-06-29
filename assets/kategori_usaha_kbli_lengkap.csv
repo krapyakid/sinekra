@@ -1,4 +1,4 @@
-Kode,Kategori Usaha,Penjelasan,Contoh Usaha
+kode,kategori_usaha,penjelasan,contoh_usaha
 KU001,"Pertanian, Kehutanan, dan Perikanan","Usaha pertanian, kehutanan, perikanan budidaya dan tangkap, termasuk pengelolaan hasilnya.","Petani, nelayan, perkebunan, pembibitan ikan, "
 KU002,Pertambangan dan Penggalian,Eksplorasi dan ekstraksi sumber daya alam seperti tambang dan batubara.,"Tambang batubara, minyak bumi, emas"
 KU003,Industri Pengolahan,Proses pengolahan bahan mentah menjadi barang jadi atau setengah jadi.,"Pabrik roti, pabrik tekstil, industri mebel"
