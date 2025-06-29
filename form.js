@@ -291,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (selectedValue) {
                 const selectedData = kbliData.find(item => item.kategori_usaha === selectedValue);
                 if (selectedData) {
-                    descriptionDiv.innerHTML = `<strong>Deskripsi:</strong> ${selectedData.deskripsi || 'Tidak tersedia.'}<br><strong>Contoh:</strong> ${selectedData.contoh || 'Tidak tersedia.'}`;
+                    descriptionDiv.innerHTML = `<strong>Deskripsi:</strong> ${selectedData.penjelasan || 'Tidak tersedia.'}<br><strong>Contoh:</strong> ${selectedData.contoh_usaha || 'Tidak tersedia.'}`;
                     descriptionDiv.style.display = 'block';
                 }
             } else {
