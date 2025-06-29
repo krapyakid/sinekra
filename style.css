@@ -1052,13 +1052,13 @@ input:checked + .slider:before {
     backdrop-filter: blur(4px);
 }
 .modal-content {
-    background: white;
-    padding: 2rem;
+    background: var(--form-bg-color);
+    padding: 30px;
     border-radius: 12px;
-    max-width: 600px;
     width: 90%;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    text-align: center;
+    max-width: 700px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    text-align: left;
 }
 .modal-content h2 {
     margin-bottom: 1rem;
@@ -1102,19 +1102,23 @@ input:checked + .slider:before {
 /* Responsiveness for Form */
 @media (max-width: 768px) {
     .form-container {
-        padding: 1rem;
-        margin: 0;
+        padding: 30px 20px;
     }
+
     .form-section {
-        padding: 1.5rem;
+        padding: 20px 15px;
     }
-    .form-grid {
+
+    .form-grid,
+    .business-entry-card .form-grid {
         grid-template-columns: 1fr;
     }
+
     .ai-group textarea {
-        padding-right: 50px;
-        padding-bottom: 1rem;
+        padding-right: 15px;
+        padding-bottom: 45px;
     }
+
     .ai-btn {
         /* Tidak perlu style khusus mobile, akan mengikuti style desktop */
     }
