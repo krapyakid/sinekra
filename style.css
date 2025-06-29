@@ -808,6 +808,31 @@ input:checked + .slider:before {
     transform: scale(1.1);
 }
 
+.ai-btn:disabled {
+    background-color: #f0f2f5;
+    border-color: #e0e0e0;
+    color: #b0b0b0;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.ai-btn.loading {
+    cursor: wait;
+    background-color: #dbe6ff;
+    transform: none;
+}
+
+.ai-btn.loading::before {
+    content: '';
+    display: inline-block;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    animation: spin 0.8s linear infinite;
+}
+
 .ai-group textarea {
     padding-right: 45px;
     padding-bottom: 35px; /* Tambahkan ruang di bawah untuk tombol AI */
