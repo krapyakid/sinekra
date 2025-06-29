@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mobile Search Logic (REMOVED as it's now always visible)
     
     // --- FUNGSI GLOBAL & DATA BERSAMA ---
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-GZ7xYJvzT_G7uYv_N5KiRByre-XQFzJbIXkAyWM8bxSxiszIKDUxvPxTupqzyawq/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvsDmDoerDTDgV39Op65g8D_fGyCyTy82StbSzsACbpQoYnetw96E4mQ1T0suIHfhR/exec";
     
     let allDataCache = []; // Cache untuk menyimpan data yang sudah di-fetch
 
