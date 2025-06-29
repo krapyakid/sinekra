@@ -1245,15 +1245,15 @@ input:checked + .slider:before {
 }
 
 .clear-icon {
+    display: none; /* Initially hidden */
     position: absolute;
-    top: 50%;
     right: 10px;
+    top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     color: #999;
-    font-weight: bold;
     font-size: 1.2rem;
-    display: none; /* Sembunyi secara default */
+    line-height: 1;
 }
 
 .input-wrapper input:not(:placeholder-shown) + .clear-icon,
@@ -1262,10 +1262,11 @@ input:checked + .slider:before {
 }
 
 .char-counter {
-    font-size: 0.8rem;
-    color: #666;
     text-align: right;
-    margin-top: 4px;
+    font-size: 0.75rem; /* Ukuran font diperkecil */
+    color: var(--light-text-color);
+    margin-top: 5px;
+    height: 1rem; /* Reserve space to prevent layout shift */
 }
 
 .phone-input-wrapper {
@@ -1389,4 +1390,20 @@ input:checked + .slider:before {
         display: block;   /* Pastikan gambar adalah block element */
         border-radius: 0; /* Hapus jika ada border-radius */
     }
+}
+
+/* Styling untuk deskripsi Kategori Usaha */
+.category-description {
+    display: none; /* Ditampilkan oleh JS */
+    font-size: 0.875rem;
+    color: #495057;
+    background-color: #e9ecef;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-top: 8px;
+    border-left: 3px solid var(--secondary-color);
+}
+
+.category-description strong {
+    color: var(--primary-color);
 }
