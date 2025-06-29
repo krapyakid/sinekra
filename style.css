@@ -919,15 +919,27 @@ input:checked + .slider:before {
 }
 
 .business-entry-card {
-    border: 1px dashed var(--border-color);
-    padding: 1.5rem;
-    border-radius: 10px;
-    margin-top: 1.5rem;
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
     position: relative;
+    background-color: #fcfcfc;
 }
+
+.business-entry-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
 .business-entry-card:first-child {
     margin-top: 0;
 }
+
 .remove-business-btn {
     position: absolute;
     top: 10px;
@@ -949,29 +961,73 @@ input:checked + .slider:before {
     border-top: 1px solid #e9ecef;
 }
 .sub-section-title {
-    font-size: 1rem;
     font-weight: 600;
-    margin-bottom: 1rem;
-    color: var(--text-color);
+    margin-bottom: 15px;
+    font-size: 1rem;
+    color: #555;
 }
 .link-entry {
-    display: flex;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr auto;
+    gap: 10px;
     align-items: flex-end;
-    margin-bottom: 1rem;
+    margin-bottom: 10px;
 }
 .link-entry .form-group {
-    flex-grow: 1;
     margin-bottom: 0;
 }
 .remove-link-btn {
-    padding: 0;
-    width: 44px;
-    height: 44px;
-    background-color: #f8f9fa;
-    color: var(--danger-color);
-    font-size: 1.5rem;
+    background: none;
     border: 1px solid var(--border-color);
+    color: var(--light-text-color);
+    border-radius: 8px;
+    width: 42px;
+    height: 42px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-bottom: 0;
+    transition: all 0.2s ease;
+}
+.remove-link-btn:hover {
+    background-color: #fbebeb;
+    border-color: #f0b6b6;
+    color: var(--danger-color);
+}
+
+/* Stle untuk URL Input Wrapper */
+.url-input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--input-border-color);
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+    background-color: #fff;
+    overflow: hidden; /* To make border-radius work on children */
+}
+
+.url-input-wrapper:focus-within {
+    border-color: var(--input-focus-color);
+    box-shadow: 0 0 0 3px rgba(52, 48, 139, 0.1);
+}
+
+.url-prefix {
+    padding: 10px 12px;
+    background-color: #f7f7f7;
+    border-right: 1px solid var(--input-border-color);
+    color: var(--light-text-color);
+    white-space: nowrap;
+    font-size: 0.9em;
+}
+
+.url-input-wrapper input {
+    border: none !important;
+    outline: none !important;
+    padding: 12px 15px !important;
+    flex-grow: 1;
+    width: 100%;
+    background-color: transparent !important;
+    box-shadow: none !important; /* Override default input styles */
+    height: auto !important;
 }
 
 /* Modal Styles */
