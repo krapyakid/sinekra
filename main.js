@@ -296,81 +296,70 @@ document.addEventListener('DOMContentLoaded', function() {
         return card;
     }
 
-    function createMemberCard(member) {
-        // --- Create Elements ---
+    function createMemberCard(businessData) {
         const card = document.createElement('div');
         card.className = 'member-card';
-        card.style.cursor = 'pointer';
         card.addEventListener('click', (e) => {
-            // Jangan navigasi jika yang diklik adalah link (seperti gmaps atau no wa)
             if (e.target.closest('a')) return;
-            
-            if (member.id_anggota) {
-                window.location.href = `detail.html?id=${member.id_anggota}`;
+            if (businessData.id_anggota) {
+                window.location.href = `detail.html?id=${businessData.id_anggota}`;
             }
         });
 
+        // --- Gambar Usaha ---
         const banner = document.createElement('div');
         banner.className = 'card-banner';
+        
+        const img = document.createElement('img');
+        img.src = `assets/usaha/${businessData.id_usaha}.jpg`;
+        const defaultImgUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/default_image_usaha.jpg';
+        img.onerror = function() {
+            this.onerror = null;
+            this.src = defaultImgUrl;
+        };
+        img.alt = `Gambar usaha ${businessData.nama_usaha}`;
+        
+        // --- Overlay Lokasi ---
+        const locationOverlay = document.createElement(businessData.url_gmaps_perusahaan ? 'a' : 'div');
+        locationOverlay.className = 'card-location-overlay';
+        if (businessData.url_gmaps_perusahaan) {
+            locationOverlay.href = businessData.url_gmaps_perusahaan;
+            locationOverlay.target = '_blank';
+            locationOverlay.rel = 'noopener noreferrer';
+        }
+        
+        const namaPanggilan = businessData.nama_panggilan || businessData.nama_lengkap.split(' ')[0];
+        locationOverlay.innerHTML = `<i class="fas fa-map-marker-alt"></i> <span>${namaPanggilan} - ${businessData.domisili}</span>`;
 
+        banner.append(locationOverlay, img);
+
+        // --- Konten Kartu ---
         const content = document.createElement('div');
         content.className = 'card-content';
 
         const businessName = document.createElement('h3');
         businessName.className = 'card-business-name';
-        businessName.textContent = member.nama_usaha || 'Nama Usaha Tidak Tersedia';
+        businessName.textContent = businessData.nama_usaha;
 
         const description = document.createElement('p');
         description.className = 'card-description';
-        description.textContent = `${member.kategori_usaha || 'Kategori tidak tersedia'} • Oleh: ${member.nama_lengkap || 'Pemilik tidak diketahui'}`;
+        description.textContent = businessData.detail_usaha || 'Tidak ada deskripsi usaha.';
 
-        const footer = document.createElement('div');
-        footer.className = 'card-footer';
-
-        const contactBar = document.createElement('div');
-        contactBar.className = 'card-contact-bar';
-
-        // --- Populate & Assemble ---
-        const ownerInfo = document.createElement('div');
-        ownerInfo.className = 'card-owner';
-        ownerInfo.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${member.domisili || 'Lokasi tidak tersedia'}`;
-
-        const icons = [
-            { link: member.no_hp_wa ? `https://wa.me/${member.no_hp_wa.replace(/[^0-9]/g, '')}` : null, asset: 'assets/icon-whatsapp.svg' },
-            { link: member.link_facebook, asset: 'assets/icon-facebook.svg' },
-            { link: member.link_shopee, asset: 'assets/marketplace/icon-shopee.svg' },
-            { link: member.link_tokopedia, asset: 'assets/marketplace/icon-tokopedia.svg' },
-            { link: member.link_tiktok, asset: 'assets/marketplace/icon-tiktok.svg' },
-            { link: member.link_website, asset: 'assets/webicon.svg' },
-        ];
-
-        icons.forEach(item => {
-            if (item.link) {
-                const anchor = document.createElement('a');
-                anchor.href = item.link;
-                anchor.target = '_blank';
-                const iconImg = document.createElement('img');
-                iconImg.src = item.asset;
-                iconImg.className = 'marketplace-icon';
-                anchor.appendChild(iconImg);
-                contactBar.appendChild(anchor);
-            }
-        });
-
-        footer.append(ownerInfo);
-        footer.appendChild(contactBar);
-        content.append(businessName, description, footer);
+        const owner = document.createElement('p');
+        owner.className = 'card-owner';
+        owner.innerHTML = `<i class="fas fa-user"></i> ${businessData.nama_lengkap}`;
+        
+        content.append(businessName, description, owner);
         card.append(banner, content);
         
-        card.addEventListener('click', (e) => {
-            if (!e.target.closest('a')) window.location.href = `detail.html?id=${member.id_anggota}`;
-        });
-
         return card;
     }
 
     // --- FUNGSI UTILITAS ---
     function getDistance(lat1, lon1, lat2, lon2) {
+        if ((lat1 == lat2) && (lon1 == lon2)) {
+            return 0;
+        }
         if (!lat1 || !lon1 || !lat2 || !lon2) return Infinity;
         const R = 6371; // Radius bumi dalam km
         const dLat = (lat2 - lat1) * Math.PI / 180;
