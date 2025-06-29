@@ -46,8 +46,16 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error("Elemen 'detail-content' tidak ditemukan.");
             return;
         }
+
+        // --- Update Breadcrumb and Page Title ---
+        document.title = `${member.nama_lengkap} - Detail Anggota`;
+        const breadcrumbNama = document.getElementById('breadcrumb-nama');
+        if (breadcrumbNama) {
+            breadcrumbNama.textContent = member.nama_lengkap;
+        }
+        
         detailContent.innerHTML = ''; // Kosongkan konten sebelumnya
-        detailContent.style.display = 'block';
+        detailContent.style.display = 'grid'; // Changed from 'block' to 'grid' to match container style
 
         // Tampilkan info jika anggota tidak punya usaha
         if (!member.usaha || member.usaha.length === 0) {
