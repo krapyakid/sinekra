@@ -79,15 +79,21 @@
                     </div>
                     <div class="form-group">
                         <label for="th_masuk">Tahun Masuk <span class="mandatory-star">*</span></label>
-                        <select id="th_masuk" name="th_masuk" required>
-                            <option value="" disabled selected>Pilih Tahun</option>
-                        </select>
+                        <div class="select-with-clear">
+                            <select id="th_masuk" name="th_masuk" required>
+                                <option value="" disabled selected>Pilih Tahun</option>
+                            </select>
+                            <button type="button" class="clear-select-icon" aria-label="Kosongkan pilihan">&times;</button>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="th_keluar">Tahun Keluar</label>
-                        <select id="th_keluar" name="th_keluar">
-                            <option value="" disabled selected>Pilih Tahun</option>
-                        </select>
+                        <div class="select-with-clear">
+                            <select id="th_keluar" name="th_keluar">
+                                <option value="" disabled selected>Pilih Tahun</option>
+                            </select>
+                            <button type="button" class="clear-select-icon" aria-label="Kosongkan pilihan">&times;</button>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="komplek">Komplek <span class="mandatory-star">*</span></label>
@@ -164,13 +170,14 @@
                     <div class="char-counter">0 / 500</div>
                     <button type="button" class="ai-btn" data-target="ide" aria-label="Generate dengan AI">✨</button>
                 </div>
-                 <div class="form-group">
+                 <div class="form-group ai-group">
                     <label for="lain_lain">Lain-lain</label>
                      <div class="input-wrapper">
                         <textarea id="lain_lain" name="lain_lain" rows="3" placeholder="Informasi tambahan yang relevan..." maxlength="500"></textarea>
                         <span class="clear-icon">&times;</span>
                     </div>
                     <div class="char-counter">0 / 500</div>
+                    <button type="button" class="ai-btn" data-target="lain_lain" aria-label="Generate dengan AI">✨</button>
                 </div>
                 </div>
             </fieldset>
