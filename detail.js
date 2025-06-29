@@ -69,19 +69,40 @@ document.addEventListener('DOMContentLoaded', function() {
             const defaultImgUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/default_image_usaha.jpg';
             const usahaImgUrl = `assets/usaha/${usaha.id_usaha}.jpg`;
 
-            const olshopLinks = usaha.toko_online.map(shop => 
-                `<a href="${shop.url_olshop}" target="_blank" class="contact-link-item"><i class="fas fa-shopping-cart"></i> ${shop.platform_olshop}</a>`
-            ).join('');
+            // --- Logika Ikon Baru ---
+            const iconBaseUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/marketplace/';
+            const platformIcons = {
+                'shopee': { name: 'Shopee', icon: 'shopee.png' },
+                'tokopedia': { name: 'Tokopedia', icon: 'tokopedia.png' },
+                'lazada': { name: 'Lazada', icon: 'lazada.png' },
+                'tiktok shop': { name: 'TikTok Shop', icon: 'tiktok.png' },
+                'blibli': { name: 'Blibli', icon: 'blibli.png' },
+                'facebook': { name: 'Facebook', icon: 'facebook.png' },
+                'instagram': { name: 'Instagram', icon: 'instagram.png' },
+                'tiktok': { name: 'TikTok', icon: 'tiktok.png' },
+                'youtube': { name: 'YouTube', icon: 'youtube.png' },
+                'google maps': { name: 'Google Maps', icon: 'gmaps.png' },
+                'website': { name: 'Website', icon: 'website.png' }
+            };
+
+            const allLinks = [];
+            usaha.toko_online.forEach(shop => allLinks.push({ key: shop.platform_olshop, url: shop.url_olshop }));
+            usaha.media_sosial.forEach(social => allLinks.push({ key: social.platform_sosmed, url: social.url_sosmed }));
+            if (usaha.url_gmaps_perusahaan) allLinks.push({ key: 'Google Maps', url: usaha.url_gmaps_perusahaan });
+            if (usaha.website_perusahaan) allLinks.push({ key: 'Website', url: usaha.website_perusahaan });
             
-            const sosmedLinks = usaha.media_sosial.map(social => {
-                let iconClass = 'fa-share-alt'; // default icon
-                const platform = social.platform_sosmed.toLowerCase();
-                if (platform.includes('facebook')) iconClass = 'fa-facebook-f';
-                else if (platform.includes('instagram')) iconClass = 'fa-instagram';
-                else if (platform.includes('tiktok')) iconClass = 'fa-tiktok';
-                else if (platform.includes('youtube')) iconClass = 'fa-youtube';
-                return `<a href="${social.url_sosmed}" target="_blank" class="contact-link-item"><i class="fab ${iconClass}"></i> ${social.platform_sosmed}</a>`;
+            const linksHtml = allLinks.map(link => {
+                const platformInfo = platformIcons[link.key.toLowerCase()];
+                if (!platformInfo) return ''; // Jangan tampilkan jika ikon tidak ada
+                const iconUrl = iconBaseUrl + platformInfo.icon;
+                return `
+                    <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="contact-link-item">
+                        <img src="${iconUrl}" class="contact-link-icon" alt="${platformInfo.name} icon">
+                        <span>${platformInfo.name}</span>
+                    </a>
+                `;
             }).join('');
+            // --- Akhir Logika Ikon Baru ---
 
             const businessHtml = `
                 <div class="product-view-container">
@@ -115,10 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         <h3>Toko Online & Tautan</h3>
                         <div class="contact-links-grid">
-                            ${olshopLinks}
-                            ${sosmedLinks}
-                            ${usaha.url_gmaps_perusahaan ? `<a href="${usaha.url_gmaps_perusahaan}" target="_blank" class="contact-link-item"><i class="fas fa-map-marked-alt"></i> Google Maps</a>` : ''}
-                            ${usaha.website_perusahaan ? `<a href="${usaha.website_perusahaan}" target="_blank" class="contact-link-item"><i class="fas fa-globe"></i> Website</a>` : ''}
+                            ${linksHtml}
                         </div>
                     </div>
                 </div>
