@@ -1475,3 +1475,154 @@ input:checked + .slider:before {
     color: var(--primary-color);
     font-weight: 500;
 }
+
+.category-description strong {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+/* ==========================================================================
+   Struktur Halaman Detail Produk Baru
+   ========================================================================== */
+
+#detail-content .product-view-container {
+    display: grid;
+    grid-template-columns: 1fr; /* Default 1 kolom untuk mobile */
+    gap: 30px;
+    padding: 20px 0;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.product-gallery-pane img {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+.product-details-pane .product-category {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.product-details-pane .product-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 5px 0 20px 0;
+}
+
+.seller-info-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.seller-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.seller-details {
+    flex-grow: 1;
+}
+
+.seller-details strong {
+    display: block;
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+.seller-details span {
+    color: var(--light-text-color);
+    font-size: 0.9rem;
+}
+
+.seller-details span i {
+    margin-right: 5px;
+}
+
+.seller-actions .btn-action.primary {
+    background-color: var(--success-color);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.seller-actions .btn-action.primary:hover {
+    background-color: #27ae60;
+}
+
+.separator {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 25px 0;
+}
+
+.product-details-pane h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.product-description,
+.product-prospects {
+    line-height: 1.7;
+    color: var(--light-text-color);
+}
+
+.contact-links-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.contact-link-item {
+    background-color: #f0f0f0;
+    color: var(--text-color);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.contact-link-item:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.contact-link-item i {
+    margin-right: 8px;
+}
+
+/* Responsive untuk Desktop */
+@media (min-width: 768px) {
+    #detail-content .product-view-container {
+        grid-template-columns: 2fr 3fr; /* 2 kolom di desktop */
+        gap: 50px;
+    }
+}
