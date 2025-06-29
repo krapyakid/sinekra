@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const DOMISILI_URL = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/data_domisili.csv';
     const PROFESI_URL = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/profesi.csv';
+    const KBLI_URL = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/kategori_usaha_kbli_lengkap.csv';
 
     // === ELEMEN UTAMA ===
     const form = document.getElementById('data-form');
@@ -24,11 +25,49 @@ document.addEventListener('DOMContentLoaded', function() {
     aiButtons.forEach(button => {
         button.addEventListener('click', handleAiButtonClick);
     });
+    // Listener untuk perubahan Kategori Usaha
+    businessListContainer.addEventListener('change', handleCategoryChange);
 
     // === VARIABEL ===
     let domisiliChoice, profesiChoice;
+    let kbliData = [];
 
     // === FUNGSI-FUNGSI ===
+
+    async function loadKbliData() {
+        try {
+            const response = await fetch(KBLI_URL);
+            if (!response.ok) throw new Error('Gagal memuat data KBLI');
+            const csvText = await response.text();
+            Papa.parse(csvText, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    kbliData = results.data;
+                    // Jika sudah ada kartu usaha saat data dimuat, populasikan
+                    document.querySelectorAll('.business-entry-card select[name="kategori_usaha"]').forEach(populateKbliDropdown);
+                }
+            });
+        } catch (error) {
+            console.error('Error loading KBLI data:', error);
+        }
+    }
+
+    function populateKbliDropdown(selectElement) {
+        if (!selectElement || kbliData.length === 0) return;
+        
+        // Simpan opsi pertama (placeholder)
+        const placeholder = selectElement.options[0];
+        selectElement.innerHTML = '';
+        selectElement.appendChild(placeholder);
+
+        kbliData.forEach(item => {
+            if (item.kategori_usaha) {
+                const option = new Option(item.kategori_usaha, item.kategori_usaha);
+                selectElement.add(option);
+            }
+        });
+    }
 
     function populateYearDropdowns() {
         const thMasukSelect = document.getElementById('th_masuk');
@@ -200,6 +239,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function addBusinessEntry() {
         const businessClone = businessTemplate.content.cloneNode(true);
+        const kbliSelect = businessClone.querySelector('select[name="kategori_usaha"]');
+        
+        // Populasikan dropdown KBLI jika data sudah tersedia
+        if (kbliData.length > 0) {
+            populateKbliDropdown(kbliSelect);
+        }
+
         businessListContainer.appendChild(businessClone);
         updateBusinessTitles();
     }
@@ -229,6 +275,29 @@ document.addEventListener('DOMContentLoaded', function() {
         // Hapus entri link (toko atau sosmed)
         if (e.target.classList.contains('remove-link-btn')) {
             e.target.closest('.link-entry').remove();
+        }
+    }
+
+    function handleCategoryChange(e) {
+        if (e.target.matches('select[name="kategori_usaha"]')) {
+            const select = e.target;
+            const selectedValue = select.value;
+            const descriptionDiv = select.nextElementSibling;
+
+            if (!descriptionDiv || !descriptionDiv.classList.contains('category-description')) {
+                return;
+            }
+
+            if (selectedValue) {
+                const selectedData = kbliData.find(item => item.kategori_usaha === selectedValue);
+                if (selectedData) {
+                    descriptionDiv.innerHTML = `<strong>Deskripsi:</strong> ${selectedData.deskripsi || 'Tidak tersedia.'}<br><strong>Contoh:</strong> ${selectedData.contoh || 'Tidak tersedia.'}`;
+                    descriptionDiv.style.display = 'block';
+                }
+            } else {
+                descriptionDiv.style.display = 'none';
+                descriptionDiv.innerHTML = '';
+            }
         }
     }
 
@@ -362,6 +431,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- Panggil Fungsi Inisialisasi ---
     populateYearDropdowns();
+    loadKbliData();
     
     // Inisialisasi Choices.js pada elemen select
     domisiliChoice = new Choices(domisiliSelect, {
