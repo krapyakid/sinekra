@@ -1259,7 +1259,3 @@ input:checked + .slider:before {
     }
     /* ... existing CSS ... */
 }
-
-body.mobile-menu-open .main-header {
-    z-index: 1100; /* Angkat header di atas segalanya saat menu aktif */
-}
