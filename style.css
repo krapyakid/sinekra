@@ -1277,10 +1277,14 @@ input:checked + .slider:before {
 
 @media (max-width: 768px) {
     .statistik-img-center {
-        padding: 1rem; /* Padding lebih kecil di mobile */
+        display: block; /* Ganti ke block layout untuk mobile */
+        min-height: auto; /* Hapus tinggi minimum */
+        padding: 0;       /* Hapus semua padding */
     }
     .statistik-img-center img {
         width: 100%; /* Gambar mengisi lebar container */
-        max-height: none; /* Hapus batasan tinggi agar gambar bisa lebih besar */
+        max-height: none; /* Hapus batasan tinggi */
+        display: block;   /* Pastikan gambar adalah block element */
+        border-radius: 0; /* Hapus jika ada border-radius */
     }
 }
