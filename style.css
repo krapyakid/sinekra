@@ -241,6 +241,7 @@ main.content-container {
     width: 100%;
     transition: all 0.3s ease;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    font-family: var(--font-main);
 }
 
 .search-bar-wrapper input:focus,
@@ -840,6 +841,7 @@ input:checked + .slider:before {
     cursor: pointer;
     transition: all 0.3s;
     text-align: center;
+    font-family: var(--font-main);
 }
 
 .btn-primary {
