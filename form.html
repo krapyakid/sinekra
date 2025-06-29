@@ -197,23 +197,60 @@
         <div class="business-entry-card">
             <button type="button" class="remove-btn remove-business-btn" aria-label="Hapus Usaha">&times;</button>
             <div class="form-grid">
-                <div class="form-group form-group-full">
+                <div class="form-group">
                     <label>Nama Usaha</label>
-                    <input type="text" name="nama_usaha" required>
+                    <div class="input-wrapper">
+                        <input type="text" name="nama_usaha" required maxlength="100">
+                        <span class="clear-icon">&times;</span>
+                    </div>
+                    <div class="char-counter">0 / 100</div>
                 </div>
                 <div class="form-group">
+                    <label>Jenis Usaha</label>
+                     <div class="input-wrapper">
+                        <input type="text" name="jenis_usaha" maxlength="50">
+                        <span class="clear-icon">&times;</span>
+                    </div>
+                    <div class="char-counter">0 / 50</div>
+                </div>
+                 <div class="form-group">
                     <label>Kategori Usaha</label>
                     <input type="text" name="kategori_usaha">
                 </div>
                 <div class="form-group">
-                    <label>Jenis Usaha</label>
-                    <input type="text" name="jenis_usaha">
+                    <label>Nomor HP Usaha (WhatsApp)</label>
+                    <div class="phone-input-wrapper">
+                        <span class="phone-prefix">+62</span>
+                        <input type="tel" name="no_hp_perusahaan" placeholder="81234567890" pattern="[0-9]{9,13}">
+                    </div>
+                </div>
+                 <div class="form-group form-group-full ai-group">
+                    <label>Detail/Deskripsi Usaha</label>
+                    <div class="input-wrapper">
+                        <textarea name="detail_usaha" rows="3" maxlength="500"></textarea>
+                         <span class="clear-icon">&times;</span>
+                    </div>
+                    <div class="char-counter">0 / 500</div>
+                    <button type="button" class="ai-btn" data-target="detail_usaha" aria-label="Generate dengan AI">✨</button>
+                </div>
+                 <div class="form-group form-group-full ai-group">
+                    <label>Prospek Kerjasama/Penawaran</label>
+                    <div class="input-wrapper">
+                        <textarea name="prospek_kerjasama_penawaran" rows="3" maxlength="500" placeholder="Contoh: Terbuka untuk kerjasama reseller, mencari pemasok bahan baku, atau menawarkan jasa konsultasi..."></textarea>
+                        <span class="clear-icon">&times;</span>
+                    </div>
+                     <div class="char-counter">0 / 500</div>
+                    <button type="button" class="ai-btn" data-target="prospek_kerjasama_penawaran" aria-label="Generate dengan AI">✨</button>
+                </div>
+
+                <div class="form-group form-group-full">
+                    <label>URL Website</label>
+                    <div class="url-input-wrapper">
+                        <span class="url-prefix">https://www.</span>
+                        <input type="text" name="website_perusahaan" placeholder="namadomain.com">
+                    </div>
                 </div>
                 <div class="form-group form-group-full">
-                    <label>Detail/Deskripsi Usaha</label>
-                    <textarea name="detail_usaha" rows="3"></textarea>
-                </div>
-                <div class="form-group">
                     <label>URL Google Maps</label>
                     <div class="url-input-wrapper">
                         <span class="url-prefix">https://maps.app.goo.gl/</span>
@@ -260,7 +297,6 @@
                         <option value="Instagram">Instagram</option>
                         <option value="Facebook">Facebook</option>
                         <option value="TikTok">TikTok</option>
-                        <option value="Website">Website</option>
                         <option value="YouTube">YouTube</option>
                     </optgroup>
                     <option value="Lainnya">Lainnya</option>
