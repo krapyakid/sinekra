@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // --- KONFIGURASI ---
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-GZ7xYJvzT_G7uYv_N5KiRByre-XQFzJbIXkAyWM8bxSxiszIKDUxvPxTupqzyawq/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvsDmDoerDTDgV39Op65g8D_fGyCyTy82StbSzsACbpQoYnetw96E4mQ1T0suIHfhR/exec";
 
     // --- ELEMEN DOM ---
     const loadingIndicator = document.getElementById('detail-loading');
