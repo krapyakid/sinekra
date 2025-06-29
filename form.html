@@ -21,13 +21,6 @@
                 <img src="assets/logo_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="logo">
             </a>
             <div class="header-right">
-                <nav class="main-nav" id="main-nav">
-                    <button class="nav-close-btn" id="nav-close-btn">&times;</button>
-                    <a href="index.html" class="nav-link">Home</a>
-                    <a href="form.html" class="nav-link active">Isi Form</a>
-                    <a href="statistik.html" class="nav-link">Statistik</a>
-                    <a href="tentang.html" class="nav-link">Tentang</a>
-                </nav>
                 <div class="header-actions">
                     <button class="mobile-search-trigger" id="mobile-search-trigger" style="display: none !important;"></button>
                     <div class="mobile-menu-trigger" id="burger-menu-trigger">
@@ -37,6 +30,15 @@
             </div>
         </div>
     </header>
+
+    <div class="menu-overlay" id="menu-overlay"></div>
+    <nav class="main-nav" id="main-nav">
+        <button class="nav-close-btn" id="nav-close-btn">&times;</button>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="form.html" class="nav-link active">Isi Form</a>
+        <a href="statistik.html" class="nav-link">Statistik</a>
+        <a href="tentang.html" class="nav-link">Tentang</a>
+    </nav>
 
     <main class="container">
         <form id="data-form" class="form-container">
@@ -295,6 +297,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="form.js"></script>
     <script src="main.js"></script>
 </body>
