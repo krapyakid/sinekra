@@ -470,24 +470,57 @@ main.content-container {
     box-shadow: 0 8px 25px rgba(0,0,0,0.08);
 }
 
-.card-banner {
-    aspect-ratio: 4 / 3;
+.member-card .card-banner {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background-color: #f0f0f0;
+    border-top-left-radius: var(--card-border-radius);
+    border-top-right-radius: var(--card-border-radius);
+    overflow: hidden;
     position: relative;
 }
 
-.card-banner-img {
+.member-card .card-banner img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
-.placeholder {
-    background-color: #f0f2f5;
-    color: var(--light-text-color);
+.member-card:hover .card-banner img {
+    transform: scale(1.05);
 }
 
-.card-content {
-    padding: 20px;
+.card-location-overlay {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 0.35rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    text-decoration: none;
+    z-index: 1;
+    max-width: calc(100% - 1.5rem);
+}
+
+.card-location-overlay i {
+    font-size: 0.85rem;
+}
+
+.card-location-overlay span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.member-card .card-content {
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -499,11 +532,19 @@ main.content-container {
     color: var(--primary-color);
 }
 
-.card-description {
+.member-card .card-description {
+    color: var(--text-color-secondary);
     font-size: 0.9rem;
-    color: var(--light-text-color);
-    margin-bottom: 15px;
-    flex-grow: 1;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    flex-grow: 1; /* Allows this to take up space */
+    
+    /* Truncate to 2 lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .card-owner-name {
