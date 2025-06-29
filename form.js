@@ -110,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (selectWrapper) {
                     const select = selectWrapper.querySelector('select');
                     if (select) {
+                        select.value = ''; // Set value to empty to select the placeholder
                         select.selectedIndex = 0; // Reset to the placeholder option
                     }
                 }
