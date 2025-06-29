@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="detail-section">
                 <h3>Informasi Kontak</h3>
-                <p><strong>No. HP:</strong> ${member.no_hp_anggota && member.no_hp_active == 1 ? `<a href="https://wa.me/${member.no_hp_anggota.replace(/\D/g, '')}">${member.no_hp_anggota}</a>` : 'Tidak ditampilkan'}</p>
+                <p><strong>No. HP:</strong> ${member.no_hp_anggota && member.no_hp_active == 1 ? `<a href="https://wa.me/${String(member.no_hp_anggota).replace(/\D/g, '')}">${member.no_hp_anggota}</a>` : 'Tidak ditampilkan'}</p>
                 <p><strong>Alamat:</strong> ${member.detail_alamat && member.alamat_active == 1 ? member.detail_alamat : 'Tidak ditampilkan'}</p>
             </div>
             <div class="detail-section">
