@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (selectWrapper) {
                     const select = selectWrapper.querySelector('select');
                     if (select) {
-                        select.value = '';
+                        select.selectedIndex = 0; // Reset to the placeholder option
                     }
                 }
             }
@@ -137,22 +137,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 const platform = e.target.value;
                 const linkEntry = e.target.closest('.link-entry');
                 const urlInput = linkEntry.querySelector('input[name="url"]');
+                const urlPrefixSpan = linkEntry.querySelector('.url-prefix');
 
-                const platformPatterns = {
-                    'Shopee': 'https://shopee.co.id/username',
-                    'Tokopedia': 'https://www.tokopedia.com/namatoko',
-                    'Lazada': 'https://www.lazada.co.id/shop/namatoko',
-                    'TikTok Shop': 'https://www.tiktok.com/@username',
-                    'Blibli': 'https://www.blibli.com/merchant/nama-toko/TOS-XXXXX',
-                    'Instagram': 'https://www.instagram.com/username',
-                    'Facebook': 'https://www.facebook.com/username',
-                    'TikTok': 'https://www.tiktok.com/@username',
-                    'Website': 'https://www.namadomain.com',
-                    'YouTube': 'https://www.youtube.com/c/channelname'
+                const platformData = {
+                    'Shopee': { prefix: 'https://shopee.co.id/', placeholder: 'username' },
+                    'Tokopedia': { prefix: 'https://www.tokopedia.com/', placeholder: 'namatoko' },
+                    'Lazada': { prefix: 'https://www.lazada.co.id/shop/', placeholder: 'namatoko' },
+                    'TikTok Shop': { prefix: 'https://www.tiktok.com/@', placeholder: 'username' },
+                    'Blibli': { prefix: 'https://www.blibli.com/merchant/', placeholder: 'nama-toko/TOS-XXXXX' },
+                    'Instagram': { prefix: 'https://www.instagram.com/', placeholder: 'username' },
+                    'Facebook': { prefix: 'https://www.facebook.com/', placeholder: 'username' },
+                    'TikTok': { prefix: 'https://www.tiktok.com/@', placeholder: 'username' },
+                    'Website': { prefix: 'https://www.', placeholder: 'namadomain.com' },
+                    'YouTube': { prefix: 'https://www.youtube.com/', placeholder: 'c/channelname' },
+                    'Lainnya': { prefix: '', placeholder: 'https://...'}
                 };
 
-                if (urlInput) {
-                    urlInput.placeholder = platformPatterns[platform] || 'https://...';
+                const data = platformData[platform] || { prefix: 'https://', placeholder: '...' };
+
+                if (urlInput && urlPrefixSpan) {
+                    urlPrefixSpan.textContent = data.prefix;
+                    urlInput.placeholder = data.placeholder;
+                    // Hide prefix wrapper if prefix is empty (e.g., for "Lainnya")
+                    urlPrefixSpan.parentElement.style.display = data.prefix ? 'flex' : 'none';
+                    // Show a single input for "Lainnya"
+                    if (!data.prefix) {
+                        const plainInput = linkEntry.querySelector('.plain-url-input');
+                        if (plainInput) {
+                            plainInput.style.display = 'block';
+                            plainInput.value = urlInput.value; // sync values
+                            urlInput.value = '';
+                        }
+                    } else {
+                         const plainInput = linkEntry.querySelector('.plain-url-input');
+                        if (plainInput) plainInput.style.display = 'none';
+                    }
                 }
             }
         });
@@ -173,9 +192,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function updateBusinessTitles() {
+        const businessEntries = businessListContainer.querySelectorAll('.business-entry-card');
+        businessEntries.forEach((card, index) => {
+            let titleElement = card.querySelector('.business-entry-title');
+            if (!titleElement) {
+                titleElement = document.createElement('h4');
+                titleElement.className = 'business-entry-title';
+                // Insert after the remove button
+                card.insertBefore(titleElement, card.children[1]);
+            }
+            titleElement.textContent = `Usaha ke-${index + 1}`;
+        });
+    }
+
     function addBusinessEntry() {
         const businessClone = businessTemplate.content.cloneNode(true);
         businessListContainer.appendChild(businessClone);
+        updateBusinessTitles();
     }
 
     function addLinkEntry(container, type) {
@@ -188,6 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Hapus blok usaha
         if (e.target.classList.contains('remove-business-btn')) {
             e.target.closest('.business-entry-card').remove();
+            updateBusinessTitles();
         }
         // Tambah entri toko
         if (e.target.classList.contains('add-shop-btn')) {
@@ -228,21 +263,51 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Kumpulkan data usaha
         data.usaha = [];
-        document.querySelectorAll('.business-block').forEach(block => {
+        document.querySelectorAll('.business-entry-card').forEach(card => {
+            const gmapsPrefix = card.querySelector('.url-prefix')?.textContent || 'https://maps.app.goo.gl/';
+            const gmapsInput = card.querySelector('input[name="url_gmaps_perusahaan"]');
+
             const businessData = {
-                nama_usaha: block.querySelector('[name="nama_usaha"]').value,
-                bidang_usaha: block.querySelector('[name="bidang_usaha"]').value,
-                detail_usaha: block.querySelector('[name="detail_usaha"]').value,
-                omset_bulanan: block.querySelector('[name="omset_bulanan"]').value,
-                alamat_usaha: block.querySelector('[name="alamat_usaha"]').value,
-                shopee: block.querySelector('[name="shopee"]').value,
-                tokopedia: block.querySelector('[name="tokopedia"]').value,
-                lainnya: block.querySelector('[name="lainnya"]').value,
-                instagram: block.querySelector('[name="instagram"]').value,
-                facebook: block.querySelector('[name="facebook"]').value,
-                tiktok: block.querySelector('[name="tiktok"]').value,
-                website: block.querySelector('[name="website"]').value
+                nama_usaha: card.querySelector('[name="nama_usaha"]').value,
+                kategori_usaha: card.querySelector('[name="kategori_usaha"]').value,
+                jenis_usaha: card.querySelector('[name="jenis_usaha"]').value,
+                detail_usaha: card.querySelector('[name="detail_usaha"]').value,
+                url_gmaps_perusahaan: gmapsInput && gmapsInput.value ? gmapsPrefix + gmapsInput.value : '',
+                toko_online: [],
+                media_sosial: []
             };
+
+             // Kumpulkan Toko Online
+            card.querySelectorAll('.shop-list-container .link-entry').forEach(linkEntry => {
+                const platform = linkEntry.querySelector('select[name="platform"]').value;
+                const urlInput = linkEntry.querySelector('input[name="url"]');
+                const prefix = linkEntry.querySelector('.url-prefix').textContent;
+                const fullUrl = urlInput && urlInput.value ? prefix + urlInput.value : '';
+
+                if (platform && fullUrl) {
+                    businessData.toko_online.push({
+                        platform: platform,
+                        url: fullUrl
+                    });
+                }
+            });
+
+            // Kumpulkan Media Sosial
+            card.querySelectorAll('.social-list-container .link-entry').forEach(linkEntry => {
+                const platform = linkEntry.querySelector('select[name="platform"]').value;
+                const urlInput = linkEntry.querySelector('input[name="url"]');
+                const prefix = linkEntry.querySelector('.url-prefix').textContent;
+                const fullUrl = urlInput && urlInput.value ? prefix + urlInput.value : '';
+
+                if (platform && fullUrl) {
+                    businessData.media_sosial.push({
+                        platform: platform,
+                        url: fullUrl
+                    });
+                }
+            });
+
+
             data.usaha.push(businessData);
         });
 
