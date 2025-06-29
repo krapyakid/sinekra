@@ -30,35 +30,35 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mobile Search Logic (REMOVED as it's now always visible)
     
     // --- FUNGSI GLOBAL & DATA BERSAMA ---
-    const membersSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGe6AOx8Dsnq--KPToMl0Q4lF20650_IQ6VoLQxyy3heEFW43LSTIqB0UAUeTV0QOvr8O_YnaeU-om/pub?gid=0&output=csv";
-    const olshopSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGe6AOx8Dsnq--KPToMl0Q4lF20650_IQ6VoLQxyy3heEFW43LSTIqB0UAUeTV0QOvr8O_YnaeU-om/pub?gid=1048998840&output=csv";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-GZ7xYJvzT_G7uYv_N5KiRByre-XQFzJbIXkAyWM8bxSxiszIKDUxvPxTupqzyawq/exec";
     
-    let allMembers = [];
+    let allDataCache = []; // Cache untuk menyimpan data yang sudah di-fetch
 
-    // Fungsi untuk mengambil dan mem-parsing data
+    // Fungsi untuk mengambil dan mem-parsing data dari Apps Script
     async function fetchData() {
-        if (allMembers.length > 0) return allMembers; // Kembalikan dari cache jika sudah ada
+        if (allDataCache.length > 0) {
+            return allDataCache; // Kembalikan dari cache jika sudah ada
+        }
 
         try {
-            const [membersResponse, olshopResponse] = await Promise.all([
-                fetch(membersSheetUrl, { cache: 'no-cache' }),
-                fetch(olshopSheetUrl, { cache: 'no-cache' })
-            ]);
-
-            if (!membersResponse.ok || !olshopResponse.ok) {
-                throw new Error('Gagal mengambil data dari Google Sheets.');
+            const response = await fetch(SCRIPT_URL, { cache: 'no-cache' });
+            if (!response.ok) {
+                throw new Error(`Gagal mengambil data: ${response.statusText}`);
             }
-
-            const membersCsv = await membersResponse.text();
-            const olshopCsv = await olshopResponse.text();
-
-            const parsedMembers = parseCsv(membersCsv);
-            const parsedOlshops = parseCsv(olshopCsv);
-
-            allMembers = mergeData(parsedMembers, parsedOlshops);
-            return allMembers;
+            const result = await response.json();
+            if (result.status === "success") {
+                allDataCache = result.data; // Simpan data ke cache
+                return allDataCache;
+            } else {
+                throw new Error(result.message || 'Terjadi kesalahan dari server.');
+            }
         } catch (error) {
             console.error("Gagal memuat data:", error);
+            // Menampilkan pesan error di UI
+            const directoryGrid = document.getElementById('directory-grid');
+            if (directoryGrid) {
+                directoryGrid.innerHTML = `<p class="error-message">Gagal memuat data. Silakan coba muat ulang halaman.</p>`;
+            }
             return [];
         }
     }
@@ -105,16 +105,25 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         const members = await fetchData();
-        const businessMembers = members.filter(member => member.nama_usaha && member.nama_usaha.trim() !== '');
+        // Mengambil anggota yang memiliki minimal satu usaha yang terdaftar
+        const businessMembers = members.filter(member => member.usaha && member.usaha.length > 0);
         
         if (businessMembers.length === 0) {
-            directoryGrid.innerHTML = '<p>Gagal memuat data usaha atau tidak ada data.</p>';
+            directoryGrid.innerHTML = '<p>Saat ini belum ada data usaha yang terdaftar.</p>';
             return;
         }
 
         directoryGrid.innerHTML = '';
+        // Looping untuk setiap anggota, lalu looping untuk setiap usahanya
         businessMembers.forEach(member => {
-            directoryGrid.appendChild(createMemberCard(member));
+            member.usaha.forEach(u => {
+                 // Kirim data gabungan ke fungsi pembuat kartu
+                const cardData = {
+                    ...member, // data anggota (nama_lengkap, domisili, dll)
+                    ...u // data usaha (nama_usaha, kategori_usaha, dll)
+                };
+                directoryGrid.appendChild(createMemberCard(cardData));
+            });
         });
     }
 
@@ -239,9 +248,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const businessName = document.createElement('h3');
         businessName.className = 'card-business-name';
+        businessName.textContent = member.nama_usaha || 'Nama Usaha Tidak Tersedia';
 
         const description = document.createElement('p');
         description.className = 'card-description';
+        description.textContent = `${member.kategori_usaha || 'Kategori tidak tersedia'} • Oleh: ${member.nama_lengkap || 'Pemilik tidak diketahui'}`;
 
         const footer = document.createElement('div');
         footer.className = 'card-footer';
@@ -250,46 +261,10 @@ document.addEventListener('DOMContentLoaded', function() {
         contactBar.className = 'card-contact-bar';
 
         // --- Populate & Assemble ---
-        const namaUsaha = member.nama_usaha || 'Nama Usaha Belum Diisi';
-        businessName.textContent = namaUsaha;
-        
-        const deskripsiText = member.detail_profesi || 'Deskripsi usaha tidak tersedia.';
-        description.textContent = deskripsiText.substring(0, 100) + (deskripsiText.length > 100 ? '...' : '');
+        const ownerInfo = document.createElement('div');
+        ownerInfo.className = 'card-owner';
+        ownerInfo.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${member.domisili || 'Lokasi tidak tersedia'}`;
 
-        const gmapsUrl = member.url_gmaps;
-        const lokasiText = [member.nama_panggilan, member.domisili].filter(Boolean).join(' - ');
-        const locationTag = gmapsUrl ? document.createElement('a') : document.createElement('div');
-        if (gmapsUrl) {
-            locationTag.href = gmapsUrl;
-            locationTag.target = '_blank';
-            locationTag.addEventListener('click', (e) => e.stopPropagation()); // Hentikan event bubbling
-        }
-        locationTag.className = 'location-tag';
-        locationTag.innerHTML = `<i class="fas fa-map-marker-alt"></i><span>${lokasiText}</span>`;
-        
-        const placeholder = document.createElement('div');
-        placeholder.className = 'placeholder';
-        placeholder.textContent = namaUsaha.charAt(0);
-
-        if (member.id_anggota) {
-            const bannerImg = document.createElement('img');
-            bannerImg.src = `assets/usaha/${member.id_anggota}.jpg`;
-            bannerImg.alt = namaUsaha;
-            bannerImg.className = 'card-banner-img';
-            bannerImg.onerror = function() {
-                this.onerror = null;
-                this.src = 'assets/usaha/default_image_usaha.jpg';
-            };
-            banner.appendChild(bannerImg);
-        } else {
-            const defaultImg = document.createElement('img');
-            defaultImg.src = 'assets/usaha/default_image_usaha.jpg';
-            defaultImg.alt = namaUsaha;
-            defaultImg.className = 'card-banner-img';
-            banner.appendChild(defaultImg);
-        }
-        banner.appendChild(locationTag);
-        
         const icons = [
             { link: member.no_hp_wa ? `https://wa.me/${member.no_hp_wa.replace(/[^0-9]/g, '')}` : null, asset: 'assets/icon-whatsapp.svg' },
             { link: member.link_facebook, asset: 'assets/icon-facebook.svg' },
@@ -312,6 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
+        footer.append(ownerInfo);
         footer.appendChild(contactBar);
         content.append(businessName, description, footer);
         card.append(banner, content);
@@ -324,51 +300,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- FUNGSI UTILITAS ---
-    function parseCsv(csvText) {
-        const lines = csvText.trim().split(/\r?\n/);
-        if (lines.length < 2) return [];
-        const headers = lines[0].split(',').map(h => h.trim());
-        return lines.slice(1).map(line => {
-            const values = line.match(/(".*?"|[^",]*)(?=\s*,|\s*$)/g) || [];
-            const entry = {};
-            headers.forEach((header, i) => {
-                let value = values[i] || '';
-                if (value.startsWith('"') && value.endsWith('"')) {
-                    value = value.slice(1, -1);
-                }
-                entry[header] = value.replace(/""/g, '"').trim();
-            });
-            // Fallback jika id_anggota tidak ada
-            if (!entry.id_anggota) {
-                entry.id_anggota = 'gen_' + Math.random().toString(36).substr(2, 9);
-            }
-            return entry;
-        });
-    }
-
-    function mergeData(members, olshops) {
-        const olshopMap = olshops.reduce((acc, shop) => {
-            if (!shop.id_anggota) return acc;
-            if (!acc[shop.id_anggota]) {
-                acc[shop.id_anggota] = {};
-            }
-            const platform = (shop.platform || '').toLowerCase().replace(' ', '_');
-            const url = shop.url || '';
-
-            if (platform === 'shopee') acc[shop.id_anggota].link_shopee = url;
-            else if (platform === 'tokopedia') acc[shop.id_anggota].link_tokopedia = url;
-            else if (platform === 'tiktok_shop') acc[shop.id_anggota].link_tiktok = url;
-            else if (platform === 'facebook') acc[shop.id_anggota].link_facebook = url;
-            else if (platform === 'instagram') acc[shop.id_anggota].link_instagram = url;
-            else if (platform === 'website') acc[shop.id_anggota].link_website = url;
-            
-            return acc;
-        }, {});
-        return members.map(member => ({ ...member, ...(olshopMap[member.id_anggota] || {}) }));
-    }
-
-    // Fungsi Haversine untuk menghitung jarak
     function getDistance(lat1, lon1, lat2, lon2) {
+        if (!lat1 || !lon1 || !lat2 || !lon2) return Infinity;
         const R = 6371; // Radius bumi dalam km
         const dLat = (lat2 - lat1) * Math.PI / 180;
         const dLon = (lon2 - lon1) * Math.PI / 180;
