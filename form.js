@@ -390,13 +390,22 @@ document.addEventListener('DOMContentLoaded', function() {
         let anggotaHtml = '<h3>Biodata Diri</h3>';
         const biodataMap = {
             nama_lengkap: 'Nama Lengkap', th_masuk: 'Tahun Masuk', th_keluar: 'Tahun Keluar',
-            komplek: 'Komplek', domisili: 'Domisili', no_hp_anggota: 'No. HP', profesi: 'Profesi'
+            komplek: 'Komplek', domisili: 'Domisili', detail_alamat: 'Alamat Lengkap', 
+            no_hp_anggota: 'No. HP', profesi: 'Profesi'
         };
+        
         for (const key in biodataMap) {
             if (data.anggota_data[key]) {
                 anggotaHtml += `<div class="preview-item"><span class="preview-label">${biodataMap[key]}</span><span class="preview-value">${data.anggota_data[key]}</span></div>`;
             }
         }
+        
+        // Tambahkan status alumni secara spesifik
+        if (data.anggota_data.alumni !== undefined) {
+             const statusAlumni = data.anggota_data.alumni === 1 ? 'Alumni Pondok Pesantren Krapyak Yogyakarta' : 'Bukan Alumni';
+             anggotaHtml += `<div class="preview-item"><span class="preview-label">Status Alumni</span><span class="preview-value">${statusAlumni}</span></div>`;
+        }
+
         previewContainer.innerHTML += `<div class="preview-section">${anggotaHtml}</div>`;
 
         // --- Tampilkan Data Usaha ---
@@ -412,12 +421,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         usahaHtml += `<div class="preview-item"><span class="preview-label">${usahaMap[key]}</span><span class="preview-value">${usaha[key]}</span></div>`;
                     }
                 }
-                // Tambahkan toko online dan sosmed
-                if(usaha.toko_online.length > 0) {
-                    usahaHtml += `<div class="preview-item"><span class="preview-label">Toko Online</span><span class="preview-value">${usaha.toko_online.map(t => t.platform).join(', ')}</span></div>`;
+                // Tambahkan toko online dan sosmed - dengan perbaikan
+                if (usaha.toko_online && usaha.toko_online.length > 0) {
+                    const platforms = usaha.toko_online.map(t => t.platform_olshop).filter(Boolean).join(', ');
+                    if (platforms) {
+                        usahaHtml += `<div class="preview-item"><span class="preview-label">Toko Online</span><span class="preview-value">${platforms}</span></div>`;
+                    }
                 }
-                 if(usaha.media_sosial.length > 0) {
-                    usahaHtml += `<div class="preview-item"><span class="preview-label">Media Sosial</span><span class="preview-value">${usaha.media_sosial.map(s => s.platform).join(', ')}</span></div>`;
+                if (usaha.media_sosial && usaha.media_sosial.length > 0) {
+                    const platforms = usaha.media_sosial.map(s => s.platform_sosmed).filter(Boolean).join(', ');
+                    if (platforms) {
+                        usahaHtml += `<div class="preview-item"><span class="preview-label">Media Sosial</span><span class="preview-value">${platforms}</span></div>`;
+                    }
                 }
                 previewContainer.innerHTML += `<div class="preview-section">${usahaHtml}</div>`;
             });
@@ -438,12 +453,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Dapatkan IP Address di awal
         const ipAddress = await getIpAddress();
 
-        // Data Anggota
-        // Format ID Anggota baru: MMBR-timestamp-random
-        const idAnggota = `MMBR_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        
+        // Data Anggota (ID akan dibuat oleh Google Script)
         allData.anggota_data = {
-            id_anggota: idAnggota,
             nama_lengkap: formData.get('nama_lengkap'),
             nama_panggilan: formData.get('nama_panggilan'),
             alumni: document.getElementById('alumni_krapyak').checked ? 1 : 0, // Mengambil dari checkbox dan konversi ke 1/0
@@ -465,21 +476,13 @@ document.addEventListener('DOMContentLoaded', function() {
             device: navigator.userAgent // Mengambil info device dari user agent
         };
 
-        // Data Usaha
+        // Data Usaha (ID akan dibuat oleh Google Script)
         allData.usaha_list = [];
-        let usahaCounter = 0;
         document.querySelectorAll('.business-entry-card').forEach(card => {
-            usahaCounter++;
-            const idUsaha = `USH-${usahaCounter}`;
             const gmapsPrefix = card.querySelector('input[name="url_gmaps_perusahaan"]').previousElementSibling.textContent;
             const websitePrefix = card.querySelector('input[name="website_perusahaan"]').previousElementSibling.textContent;
 
-            let olshopCounter = 0;
-            let sosmedCounter = 0;
-
             const businessData = {
-                id_usaha: idUsaha,
-                id_anggota: idAnggota,
                 nama_usaha: card.querySelector('[name="nama_usaha"]').value,
                 kategori_usaha: card.querySelector('[name="kategori_usaha"]').value,
                 jenis_usaha: card.querySelector('[name="jenis_usaha"]').value,
@@ -488,12 +491,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 prospek_kerjasama_penawaran: card.querySelector('[name="prospek_kerjasama_penawaran"]').value,
                 website_perusahaan: card.querySelector('[name="website_perusahaan"]').value ? websitePrefix + card.querySelector('[name="website_perusahaan"]').value : '',
                 url_gmaps_perusahaan: card.querySelector('[name="url_gmaps_perusahaan"]').value ? gmapsPrefix + card.querySelector('[name="url_gmaps_perusahaan"]').value : '',
-                aktif: 1, // Sesuai permintaan
+                aktif: 1, 
                 toko_online: [],
                 media_sosial: []
             };
 
-            // Kumpulkan Toko Online
+            // Kumpulkan Toko Online (ID akan dibuat oleh Google Script)
             card.querySelectorAll('.shop-list-container .link-entry').forEach(linkEntry => {
                 const platform = linkEntry.querySelector('select[name="platform"]').value;
                 const urlInput = linkEntry.querySelector('input[name="url"]');
@@ -501,18 +504,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 const fullUrl = urlInput && urlInput.value ? prefix + urlInput.value : '';
 
                 if (platform && fullUrl) {
-                    olshopCounter++;
                     businessData.toko_online.push({
-                        id_olshop: `OLSHP-${olshopCounter}`,
-                        id_usaha: idUsaha,
-                        id_anggota: idAnggota,
                         platform_olshop: platform,
                         url_olshop: fullUrl
                     });
                 }
             });
 
-            // Kumpulkan Media Sosial
+            // Kumpulkan Media Sosial (ID akan dibuat oleh Google Script)
             card.querySelectorAll('.social-list-container .link-entry').forEach(linkEntry => {
                 const platform = linkEntry.querySelector('select[name="platform"]').value;
                 const urlInput = linkEntry.querySelector('input[name="url"]');
@@ -520,11 +519,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const fullUrl = urlInput && urlInput.value ? prefix + urlInput.value : '';
 
                 if (platform && fullUrl) {
-                    sosmedCounter++;
                      businessData.media_sosial.push({
-                        id_sosmed: `SSMD-${sosmedCounter}`,
-                        id_usaha: idUsaha,
-                        id_anggota: idAnggota,
                         platform_sosmed: platform,
                         url_sosmed: fullUrl
                     });
