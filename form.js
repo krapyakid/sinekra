@@ -206,20 +206,66 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function handleAiButtonClick(event) {
-        const targetId = event.target.dataset.target;
+    async function handleAiButtonClick(event) {
+        const button = event.target;
+        const targetId = button.dataset.target;
         const targetTextarea = document.getElementById(targetId);
-        const prompts = {
-            pengembangan_profesi: "Saya ingin berkolaborasi dengan sesama alumni untuk membuat program pelatihan kewirausahaan digital bagi santri. Fokusnya pada skill praktis seperti digital marketing dan manajemen e-commerce, memanfaatkan platform yang sudah ada untuk menciptakan dampak ekonomi yang nyata dan terukur di lingkungan pesantren.",
-            ide: "Saya mengusulkan sebuah platform 'Sinergi Bisnis Santri' yang terintegrasi, di mana anggota bisa memetakan keahlian, menawarkan jasa, dan mencari mitra untuk proyek bersama. Platform ini bisa menjadi inkubator ide, memfasilitasi kolaborasi dari tahap gagasan hingga eksekusi dengan semangat gotong royong.",
-            lain_lain: "Saya memiliki keahlian di bidang desain grafis dan video editing, siap berkontribusi untuk kebutuhan visual promosi kegiatan Sinergi Ekonomi. Saya juga tertarik untuk berbagi pengetahuan melalui workshop kecil.",
-            detail_usaha: "Kami adalah kedai kopi yang berfokus pada biji kopi asli Indonesia dengan proses roasting mandiri. Selain menyajikan kopi, kami juga menyediakan ruang bagi komunitas untuk berkumpul dan berdiskasi.",
-            prospek_kerjasama_penawaran: "Kami mencari mitra untuk distribusi produk kopi bubuk kami ke kafe atau kantor di seluruh Indonesia. Kami menawarkan skema bagi hasil yang menarik dan dukungan branding."
-        };
-        if (targetTextarea && prompts[targetId]) {
-            targetTextarea.value = prompts[targetId];
-            // Trigger input event to update char counter
-            targetTextarea.dispatchEvent(new Event('input', { bubbles: true }));
+        if (!targetTextarea) return;
+
+        let prompt = "";
+        const formGroup = button.closest('.form-group, .form-group-full');
+
+        switch (targetId) {
+            case 'detail_usaha':
+                const kategori = formGroup.querySelector('select[name="kategori_usaha"]')?.value || 'umum';
+                prompt = `Buatkan contoh deskripsi usaha yang menarik dan singkat (maksimal 2-3 kalimat) untuk sebuah usaha dalam kategori "${kategori}".`;
+                break;
+            case 'prospek_kerjasama_penawaran':
+                prompt = `Buatkan contoh teks singkat (maksimal 2-3 kalimat) untuk kolom "Prospek Kerjasama/Penawaran" pada formulir data anggota, yang menjelaskan jenis kerjasama yang dicari atau ditawarkan.`;
+                break;
+            case 'pengembangan_profesi':
+                prompt = `Buatkan contoh rencana pengembangan profesi atau keahlian (maksimal 2-3 kalimat) yang relevan untuk seorang anggota komunitas ekonomi.`;
+                break;
+            case 'ide':
+                prompt = `Buatkan contoh ide atau gagasan singkat (maksimal 2-3 kalimat) untuk program atau kegiatan Sinergi Ekonomi Santri.`;
+                break;
+            case 'lain_lain':
+                prompt = `Buatkan contoh isian untuk kolom "Lain-lain" (maksimal 2-3 kalimat) yang berisi informasi tambahan yang relevan tentang keahlian atau kontribusi yang bisa diberikan untuk komunitas.`;
+                break;
+            default:
+                prompt = "Buatkan contoh teks singkat yang relevan.";
+        }
+
+        button.classList.add('loading');
+        button.disabled = true;
+
+        try {
+            // Alihkan permintaan ke serverless function kita yang aman
+            const response = await fetch('/.netlify/functions/generate-ai-text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt: prompt })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            if (data.completion) {
+                targetTextarea.value = data.completion.trim();
+                targetTextarea.dispatchEvent(new Event('input', { bubbles: true })); // Update char counter
+            }
+
+        } catch (error) {
+            console.error('Error fetching AI completion:', error);
+            alert(`Gagal menghasilkan teks dengan AI. Silakan coba lagi. Error: ${error.message}`);
+        } finally {
+            button.classList.remove('loading');
+            button.disabled = false;
         }
     }
 
