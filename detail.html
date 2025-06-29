@@ -57,6 +57,52 @@
             font-weight: 600;
         }
 
+        .breadcrumb-nav {
+            padding: 0.75rem 0;
+            margin-bottom: 1rem;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb-item a {
+            color: #4a90e2; /* Using a color from the existing palette */
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .breadcrumb-item a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-item+.breadcrumb-item::before {
+            display: inline-block;
+            padding-right: .5rem;
+            padding-left: .5rem;
+            color: #6c757d;
+            content: ">"; /* Changed for style */
+        }
+
+        .breadcrumb-item.active {
+            color: #333;
+            font-weight: 600;
+        }
+
         .detail-section {
             margin-top: 1.5rem;
             padding-top: 1.5rem;
@@ -136,7 +182,14 @@
         </div>
     </header>
 
-    <div class="container">
+    <main class="container">
+         <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page" id="breadcrumb-nama">Detail Anggota</li>
+            </ol>
+        </nav>
+
         <!-- Elemen loading dan error dipisahkan dari kontainer konten -->
         <div id="detail-loading" class="directory-status">
             <div class="spinner"></div>
@@ -148,10 +201,10 @@
         </div>
 
         <!-- Konten akan diisi di sini oleh JS -->
-        <main id="detail-content" class="detail-container" style="display: none;">
+        <div id="detail-content" class="detail-container" style="display: none;">
             <!-- Content will be injected by detail.js -->
-        </main>
-    </div>
+        </div>
+    </main>
 
     <div class="menu-overlay" id="menu-overlay"></div>
     <nav class="main-nav" id="main-nav">
