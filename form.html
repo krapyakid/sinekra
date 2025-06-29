@@ -404,16 +404,47 @@
             document.getElementById('modal-submit-btn').addEventListener('click', () => {
                 const userAnswer = parseInt(document.getElementById('captcha-answer').value, 10);
                 if (userAnswer === captchaAnswer) {
-                    // Di sini kita akan memanggil fungsi untuk mengirim data ke Google Apps Script
-                    alert('Verifikasi Berhasil! Mengirim data...');
-                    console.log('Data yang akan dikirim:', window.finalData);
-                    // TODO: Ganti dengan fetch call ke Google Apps Script
+                    // Verifikasi berhasil, mulai proses pengiriman
                     modal.style.display = 'none';
-                    // Tampilkan status modal (misal: loading)
-                    document.getElementById('status-modal').style.display = 'flex';
+                    const statusModal = document.getElementById('status-modal');
+                    statusModal.style.display = 'flex';
                     document.getElementById('submission-loading').style.display = 'block';
                     document.getElementById('submission-success').style.display = 'none';
                     document.getElementById('submission-error').style.display = 'none';
+
+                    // Ambil data final dan URL Apps Script (GANTI URL INI)
+                    const dataToSubmit = window.finalData;
+                    const idAnggota = dataToSubmit.anggota_data.id_anggota;
+                    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwC8VxR5KVVpyMlVYI1WSAblsMGWrkEqQq0JgNNivWV4dWTSfk_2ODxol2zWkQy59aZ/exec";
+
+                     // Kirim data ke Google Apps Script
+                    fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'cors',
+                        cache: 'no-cache',
+                        headers: {
+                            'Content-Type': 'text/plain;charset=utf-8',
+                        },
+                        body: JSON.stringify(dataToSubmit)
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === "success") {
+                            document.getElementById('submission-loading').style.display = 'none';
+                            document.getElementById('submission-success').style.display = 'block';
+                            // Redirect ke halaman detail setelah 2 detik
+                            setTimeout(() => {
+                                window.location.href = `detail.html?id=${idAnggota}`;
+                            }, 2000);
+                        } else {
+                            throw new Error(data.message || 'Terjadi kesalahan dari server.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error submitting data:', error);
+                        document.getElementById('submission-loading').style.display = 'none';
+                        document.getElementById('submission-error').style.display = 'block';
+                    });
 
                 } else {
                     alert('Jawaban verifikasi salah. Silakan coba lagi.');
