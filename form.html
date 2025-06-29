@@ -321,14 +321,29 @@
     <!-- Modal Konfirmasi -->
     <div id="confirmation-modal" class="modal-overlay" style="display:none;">
         <div class="modal-content">
-            <h2>Konfirmasi Data</h2>
-            <p>Mohon periksa kembali data yang Anda masukkan sebelum mengirim.</p>
-            <div id="modal-preview-grid" class="modal-preview-grid">
-                <!-- Data preview akan disisipkan di sini -->
+            <div id="review-section">
+                <h2>Periksa Kembali Data Anda</h2>
+                <p>Pastikan semua informasi yang Anda masukkan sudah benar sebelum melanjutkan.</p>
+                <div id="modal-preview-grid" class="modal-preview-grid">
+                    <!-- Data preview akan disisipkan di sini oleh JS -->
+                </div>
+                <div class="modal-button-group">
+                    <button type="button" id="modal-edit-btn" class="btn btn-secondary">Edit Kembali</button>
+                    <button type="button" id="modal-continue-btn" class="btn btn-primary">Lanjut ke Verifikasi</button>
+                </div>
             </div>
-            <div class="modal-button-group">
-                <button type="button" id="modal-edit-btn" class="btn btn-secondary">Edit Kembali</button>
-                <button type="button" id="modal-submit-btn" class="btn btn-primary">Ya, Kirim Sekarang</button>
+
+            <div id="captcha-section" style="display:none;">
+                <h2>Verifikasi Anti-Spam</h2>
+                <p>Untuk memastikan Anda bukan robot, harap jawab pertanyaan sederhana di bawah ini.</p>
+                <div class="captcha-challenge">
+                    <span id="captcha-question"></span>
+                    <input type="number" id="captcha-answer" placeholder="Jawaban Anda...">
+                </div>
+                 <div class="modal-button-group">
+                    <button type="button" id="modal-back-btn" class="btn btn-secondary">Kembali</button>
+                    <button type="button" id="modal-submit-btn" class="btn btn-primary">Kirim Data Sekarang</button>
+                </div>
             </div>
         </div>
     </div>
@@ -360,6 +375,52 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="form.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('confirmation-modal');
+            const reviewSection = document.getElementById('review-section');
+            const captchaSection = document.getElementById('captcha-section');
+            let captchaAnswer = 0;
+
+            function showCaptcha() {
+                reviewSection.style.display = 'none';
+                captchaSection.style.display = 'block';
+                const num1 = Math.floor(Math.random() * 10) + 1;
+                const num2 = Math.floor(Math.random() * 10) + 1;
+                captchaAnswer = num1 + num2;
+                document.getElementById('captcha-question').textContent = `Berapa ${num1} + ${num2} ?`;
+                document.getElementById('captcha-answer').value = '';
+            }
+
+            function showReview() {
+                captchaSection.style.display = 'none';
+                reviewSection.style.display = 'block';
+            }
+            
+            // Event Listeners untuk Tombol Modal
+            document.getElementById('modal-edit-btn').addEventListener('click', () => modal.style.display = 'none');
+            document.getElementById('modal-continue-btn').addEventListener('click', showCaptcha);
+            document.getElementById('modal-back-btn').addEventListener('click', showReview);
+            document.getElementById('modal-submit-btn').addEventListener('click', () => {
+                const userAnswer = parseInt(document.getElementById('captcha-answer').value, 10);
+                if (userAnswer === captchaAnswer) {
+                    // Di sini kita akan memanggil fungsi untuk mengirim data ke Google Apps Script
+                    alert('Verifikasi Berhasil! Mengirim data...');
+                    console.log('Data yang akan dikirim:', window.finalData);
+                    // TODO: Ganti dengan fetch call ke Google Apps Script
+                    modal.style.display = 'none';
+                    // Tampilkan status modal (misal: loading)
+                    document.getElementById('status-modal').style.display = 'flex';
+                    document.getElementById('submission-loading').style.display = 'block';
+                    document.getElementById('submission-success').style.display = 'none';
+                    document.getElementById('submission-error').style.display = 'none';
+
+                } else {
+                    alert('Jawaban verifikasi salah. Silakan coba lagi.');
+                }
+            });
+        });
+    </script>
     <script src="main.js"></script>
 </body>
 </html> 
