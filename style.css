@@ -1379,36 +1379,3 @@ input:checked + .slider:before {
         border-radius: 0; /* Hapus jika ada border-radius */
     }
 }
-
-/* Penyesuaian untuk Select dengan Tombol Clear */
-.select-with-clear {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.select-with-clear select {
-    flex-grow: 1;
-    width: 100%; /* Pastikan select mengisi ruang yang tersedia */
-}
-
-.clear-select-icon {
-    background-color: #f1f1f1;
-    border: 1px solid #ddd;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 16px;
-    color: #888;
-    flex-shrink: 0; /* Mencegah tombol menyusut */
-    transition: all 0.2s ease;
-}
-
-.clear-select-icon:hover {
-    background-color: #e0e0e0;
-    color: #333;
-}
