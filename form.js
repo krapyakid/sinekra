@@ -457,7 +457,7 @@ document.addEventListener('DOMContentLoaded', function() {
         allData.anggota_data = {
             nama_lengkap: formData.get('nama_lengkap'),
             nama_panggilan: formData.get('nama_panggilan'),
-            alumni: document.getElementById('alumni_krapyak').checked ? 1 : 0, // Mengambil dari checkbox dan konversi ke 1/0
+            alumni: formData.get('alumni'), // Mengambil dari field alumni
             th_masuk: formData.get('th_masuk'),
             th_keluar: formData.get('th_keluar'),
             komplek: formData.get('komplek'),
