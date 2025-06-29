@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // --- KONFIGURASI ---
-    const membersSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGe6AOx8Dsnq--KPToMl0Q4lF20650_IQ6VoLQxyy3heEFW43LSTIqB0UAUeTV0QOvr8O_YnaeU-om/pub?gid=0&output=csv";
-    const olshopSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGe6AOx8Dsnq--KPToMl0Q4lF20650_IQ6VoLQxyy3heEFW43LSTIqB0UAUeTV0QOvr8O_YnaeU-om/pub?gid=1048998840&output=csv";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-GZ7xYJvzT_G7uYv_N5KiRByre-XQFzJbIXkAyWM8bxSxiszIKDUxvPxTupqzyawq/exec";
 
     // --- ELEMEN DOM ---
     const loadingIndicator = document.getElementById('detail-loading');
@@ -18,189 +17,116 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        console.log(`Mencari anggota dengan ID: ${memberId}`); // Log untuk debugging
-
         try {
-            // Tampilkan loading saat mulai fetch
             if(loadingIndicator) loadingIndicator.style.display = 'flex';
             if(errorMessage) errorMessage.style.display = 'none';
 
-            const [membersResponse, olshopResponse] = await Promise.all([
-                fetch(membersSheetUrl, { cache: 'no-cache' }),
-                fetch(olshopSheetUrl, { cache: 'no-cache' })
-            ]);
-            
-            if (!membersResponse.ok || !olshopResponse.ok) {
-                throw new Error('Gagal mengambil data dari Google Sheets.');
+            // Ambil data untuk satu anggota spesifik
+            const response = await fetch(`${SCRIPT_URL}?id=${memberId}`, { cache: 'no-cache' });
+            if (!response.ok) {
+                throw new Error(`Gagal mengambil data: ${response.statusText}`);
             }
 
-            const membersCsv = await membersResponse.text();
-            const olshopCsv = await olshopResponse.text();
-            const allMembers = mergeData(parseCsv(membersCsv), parseCsv(olshopCsv));
-            
-            console.log("Total anggota setelah merge:", allMembers.length); // Log untuk debugging
-
-            const member = allMembers.find(m => m.id_anggota === memberId);
-
-            if (member) {
-                console.log("Anggota ditemukan:", member); // Log untuk debugging
-                displayMember(member);
+            const result = await response.json();
+            if (result.status === "success" && result.data) {
+                displayMember(result.data);
             } else {
-                console.error(`Anggota dengan ID "${memberId}" tidak ditemukan dalam data.`); // Log error
-                showError(`Anggota dengan ID "${memberId}" tidak ditemukan.`);
+                throw new Error(result.message || `Anggota dengan ID "${memberId}" tidak ditemukan.`);
             }
 
         } catch (error) {
             console.error("Error loading member details:", error);
-            showError("Terjadi kesalahan saat memuat data. Periksa konsol untuk detail.");
+            showError(error.message);
         }
     }
 
     function displayMember(member) {
-        // Sembunyikan indikator loading
         if(loadingIndicator) loadingIndicator.style.display = 'none';
-        
-        // Pastikan kontainer ada sebelum mengisi
         if (!detailContent) {
             console.error("Elemen 'detail-content' tidak ditemukan.");
             return;
         }
+        detailContent.style.display = 'block'; // Menggunakan block, bukan grid
 
-        // Tampilkan kontainer konten
-        detailContent.style.display = 'grid';
-
-        const placeholderDiv = `<div class="main-image-placeholder">${(member.nama_usaha || member.nama_lengkap || 'A').charAt(0)}</div>`;
-
-        // Kontak dan Tombol Aksi
-        let contactButtonsHtml = '';
-        if (member.no_hp) {
-            const phoneNumber = member.no_hp.replace(/\D/g, ''); // Hapus semua non-digit
-            contactButtonsHtml += `<a href="https://wa.me/${phoneNumber}" class="contact-btn whatsapp" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i> Hubungi via WhatsApp</a>`;
-        }
-        if (member.url_gmaps) {
-            contactButtonsHtml += `<a href="${member.url_gmaps}" class="contact-btn gmaps" target="_blank" rel="noopener noreferrer"><i class="fas fa-map-marker-alt"></i> Lihat di Google Maps</a>`;
-        }
-        if (member.website_url) {
-            contactButtonsHtml += `<a href="${member.website_url}" class="contact-btn website" target="_blank" rel="noopener noreferrer"><i class="fas fa-globe"></i> Kunjungi Website</a>`;
-        }
-
-        // Toko Online
-        let olshopsHtml = '';
-        const olshopPlatforms = {
-            link_shopee: { name: 'Shopee', icon: 'fa-shopping-bag' },
-            link_tokopedia: { name: 'Tokopedia', icon: 'fa-store' },
-            link_tiktok: { name: 'TikTok Shop', icon: 'fa-tiktok' },
-            link_bukalapak: { name: 'Bukalapak', icon: 'fa-store-alt' },
-            link_facebook: { name: 'Facebook', icon: 'fa-facebook-f' }
-        };
-
-        let olshopLinks = '';
-        for (const key in olshopPlatforms) {
-            if (member[key]) {
-                const platform = olshopPlatforms[key];
-                olshopLinks += `
-                    <a href="${member[key]}" class="olshop-link" target="_blank" rel="noopener noreferrer">
-                        <i class="fab ${platform.icon}"></i> <span>${platform.name}</span>
-                    </a>`;
-            }
-        }
-        if (olshopLinks) {
-            olshopsHtml = `<div class="detail-section"><h3>Toko Online & Media Sosial</h3><div class="olshop-container">${olshopLinks}</div></div>`;
-        }
-        
-        const bannerSrc = member.id_anggota ? `assets/usaha/${member.id_anggota}.jpg` : (member.banner_url || '');
-
-        // Langsung isi innerHTML dari 'detail-content'
-        detailContent.innerHTML = `
-            <div class="product-gallery">
-                <div class="main-image">
-                    <img src="${bannerSrc}" alt="${member.nama_usaha || ''}" onerror="this.parentElement.innerHTML = \`${placeholderDiv}\`;">
+        // --- Data Utama Anggota ---
+        const memberInfoHtml = `
+            <div class="detail-header">
+                <div class="detail-header-image">
+                    ${(member.nama_lengkap || 'A').charAt(0)}
+                </div>
+                <div class="detail-header-info">
+                    <h1>${member.nama_lengkap}</h1>
+                    <p>${member.profesi || 'Profesi tidak diisi'}</p>
+                    <div class="info-tags">
+                        <span><i class="fas fa-calendar-alt"></i> Angkatan: ${member.th_masuk || 'N/A'}</span>
+                        <span><i class="fas fa-map-marker-alt"></i> Domisili: ${member.domisili || 'N/A'}</span>
+                        <span><i class="fas fa-building"></i> Komplek: ${member.komplek || 'N/A'}</span>
+                    </div>
                 </div>
             </div>
-            <div class="product-details">
-                <h1 class="detail-title">${member.nama_usaha || 'Usaha Belum Bernama'}</h1>
-                <p class="detail-owner">Oleh: <strong>${member.nama_lengkap || 'N/A'}</strong> (Angkatan: ${member.angkatan || 'N/A'})</p>
-                
-                <div class="contact-buttons">${contactButtonsHtml || '<p>Tidak ada kontak yang bisa dihubungi.</p>'}</div>
-
-                <div class="detail-section">
-                    <h3>Deskripsi</h3>
-                    <p class="detail-description">${member.detail_profesi || 'Tidak ada deskripsi.'}</p>
-                </div>
-
-                 <div class="detail-section">
-                    <h3>Prospek & Kerjasama</h3>
-                    <p class="detail-description">${member.prospek_kerjasama || 'Tidak ada informasi prospek.'}</p>
-                </div>
-
-                ${olshopsHtml}
-
-                <div class="detail-section">
-                    <h3>Info Tambahan</h3>
-                    <p><strong>Domisili:</strong> ${member.domisili || 'N/A'}</p>
-                    <p><strong>Komplek:</strong> ${member.komplek || 'N/A'}</p>
-                </div>
+            <div class="detail-section">
+                <h3>Informasi Kontak</h3>
+                <p><strong>No. HP:</strong> ${member.no_hp_anggota && member.no_hp_active == 1 ? `<a href="https://wa.me/${member.no_hp_anggota.replace(/\D/g, '')}">${member.no_hp_anggota}</a>` : 'Tidak ditampilkan'}</p>
+                <p><strong>Alamat:</strong> ${member.detail_alamat && member.alamat_active == 1 ? member.detail_alamat : 'Tidak ditampilkan'}</p>
+            </div>
+            <div class="detail-section">
+                <h3>Gagasan & Pengembangan Diri</h3>
+                <p><strong>Rencana Pengembangan:</strong> ${member.pengembangan_profesi || 'Tidak ada'}</p>
+                <p><strong>Ide untuk Komunitas:</strong> ${member.ide || 'Tidak ada'}</p>
             </div>
         `;
+        
+        detailContent.innerHTML = memberInfoHtml;
+
+        // --- Tampilkan Daftar Usaha ---
+        if (member.usaha && member.usaha.length > 0) {
+            let usahaHtml = '<div class="detail-section"><h2>Daftar Usaha</h2>';
+            member.usaha.forEach(u => {
+                
+                // Toko Online & Sosmed untuk usaha ini
+                const olshopLinks = u.toko_online.map(shop => 
+                    `<a href="${shop.url_olshop}" target="_blank" class="social-link"><i class="fas fa-shopping-cart"></i> ${shop.platform_olshop}</a>`
+                ).join('');
+                const sosmedLinks = u.media_sosial.map(social => 
+                    `<a href="${social.url_sosmed}" target="_blank" class="social-link"><i class="fas fa-share-alt"></i> ${social.platform_sosmed}</a>`
+                ).join('');
+
+                usahaHtml += `
+                    <div class="business-card">
+                        <h3>${u.nama_usaha}</h3>
+                        <p class="category-tag">${u.kategori_usaha || ''}</p>
+                        <p>${u.detail_usaha || 'Tidak ada deskripsi usaha.'}</p>
+                        <div class="business-contact">
+                            ${u.no_hp_perusahaan ? `<span><i class="fas fa-phone"></i> ${u.no_hp_perusahaan}</span>` : ''}
+                            ${u.website_perusahaan ? `<span><i class="fas fa-globe"></i> <a href="${u.website_perusahaan}" target="_blank">Website</a></span>` : ''}
+                            ${u.url_gmaps_perusahaan ? `<span><i class="fas fa-map-marked-alt"></i> <a href="${u.url_gmaps_perusahaan}" target="_blank">Google Maps</a></span>` : ''}
+                        </div>
+                        <div class="business-socials">
+                            ${olshopLinks}
+                            ${sosmedLinks}
+                        </div>
+                         <div class="prospect-section">
+                            <strong>Prospek Kerjasama:</strong>
+                            <p>${u.prospek_kerjasama_penawaran || 'Tidak ada informasi.'}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            usahaHtml += '</div>';
+            detailContent.innerHTML += usahaHtml;
+        }
     }
 
     function showError(message = "Gagal memuat data atau anggota tidak ditemukan.") {
         if(loadingIndicator) loadingIndicator.style.display = 'none';
-        if(detailContent) detailContent.style.display = 'none'; // Pastikan konten disembunyikan
+        if(detailContent) detailContent.style.display = 'none';
         if(errorMessage) {
-            errorMessage.style.display = 'flex'; // Gunakan flex agar bisa center align
+            errorMessage.style.display = 'flex';
             const p = errorMessage.querySelector('p');
             if (p) p.textContent = message;
         }
     }
-
-
-    // --- FUNGSI UTILITAS (DUPLIKAT DARI main.js) ---
-    // NOTE: Dalam proyek nyata, ini sebaiknya ada di file utilitas terpisah
-    function parseCsv(csvText) {
-        const lines = csvText.trim().split(/\r?\n/);
-        if (lines.length < 2) return [];
-        const headers = lines[0].split(',').map(h => h.trim());
-        return lines.slice(1).map(line => {
-            // Regex yang lebih andal untuk menangani koma di dalam field yang dikutip
-            const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            const entry = {};
-            headers.forEach((header, i) => {
-                let value = values[i] || '';
-                // Membersihkan tanda kutip di awal dan akhir jika ada
-                if (value.startsWith('"') && value.endsWith('"')) {
-                    value = value.slice(1, -1);
-                }
-                // Mengganti tanda kutip ganda (escape) dengan satu tanda kutip
-                entry[header] = value.replace(/""/g, '"').trim();
-            });
-            if (!entry.id_anggota) {
-                entry.id_anggota = 'gen_' + Math.random().toString(36).substr(2, 9);
-            }
-            return entry;
-        });
-    }
-
-    function mergeData(members, olshops) {
-        const olshopMap = olshops.reduce((acc, shop) => {
-            if (!shop.id_anggota) return acc;
-            if (!acc[shop.id_anggota]) {
-                acc[shop.id_anggota] = {};
-            }
-            const platform = (shop.platform || '').toLowerCase();
-            const url = shop.url || '';
-            if (platform === 'shopee') acc[shop.id_anggota].link_shopee = url;
-            else if (platform === 'tokopedia') acc[shop.id_anggota].link_tokopedia = url;
-            else if (platform === 'tiktok shop') acc[shop.id_anggota].link_tiktok = url;
-            else if (platform === 'lainnya') {
-                if (url.includes('bukalapak.com')) acc[shop.id_anggota].link_bukalapak = url;
-                else if (url.includes('facebook.com')) acc[shop.id_anggota].link_facebook = url;
-            }
-            return acc;
-        }, {});
-        return members.map(member => ({ ...member, ...(olshopMap[member.id_anggota] || {}) }));
-    }
-
+    
     // --- Mulai proses ---
     loadMemberDetail();
 }); 
