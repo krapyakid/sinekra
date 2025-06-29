@@ -670,16 +670,23 @@ fieldset.form-section {
 }
 
 .form-section-title {
-    font-size: 1.5rem;
+    grid-column: 1 / -1;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
     color: var(--primary-color);
-    margin-bottom: 1.5rem;
-    margin-top: 4px;
 }
 
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px 25px;
+}
+
+.business-entry-card .form-grid {
+    grid-template-columns: 1fr 1fr;
 }
 
 .form-group.form-group-full {
