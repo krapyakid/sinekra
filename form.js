@@ -347,50 +347,135 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function handleFormSubmit(e) {
+    // --- FUNGSI BARU UNTUK VALIDASI, POPUP, DAN SUBMISI ---
+
+    function generateUniqueId(prefix = 'id') {
+        return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    }
+
+    function validateForm() {
+        let firstInvalidField = null;
+        const requiredFields = form.querySelectorAll('[required]');
+
+        for (const field of requiredFields) {
+            if (!field.value.trim()) {
+                const label = field.closest('.form-group, .form-group-full').querySelector('label').innerText;
+                alert(`Kolom wajib diisi: "${label.replace('*', '').trim()}"`);
+                field.focus();
+                firstInvalidField = field;
+                // Tambahkan class error untuk styling
+                field.classList.add('input-error');
+                // Hapus class error setelah beberapa detik
+                setTimeout(() => field.classList.remove('input-error'), 3000);
+                return false;
+            }
+             field.classList.remove('input-error');
+        }
+        return true;
+    }
+    
+    function populateReviewModal(data) {
+        const previewContainer = document.getElementById('modal-preview-grid');
+        previewContainer.innerHTML = ''; // Kosongkan preview sebelumnya
+
+        // --- Tampilkan Data Anggota ---
+        let anggotaHtml = '<h3>Biodata Diri</h3>';
+        const biodataMap = {
+            nama_lengkap: 'Nama Lengkap', th_masuk: 'Tahun Masuk', th_keluar: 'Tahun Keluar',
+            komplek: 'Komplek', domisili: 'Domisili', no_hp_anggota: 'No. HP', profesi: 'Profesi'
+        };
+        for (const key in biodataMap) {
+            if (data.anggota_data[key]) {
+                anggotaHtml += `<div class="preview-item"><span class="preview-label">${biodataMap[key]}</span><span class="preview-value">${data.anggota_data[key]}</span></div>`;
+            }
+        }
+        previewContainer.innerHTML += `<div class="preview-section">${anggotaHtml}</div>`;
+
+        // --- Tampilkan Data Usaha ---
+        if (data.usaha_list && data.usaha_list.length > 0) {
+            data.usaha_list.forEach((usaha, index) => {
+                let usahaHtml = `<h3>Usaha ke-${index + 1}</h3>`;
+                const usahaMap = {
+                    nama_usaha: 'Nama Usaha', kategori_usaha: 'Kategori', jenis_usaha: 'Jenis Usaha',
+                    no_hp_perusahaan: 'No. HP Usaha', website_perusahaan: 'Website', url_gmaps_perusahaan: 'Google Maps'
+                };
+                 for (const key in usahaMap) {
+                    if (usaha[key]) {
+                        usahaHtml += `<div class="preview-item"><span class="preview-label">${usahaMap[key]}</span><span class="preview-value">${usaha[key]}</span></div>`;
+                    }
+                }
+                // Tambahkan toko online dan sosmed
+                if(usaha.toko_online.length > 0) {
+                    usahaHtml += `<div class="preview-item"><span class="preview-label">Toko Online</span><span class="preview-value">${usaha.toko_online.map(t => t.platform).join(', ')}</span></div>`;
+                }
+                 if(usaha.media_sosial.length > 0) {
+                    usahaHtml += `<div class="preview-item"><span class="preview-label">Media Sosial</span><span class="preview-value">${usaha.media_sosial.map(s => s.platform).join(', ')}</span></div>`;
+                }
+                previewContainer.innerHTML += `<div class="preview-section">${usahaHtml}</div>`;
+            });
+        }
+    }
+
+    async function handleFormSubmit(e) {
         e.preventDefault();
         
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            alert('Harap isi semua field yang wajib diisi (bertanda *).');
-            return;
+        if (!validateForm()) {
+            return; // Hentikan jika validasi gagal
         }
 
+        // --- KUMPULKAN SEMUA DATA ---
         const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-
-        // Handle checkboxes (switches)
-        data.alamat_active = document.getElementById('alamat_active').checked;
-        data.no_hp_active = document.getElementById('no_hp_active').checked;
+        const allData = {};
         
-        // Gabungkan nomor HP
-        if (data.no_hp_anggota) {
-            data.no_hp_anggota = `+62${data.no_hp_anggota}`;
-        }
+        // Data Anggota
+        const idAnggota = generateUniqueId('anggota');
+        allData.anggota_data = {
+            id_anggota: idAnggota,
+            nama_lengkap: formData.get('nama_lengkap'),
+            nama_panggilan: formData.get('nama_panggilan'),
+            alumni: formData.get('alumni'),
+            th_masuk: formData.get('th_masuk'),
+            th_keluar: formData.get('th_keluar'),
+            komplek: formData.get('komplek'),
+            domisili: formData.get('domisili'),
+            detail_alamat: formData.get('detail_alamat'),
+            alamat_active: document.getElementById('alamat_active').checked,
+            no_hp_anggota: `+62${formData.get('no_hp_anggota')}`,
+            no_hp_active: document.getElementById('no_hp_active').checked,
+            profesi: formData.get('profesi'),
+            detail_profesi: formData.get('detail_profesi'),
+            pengembangan_profesi: formData.get('pengembangan_profesi'),
+            ide: formData.get('ide'),
+            lain_lain: formData.get('lain_lain'),
+            timestamp: new Date().toISOString(),
+            ip_by: 'AUTO', // Akan diganti oleh Apps Script
+            device: 'webform'
+        };
 
-        // Kumpulkan data usaha
-        data.usaha = [];
+        // Data Usaha
+        allData.usaha_list = [];
         document.querySelectorAll('.business-entry-card').forEach(card => {
+            const idUsaha = generateUniqueId('usaha');
             const gmapsPrefix = card.querySelector('input[name="url_gmaps_perusahaan"]').previousElementSibling.textContent;
-            const gmapsInput = card.querySelector('input[name="url_gmaps_perusahaan"]');
             const websitePrefix = card.querySelector('input[name="website_perusahaan"]').previousElementSibling.textContent;
-            const websiteInput = card.querySelector('input[name="website_perusahaan"]');
-            const noHpPerusahaanInput = card.querySelector('input[name="no_hp_perusahaan"]');
 
             const businessData = {
+                id_usaha: idUsaha,
+                id_anggota: idAnggota,
                 nama_usaha: card.querySelector('[name="nama_usaha"]').value,
                 kategori_usaha: card.querySelector('[name="kategori_usaha"]').value,
                 jenis_usaha: card.querySelector('[name="jenis_usaha"]').value,
                 detail_usaha: card.querySelector('[name="detail_usaha"]').value,
-                no_hp_perusahaan: noHpPerusahaanInput && noHpPerusahaanInput.value ? `+62${noHpPerusahaanInput.value}` : '',
+                no_hp_perusahaan: card.querySelector('[name="no_hp_perusahaan"]').value ? `+62${card.querySelector('[name="no_hp_perusahaan"]').value}`: '',
                 prospek_kerjasama_penawaran: card.querySelector('[name="prospek_kerjasama_penawaran"]').value,
-                website_perusahaan: websiteInput && websiteInput.value ? websitePrefix + websiteInput.value : '',
-                url_gmaps_perusahaan: gmapsInput && gmapsInput.value ? gmapsPrefix + gmapsInput.value : '',
+                website_perusahaan: card.querySelector('[name="website_perusahaan"]').value ? websitePrefix + card.querySelector('[name="website_perusahaan"]').value : '',
+                url_gmaps_perusahaan: card.querySelector('[name="url_gmaps_perusahaan"]').value ? gmapsPrefix + card.querySelector('[name="url_gmaps_perusahaan"]').value : '',
+                aktif: 1, // Sesuai permintaan
                 toko_online: [],
                 media_sosial: []
             };
 
-             // Kumpulkan Toko Online
+            // Kumpulkan Toko Online
             card.querySelectorAll('.shop-list-container .link-entry').forEach(linkEntry => {
                 const platform = linkEntry.querySelector('select[name="platform"]').value;
                 const urlInput = linkEntry.querySelector('input[name="url"]');
@@ -399,8 +484,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (platform && fullUrl) {
                     businessData.toko_online.push({
-                        platform: platform,
-                        url: fullUrl
+                        id_olshop: generateUniqueId('olshop'),
+                        id_usaha: idUsaha,
+                        id_anggota: idAnggota,
+                        platform_olshop: platform,
+                        url_olshop: fullUrl
                     });
                 }
             });
@@ -413,19 +501,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 const fullUrl = urlInput && urlInput.value ? prefix + urlInput.value : '';
 
                 if (platform && fullUrl) {
-                    businessData.media_sosial.push({
-                        platform: platform,
-                        url: fullUrl
+                     businessData.media_sosial.push({
+                        id_sosmed: generateUniqueId('sosmed'),
+                        id_usaha: idUsaha,
+                        id_anggota: idAnggota,
+                        platform_sosmed: platform,
+                        url_sosmed: fullUrl
                     });
                 }
             });
 
-
-            data.usaha.push(businessData);
+            allData.usaha_list.push(businessData);
         });
+        
+        // --- TAMPILKAN MODAL REVIEW ---
+        populateReviewModal(allData);
+        document.getElementById('confirmation-modal').style.display = 'flex';
 
-        console.log("Data siap dikirim:", JSON.stringify(data, null, 2));
-        alert('Data berhasil divalidasi dan siap untuk dikirim! Cek console log untuk melihat struktur data JSON.');
+        // Simpan data di window object untuk digunakan nanti oleh CAPTCHA
+        window.finalData = allData;
     }
 
     function handleFormReset(e) {
