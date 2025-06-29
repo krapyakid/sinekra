@@ -146,13 +146,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const shareButtonHtml = navigator.share ? `<button class="action-btn share" onclick="navigator.share(${JSON.stringify(shareData)})"><i class="fas fa-share-alt"></i> Bagikan</button>` : '';
 
         // --- HTML Structure Generation ---
-        const defaultImgUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/default_image_usaha.jpg';
-        const usahaImgUrl = `assets/usaha/${usaha.id_usaha}.jpg`;
+        const baseRepoUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/';
+        const defaultImgUrl = `${baseRepoUrl}default_image_usaha.jpg`;
+        
+        const imageHtml = `
+            <img src="${baseRepoUrl}${usaha.id_usaha}.jpg" 
+                 alt="Gambar produk ${usaha.nama_usaha}" 
+                 onerror="this.onerror=null; this.src='${baseRepoUrl}${member.id_anggota}.jpg'; this.onerror=function(){this.onerror=null; this.src='${defaultImgUrl}';};">
+        `;
 
         return `
         <div class="product-view-container" id="${usaha.id_usaha}">
             <div class="product-gallery-pane">
-                <img src="${usahaImgUrl}" alt="Gambar produk ${usaha.nama_usaha}" onerror="this.onerror=null;this.src='${defaultImgUrl}';">
+                ${imageHtml}
                 
                 <a href="${usaha.url_gmaps_perusahaan || '#'}" target="_blank" rel="noopener noreferrer" class="location-bar ${usaha.url_gmaps_perusahaan ? 'clickable' : ''}">
                     <i class="fas fa-map-marker-alt"></i>
@@ -220,12 +226,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function createSuggestionSectionHtml(suggestions) {
+        const baseRepoUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/';
+        const defaultImgUrl = `${baseRepoUrl}default_image_usaha.jpg`;
+
         const suggestionCardsHtml = suggestions.map(s => {
-            const defaultImgUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/default_image_usaha.jpg';
-            const usahaImgUrl = `assets/usaha/${s.id_usaha}.jpg`;
+            const imageHtml = `
+                <img src="${baseRepoUrl}${s.id_usaha}.jpg" 
+                     alt="${s.nama_usaha}" 
+                     class="suggestion-img" 
+                     onerror="this.onerror=null; this.src='${baseRepoUrl}${s.id_anggota}.jpg'; this.onerror=function(){this.onerror=null; this.src='${defaultImgUrl}';};">
+            `;
+
             return `
             <a href="detail.html?id=${s.id_anggota}" class="suggestion-card">
-                <img src="${usahaImgUrl}" alt="${s.nama_usaha}" class="suggestion-img" onerror="this.onerror=null;this.src='${defaultImgUrl}';">
+                ${imageHtml}
                 <div class="suggestion-info">
                     <h5 class="suggestion-title">${s.nama_usaha}</h5>
                     <p class="suggestion-location">${s.domisili}</p>
