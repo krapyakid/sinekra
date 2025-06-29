@@ -394,6 +394,23 @@ main.content-container {
     .section-title {
         font-size: 1.1rem;
     }
+
+    .statistik-img-center {
+        display: block; 
+        min-height: auto;
+        padding: 0;
+    }
+    .statistik-img-center img {
+        width: 100%;
+        max-height: none;
+        display: block;
+        border-radius: 0;
+    }
+    
+    /* Hapus padding dari container khusus di halaman statistik */
+    body:has(.statistik-img-center) .content-container {
+        padding: 0;
+    }
 }
 
 /* Grid Section */
