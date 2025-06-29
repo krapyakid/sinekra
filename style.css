@@ -1259,3 +1259,17 @@ input:checked + .slider:before {
     }
     /* ... existing CSS ... */
 }
+
+.statistik-img-center {
+    display: flex;
+    justify-content: center; /* Center horizontal */
+    align-items: center;     /* Center vertical */
+    min-height: calc(100vh - 80px); /* Adjust 80px to your header's height */
+    padding: 2rem;
+}
+
+.statistik-img-center img {
+    max-width: 100%;
+    max-height: 50vh; /* Prevent image from being too large */
+    object-fit: contain;
+}
