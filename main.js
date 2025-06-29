@@ -349,8 +349,9 @@ document.addEventListener('DOMContentLoaded', function() {
         banner.className = 'card-banner';
         
         const img = document.createElement('img');
-        img.src = `assets/usaha/${businessData.id_usaha}.jpg`;
-        const defaultImgUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/default_image_usaha.jpg';
+        const baseRepoUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/';
+        img.src = `${baseRepoUrl}${businessData.id_usaha}.jpg`;
+        const defaultImgUrl = `${baseRepoUrl}default_image_usaha.jpg`;
         img.onerror = function() {
             this.onerror = null;
             this.src = defaultImgUrl;
