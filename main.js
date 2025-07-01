@@ -191,32 +191,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- PAGINATION & SORTING ---
     const CARDS_PER_PAGE = 120;
-    const CARDS_PER_ROW = 40; // Untuk looping per 40 card
     let currentPage = 1;
-    let currentSort = { by: 'newest', dir: 'desc' };
+    let currentSort = { by: 'newest' };
     let filteredBusinessData = [];
 
     // --- SORTING FUNCTION ---
-    function sortBusinessData(data, sortBy, sortDir) {
+    function sortBusinessData(data, sortBy) {
         let sorted = [...data];
-        if (sortBy === 'alphabet') {
-            sorted.sort((a, b) => {
-                const nameA = (a.nama_usaha || '').toLowerCase();
-                const nameB = (b.nama_usaha || '').toLowerCase();
-                if (nameA < nameB) return sortDir === 'asc' ? -1 : 1;
-                if (nameA > nameB) return sortDir === 'asc' ? 1 : -1;
-                return 0;
-            });
+        if (sortBy === 'az') {
+            sorted.sort((a, b) => (a.nama_usaha || '').localeCompare(b.nama_usaha || '', 'id'));
+        } else if (sortBy === 'za') {
+            sorted.sort((a, b) => (b.nama_usaha || '').localeCompare(a.nama_usaha || '', 'id'));
+        } else if (sortBy === 'oldest') {
+            sorted.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
         } else {
-            // Default: sort by terbaru (asumsi ada field waktu/ID urut)
-            sorted.sort((a, b) => {
-                // Gunakan id_usaha sebagai fallback urutan (semakin baru semakin besar)
-                const idA = a.id_usaha || '';
-                const idB = b.id_usaha || '';
-                if (idA < idB) return sortDir === 'asc' ? -1 : 1;
-                if (idA > idB) return sortDir === 'asc' ? 1 : -1;
-                return 0;
-            });
+            // newest
+            sorted.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         }
         return sorted;
     }
@@ -251,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- RENDER BUSINESS LIST DENGAN PAGINATION & LOOPING ---
+    // --- RENDER BUSINESS LIST DENGAN PAGINATION ---
     function renderBusinessList(businessList) {
         const directoryGrid = document.getElementById('directory-grid');
         if (!directoryGrid) return;
@@ -263,35 +253,42 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         // Sort & Pagination
-        filteredBusinessData = sortBusinessData(businessList, currentSort.by, currentSort.dir);
+        filteredBusinessData = sortBusinessData(businessList, currentSort.by);
         const paginated = getPaginatedData(filteredBusinessData, currentPage);
-        // Looping per 40 card (bisa digunakan untuk pemisahan baris jika ingin)
         paginated.forEach((businessData, idx) => {
             directoryGrid.appendChild(createMemberCard(businessData));
-            // Bisa tambahkan pemisah baris tiap 40 card jika ingin
         });
         renderPaginationControls(filteredBusinessData.length, currentPage, 'pagination-top');
         renderPaginationControls(filteredBusinessData.length, currentPage, 'pagination-bottom');
     }
 
-    // --- EVENT HANDLER SORT ---
+    // --- EVENT HANDLER SORT DROPDOWN ---
     document.addEventListener('DOMContentLoaded', function() {
-        const sortBy = document.getElementById('sort-by');
-        const sortAsc = document.getElementById('sort-asc');
-        const sortDesc = document.getElementById('sort-desc');
-        if (sortBy && sortAsc && sortDesc) {
-            sortBy.onchange = function() {
-                currentSort.by = sortBy.value;
-                masterFilterHandler();
+        const sortBtn = document.getElementById('sortDropdownBtn');
+        const sortMenu = document.getElementById('sortDropdownMenu');
+        if (sortBtn && sortMenu) {
+            sortBtn.onclick = function(e) {
+                e.stopPropagation();
+                sortMenu.parentElement.classList.toggle('open');
             };
-            sortAsc.onclick = function() {
-                currentSort.dir = 'asc';
-                masterFilterHandler();
-            };
-            sortDesc.onclick = function() {
-                currentSort.dir = 'desc';
-                masterFilterHandler();
-            };
+            document.body.addEventListener('click', function() {
+                sortMenu.parentElement.classList.remove('open');
+            });
+            sortMenu.querySelectorAll('.sort-option').forEach(opt => {
+                opt.onclick = function(e) {
+                    currentSort.by = opt.dataset.sort;
+                    // Update label
+                    let label = opt.textContent;
+                    sortBtn.innerHTML = `Sort: ${label} ▼`;
+                    // Highlight active
+                    sortMenu.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
+                    opt.classList.add('active');
+                    sortMenu.parentElement.classList.remove('open');
+                    masterFilterHandler();
+                };
+            });
+            // Set default active
+            sortMenu.querySelector('.sort-option[data-sort="newest"]').classList.add('active');
         }
     });
 
