@@ -64,14 +64,14 @@
             </div>
             <!-- Sort & Pagination Controls Atas -->
             <div class="directory-controls-top" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px;">
-                <div class="sort-controls">
-                    <label for="sort-by" style="font-weight:500; margin-right:8px;">Sort by:</label>
-                    <select id="sort-by">
-                        <option value="newest">Data Baru di Post</option>
-                        <option value="alphabet">Urut Abjad</option>
-                    </select>
-                    <button id="sort-asc" title="Ascending" style="margin-left:4px;">▲</button>
-                    <button id="sort-desc" title="Descending">▼</button>
+                <div class="sort-dropdown">
+                  <button id="sortDropdownBtn" class="sort-dropdown-btn">Sort: Post Terbaru ▼</button>
+                  <div id="sortDropdownMenu" class="sort-dropdown-menu">
+                    <div class="sort-option" data-sort="newest">Post Terbaru</div>
+                    <div class="sort-option" data-sort="oldest">Post Terlama</div>
+                    <div class="sort-option" data-sort="az">Huruf A-Z</div>
+                    <div class="sort-option" data-sort="za">Huruf Z-A</div>
+                  </div>
                 </div>
                 <div id="pagination-top" class="pagination-container"></div>
             </div>
