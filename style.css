@@ -1537,10 +1537,14 @@ input:checked + .slider:before {
 
 .product-gallery-pane img {
     width: 100%;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
+    max-width: 400px;
+    height: auto;
     aspect-ratio: 4 / 3;
     object-fit: cover;
+    border-radius: 12px;
+    background-color: #f0f0f0;
+    display: block;
+    margin: 0 auto;
 }
 
 .product-details-pane .product-category {
@@ -1552,10 +1556,11 @@ input:checked + .slider:before {
 }
 
 .product-details-pane .product-title {
-    font-size: 2.5rem;
+    font-size: 1.3rem;
     font-weight: 700;
-    color: var(--primary-color);
-    margin: 5px 0 20px 0;
+    line-height: 1.2;
+    margin: 0;
+    flex-grow: 1;
 }
 
 .seller-info-box {
@@ -1673,5 +1678,15 @@ input:checked + .slider:before {
     #detail-content .product-view-container {
         grid-template-columns: 2fr 3fr; /* 2 kolom di desktop */
         gap: 50px;
+    }
+    .product-title {
+        font-size: 1.7rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .product-gallery-pane img {
+        max-width: 90vw;
+        height: auto;
     }
 }
