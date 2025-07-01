@@ -8,43 +8,102 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        body, .about-wrapper {
-            font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
-            color: #2d2d2d;
-            background: #f8fafc;
+        body {
+            background-color: #f8fafc;
         }
         .about-wrapper {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
             background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 4px 24px rgba(52,48,139,0.06);
-            max-width: 620px;
-            margin: 48px auto 0 auto;
-            padding: 36px 20px 32px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            max-width: 800px;
+            margin: 32px auto 0 auto;
+            padding: 24px 40px;
+        }
+        .about-section {
+            margin-bottom: 32px;
         }
         .about-title {
-            color: #34308b;
-            font-size: 1.5rem;
+            color: var(--primary-color, #34308b);
+            font-size: 1.4rem;
             font-weight: 700;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            border-bottom: 2px solid #eef2f7;
+            padding-bottom: 10px;
         }
-        .about-desc {
-            font-size: 1.08rem;
-            line-height: 1.8;
-            margin-bottom: 32px;
+        .title-icon {
+            font-size: 1.5rem;
+        }
+        .about-desc, .about-list {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #4A5568;
+        }
+        .about-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .about-list li {
+            padding-left: 1.5em;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        .about-list li::before {
+            content: '•';
+            color: var(--primary-color, #34308b);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1.5em;
+            position: absolute;
+            left: 0;
+        }
+        .about-quote {
+            background-color: #f7f9fc;
+            border-left: 4px solid var(--secondary-color, #5396FF);
+            margin: 24px 0;
+            padding: 16px 20px;
+            font-style: italic;
+            color: #2d3748;
+        }
+        .about-quote p {
+            margin: 0;
+        }
+        .about-quote footer {
+            margin-top: 8px;
+            font-style: normal;
+            font-weight: 600;
+            text-align: right;
+            color: #4a5568;
+        }
+        .discussion-point {
+            margin-top: 20px;
+        }
+        .discussion-point h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 12px;
         }
         .about-footer {
             text-align: center;
             margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
         }
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             .about-wrapper {
-                padding: 18px 4vw 18px 4vw;
+                margin-top: 24px;
+                padding: 20px 24px;
             }
             .about-title {
-                font-size: 1.1rem;
+                font-size: 1.2rem;
+            }
+            .about-desc, .about-list {
+                font-size: 0.95rem;
             }
         }
         .mobile-search-trigger {
@@ -86,14 +145,96 @@
     
     <main class="content-container">
         <div class="about-wrapper">
-            <div class="about-title">🟦 Tentang Sinergi Ekonomi</div>
-            <div class="about-desc">
-                Sinergi Ekonomi adalah sebuah inisiatif kolaboratif yang tumbuh dari semangat para santri, alumni, dan masyarakat yang terhubung dengan Pondok Pesantren Krapyak. Program ini bertujuan untuk menghimpun dan mengembangkan potensi ekonomi yang dimiliki oleh komunitas santri dalam berbagai bentuk usaha.<br><br>
-                Kami percaya bahwa pesantren bukan hanya pusat pendidikan spiritual, tetapi juga dapat menjadi pusat pertumbuhan ekonomi berbasis nilai dan kebersamaan. Melalui program ini, kami menyusun direktori usaha para santri dan alumni untuk memperkuat jaringan, memudahkan akses, serta mendorong kolaborasi dan pertumbuhan yang berkelanjutan.<br><br>
-                Harapannya, Sinergi Ekonomi menjadi ruang bersama untuk saling dukung, saling belajar, dan saling menguatkan—menuju ekonomi umat yang berdaya, mandiri, dan berkah.
+            <div class="about-section">
+                <h2 class="about-title">
+                    <span class="title-icon">🧾</span> I. LATAR BELAKANG
+                </h2>
+                <p class="about-desc">
+                    Silaturahmi ini diinisiasi oleh alumni Pondok Pesantren Krapyak, Yogyakarta, sebagai bentuk ikhtiar memperkuat kontribusi alumni dalam kehidupan sosial dan ekonomi bangsa. Acara ini digelar secara daring dan menghadirkan lintas generasi alumni, mulai dari senior hingga gen Z.
+                </p>
+                <blockquote class="about-quote">
+                    <p>“Menjadi contoh yang bisa dilihat masyarakat kalau pesantren bisa melahirkan hal positif secara bersama.”</p>
+                    <footer>— Afif Muhammad, Pengasuh Ponpes Krapyak</footer>
+                </blockquote>
             </div>
+    
+            <div class="about-section">
+                <h2 class="about-title">
+                    <span class="title-icon">💡</span> II. TUJUAN UTAMA
+                </h2>
+                <ul class="about-list">
+                    <li>Menguatkan jejaring antar alumni pesantren.</li>
+                    <li>Membuka ruang kontribusi alumni di bidang ekonomi, sosial, dan digital.</li>
+                    <li>Merumuskan langkah konkret kolaborasi ekonomi antaralumni.</li>
+                </ul>
+            </div>
+    
+            <div class="about-section">
+                <h2 class="about-title">
+                    <span class="title-icon">🧩</span> III. RANGKAIAN ACARA & INTI PEMBAHASAN
+                </h2>
+                <div class="discussion-point">
+                    <h3>🔹 Pembukaan oleh Kyai Idham Kholid</h3>
+                    <ul class="about-list">
+                        <li>Menekankan pentingnya ukhuwah dan kontribusi alumni.</li>
+                        <li>Silaturahmi ini menjadi sarana ikhtiar bersama dalam memberi manfaat luas.</li>
+                    </ul>
+                </div>
+                <div class="discussion-point">
+                    <h3>🔹 Sambutan Ahmad Shidqi (Pimpinan Ponpes Krapyak)</h3>
+                    <ul class="about-list">
+                        <li>Alumni tidak harus menjadi kiai, namun dapat berperan dalam bidang ekonomi, sosial, dan teknologi.</li>
+                        <li>Wadah ini diharapkan menjadi penyemangat untuk saling mendukung.</li>
+                    </ul>
+                </div>
+                <div class="discussion-point">
+                    <h3>🔹 Diskusi & Sharing Alumni</h3>
+                    <ul class="about-list">
+                        <li><strong>Kolaborasi Usaha:</strong> Alumni berbagi pengalaman sukses usaha bersama berbasis kepercayaan dan jaringan pesantren.</li>
+                        <li><strong>Peluang Digitalisasi:</strong> Pemanfaatan teknologi dan media digital (e-commerce, promosi daring) untuk mendukung usaha alumni.</li>
+                        <li><strong>Pembiayaan Komunitas:</strong> Usulan koperasi alumni dan arisan sebagai solusi permodalan.</li>
+                        <li><strong>Nilai Keislaman:</strong> Spirit keagamaan menjadi dasar moral dari semua kontribusi alumni.</li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="about-section">
+                <h2 class="about-title">
+                    <span class="title-icon">🔍</span> IV. HASIL & KESIMPULAN
+                </h2>
+                <p class="about-desc">✅ Silaturahmi daring ini berhasil:</p>
+                <ul class="about-list">
+                    <li>Menghidupkan kembali semangat kebersamaan antaralumni.</li>
+                    <li>Menjadi forum dialog lintas generasi dan profesi.</li>
+                    <li>Mendorong arah gerakan alumni dari pasif menjadi aktif membangun ekonomi umat.</li>
+                    <li>Mewujudkan sinergi pesantren & ekonomi modern, tanpa kehilangan nilai tradisional dan moral keagamaan.</li>
+                </ul>
+            </div>
+    
+            <div class="about-section">
+                <h2 class="about-title">
+                    <span class="title-icon">📌</span> V. REKOMENDASI LANJUTAN
+                </h2>
+                <ul class="about-list">
+                    <li>Pembentukan Koperasi Alumni Ponpes Krapyak.</li>
+                    <li>Rutin menggelar pertemuan daring tiap triwulan.</li>
+                    <li>Workshop dan pelatihan digital marketing & manajemen usaha.</li>
+                    <li>Membuat katalog digital produk alumni.</li>
+                    <li>Pembentukan forum aksi sosial (zakat, wakaf, beasiswa) antaralumni.</li>
+                </ul>
+            </div>
+    
+            <div class="about-section">
+                <h2 class="about-title">
+                     <span class="title-icon">📎</span> Penutup
+                </h2>
+                <p class="about-desc">
+                    Silaturahmi ini bukan sekadar nostalgia, melainkan langkah nyata menjawab tantangan zaman dengan kolaborasi berbasis nilai pesantren. Alumni bukan hanya bagian dari masa lalu, tapi juga kunci masa depan.
+                </p>
+            </div>
+    
             <div class="about-footer">
-                <small style="font-size: 12px; color: #888;">© 2025 Sinergi Ekonomi Santri Krapyak</small>
+                <small>© 2025 Sinergi Ekonomi Santri Krapyak</small>
             </div>
         </div>
     </main>
