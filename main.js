@@ -277,9 +277,9 @@ document.addEventListener('DOMContentLoaded', function() {
             sortMenu.querySelectorAll('.sort-option').forEach(opt => {
                 opt.onclick = function(e) {
                     currentSort.by = opt.dataset.sort;
-                    // Update label
+                    // Update label (tanpa kata "Sort:")
                     let label = opt.textContent;
-                    sortBtn.innerHTML = `Sort: ${label} ▼`;
+                    sortBtn.innerHTML = `${label} ▼`;
                     // Highlight active
                     sortMenu.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
                     opt.classList.add('active');
@@ -289,6 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             // Set default active
             sortMenu.querySelector('.sort-option[data-sort="newest"]').classList.add('active');
+            sortBtn.innerHTML = 'Post Terbaru ▼';
         }
     });
 
