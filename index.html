@@ -62,9 +62,24 @@
                 <h2 id="grid-title" class="section-title">Daftar Usaha Santri</h2>
                 <a href="#" id="view-toggle-link" class="see-more-link">Lihat Daftar Anggota</a>
             </div>
+            <!-- Sort & Pagination Controls Atas -->
+            <div class="directory-controls-top" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px;">
+                <div class="sort-controls">
+                    <label for="sort-by" style="font-weight:500; margin-right:8px;">Sort by:</label>
+                    <select id="sort-by">
+                        <option value="newest">Data Baru di Post</option>
+                        <option value="alphabet">Urut Abjad</option>
+                    </select>
+                    <button id="sort-asc" title="Ascending" style="margin-left:4px;">▲</button>
+                    <button id="sort-desc" title="Descending">▼</button>
+                </div>
+                <div id="pagination-top" class="pagination-container"></div>
+            </div>
             <div id="directory-grid" class="directory-grid-container">
                 <!-- Kartu anggota akan dimuat di sini oleh JS -->
             </div>
+            <!-- Pagination Controls Bawah -->
+            <div id="pagination-bottom" class="pagination-container" style="margin-top: 24px;"></div>
         </section>
     </main>
 
