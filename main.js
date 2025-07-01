@@ -189,19 +189,120 @@ document.addEventListener('DOMContentLoaded', function() {
         renderMemberList(filteredData);
     }
 
+    // --- PAGINATION & SORTING ---
+    const CARDS_PER_PAGE = 120;
+    const CARDS_PER_ROW = 40; // Untuk looping per 40 card
+    let currentPage = 1;
+    let currentSort = { by: 'newest', dir: 'desc' };
+    let filteredBusinessData = [];
+
+    // --- SORTING FUNCTION ---
+    function sortBusinessData(data, sortBy, sortDir) {
+        let sorted = [...data];
+        if (sortBy === 'alphabet') {
+            sorted.sort((a, b) => {
+                const nameA = (a.nama_usaha || '').toLowerCase();
+                const nameB = (b.nama_usaha || '').toLowerCase();
+                if (nameA < nameB) return sortDir === 'asc' ? -1 : 1;
+                if (nameA > nameB) return sortDir === 'asc' ? 1 : -1;
+                return 0;
+            });
+        } else {
+            // Default: sort by terbaru (asumsi ada field waktu/ID urut)
+            sorted.sort((a, b) => {
+                // Gunakan id_usaha sebagai fallback urutan (semakin baru semakin besar)
+                const idA = a.id_usaha || '';
+                const idB = b.id_usaha || '';
+                if (idA < idB) return sortDir === 'asc' ? -1 : 1;
+                if (idA > idB) return sortDir === 'asc' ? 1 : -1;
+                return 0;
+            });
+        }
+        return sorted;
+    }
+
+    // --- PAGINATION FUNCTION ---
+    function getPaginatedData(data, page) {
+        const start = (page - 1) * CARDS_PER_PAGE;
+        const end = start + CARDS_PER_PAGE;
+        return data.slice(start, end);
+    }
+
+    function renderPaginationControls(totalItems, currentPage, containerId) {
+        const totalPages = Math.ceil(totalItems / CARDS_PER_PAGE);
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        if (totalPages <= 1) {
+            container.innerHTML = '';
+            return;
+        }
+        let html = '';
+        for (let i = 1; i <= totalPages; i++) {
+            html += `<button class="pagination-btn${i === currentPage ? ' active' : ''}" data-page="${i}">${i}</button>`;
+        }
+        container.innerHTML = html;
+        // Event
+        container.querySelectorAll('.pagination-btn').forEach(btn => {
+            btn.onclick = e => {
+                currentPage = parseInt(btn.dataset.page);
+                masterFilterHandler();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+        });
+    }
+
+    // --- RENDER BUSINESS LIST DENGAN PAGINATION & LOOPING ---
     function renderBusinessList(businessList) {
         const directoryGrid = document.getElementById('directory-grid');
         if (!directoryGrid) return;
-
-        directoryGrid.innerHTML = ''; // Clear previous results
+        directoryGrid.innerHTML = '';
         if (businessList.length === 0) {
             directoryGrid.innerHTML = '<p>Tidak ada usaha yang cocok dengan kriteria pencarian Anda.</p>';
+            renderPaginationControls(0, 1, 'pagination-top');
+            renderPaginationControls(0, 1, 'pagination-bottom');
             return;
         }
-
-        businessList.forEach(businessData => {
+        // Sort & Pagination
+        filteredBusinessData = sortBusinessData(businessList, currentSort.by, currentSort.dir);
+        const paginated = getPaginatedData(filteredBusinessData, currentPage);
+        // Looping per 40 card (bisa digunakan untuk pemisahan baris jika ingin)
+        paginated.forEach((businessData, idx) => {
             directoryGrid.appendChild(createMemberCard(businessData));
+            // Bisa tambahkan pemisah baris tiap 40 card jika ingin
         });
+        renderPaginationControls(filteredBusinessData.length, currentPage, 'pagination-top');
+        renderPaginationControls(filteredBusinessData.length, currentPage, 'pagination-bottom');
+    }
+
+    // --- EVENT HANDLER SORT ---
+    document.addEventListener('DOMContentLoaded', function() {
+        const sortBy = document.getElementById('sort-by');
+        const sortAsc = document.getElementById('sort-asc');
+        const sortDesc = document.getElementById('sort-desc');
+        if (sortBy && sortAsc && sortDesc) {
+            sortBy.onchange = function() {
+                currentSort.by = sortBy.value;
+                masterFilterHandler();
+            };
+            sortAsc.onclick = function() {
+                currentSort.dir = 'asc';
+                masterFilterHandler();
+            };
+            sortDesc.onclick = function() {
+                currentSort.dir = 'desc';
+                masterFilterHandler();
+            };
+        }
+    });
+
+    // --- UPDATE masterFilterHandler UNTUK RESET PAGE ---
+    function masterFilterHandler() {
+        currentPage = 1; // Reset ke halaman 1 setiap filter/sort berubah
+        if (currentView === 'usaha') {
+            applyAndRenderBusinessFilters();
+        } else {
+            applyAndRenderMemberFilters();
+        }
     }
 
     function renderMemberList(memberList) {
