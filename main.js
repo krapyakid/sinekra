@@ -113,14 +113,6 @@ document.addEventListener('DOMContentLoaded', function() {
             masterFilterHandler(); // Terapkan filter untuk view yang baru
         });
 
-        function masterFilterHandler() {
-             if (currentView === 'usaha') {
-                applyAndRenderBusinessFilters();
-            } else {
-                applyAndRenderMemberFilters();
-            }
-        }
-
         // Event listeners untuk filter
         searchBar.addEventListener('input', masterFilterHandler);
         categoryFilter.addEventListener('change', masterFilterHandler);
@@ -263,35 +255,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- EVENT HANDLER SORT DROPDOWN ---
-    document.addEventListener('DOMContentLoaded', function() {
-        const sortBtn = document.getElementById('sortDropdownBtn');
-        const sortMenu = document.getElementById('sortDropdownMenu');
-        if (sortBtn && sortMenu) {
-            sortBtn.onclick = function(e) {
-                e.stopPropagation();
-                sortMenu.parentElement.classList.toggle('open');
-            };
-            document.body.addEventListener('click', function() {
+    const sortBtn = document.getElementById('sortDropdownBtn');
+    const sortMenu = document.getElementById('sortDropdownMenu');
+    if (sortBtn && sortMenu) {
+        sortBtn.onclick = function(e) {
+            e.stopPropagation();
+            sortMenu.parentElement.classList.toggle('open');
+        };
+        document.body.addEventListener('click', function() {
+            sortMenu.parentElement.classList.remove('open');
+        });
+        sortMenu.querySelectorAll('.sort-option').forEach(opt => {
+            opt.onclick = function(e) {
+                currentSort.by = opt.dataset.sort;
+                // Update label (tanpa kata "Sort:")
+                let label = opt.textContent;
+                sortBtn.innerHTML = `${label} ▼`;
+                // Highlight active
+                sortMenu.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
                 sortMenu.parentElement.classList.remove('open');
-            });
-            sortMenu.querySelectorAll('.sort-option').forEach(opt => {
-                opt.onclick = function(e) {
-                    currentSort.by = opt.dataset.sort;
-                    // Update label (tanpa kata "Sort:")
-                    let label = opt.textContent;
-                    sortBtn.innerHTML = `${label} ▼`;
-                    // Highlight active
-                    sortMenu.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
-                    opt.classList.add('active');
-                    sortMenu.parentElement.classList.remove('open');
-                    masterFilterHandler();
-                };
-            });
-            // Set default active
-            sortMenu.querySelector('.sort-option[data-sort="newest"]').classList.add('active');
-            sortBtn.innerHTML = 'Post Terbaru ▼';
-        }
-    });
+                masterFilterHandler(); // Panggil handler utama untuk render ulang
+            };
+        });
+        // Set default active
+        sortMenu.querySelector('.sort-option[data-sort="newest"]').classList.add('active');
+        sortBtn.innerHTML = 'Post Terbaru ▼';
+    }
 
     // --- UPDATE masterFilterHandler UNTUK RESET PAGE ---
     function masterFilterHandler() {
