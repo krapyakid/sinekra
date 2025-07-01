@@ -342,9 +342,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const businessImgUrl = `${baseRepoUrl}${businessData.id_usaha}.jpg`;
         const imageUrl = businessData.foto_usaha ? businessImgUrl : defaultImgUrl;
 
-        // [PERBAIKAN] Menggunakan `url_gmaps_perusahaan` yang benar
-        const mapsUrl = businessData.url_gmaps_perusahaan || '#';
-        const hasMapsUrl = businessData.url_gmaps_perusahaan ? 'clickable' : '';
+        // [PERBAIKAN] Fallback ke pencarian domisili jika url_gmaps_perusahaan kosong
+        const mapsUrl = businessData.url_gmaps_perusahaan 
+            || (businessData.domisili ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(businessData.domisili)}` : '#');
+        const hasMapsUrl = mapsUrl !== '#' ? 'clickable' : '';
 
         // Generate social/marketplace icons
         const contactLinks = [];
