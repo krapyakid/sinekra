@@ -155,12 +155,17 @@ document.addEventListener('DOMContentLoaded', function() {
                  onerror="this.onerror=null; this.src='${baseRepoUrl}${member.id_anggota}.jpg'; this.onerror=function(){this.onerror=null; this.src='${defaultImgUrl}';};">
         `;
 
+        // Fallback Google Maps: gunakan url_gmaps_perusahaan, jika kosong gunakan domisili
+        const mapsUrl = usaha.url_gmaps_perusahaan 
+            || (member.domisili ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(member.domisili)}` : '#');
+        const hasMapsUrl = mapsUrl !== '#' ? 'clickable' : '';
+
         return `
         <div class="product-view-container" id="${usaha.id_usaha}">
             <div class="product-gallery-pane">
                 ${imageHtml}
                 
-                <a href="${usaha.url_gmaps_perusahaan || '#'}" target="_blank" rel="noopener noreferrer" class="location-bar ${usaha.url_gmaps_perusahaan ? 'clickable' : ''}">
+                <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="location-bar ${hasMapsUrl}">
                     <i class="fas fa-map-marker-alt"></i>
                     <span>${member.nama_panggilan || member.nama_lengkap.split(' ')[0]} - ${member.domisili}</span>
                 </a>
