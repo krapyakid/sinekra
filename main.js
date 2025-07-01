@@ -335,6 +335,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function createMemberCard(businessData) {
+        // Fallback untuk gambar
+        const baseRepoUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/';
+        const defaultImgUrl = `${baseRepoUrl}default_image_usaha.jpg`;
+        const memberImgUrl = `${baseRepoUrl}${businessData.id_anggota}.jpg`;
+        const businessImgUrl = `${baseRepoUrl}${businessData.id_usaha}.jpg`;
+        const imageUrl = businessData.foto_usaha ? businessImgUrl : defaultImgUrl;
+
+        // [PERBAIKAN] Menggunakan `url_gmaps_perusahaan` yang benar
+        const mapsUrl = businessData.url_gmaps_perusahaan || '#';
+        const hasMapsUrl = businessData.url_gmaps_perusahaan ? 'clickable' : '';
+
+        // Generate social/marketplace icons
+        const contactLinks = [];
+
         const card = document.createElement('div');
         card.className = 'member-card';
         card.addEventListener('click', (e) => {
@@ -344,61 +358,35 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // --- Gambar Usaha ---
-        const banner = document.createElement('div');
-        banner.className = 'card-banner';
-        
-        const img = document.createElement('img');
-        const baseRepoUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/';
-        const defaultImgUrl = `${baseRepoUrl}default_image_usaha.jpg`;
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="card-contact-links">
+                    ${contactLinks.join('')}
+                </div>
+            </div>
+            <div class="card-banner">
+                <a href="detail.html?id=${businessData.id_anggota}" class="card-banner-link">
+                    <img src="${imageUrl}" alt="Gambar Usaha ${businessData.nama_usaha}" 
+                         onerror="this.onerror=null; this.src='${memberImgUrl}'; this.onerror=function(){this.onerror=null; this.src='${defaultImgUrl}';};">
+                </a>
+                <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="card-location-overlay ${hasMapsUrl}">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>${businessData.domisili || 'Lokasi'}</span>
+                </a>
+            </div>
+            <div class="card-content">
+                <h3 class="card-business-name">
+                    ${businessData.nama_usaha}
+                </h3>
+                <p class="card-description">
+                    ${businessData.jenis_usaha || 'Jenis usaha tidak tersedia.'}
+                </p>
+                <p class="card-owner">
+                    <i class="fas fa-user"></i> ${businessData.nama_lengkap}
+                </p>
+            </div>
+        `;
 
-        // --- [FIX] Mencoba id_usaha, lalu id_anggota, lalu default ---
-        img.src = `${baseRepoUrl}${businessData.id_usaha}.jpg`;
-        img.alt = `Gambar usaha ${businessData.nama_usaha}`;
-
-        img.onerror = function() {
-            // Jika id_usaha gagal, coba id_anggota
-            this.src = `${baseRepoUrl}${businessData.id_anggota}.jpg`;
-            this.onerror = function() {
-                // Jika id_anggota juga gagal, gunakan default
-                this.onerror = null; // Mencegah loop tak terbatas
-                this.src = defaultImgUrl;
-            };
-        };
-        
-        // --- Overlay Lokasi ---
-        const locationOverlay = document.createElement(businessData.url_gmaps_perusahaan ? 'a' : 'div');
-        locationOverlay.className = 'card-location-overlay';
-        if (businessData.url_gmaps_perusahaan) {
-            locationOverlay.href = businessData.url_gmaps_perusahaan;
-            locationOverlay.target = '_blank';
-            locationOverlay.rel = 'noopener noreferrer';
-        }
-        
-        const namaPanggilan = businessData.nama_panggilan || businessData.nama_lengkap.split(' ')[0];
-        locationOverlay.innerHTML = `<i class="fas fa-map-marker-alt"></i> <span>${namaPanggilan} - ${businessData.domisili}</span>`;
-
-        banner.append(locationOverlay, img);
-
-        // --- Konten Kartu ---
-        const content = document.createElement('div');
-        content.className = 'card-content';
-
-        const businessName = document.createElement('h3');
-        businessName.className = 'card-business-name';
-        businessName.textContent = businessData.nama_usaha;
-
-        const description = document.createElement('p');
-        description.className = 'card-description';
-        description.textContent = businessData.jenis_usaha || 'Jenis usaha tidak tersedia.';
-
-        const owner = document.createElement('p');
-        owner.className = 'card-owner';
-        owner.innerHTML = `<i class="fas fa-user"></i> ${businessData.nama_lengkap}`;
-        
-        content.append(businessName, description, owner);
-        card.append(banner, content);
-        
         return card;
     }
 
