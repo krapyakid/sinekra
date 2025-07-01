@@ -678,15 +678,15 @@ main.content-container {
 /* --- STYLING UNTUK HALAMAN FORMULIR (form.html) --- */
 
 .form-container {
-    max-width: 600px;
+    max-width: 95vw;
     margin: 0 auto;
-    padding: 0 15px;
+    padding: 0 4vw;
 }
 
 @media (min-width: 768px) {
     .form-container {
-        max-width: 700px;
-        padding: 0 32px;
+        max-width: 800px;
+        padding: 0 40px;
     }
 }
 
@@ -712,7 +712,7 @@ fieldset.form-section {
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     border: 1px solid #e0e0e0;
     margin-bottom: 32px;
-    padding: 32px 20px;
+    padding: 32px 10px;
     max-width: 100%;
 }
 
