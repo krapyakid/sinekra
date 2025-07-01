@@ -32,38 +32,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- FUNGSI GLOBAL & DATA BERSAMA ---
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvsDmDoerDTDgV39Op65g8D_fGyCyTy82StbSzsACbpQoYnetw96E4mQ1T0suIHfhR/exec";
     
-    let allDataCache = []; // Cache untuk menyimpan data anggota yang sudah di-fetch
-    let allBusinessData = []; // Cache untuk menyimpan data usaha yang sudah di-flatten
+    let allDataCache = [];
+    let allBusinessData = [];
 
-    // Fungsi untuk mengambil dan mem-parsing data dari Apps Script
     async function fetchData() {
-        if (allDataCache.length > 0) {
-            return allDataCache; // Kembalikan dari cache jika sudah ada
-        }
-
+        if (allDataCache.length > 0) return allDataCache;
         try {
             const response = await fetch(SCRIPT_URL, { cache: 'no-cache' });
-            if (!response.ok) {
-                throw new Error(`Gagal mengambil data: ${response.statusText}`);
-            }
+            if (!response.ok) throw new Error(`Gagal mengambil data: ${response.statusText}`);
             const result = await response.json();
             if (result.status === "success") {
-                allDataCache = result.data; // Simpan data mentah
-                
-                // Flatten data usaha untuk kemudahan filtering dan rendering
+                allDataCache = result.data;
                 allBusinessData = allDataCache.flatMap(member => 
                     (member.usaha && member.usaha.length > 0) 
                     ? member.usaha.map(u => ({ ...member, ...u })) 
                     : []
                 );
-
                 return allDataCache;
             } else {
                 throw new Error(result.message || 'Terjadi kesalahan dari server.');
             }
         } catch (error) {
             console.error("Gagal memuat data:", error);
-            // Menampilkan pesan error di UI
             const directoryGrid = document.getElementById('directory-grid');
             if (directoryGrid) {
                 directoryGrid.innerHTML = `<p class="error-message">Gagal memuat data. Silakan coba muat ulang halaman.</p>`;
@@ -73,75 +63,122 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // --- Logika untuk Halaman Beranda (index.html) ---
-    if (document.getElementById('directory-grid')) {
-        let currentView = 'usaha'; // 'usaha' or 'anggota'
-        const gridTitle = document.getElementById('grid-title');
+    const directoryGrid = document.getElementById('directory-grid');
+    if (directoryGrid) {
+        initializeHomepage();
+    }
+
+    let currentView = 'usaha';
+    let filteredBusinessData = [];
+    let currentPage = 1;
+    const CARDS_PER_PAGE = 120;
+    let currentSort = { by: 'newest' };
+
+    function masterFilterHandler() {
+        currentPage = 1; 
+        if (currentView === 'usaha') {
+            applyAndRenderBusinessFilters();
+        } else {
+            applyAndRenderMemberFilters();
+        }
+    }
+
+    async function initializeHomepage() {
+        showLoading(directoryGrid, 'Memuat data...');
+        await fetchData();
+        
+        // Setup event listeners setelah data siap
+        setupHomepageEventListeners();
+
+        populateFilters();
+        masterFilterHandler();
+    }
+
+    function setupHomepageEventListeners() {
         const viewToggleLink = document.getElementById('view-toggle-link');
         const searchBar = document.getElementById('desktop-search-bar');
         const categoryFilter = document.getElementById('filter-category');
         const domicileFilter = document.getElementById('filter-domicile');
-        const searchFilterSection = document.querySelector('.search-and-filter-section');
+        const sortBtn = document.getElementById('sortDropdownBtn');
+        const sortMenu = document.getElementById('sortDropdownMenu');
 
-        async function initializePage() {
-            showLoading(document.getElementById('directory-grid'), 'Memuat data...');
-            await fetchData();
-            populateFilters();
-            masterFilterHandler(); // Panggil filter utama untuk tampilan awal
+        if (viewToggleLink) {
+            viewToggleLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                const gridTitle = document.getElementById('grid-title');
+                if (currentView === 'usaha') {
+                    currentView = 'anggota';
+                    gridTitle.textContent = 'Daftar Seluruh Anggota';
+                    viewToggleLink.textContent = 'Lihat Daftar Usaha';
+                    if(categoryFilter) categoryFilter.style.display = 'none';
+                    if(searchBar) searchBar.placeholder = 'Cari Nama Anggota';
+                } else {
+                    currentView = 'usaha';
+                    gridTitle.textContent = 'Daftar Usaha Santri';
+                    viewToggleLink.textContent = 'Lihat Daftar Anggota';
+                    if(categoryFilter) categoryFilter.style.display = '';
+                    if(searchBar) searchBar.placeholder = 'Cari Nama Usaha atau Anggota';
+                }
+                masterFilterHandler();
+            });
         }
         
-        // Panggil tampilan awal
-        initializePage();
+        if(searchBar) searchBar.addEventListener('input', masterFilterHandler);
+        if(categoryFilter) categoryFilter.addEventListener('change', masterFilterHandler);
+        if(domicileFilter) domicileFilter.addEventListener('change', masterFilterHandler);
 
-        viewToggleLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (currentView === 'usaha') {
-                currentView = 'anggota';
-                gridTitle.textContent = 'Daftar Seluruh Anggota';
-                viewToggleLink.textContent = 'Lihat Daftar Usaha';
-                
-                categoryFilter.style.display = 'none'; // Sembunyikan filter kategori
-                searchBar.placeholder = 'Cari Nama Anggota';
-
-            } else {
-                currentView = 'usaha';
-                gridTitle.textContent = 'Daftar Usaha Santri';
-                viewToggleLink.textContent = 'Lihat Daftar Anggota';
-
-                categoryFilter.style.display = ''; // Tampilkan kembali filter kategori
-                searchBar.placeholder = 'Cari Nama Usaha atau Anggota';
+        if (sortBtn && sortMenu) {
+            sortBtn.onclick = function(e) {
+                e.stopPropagation();
+                sortMenu.parentElement.classList.toggle('open');
+            };
+            document.body.addEventListener('click', function() {
+                sortMenu.parentElement.classList.remove('open');
+            });
+            sortMenu.querySelectorAll('.sort-option').forEach(opt => {
+                opt.onclick = function() {
+                    currentSort.by = opt.dataset.sort;
+                    let label = opt.textContent;
+                    sortBtn.innerHTML = `${label} ▼`;
+                    sortMenu.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
+                    opt.classList.add('active');
+                    sortMenu.parentElement.classList.remove('open');
+                    masterFilterHandler();
+                };
+            });
+            const defaultSortOption = sortMenu.querySelector('.sort-option[data-sort="newest"]');
+            if (defaultSortOption) {
+                defaultSortOption.classList.add('active');
+                sortBtn.innerHTML = 'Post Terbaru ▼';
             }
-            masterFilterHandler(); // Terapkan filter untuk view yang baru
-        });
-
-        // Event listeners untuk filter
-        searchBar.addEventListener('input', masterFilterHandler);
-        categoryFilter.addEventListener('change', masterFilterHandler);
-        domicileFilter.addEventListener('change', masterFilterHandler);
+        }
     }
-
+    
     function populateFilters() {
         const categoryFilter = document.getElementById('filter-category');
         const domicileFilter = document.getElementById('filter-domicile');
 
-        // Populate Categories from business data
-        const categories = [...new Set(allBusinessData.map(b => b.kategori_usaha).filter(Boolean))];
-        categoryFilter.innerHTML = '<option value="">Semua Kategori</option>';
-        categories.sort().forEach(category => {
-            const option = document.createElement('option');
-            option.value = category;
-            option.textContent = category;
-            categoryFilter.appendChild(option);
-        });
+        if (categoryFilter) {
+            const categories = [...new Set(allBusinessData.map(b => b.kategori_usaha).filter(Boolean))];
+            categoryFilter.innerHTML = '<option value="">Semua Kategori</option>';
+            categories.sort().forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
         
-        // Populate Domiciles from ALL member data for consistency
-        const domiciles = [...new Set(allDataCache.map(m => m.domisili).filter(Boolean))];
-        domicileFilter.innerHTML = '<option value="">Semua Domisili</option>';
-        domiciles.sort().forEach(domicile => {
-            const option = document.createElement('option');
-            option.value = domicile;
-            option.textContent = domicile;
-            domicileFilter.appendChild(option);
-        });
+        if (domicileFilter) {
+            const domiciles = [...new Set(allDataCache.map(m => m.domisili).filter(Boolean))];
+            domicileFilter.innerHTML = '<option value="">Semua Domisili</option>';
+            domiciles.sort().forEach(domicile => {
+                const option = document.createElement('option');
+                option.value = domicile;
+                option.textContent = domicile;
+                domicileFilter.appendChild(option);
+            });
+        }
     }
 
     function applyAndRenderBusinessFilters() {
@@ -149,9 +186,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const categoryFilter = document.getElementById('filter-category');
         const domicileFilter = document.getElementById('filter-domicile');
         
-        const searchTerm = searchBar.value.toLowerCase();
-        const selectedCategory = categoryFilter.value;
-        const selectedDomicile = domicileFilter.value;
+        const searchTerm = searchBar ? searchBar.value.toLowerCase() : '';
+        const selectedCategory = categoryFilter ? categoryFilter.value : '';
+        const selectedDomicile = domicileFilter ? domicileFilter.value : '';
 
         const filteredData = allBusinessData.filter(business => {
             const nameMatch = business.nama_usaha.toLowerCase().includes(searchTerm);
@@ -169,8 +206,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const searchBar = document.getElementById('desktop-search-bar');
         const domicileFilter = document.getElementById('filter-domicile');
 
-        const searchTerm = searchBar.value.toLowerCase();
-        const selectedDomicile = domicileFilter.value;
+        const searchTerm = searchBar ? searchBar.value.toLowerCase() : '';
+        const selectedDomicile = domicileFilter ? domicileFilter.value : '';
 
         const filteredData = allDataCache.filter(member => {
             const nameMatch = member.nama_lengkap.toLowerCase().includes(searchTerm);
@@ -182,12 +219,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- PAGINATION & SORTING ---
-    const CARDS_PER_PAGE = 120;
-    let currentPage = 1;
-    let currentSort = { by: 'newest' };
-    let filteredBusinessData = [];
-
-    // --- SORTING FUNCTION ---
     function sortBusinessData(data, sortBy) {
         let sorted = [...data];
         if (sortBy === 'az') {
@@ -203,7 +234,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return sorted;
     }
 
-    // --- PAGINATION FUNCTION ---
     function getPaginatedData(data, page) {
         const start = (page - 1) * CARDS_PER_PAGE;
         const end = start + CARDS_PER_PAGE;
@@ -223,7 +253,6 @@ document.addEventListener('DOMContentLoaded', function() {
             html += `<button class="pagination-btn${i === currentPage ? ' active' : ''}" data-page="${i}">${i}</button>`;
         }
         container.innerHTML = html;
-        // Event
         container.querySelectorAll('.pagination-btn').forEach(btn => {
             btn.onclick = e => {
                 currentPage = parseInt(btn.dataset.page);
@@ -233,7 +262,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- RENDER BUSINESS LIST DENGAN PAGINATION ---
     function renderBusinessList(businessList) {
         const directoryGrid = document.getElementById('directory-grid');
         if (!directoryGrid) return;
@@ -244,7 +272,6 @@ document.addEventListener('DOMContentLoaded', function() {
             renderPaginationControls(0, 1, 'pagination-bottom');
             return;
         }
-        // Sort & Pagination
         filteredBusinessData = sortBusinessData(businessList, currentSort.by);
         const paginated = getPaginatedData(filteredBusinessData, currentPage);
         paginated.forEach((businessData, idx) => {
@@ -254,50 +281,11 @@ document.addEventListener('DOMContentLoaded', function() {
         renderPaginationControls(filteredBusinessData.length, currentPage, 'pagination-bottom');
     }
 
-    // --- EVENT HANDLER SORT DROPDOWN ---
-    const sortBtn = document.getElementById('sortDropdownBtn');
-    const sortMenu = document.getElementById('sortDropdownMenu');
-    if (sortBtn && sortMenu) {
-        sortBtn.onclick = function(e) {
-            e.stopPropagation();
-            sortMenu.parentElement.classList.toggle('open');
-        };
-        document.body.addEventListener('click', function() {
-            sortMenu.parentElement.classList.remove('open');
-        });
-        sortMenu.querySelectorAll('.sort-option').forEach(opt => {
-            opt.onclick = function(e) {
-                currentSort.by = opt.dataset.sort;
-                // Update label (tanpa kata "Sort:")
-                let label = opt.textContent;
-                sortBtn.innerHTML = `${label} ▼`;
-                // Highlight active
-                sortMenu.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
-                opt.classList.add('active');
-                sortMenu.parentElement.classList.remove('open');
-                masterFilterHandler(); // Panggil handler utama untuk render ulang
-            };
-        });
-        // Set default active
-        sortMenu.querySelector('.sort-option[data-sort="newest"]').classList.add('active');
-        sortBtn.innerHTML = 'Post Terbaru ▼';
-    }
-
-    // --- UPDATE masterFilterHandler UNTUK RESET PAGE ---
-    function masterFilterHandler() {
-        currentPage = 1; // Reset ke halaman 1 setiap filter/sort berubah
-        if (currentView === 'usaha') {
-            applyAndRenderBusinessFilters();
-        } else {
-            applyAndRenderMemberFilters();
-        }
-    }
-
     function renderMemberList(memberList) {
         const directoryGrid = document.getElementById('directory-grid');
         if (!directoryGrid) return;
 
-        directoryGrid.innerHTML = ''; // Clear previous results
+        directoryGrid.innerHTML = '';
         if (memberList.length === 0) {
             directoryGrid.innerHTML = '<p>Tidak ada anggota yang cocok dengan kriteria pencarian Anda.</p>';
             return;
@@ -312,41 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('direktori-list-container')) {
         displayMemberList();
     }
-
-    // Fungsi ini tidak lagi dipakai untuk tampilan awal, tapi untuk toggle
-    async function displayDirectory() {
-       initializeBusinessView();
-    }
-
-    function showLoading(container, message) {
-        if (!container) return;
-        container.innerHTML = `
-            <div class="loading-container">
-                <div class="spinner"></div>
-                <p>${message}</p>
-            </div>
-        `;
-    }
-
-    // Fungsi ini tidak lagi dipakai, digantikan oleh applyAndRenderMemberFilters dan renderMemberList
-    async function displayAllMembers() {
-        const directoryGrid = document.getElementById('directory-grid');
-        if (!directoryGrid) return;
-
-        showLoading(directoryGrid, 'Memuat data anggota...');
-
-        const members = await fetchData();
-        if (members.length === 0) {
-            directoryGrid.innerHTML = '<p>Gagal memuat data anggota atau tidak ada data.</p>';
-            return;
-        }
-
-        directoryGrid.innerHTML = '';
-        members.forEach(member => {
-            directoryGrid.appendChild(createSimpleMemberCard(member));
-        });
-    }
-
+    
     async function displayMemberList() {
         const listContainer = document.getElementById('direktori-list-container');
         if (!listContainer) return;
@@ -392,11 +346,20 @@ document.addEventListener('DOMContentLoaded', function() {
         return item;
     }
 
-    // --- FUNGSI PEMBUATAN KARTU ---
+    function showLoading(container, message) {
+        if (!container) return;
+        container.innerHTML = `
+            <div class="loading-container">
+                <div class="spinner"></div>
+                <p>${message}</p>
+            </div>
+        `;
+    }
+
     function createSimpleMemberCard(member) {
         const card = document.createElement('div');
-        card.className = 'member-card'; // Re-use styling
-        card.style.cursor = 'pointer'; // Menambahkan kursor pointer
+        card.className = 'member-card';
+        card.style.cursor = 'pointer';
         card.addEventListener('click', () => {
             if (member.id_anggota) {
                 window.location.href = `detail.html?id=${member.id_anggota}`;
@@ -424,19 +387,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function createMemberCard(businessData) {
-        // Fallback untuk gambar
         const baseRepoUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/';
         const defaultImgUrl = `${baseRepoUrl}default_image_usaha.jpg`;
         const memberImgUrl = `${baseRepoUrl}${businessData.id_anggota}.jpg`;
         const businessImgUrl = `${baseRepoUrl}${businessData.id_usaha}.jpg`;
         const imageUrl = businessData.foto_usaha ? businessImgUrl : defaultImgUrl;
 
-        // [PERBAIKAN] Fallback ke pencarian domisili jika url_gmaps_perusahaan kosong
         const mapsUrl = businessData.url_gmaps_perusahaan 
             || (businessData.domisili ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(businessData.domisili)}` : '#');
         const hasMapsUrl = mapsUrl !== '#' ? 'clickable' : '';
 
-        // Generate social/marketplace icons
         const contactLinks = [];
 
         const card = document.createElement('div');
@@ -480,13 +440,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return card;
     }
 
-    // --- FUNGSI UTILITAS ---
     function getDistance(lat1, lon1, lat2, lon2) {
         if ((lat1 == lat2) && (lon1 == lon2)) {
             return 0;
         }
         if (!lat1 || !lon1 || !lat2 || !lon2) return Infinity;
-        const R = 6371; // Radius bumi dalam km
+        const R = 6371;
         const dLat = (lat2 - lat1) * Math.PI / 180;
         const dLon = (lon2 - lon1) * Math.PI / 180;
         const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
