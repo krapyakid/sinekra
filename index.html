@@ -45,50 +45,48 @@
     </section>
 
     <main class="content-container">
-        <section class="directory-section">
+        <section class="search-and-filter-section">
             <div class="search-and-filter-container">
-                <div class="filter-controls-container">
-                    <div class="filter-group">
-                        <div class="search-bar-wrapper">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="desktop-search-bar" class="search-bar" placeholder="Cari Nama Usaha atau Anggota">
-                        </div>
-                        <div class="filter-select-wrapper">
-                            <i class="fas fa-tags"></i>
-                            <select id="filter-category" class="filter-select">
-                                <option value="">Semua Kategori</option>
-                            </select>
-                        </div>
-                        <div class="filter-select-wrapper">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <select id="filter-domicile" class="filter-select">
-                                <option value="">Semua Domisili</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="actions-group">
-                        <span id="total-count"></span>
-                        <div class="sort-dropdown-wrapper dropdown">
-                            <button id="sortDropdownBtn" class="dropdown-btn">
-                                Post Terbaru <i class="fas fa-chevron-down"></i>
-                            </button>
-                            <div id="sortDropdownMenu" class="dropdown-menu">
-                                <a href="#" class="sort-option" data-sort="newest">Post Terbaru</a>
-                                <a href="#" class="sort-option" data-sort="oldest">Post Terlama</a>
-                                <a href="#" class="sort-option" data-sort="az">Nama A-Z</a>
-                                <a href="#" class="sort-option" data-sort="za">Nama Z-A</a>
-                            </div>
-                        </div>
-                        <a href="#" id="view-toggle-link" class="view-toggle">Lihat Daftar Anggota</a>
-                    </div>
+                <div class="search-bar-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="desktop-search-bar" class="search-bar" placeholder="Cari Nama Usaha atau Anggota">
                 </div>
-
-                <div class="directory-header">
-                    <h2 id="grid-title">Daftar Usaha Santri</h2>
-                    <div id="pagination-top" class="pagination-controls"></div>
+                <div class="filter-select-wrapper">
+                    <i class="fas fa-tags"></i>
+                    <select id="filter-category" class="filter-select">
+                        <option value="">Semua Kategori</option>
+                    </select>
+                </div>
+                <div class="filter-select-wrapper">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <select id="filter-domicile" class="filter-select">
+                        <option value="">Semua Domisili</option>
+                    </select>
                 </div>
             </div>
+        </section>
+
+        <section class="directory-section">
+            <div class="directory-header">
+                <h2 id="grid-title">Daftar Usaha Santri</h2>
+                <div class="actions-group">
+                    <span id="total-count"></span>
+                    <div class="sort-dropdown-wrapper dropdown">
+                        <button id="sortDropdownBtn" class="dropdown-btn">
+                            Post Terbaru <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="sortDropdownMenu" class="dropdown-menu">
+                            <a href="#" class="sort-option" data-sort="newest">Post Terbaru</a>
+                            <a href="#" class="sort-option" data-sort="oldest">Post Terlama</a>
+                            <a href="#" class="sort-option" data-sort="az">Nama A-Z</a>
+                            <a href="#" class="sort-option" data-sort="za">Nama Z-A</a>
+                        </div>
+                    </div>
+                    <a href="#" id="view-toggle-link" class="view-toggle">Lihat Daftar Anggota</a>
+                </div>
+            </div>
+
+            <div id="pagination-top" class="pagination-controls"></div>
 
             <div id="directory-grid" class="directory-grid">
                 <!-- Kartu anggota akan dimuat di sini oleh JavaScript -->
