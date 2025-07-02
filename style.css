@@ -501,6 +501,72 @@ main.content-container {
     gap: 25px;
 }
 
+/* New styles for member list view */
+.directory-grid.list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    grid-template-columns: 1fr; /* Override grid */
+}
+
+.member-list-item {
+    background-color: var(--card-bg);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.member-list-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.member-list-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+    flex-shrink: 0; /* Prevent avatar from shrinking */
+}
+
+.member-list-details {
+    flex-grow: 1;
+}
+
+.member-list-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 2px;
+}
+
+.member-list-profession {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    margin-bottom: 4px;
+}
+
+.member-list-domicile {
+    font-size: 0.85rem;
+    color: var(--light-text-color);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
 /* Kartu Anggota */
 .member-card {
     border: 1px solid var(--border-color);
