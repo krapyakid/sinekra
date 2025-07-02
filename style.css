@@ -241,12 +241,10 @@ main.content-container {
     pointer-events: none;
 }
 
-.filter-select-wrapper {
+.filter-select {
     position: relative;
     flex-grow: 1;
     min-width: 180px;
-    display: flex;
-    align-items: center;
 }
 
 .search-and-filter-container .filter-select {
@@ -374,7 +372,7 @@ main.content-container {
     }
 
     .search-bar-wrapper,
-    .filter-select-wrapper {
+    .filter-select {
         width: 100%;
         min-width: 0; /* Reset min-width from desktop view */
     }
