@@ -253,7 +253,8 @@ main.content-container {
 
 .search-bar-wrapper .search-icon {
     position: absolute;
-    left: 15px;
+    left: auto;
+    right: 15px;
     top: 50%;
     transform: translateY(-50%);
     color: #aaa;
@@ -261,7 +262,8 @@ main.content-container {
 }
 
 .search-bar-wrapper input {
-    padding-left: 40px;
+    padding-left: 15px;
+    padding-right: 40px; /* Make space for the icon on the right */
 }
 
 .filter-select-wrapper {
@@ -363,7 +365,7 @@ main.content-container {
     .search-and-filter-container {
         flex-direction: column;
         align-items: stretch;
-        gap: 15px;
+        gap: 10px; /* Reduced gap between items */
         padding: 20px;
     }
 
@@ -374,7 +376,8 @@ main.content-container {
     }
 
     .search-bar-wrapper input {
-        padding-left: 40px; /* Ensure padding is consistent on mobile */
+        padding-left: 15px; /* Reset for consistency */
+        padding-right: 40px; /* Ensure padding is consistent on mobile */
     }
 
     .search-and-filter-container > *:last-child {
