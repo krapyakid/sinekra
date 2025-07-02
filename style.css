@@ -218,7 +218,7 @@ main.content-container {
 
 .search-bar {
     width: 100%;
-    padding: 12px 15px 12px 40px; /* Left padding for icon */
+    padding: 12px 40px 12px 15px; /* Right padding for icon */
     border: 1px solid #dfe1e5;
     border-radius: 8px;
     font-size: 1rem;
@@ -234,7 +234,8 @@ main.content-container {
 
 .search-icon {
     position: absolute;
-    left: 15px;
+    right: 15px; /* Moved to the right */
+    left: auto; /* Unset left */
     top: 50%;
     transform: translateY(-50%);
     color: #9aa0a6;
@@ -361,27 +362,28 @@ main.content-container {
         padding: 40px 20px;
     }
     .search-and-filter-section {
-        margin: 20px 15px; /* Adjust margin for mobile */
+        margin: 20px 15px;
         padding: 15px;
     }
     .search-and-filter-container {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px; /* Adjusted gap */
-        padding: 20px;
+        flex-direction: row; /* Allow side-by-side */
+        flex-wrap: wrap; /* Allow wrapping */
+        gap: 10px;
+        padding: 0; /* Remove extra padding, section has it */
     }
-
+    .search-bar-wrapper {
+        flex-basis: 100%; /* Search bar takes full width */
+    }
+    .filter-select {
+        flex-grow: 1;
+        flex-basis: calc(50% - 5px); /* Two filters per row */
+        min-width: calc(50% - 5px);
+    }
     .search-bar, .filter-select {
         padding-top: 10px;
         padding-bottom: 10px;
         font-size: 0.95rem;
     }
-
-    .search-bar-wrapper,
-    .filter-select {
-        width: 100%;
-    }
-
     .search-bar-wrapper input {
         padding-left: 15px; /* Reset for consistency */
         padding-right: 40px; /* Ensure padding is consistent on mobile */
