@@ -456,8 +456,8 @@ document.addEventListener('DOMContentLoaded', function() {
         card.className = 'member-card';
         card.addEventListener('click', (e) => {
             if (e.target.closest('a')) return;
-            if (businessData.id_anggota) {
-                window.location.href = `detail.html?id=${businessData.id_anggota}`;
+            if (businessData.id_usaha) {
+                window.location.href = `detail.html?id=${businessData.id_usaha}`;
             }
         });
 
