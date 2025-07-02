@@ -83,6 +83,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function updateTotalCount(count) {
+        const countEl = document.getElementById('total-count');
+        if (countEl) {
+            countEl.textContent = `${count} Data`;
+        }
+    }
+
     async function initializeHomepage() {
         showLoading(directoryGrid, 'Memuat data...');
         await fetchData();
@@ -111,12 +118,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     gridTitle.textContent = 'Daftar Seluruh Anggota';
                     viewToggleLink.textContent = 'Lihat Daftar Usaha';
                     if(categoryFilter) categoryFilter.style.display = 'none';
+                    if(sortBtn) sortBtn.style.display = 'none';
                     if(searchBar) searchBar.placeholder = 'Cari Nama Anggota';
                 } else {
                     currentView = 'usaha';
                     gridTitle.textContent = 'Daftar Usaha Santri';
                     viewToggleLink.textContent = 'Lihat Daftar Anggota';
                     if(categoryFilter) categoryFilter.style.display = '';
+                    if(sortBtn) sortBtn.style.display = '';
                     if(searchBar) searchBar.placeholder = 'Cari Nama Usaha atau Anggota';
                 }
                 masterFilterHandler();
@@ -136,10 +145,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 sortMenu.parentElement.classList.remove('open');
             });
             sortMenu.querySelectorAll('.sort-option').forEach(opt => {
-                opt.onclick = function() {
+                opt.onclick = function(e) {
+                    e.stopPropagation();
                     currentSort.by = opt.dataset.sort;
                     let label = opt.textContent;
-                    sortBtn.innerHTML = `${label} ▼`;
+                    sortBtn.innerHTML = `${label} <i class="fas fa-chevron-down"></i>`;
                     sortMenu.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
                     opt.classList.add('active');
                     sortMenu.parentElement.classList.remove('open');
@@ -149,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const defaultSortOption = sortMenu.querySelector('.sort-option[data-sort="newest"]');
             if (defaultSortOption) {
                 defaultSortOption.classList.add('active');
-                sortBtn.innerHTML = 'Post Terbaru ▼';
+                sortBtn.innerHTML = `Post Terbaru <i class="fas fa-chevron-down"></i>`;
             }
         }
     }
@@ -200,6 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         renderBusinessList(filteredData);
+        updateTotalCount(filteredData.length);
     }
     
     function applyAndRenderMemberFilters() {
@@ -217,6 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const sortedData = sortMemberData(filteredData, currentSort.by);
         renderMemberList(sortedData);
+        updateTotalCount(sortedData.length);
     }
 
     // --- PAGINATION & SORTING ---
@@ -303,6 +315,7 @@ document.addEventListener('DOMContentLoaded', function() {
         directoryGrid.innerHTML = '';
         if (memberList.length === 0) {
             directoryGrid.innerHTML = '<p>Tidak ada anggota yang cocok dengan kriteria pencarian Anda.</p>';
+            updateTotalCount(0);
             return;
         }
 
@@ -406,13 +419,32 @@ document.addEventListener('DOMContentLoaded', function() {
         const defaultImgUrl = `${baseRepoUrl}default_image_usaha.jpg`;
         const memberImgUrl = `${baseRepoUrl}${businessData.id_anggota}.jpg`;
         const businessImgUrl = `${baseRepoUrl}${businessData.id_usaha}.jpg`;
-        const imageUrl = businessData.foto_usaha ? businessImgUrl : defaultImgUrl;
 
         const mapsUrl = businessData.url_gmaps_perusahaan 
             || (businessData.domisili ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(businessData.domisili)}` : '#');
         const hasMapsUrl = mapsUrl !== '#' ? 'clickable' : '';
 
-        const contactLinks = [];
+        // --- CONTACT ICONS LOGIC ---
+        const contactIcons = [];
+        // 1. WhatsApp
+        if (businessData.whatsapp) {
+            contactIcons.push(`<a href="https://wa.me/${businessData.whatsapp.replace(/\D/g, '')}" target="_blank" rel="noopener noreferrer" class="card-contact-icon" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>`);
+        }
+        // 2. Website
+        if (businessData.website_usaha) {
+            contactIcons.push(`<a href="${businessData.website_usaha}" target="_blank" rel="noopener noreferrer" class="card-contact-icon" title="Website"><i class="fas fa-globe"></i></a>`);
+        }
+        // 3. Olshop
+        const olshops = ['tokopedia', 'shopee', 'bukalapak', 'blibli', 'tiktok'];
+        olshops.forEach(shop => {
+            if (businessData[shop]) {
+                contactIcons.push(`<a href="${businessData[shop]}" target="_blank" rel="noopener noreferrer" class="card-contact-icon" title="${shop.charAt(0).toUpperCase() + shop.slice(1)}"><img src="assets/marketplace/icon-${shop}.svg" class="olshop-icon"></a>`);
+            }
+        });
+        // 4. Social Media
+        if (businessData.sosmed_usaha) {
+            contactIcons.push(`<a href="${businessData.sosmed_usaha}" target="_blank" rel="noopener noreferrer" class="card-contact-icon" title="Social Media"><i class="fas fa-share-alt"></i></a>`);
+        }
 
         const card = document.createElement('div');
         card.className = 'member-card';
@@ -426,12 +458,12 @@ document.addEventListener('DOMContentLoaded', function() {
         card.innerHTML = `
             <div class="card-header">
                 <div class="card-contact-links">
-                    ${contactLinks.join('')}
+                    
                 </div>
             </div>
             <div class="card-banner">
                 <a href="detail.html?id=${businessData.id_anggota}" class="card-banner-link">
-                    <img src="${imageUrl}" alt="Gambar Usaha ${businessData.nama_usaha}" 
+                    <img src="${businessImgUrl}" alt="Gambar Usaha ${businessData.nama_usaha}" 
                          onerror="this.onerror=null; this.src='${memberImgUrl}'; this.onerror=function(){this.onerror=null; this.src='${defaultImgUrl}';};">
                 </a>
                 <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="card-location-overlay ${hasMapsUrl}">
@@ -446,9 +478,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p class="card-description">
                     ${businessData.jenis_usaha || 'Jenis usaha tidak tersedia.'}
                 </p>
-                <p class="card-owner">
-                    <i class="fas fa-user"></i> ${businessData.nama_lengkap}
-                </p>
+                <div class="card-owner-icons">
+                    ${contactIcons.join('')}
+                </div>
             </div>
         `;
 
