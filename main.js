@@ -113,19 +113,23 @@ document.addEventListener('DOMContentLoaded', function() {
             viewToggleLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 const gridTitle = document.getElementById('grid-title');
+                const directoryGrid = document.getElementById('directory-grid');
                 if (currentView === 'usaha') {
                     currentView = 'anggota';
                     gridTitle.textContent = 'Daftar Seluruh Anggota';
                     viewToggleLink.textContent = 'Lihat Daftar Usaha';
-                    if(categoryFilter) categoryFilter.style.display = 'none';
+                    if(categoryFilter) categoryFilter.parentElement.style.display = 'none';
                     if(searchBar) searchBar.placeholder = 'Cari Nama Anggota';
+                    if(sortBtn) sortBtn.style.display = 'none';
+                    directoryGrid.classList.add('list-view');
                 } else {
                     currentView = 'usaha';
                     gridTitle.textContent = 'Daftar Usaha Santri';
                     viewToggleLink.textContent = 'Lihat Daftar Anggota';
-                    if(categoryFilter) categoryFilter.style.display = '';
-                    if(sortBtn) sortBtn.style.display = '';
+                    if(categoryFilter) categoryFilter.parentElement.style.display = '';
                     if(searchBar) searchBar.placeholder = 'Cari Nama Usaha atau Anggota';
+                    if(sortBtn) sortBtn.style.display = '';
+                    directoryGrid.classList.remove('list-view');
                 }
                 masterFilterHandler();
             });
