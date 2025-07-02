@@ -748,15 +748,10 @@ main.content-container {
     position: relative;
 }
 .sort-dropdown-wrapper .dropdown-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
+    /* This inherits the pill style from the shared rule */
     display: inline-flex;
     align-items: center;
-    color: #333; /* Re-apply color since we reset it */
-    font-weight: 600;
-    font-size: 0.85rem;
+    cursor: pointer;
 }
 .sort-dropdown-wrapper .dropdown-btn i {
     font-size: 0.8em;
