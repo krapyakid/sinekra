@@ -36,7 +36,7 @@
         </div>
     </header>
 
-    <section class="hero-section">
+    <section class="hero-section" style="background-image: url('assets/hero-bg.jpg');">
         <div class="hero-content">
             <p class="quote">"Menjadi contoh yang bisa dilihat masyarakat kalau pesantren bisa melahirkan hal positif secara bersama."</p>
             <p class="source">- KH. Afif Muhammad, MA -</p>
@@ -45,41 +45,56 @@
     </section>
 
     <main class="content-container">
-        <section class="search-and-filter-section">
+        <section class="directory-section">
             <div class="search-and-filter-container">
-                <div class="search-bar-wrapper">
-                    <input type="text" id="desktop-search-bar" placeholder="Cari Nama Usaha atau Anggota" />
-                    <i class="fas fa-search search-icon"></i>
-                </div>
-                <select id="filter-category" class="filter-select"><option value="">Semua Kategori</option></select>
-                <select id="filter-domicile" class="filter-select"><option value="">Semua Domisili</option></select>
-            </div>
-        </section>
+                <div class="filter-controls-container">
+                    <div class="filter-group">
+                        <div class="search-bar-wrapper">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="desktop-search-bar" class="search-bar" placeholder="Cari Nama Usaha atau Anggota">
+                        </div>
+                        <div class="filter-select-wrapper">
+                            <i class="fas fa-tags"></i>
+                            <select id="filter-category" class="filter-select">
+                                <option value="">Semua Kategori</option>
+                            </select>
+                        </div>
+                        <div class="filter-select-wrapper">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <select id="filter-domicile" class="filter-select">
+                                <option value="">Semua Domisili</option>
+                            </select>
+                        </div>
+                    </div>
 
-        <!-- Main Grid Section -->
-        <section class="main-grid-section">
-            <div class="section-header">
-                <h2 id="grid-title" class="section-title">Daftar Usaha Santri</h2>
-                <a href="#" id="view-toggle-link" class="see-more-link">Lihat Daftar Anggota</a>
-            </div>
-            <!-- Sort & Pagination Controls Atas -->
-            <div class="directory-controls-top" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px;">
-                <div class="sort-dropdown">
-                  <button id="sortDropdownBtn" class="sort-dropdown-btn">Post Terbaru ▼</button>
-                  <div id="sortDropdownMenu" class="sort-dropdown-menu">
-                    <div class="sort-option" data-sort="newest">Post Terbaru</div>
-                    <div class="sort-option" data-sort="oldest">Post Terlama</div>
-                    <div class="sort-option" data-sort="az">Huruf A-Z</div>
-                    <div class="sort-option" data-sort="za">Huruf Z-A</div>
-                  </div>
+                    <div class="actions-group">
+                        <span id="total-count"></span>
+                        <div class="sort-dropdown-wrapper dropdown">
+                            <button id="sortDropdownBtn" class="dropdown-btn">
+                                Post Terbaru <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div id="sortDropdownMenu" class="dropdown-menu">
+                                <a href="#" class="sort-option" data-sort="newest">Post Terbaru</a>
+                                <a href="#" class="sort-option" data-sort="oldest">Post Terlama</a>
+                                <a href="#" class="sort-option" data-sort="az">Nama A-Z</a>
+                                <a href="#" class="sort-option" data-sort="za">Nama Z-A</a>
+                            </div>
+                        </div>
+                        <a href="#" id="view-toggle-link" class="view-toggle">Lihat Daftar Anggota</a>
+                    </div>
                 </div>
-                <div id="pagination-top" class="pagination-container"></div>
+
+                <div class="directory-header">
+                    <h2 id="grid-title">Daftar Usaha Santri</h2>
+                    <div id="pagination-top" class="pagination-controls"></div>
+                </div>
             </div>
-            <div id="directory-grid" class="directory-grid-container">
-                <!-- Kartu anggota akan dimuat di sini oleh JS -->
+
+            <div id="directory-grid" class="directory-grid">
+                <!-- Kartu anggota akan dimuat di sini oleh JavaScript -->
             </div>
-            <!-- Pagination Controls Bawah -->
-            <div id="pagination-bottom" class="pagination-container" style="margin-top: 24px;"></div>
+
+            <div id="pagination-bottom" class="pagination-controls"></div>
         </section>
     </main>
 
