@@ -260,7 +260,6 @@ main.content-container {
     border-radius: 8px;
     padding: 12px 15px;
     font-size: 1rem;
-    height: 48px;
     width: 100%;
     transition: all 0.3s ease;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
@@ -368,14 +367,19 @@ main.content-container {
     .search-and-filter-container {
         flex-direction: column;
         align-items: stretch;
-        gap: 10px; /* Reduced gap between items */
+        gap: 12px; /* Adjusted gap */
         padding: 20px;
+    }
+
+    .search-bar, .filter-select {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: 0.95rem;
     }
 
     .search-bar-wrapper,
     .filter-select {
         width: 100%;
-        min-width: 0; /* Reset min-width from desktop view */
     }
 
     .search-bar-wrapper input {
