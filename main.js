@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const professionFilter = document.getElementById('filter-profession');
 
         if (categoryFilter) {
-            const categories = [...new Set(allBusinessData.map(b => b.kategori_usaha).filter(Boolean))];
+            const categories = [...new Set(allBusinessData.map(b => b.kategori_usaha ? b.kategori_usaha.trim() : b.kategori_usaha).filter(Boolean))];
             categoryFilter.innerHTML = '<option value="">Semua Kategori</option>';
             categories.sort().forEach(category => {
                 const option = document.createElement('option');
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (domicileFilter) {
-            const domiciles = [...new Set(allDataCache.map(m => m.domisili).filter(Boolean))];
+            const domiciles = [...new Set(allDataCache.map(m => m.domisili ? m.domisili.trim() : m.domisili).filter(Boolean))];
             domicileFilter.innerHTML = '<option value="">Semua Domisili</option>';
             domiciles.sort().forEach(domicile => {
                 const option = document.createElement('option');
@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (professionFilter) {
-            const professions = [...new Set(allDataCache.map(m => m.profesi).filter(Boolean))];
+            const professions = [...new Set(allDataCache.map(m => m.profesi ? m.profesi.trim() : m.profesi).filter(Boolean))];
             professionFilter.innerHTML = '<option value="">Semua Profesi</option>';
             professions.sort().forEach(p => {
                 const option = document.createElement('option');
