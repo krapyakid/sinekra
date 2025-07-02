@@ -215,7 +215,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return nameMatch && domicileMatch;
         });
         
-        renderMemberList(filteredData);
+        const sortedData = sortMemberData(filteredData, currentSort.by);
+        renderMemberList(sortedData);
     }
 
     // --- PAGINATION & SORTING ---
@@ -229,6 +230,20 @@ document.addEventListener('DOMContentLoaded', function() {
             sorted.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
         } else {
             // newest
+            sorted.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        }
+        return sorted;
+    }
+
+    function sortMemberData(data, sortBy) {
+        let sorted = [...data];
+        if (sortBy === 'az') {
+            sorted.sort((a, b) => (a.nama_lengkap || '').localeCompare(b.nama_lengkap || '', 'id'));
+        } else if (sortBy === 'za') {
+            sorted.sort((a, b) => (b.nama_lengkap || '').localeCompare(a.nama_lengkap || '', 'id'));
+        } else if (sortBy === 'oldest') {
+            sorted.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+        } else { // newest
             sorted.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         }
         return sorted;
