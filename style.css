@@ -193,14 +193,14 @@ main.content-container {
 
 /* Search and Filter Section */
 .search-and-filter-section {
-    background-color: #f7f9fc;
+    max-width: 1240px; /* Match directory-section width */
+    margin: -60px auto 30px auto; /* Center the container and handle overlap */
     padding: 20px;
+    background-color: #f7f9fc;
     border-radius: 12px;
-    margin-bottom: 30px;
-    margin-top: -60px; /* Pulls it up over the hero image */
     position: relative;
     z-index: 2;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    box-shadow: 0 8px Gg(0,0,0,0.08);
 }
 
 .search-and-filter-container {
@@ -245,6 +245,9 @@ main.content-container {
     position: relative;
     flex-grow: 1;
     min-width: 180px;
+    align-items: center;
+    gap: 15px;
+    white-space: nowrap;
 }
 
 .search-and-filter-container .filter-select {
@@ -359,10 +362,8 @@ main.content-container {
         padding: 40px 20px;
     }
     .search-and-filter-section {
-        margin-top: 24px;
-        position: static;
-        margin-bottom: 32px;
-        padding: 0 15px;
+        margin: 20px 15px; /* Adjust margin for mobile */
+        padding: 15px;
     }
     .search-and-filter-container {
         flex-direction: column;
@@ -712,22 +713,30 @@ main.content-container {
     white-space: nowrap;
 }
 
-.view-toggle, .sort-dropdown-wrapper .dropdown-btn {
-    color: #555;
+.view-toggle, 
+.sort-dropdown-wrapper .dropdown-btn {
+    color: #333;
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+    border-radius: 50px; /* Pill shape */
+    padding: 6px 14px; /* Tighter padding */
+    font-weight: 600; /* Bold text */
+    font-size: 0.85rem; /* Smaller text */
     text-decoration: none;
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: color 0.3s;
+    transition: all 0.2s ease;
 }
-.view-toggle:hover, .sort-dropdown-wrapper .dropdown-btn:hover {
+.view-toggle:hover, 
+.sort-dropdown-wrapper .dropdown-btn:hover {
+    background-color: #dee2e6;
+    border-color: #adb5bd;
     color: var(--primary-color);
 }
 
 #total-count {
-    font-size: 0.85rem;
-    color: #999;
-    font-weight: 400;
-    margin-right: 10px; /* Add some space */
+    font-size: 0.9rem;
+    color: var(--text-color); /* Emphasized color */
+    font-weight: 500; /* Medium weight */
+    margin-right: 10px;
 }
 
 /* --- Penyesuaian Tombol Sort --- */
@@ -741,10 +750,13 @@ main.content-container {
     padding: 0;
     display: inline-flex;
     align-items: center;
+    color: #333; /* Re-apply color since we reset it */
+    font-weight: 600;
+    font-size: 0.85rem;
 }
 .sort-dropdown-wrapper .dropdown-btn i {
     font-size: 0.8em;
-    margin-left: 4px;
+    margin-left: 8px; /* Added space for the arrow */
     transition: transform 0.3s;
 }
 
