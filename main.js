@@ -105,6 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const viewToggleLink = document.getElementById('view-toggle-link');
         const searchBar = document.getElementById('desktop-search-bar');
         const categoryFilter = document.getElementById('filter-category');
+        const professionFilter = document.getElementById('filter-profession');
         const domicileFilter = document.getElementById('filter-domicile');
         const sortBtn = document.getElementById('sortDropdownBtn');
         const sortMenu = document.getElementById('sortDropdownMenu');
@@ -118,15 +119,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     currentView = 'anggota';
                     gridTitle.textContent = 'Daftar Seluruh Anggota';
                     viewToggleLink.textContent = 'Lihat Daftar Usaha';
-                    if(categoryFilter) categoryFilter.parentElement.style.display = 'none';
+                    if(categoryFilter) categoryFilter.style.display = 'none';
+                    if(professionFilter) professionFilter.style.display = '';
                     if(searchBar) searchBar.placeholder = 'Cari Nama Anggota';
-                    if(sortBtn) sortBtn.style.display = 'none';
+                    if(sortBtn) sortBtn.style.display = '';
                     directoryGrid.classList.add('list-view');
                 } else {
                     currentView = 'usaha';
                     gridTitle.textContent = 'Daftar Usaha Santri';
                     viewToggleLink.textContent = 'Lihat Daftar Anggota';
-                    if(categoryFilter) categoryFilter.parentElement.style.display = '';
+                    if(categoryFilter) categoryFilter.style.display = '';
+                    if(professionFilter) professionFilter.style.display = 'none';
                     if(searchBar) searchBar.placeholder = 'Cari Nama Usaha atau Anggota';
                     if(sortBtn) sortBtn.style.display = '';
                     directoryGrid.classList.remove('list-view');
@@ -137,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if(searchBar) searchBar.addEventListener('input', masterFilterHandler);
         if(categoryFilter) categoryFilter.addEventListener('change', masterFilterHandler);
+        if(professionFilter) professionFilter.addEventListener('change', masterFilterHandler);
         if(domicileFilter) domicileFilter.addEventListener('change', masterFilterHandler);
 
         if (sortBtn && sortMenu) {
@@ -170,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function populateFilters() {
         const categoryFilter = document.getElementById('filter-category');
         const domicileFilter = document.getElementById('filter-domicile');
+        const professionFilter = document.getElementById('filter-profession');
 
         if (categoryFilter) {
             const categories = [...new Set(allBusinessData.map(b => b.kategori_usaha).filter(Boolean))];
@@ -190,6 +195,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 option.value = domicile;
                 option.textContent = domicile;
                 domicileFilter.appendChild(option);
+            });
+        }
+
+        if (professionFilter) {
+            const professions = [...new Set(allDataCache.map(m => m.profesi).filter(Boolean))];
+            professionFilter.innerHTML = '<option value="">Semua Profesi</option>';
+            professions.sort().forEach(p => {
+                const option = document.createElement('option');
+                option.value = p;
+                option.textContent = p;
+                professionFilter.appendChild(option);
             });
         }
     }
@@ -219,14 +235,17 @@ document.addEventListener('DOMContentLoaded', function() {
     function applyAndRenderMemberFilters() {
         const searchBar = document.getElementById('desktop-search-bar');
         const domicileFilter = document.getElementById('filter-domicile');
+        const professionFilter = document.getElementById('filter-profession');
 
         const searchTerm = searchBar ? searchBar.value.toLowerCase() : '';
         const selectedDomicile = domicileFilter ? domicileFilter.value : '';
+        const selectedProfession = professionFilter ? professionFilter.value : '';
 
         const filteredData = allDataCache.filter(member => {
             const nameMatch = member.nama_lengkap.toLowerCase().includes(searchTerm);
             const domicileMatch = !selectedDomicile || member.domisili === selectedDomicile;
-            return nameMatch && domicileMatch;
+            const professionMatch = !selectedProfession || member.profesi === selectedProfession;
+            return nameMatch && domicileMatch && professionMatch;
         });
         
         const sortedData = sortMemberData(filteredData, currentSort.by);
@@ -258,16 +277,16 @@ document.addEventListener('DOMContentLoaded', function() {
             sorted.sort((a, b) => (b.nama_lengkap || '').localeCompare(a.nama_lengkap || '', 'id'));
         } else if (sortBy === 'oldest') {
             sorted.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-        } else { // newest
+        } else { // 'newest' is the default
             sorted.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         }
         return sorted;
     }
 
     function getPaginatedData(data, page) {
-        const start = (page - 1) * CARDS_PER_PAGE;
-        const end = start + CARDS_PER_PAGE;
-        return data.slice(start, end);
+        const startIndex = (page - 1) * CARDS_PER_PAGE;
+        const endIndex = startIndex + CARDS_PER_PAGE;
+        return data.slice(startIndex, endIndex);
     }
 
     function renderPaginationControls(totalItems, currentPage, containerId) {
