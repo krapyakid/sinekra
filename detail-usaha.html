@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Usaha - Sinergi Ekonomi Krapyak</title>
+    <link rel="icon" href="assets/logo_sinergi_krapyak.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-wrapper">
+            <a href="index.html" class="logo-link">
+                <img src="assets/logo_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="logo">
+            </a>
+            <div class="header-right">
+                <nav class="main-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="form.html" class="nav-link">Isi Form</a>
+                    <a href="statistik.html" class="nav-link">Statistik</a>
+                    <a href="tentang.html" class="nav-link">Tentang</a>
+                </nav>
+                <div class="header-actions">
+                    <div class="mobile-menu-trigger" id="burger-menu-trigger">
+                        <img src="assets/menu_kebab.svg" alt="Menu">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="content-container">
+        <div id="detail-content" class="container">
+            <div class="loading-container">
+                <div class="spinner"></div>
+                <p>Memuat detail usaha...</p>
+            </div>
+        </div>
+    </main>
+    
+    <div class="menu-overlay" id="menu-overlay"></div>
+
+    <nav class="main-nav" id="main-nav">
+        <button class="nav-close-btn" id="nav-close-btn">&times;</button>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="form.html" class="nav-link">Isi Form</a>
+        <a href="statistik.html" class="nav-link">Statistik</a>
+        <a href="tentang.html" class="nav-link">Tentang</a>
+    </nav>
+    
+    <footer class="main-footer">© 2025 Sinergi Ekonomi Santri Krapyak</footer>
+
+    <script src="main.js" defer></script>
+    <script src="detail-usaha.js" defer></script>
+</body>
+</html> 
