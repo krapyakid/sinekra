@@ -118,7 +118,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     gridTitle.textContent = 'Daftar Seluruh Anggota';
                     viewToggleLink.textContent = 'Lihat Daftar Usaha';
                     if(categoryFilter) categoryFilter.style.display = 'none';
-                    if(sortBtn) sortBtn.style.display = 'none';
                     if(searchBar) searchBar.placeholder = 'Cari Nama Anggota';
                 } else {
                     currentView = 'usaha';
