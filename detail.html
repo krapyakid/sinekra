@@ -266,42 +266,18 @@
         </div>
     </header>
 
-    <main class="container">
-         <nav aria-label="breadcrumb" class="breadcrumb-nav">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page" id="breadcrumb-nama">Detail Anggota</li>
-            </ol>
-        </nav>
-
-        <!-- Elemen loading dan error dipisahkan dari kontainer konten -->
-        <div id="detail-loading" class="directory-status">
-            <div class="spinner"></div>
-            <p>Memuat data anggota...</p>
-        </div>
-        <div id="detail-error" class="directory-status" style="display: none;">
-            <p>Gagal memuat data atau anggota tidak ditemukan.</p>
-            <a href="index.html" class="btn btn-primary">Kembali ke Direktori</a>
-        </div>
-
-        <!-- Konten akan diisi di sini oleh JS -->
-        <div id="detail-content">
-            <!-- Content will be injected by detail.js -->
+    <main class="content-container">
+        <div id="detail-content" class="container">
+            <!-- Konten akan dimuat oleh JavaScript -->
+            <div class="loading-container">
+                <div class="spinner"></div>
+                <p>Memuat detail anggota...</p>
+            </div>
         </div>
     </main>
-
-    <div class="menu-overlay" id="menu-overlay"></div>
-    <nav class="main-nav" id="main-nav">
-        <button class="nav-close-btn" id="nav-close-btn">&times;</button>
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="form.html" class="nav-link">Isi Form</a>
-        <a href="statistik.html" class="nav-link">Statistik</a>
-        <a href="tentang.html" class="nav-link">Tentang</a>
-    </nav>
-
-    <!-- main.js untuk fungsionalitas menu, detail.js untuk konten halaman -->
-    <script src="main.js"></script>
-    <script src="detail.js"></script>
+    
     <footer class="main-footer">© 2025 Sinergi Ekonomi Santri Krapyak</footer>
+
+    <script src="detail.js"></script>
 </body>
 </html> 
