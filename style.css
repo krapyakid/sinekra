@@ -356,6 +356,7 @@ main.content-container {
         padding: 0 15px;
     }
     .search-and-filter-container {
+        display: flex;
         flex-direction: column;
         gap: 15px;
         padding: 20px;
@@ -364,7 +365,7 @@ main.content-container {
     .search-and-filter-container > .search-bar-wrapper,
     .search-and-filter-container > .filter-select-wrapper {
         width: 100%;
-        margin-bottom: 0;
+        min-width: 0; /* Reset min-width from desktop view */
     }
 
     .search-and-filter-container > *:last-child {
