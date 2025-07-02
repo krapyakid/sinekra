@@ -289,207 +289,97 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function renderBusinessList(businessList) {
-        const directoryGrid = document.getElementById('directory-grid');
-        if (!directoryGrid) return;
         directoryGrid.innerHTML = '';
-        if (businessList.length === 0) {
-            directoryGrid.innerHTML = '<p>Tidak ada usaha yang cocok dengan kriteria pencarian Anda.</p>';
-            renderPaginationControls(0, 1, 'pagination-top');
-            renderPaginationControls(0, 1, 'pagination-bottom');
+        const sortedData = sortBusinessData(businessList, currentSort.by);
+        if (sortedData.length === 0) {
+            directoryGrid.innerHTML = '<div class="no-results-card"><i class="fas fa-info-circle"></i><p>Tidak ada hasil yang ditemukan</p><span>Coba kata kunci atau filter yang berbeda.</span></div>';
             return;
         }
-        filteredBusinessData = sortBusinessData(businessList, currentSort.by);
-        const paginated = getPaginatedData(filteredBusinessData, currentPage);
-        paginated.forEach((businessData, idx) => {
-            directoryGrid.appendChild(createMemberCard(businessData));
+        sortedData.forEach(business => {
+            const card = createBusinessCard(business);
+            directoryGrid.appendChild(card);
         });
-        renderPaginationControls(filteredBusinessData.length, currentPage, 'pagination-top');
-        renderPaginationControls(filteredBusinessData.length, currentPage, 'pagination-bottom');
     }
 
     function renderMemberList(memberList) {
-        const directoryGrid = document.getElementById('directory-grid');
-        if (!directoryGrid) return;
-
         directoryGrid.innerHTML = '';
         if (memberList.length === 0) {
-            directoryGrid.innerHTML = '<p>Tidak ada anggota yang cocok dengan kriteria pencarian Anda.</p>';
-            updateTotalCount(0);
+            directoryGrid.innerHTML = '<div class="no-results-card"><i class="fas fa-info-circle"></i><p>Tidak ada hasil yang ditemukan</p><span>Coba kata kunci atau filter yang berbeda.</span></div>';
             return;
         }
-
         memberList.forEach(member => {
-            directoryGrid.appendChild(createSimpleMemberCard(member));
+            const card = createMemberListItem(member);
+            directoryGrid.appendChild(card);
         });
     }
 
-    // --- Logika untuk Halaman Direktori (direktori.html) ---
-    if (document.getElementById('direktori-list-container')) {
-        displayMemberList();
-    }
-    
-    async function displayMemberList() {
-        const listContainer = document.getElementById('direktori-list-container');
-        if (!listContainer) return;
+    // --- RENDER FUNCTIONS (CARD CREATION) ---
 
-        listContainer.innerHTML = `
-            <div class="loading-container">
-                <div class="spinner"></div>
-                <p>Memuat data anggota...</p>
-            </div>`;
-
-        const members = await fetchData();
-        
-        if (members.length === 0) {
-            listContainer.innerHTML = '<p>Gagal memuat data atau tidak ada anggota.</p>';
-            return;
-        }
-
-        listContainer.innerHTML = '';
-        members.forEach(member => {
-            listContainer.appendChild(createMemberListItem(member));
-        });
-    }
-
-    // --- FUNGSI PEMBUATAN ITEM LIST ANGGOTA ---
     function createMemberListItem(member) {
-        const item = document.createElement('div');
+        const item = document.createElement('a');
+        item.href = `detail-anggota.html?id=${member.id_anggota}`;
         item.className = 'member-list-item';
 
-        const name = document.createElement('h3');
-        name.className = 'member-name';
-        name.textContent = member.nama_lengkap || 'Nama Tidak Tersedia';
+        let profession = member.profesi || 'Belum diisi';
+        if (member.nama_lembaga) {
+            profession += ` di ${member.nama_lembaga}`;
+        }
 
-        const details = document.createElement('p');
-        details.className = 'member-details';
-        const detailParts = [
-            member.nama_panggilan ? `(${member.nama_panggilan})` : '',
-            member.detail_profesi,
-            member.domisili
-        ].filter(Boolean).join(' • '); // Menyaring nilai kosong
-        details.textContent = detailParts || 'Informasi tidak tersedia';
-
-        item.append(name, details);
+        item.innerHTML = `
+            <div class="member-list-avatar">${member.nama_lengkap.charAt(0)}</div>
+            <div class="member-list-details">
+                <h3 class="member-list-name">${member.nama_lengkap}</h3>
+                <p class="member-list-profession">${profession}</p>
+                <span class="member-list-domicile"><i class="fas fa-map-marker-alt"></i> ${member.domisili || 'Lokasi tidak diketahui'}</span>
+            </div>
+        `;
         return item;
     }
 
     function showLoading(container, message) {
-        if (!container) return;
-        container.innerHTML = `
-            <div class="loading-container">
-                <div class="spinner"></div>
-                <p>${message}</p>
-            </div>
-        `;
+        if (container) {
+            container.innerHTML = `<div class="loading-container"><div class="spinner"></div><p>${message || 'Memuat...'}</p></div>`;
+        }
     }
-
-    function createSimpleMemberCard(member) {
-        const card = document.createElement('div');
+    
+    function createBusinessCard(businessData) {
+        const card = document.createElement('a');
+        card.href = `detail-usaha.html?id=${businessData.id_usaha}`;
         card.className = 'member-card';
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', () => {
-            if (member.id_anggota) {
-                window.location.href = `detail.html?id=${member.id_anggota}`;
-            }
-        });
 
-        const content = document.createElement('div');
-        content.className = 'card-content';
+        const baseAssetUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/';
+        const defaultImgUrl = `${baseAssetUrl}default_image_usaha.jpg`;
+        const businessImgUrl = `${baseAssetUrl}${businessData.id_usaha}.jpg`;
 
-        const name = document.createElement('h3');
-        name.className = 'card-business-name';
-        name.textContent = member.nama_lengkap || 'Nama Tidak Tersedia';
-
-        const description = document.createElement('p');
-        description.className = 'card-description';
-        const detailParts = [
-            member.profesi,
-            member.detail_profesi,
-        ].filter(Boolean).join(' / ');
-        description.textContent = detailParts || 'Informasi tidak tersedia.';
-
-        content.append(name, description);
-        card.append(content);
-        return card;
-    }
-
-    function createMemberCard(businessData) {
-        const baseRepoUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/';
-        const defaultImgUrl = `${baseRepoUrl}default_image_usaha.jpg`;
-        const memberImgUrl = `${baseRepoUrl}${businessData.id_anggota}.jpg`;
-        const businessImgUrl = `${baseRepoUrl}${businessData.id_usaha}.jpg`;
-
-        const mapsUrl = businessData.url_gmaps_perusahaan 
-            || (businessData.domisili ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(businessData.domisili)}` : '#');
-        const hasMapsUrl = mapsUrl !== '#' ? 'clickable' : '';
-
-        // --- CONTACT ICONS LOGIC ---
         const contactIcons = [];
-        // 1. WhatsApp
         if (businessData.whatsapp) {
-            contactIcons.push(`<a href="https://wa.me/${businessData.whatsapp.replace(/\D/g, '')}" target="_blank" rel="noopener noreferrer" class="card-contact-icon" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>`);
+            contactIcons.push(`<a href="https://wa.me/${businessData.whatsapp.replace(/\D/g, '')}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()"><i class="fab fa-whatsapp"></i></a>`);
         }
-        // 2. Website
         if (businessData.website_usaha) {
-            contactIcons.push(`<a href="${businessData.website_usaha}" target="_blank" rel="noopener noreferrer" class="card-contact-icon" title="Website"><i class="fas fa-globe"></i></a>`);
+            contactIcons.push(`<a href="${businessData.website_usaha}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()"><i class="fas fa-globe"></i></a>`);
         }
-        // 3. Olshop
-        const olshops = {
-            'tokopedia': 'Tokopedia',
-            'shopee': 'Shopee',
-            'bukalapak': 'Bukalapak',
-            'blibli': 'Blibli',
-            'tiktok': 'TikTok Shop'
-        };
-        for (const shopKey in olshops) {
-            if (businessData[shopKey]) {
-                contactIcons.push(`<a href="${businessData[shopKey]}" target="_blank" rel="noopener noreferrer" class="card-contact-icon" title="${olshops[shopKey]}"><img src="assets/marketplace/icon-${shopKey}.svg" class="olshop-icon"></a>`);
+        // Simplified check for online shops
+        const olshops = {'tokopedia': 'icon-tokopedia.svg', 'shopee': 'icon-shopee.svg', 'bukalapak':'icon-bukalapak.svg', 'blibli': 'icon-blibli.svg', 'tiktok': 'icon-tiktok.svg'};
+        for(const key in olshops) {
+            if(businessData[key]) {
+                contactIcons.push(`<a href="${businessData[key]}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()"><img src="assets/marketplace/${olshops[key]}" class="marketplace-icon"></a>`);
             }
         }
-        // 4. Social Media
-        if (businessData.sosmed_usaha) {
-            // Asumsi sosmed_usaha adalah link ke Facebook jika tidak ada data spesifik
-            contactIcons.push(`<a href="${businessData.sosmed_usaha}" target="_blank" rel="noopener noreferrer" class="card-contact-icon" title="Facebook"><i class="fab fa-facebook"></i></a>`);
-        }
-
-        const card = document.createElement('div');
-        card.className = 'member-card';
-        card.addEventListener('click', (e) => {
-            if (e.target.closest('a')) return;
-            if (businessData.id_usaha) {
-                window.location.href = `detail.html?id=${businessData.id_usaha}`;
-            }
-        });
-
+        
         card.innerHTML = `
-            <div class="card-header">
-                <div class="card-contact-links">
-                    
-                </div>
-            </div>
             <div class="card-banner">
-                <a href="detail.html?id=${businessData.id_anggota}" class="card-banner-link">
-                    <img src="${businessImgUrl}" alt="Gambar Usaha ${businessData.nama_usaha}" 
-                         onerror="this.onerror=null; this.src='${memberImgUrl}'; this.onerror=function(){this.onerror=null; this.src='${defaultImgUrl}';};">
-                </a>
-                <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="card-location-overlay ${hasMapsUrl}">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>${businessData.domisili || 'Lokasi'}</span>
-                </a>
+                <img src="${businessImgUrl}" alt="Gambar ${businessData.nama_usaha}" loading="lazy" onerror="this.onerror=null; this.src='${defaultImgUrl}';">
+                <div class="card-location-overlay"><i class="fas fa-map-marker-alt"></i><span>${businessData.domisili_usaha || businessData.domisili || 'Lokasi'}</span></div>
             </div>
             <div class="card-content">
-                <h3 class="card-business-name">
-                    ${businessData.nama_usaha}
-                </h3>
-                <p class="card-description">
-                    ${businessData.jenis_usaha || 'Jenis usaha tidak tersedia.'}
-                </p>
-                <div class="card-owner-icons">
-                    ${contactIcons.join('')}
+                <h3 class="card-business-name">${businessData.nama_usaha}</h3>
+                <p class="card-description">${businessData.jenis_usaha || ''}</p>
+                <div class="card-bottom-row">
+                    <div class="card-owner"><i class="fas fa-user"></i> ${businessData.nama_lengkap}</div>
+                    <div class="card-icon-container">${contactIcons.join('')}</div>
                 </div>
             </div>
         `;
-
         return card;
     }
 
