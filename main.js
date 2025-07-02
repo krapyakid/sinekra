@@ -435,15 +435,22 @@ document.addEventListener('DOMContentLoaded', function() {
             contactIcons.push(`<a href="${businessData.website_usaha}" target="_blank" rel="noopener noreferrer" class="card-contact-icon" title="Website"><i class="fas fa-globe"></i></a>`);
         }
         // 3. Olshop
-        const olshops = ['tokopedia', 'shopee', 'bukalapak', 'blibli', 'tiktok'];
-        olshops.forEach(shop => {
-            if (businessData[shop]) {
-                contactIcons.push(`<a href="${businessData[shop]}" target="_blank" rel="noopener noreferrer" class="card-contact-icon" title="${shop.charAt(0).toUpperCase() + shop.slice(1)}"><img src="assets/marketplace/icon-${shop}.svg" class="olshop-icon"></a>`);
+        const olshops = {
+            'tokopedia': 'Tokopedia',
+            'shopee': 'Shopee',
+            'bukalapak': 'Bukalapak',
+            'blibli': 'Blibli',
+            'tiktok': 'TikTok Shop'
+        };
+        for (const shopKey in olshops) {
+            if (businessData[shopKey]) {
+                contactIcons.push(`<a href="${businessData[shopKey]}" target="_blank" rel="noopener noreferrer" class="card-contact-icon" title="${olshops[shopKey]}"><img src="assets/marketplace/icon-${shopKey}.svg" class="olshop-icon"></a>`);
             }
-        });
+        }
         // 4. Social Media
         if (businessData.sosmed_usaha) {
-            contactIcons.push(`<a href="${businessData.sosmed_usaha}" target="_blank" rel="noopener noreferrer" class="card-contact-icon" title="Social Media"><i class="fas fa-share-alt"></i></a>`);
+            // Asumsi sosmed_usaha adalah link ke Facebook jika tidak ada data spesifik
+            contactIcons.push(`<a href="${businessData.sosmed_usaha}" target="_blank" rel="noopener noreferrer" class="card-contact-icon" title="Facebook"><i class="fab fa-facebook"></i></a>`);
         }
 
         const card = document.createElement('div');
