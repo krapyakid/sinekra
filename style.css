@@ -693,6 +693,7 @@ main.content-container {
     line-height: 1.5;
     margin-bottom: 12px;
     flex-grow: 1;
+    min-height: 48px; /* Reserve space for 2 lines */
 }
 
 .member-card .card-owner {
@@ -1850,14 +1851,22 @@ input:checked + .slider:before {
 
 .year-filter-group {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    grid-column: 1 / -1; /* Span full width */
+    grid-template-columns: 1fr; /* Stacked by default for mobile */
+    gap: 20px;
+    grid-column: 1 / -1; 
 }
 
 @media (min-width: 768px) {
     .year-filter-group {
-        grid-column: auto; /* Revert span on larger screens */
+        grid-template-columns: 1fr 1fr; /* Side-by-side on tablet and up */
+        gap: 15px;
+        grid-column: auto; /* Revert span */
+    }
+}
+
+@media (min-width: 1200px) {
+    .statistik-filters-card .filter-grid {
+       grid-template-columns: repeat(3, 1fr); /* Force 3 columns on large screens */
     }
 }
 
@@ -1886,13 +1895,13 @@ input:checked + .slider:before {
 
 .statistik-results-grid {
     display: grid;
-    grid-template-columns: 1fr; /* Default to one column */
+    grid-template-columns: 1fr; /* Always one column */
     gap: 30px;
 }
 
 @media (min-width: 992px) {
     .statistik-results-grid {
-        grid-template-columns: repeat(2, 1fr); /* Two columns on larger screens */
+        grid-template-columns: 1fr; /* Ensure one column on large screens */
     }
 }
 
@@ -2028,4 +2037,43 @@ input:checked + .slider:before {
 
 .sort-dropdown {
   position: relative;
+}
+
+.card-bottom-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: auto; /* Push to bottom */
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.card-icon-container {
+    display: flex;
+    gap: 16px;
+}
+
+.card-icon-link {
+    color: #888;
+    font-size: 1.4rem;
+    transition: all 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+}
+
+.card-icon-link:hover {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.card-icon-link .marketplace-icon {
+    width: 20px;
+    height: 20px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    vertical-align: middle;
+}
+
+.card-icon-link:hover .marketplace-icon {
+    opacity: 1;
 }
