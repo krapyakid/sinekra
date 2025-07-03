@@ -214,17 +214,6 @@ main.content-container {
     background-color: white;
 }
 
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3); /* Dark overlay for text readability */
-    z-index: 2;
-}
-
 .hero-content {
     position: relative;
     z-index: 3; /* Ensure content is above overlay and slides */
@@ -232,11 +221,9 @@ main.content-container {
 }
 
 .hero-content .quote {
-    font-size: 1.5rem;
     font-weight: 500;
     color: #ffffff; /* White text for contrast */
     margin-bottom: 20px;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Text shadow for readability */
 }
 
 .hero-content .source, .hero-content .source-title {
