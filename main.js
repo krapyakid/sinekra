@@ -438,32 +438,49 @@ document.addEventListener('DOMContentLoaded', function() {
         const card = document.createElement('a');
         card.href = `detail-usaha.html?id=${businessData.id_usaha}`;
         card.className = 'member-card';
-
+    
         const baseAssetUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/';
-        const defaultImgUrl = `${baseAssetUrl}default_image_usaha.jpg`;
+        const defaultImgUrl = `assets/usaha/default_image_usaha.jpg`;
         const businessImgUrl = `${baseAssetUrl}${businessData.id_usaha}.jpg`;
-
-        // --- Location Link Logic ---
+    
         const gmapsUrl = businessData.url_gmaps_perusahaan || 
             (businessData.domisili_usaha ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(businessData.domisili_usaha)}` : '#');
         const locationText = businessData.domisili_usaha || businessData.domisili || 'Lokasi';
         const nickname = businessData.nama_panggilan ? ` &nbsp;&bull;&nbsp; ${businessData.nama_panggilan}` : '';
-
-        // --- Contact Icons Logic ---
+    
         const contactIcons = [];
-        if (businessData.whatsapp) {
-            contactIcons.push(`<a href="https://wa.me/${businessData.whatsapp.replace(/\D/g, '')}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>`);
+        const waNumber = (businessData.whatsapp || '').replace(/[^0-9]/g, '');
+        if (waNumber) {
+            contactIcons.push(`<a href="https://wa.me/62${waNumber}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>`);
         }
         if (businessData.website_usaha) {
             contactIcons.push(`<a href="${businessData.website_usaha}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="Website"><i class="fas fa-globe"></i></a>`);
         }
-        if (businessData.sosmed_usaha) {
-            contactIcons.push(`<a href="${businessData.sosmed_usaha}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="Social Media"><i class="fab fa-facebook"></i></a>`);
+        
+        const socialMediaMap = {
+            instagram: { icon: 'fa-instagram', url: businessData.instagram },
+            facebook: { icon: 'fa-facebook', url: businessData.facebook },
+            tiktok: { icon: 'fa-tiktok', url: businessData.tiktok },
+            youtube: { icon: 'fa-youtube', url: businessData.youtube }
+        };
+
+        for (const [key, value] of Object.entries(socialMediaMap)) {
+            if (value.url) {
+                contactIcons.push(`<a href="${value.url}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="${key.charAt(0).toUpperCase() + key.slice(1)}"><i class="fab ${value.icon}"></i></a>`);
+            }
         }
-        const olshops = {'tokopedia': 'icon-tokopedia.svg', 'shopee': 'icon-shopee.svg', 'bukalapak':'icon-bukalapak.svg', 'blibli': 'icon-blibli.svg', 'tiktok': 'icon-tiktok.svg'};
-        for(const key in olshops) {
-            if(businessData[key]) {
-                contactIcons.push(`<a href="${businessData[key]}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="${key.charAt(0).toUpperCase() + key.slice(1)}"><img src="assets/marketplace/${olshops[key]}" class="marketplace-icon"></a>`);
+
+        const olshops = {
+            tokopedia: { icon: 'tokopedia.svg', url: businessData.tokopedia },
+            shopee: { icon: 'shopee.svg', url: businessData.shopee },
+            bukalapak: { icon: 'bukalapak.svg', url: businessData.bukalapak },
+            blibli: { icon: 'blibli.svg', url: businessData.blibli },
+            tiktokshop: { icon: 'tiktokshop.svg', url: businessData.tiktok }
+        };
+
+        for (const [key, value] of Object.entries(olshops)) {
+            if (value.url) {
+                contactIcons.push(`<a href="${value.url}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="${key.charAt(0).toUpperCase() + key.slice(1)}"><img src="assets/marketplace/${value.icon}" class="marketplace-icon"></a>`);
             }
         }
         
