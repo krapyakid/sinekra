@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const sheetId = '1e5e5b85f1c4296459392817282a51b37915a728';
-    const sheetUrl = `https://docs.google.com/spreadsheets/d/e/${sheetId}/pub?gid=0&single=true&output=csv`;
-    const usahaSheetUrl = `https://docs.google.com/spreadsheets/d/e/${sheetId}/pub?gid=1622339393&single=true&output=csv`;
+    // Correct Google Apps Script URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvsDmDoerDTDgV39Op65g8D_fGyCyTy82StbSzsACbpQoYnetw96E4mQ1T0suIHfhR/exec";
 
     // Elements
     const filterAlumni = document.getElementById('filter-alumni');
@@ -26,25 +25,28 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingOverall.style.display = 'flex';
             resultsGrid.style.display = 'none';
 
-            const [anggotaRes, usahaRes] = await Promise.all([
-                fetch(sheetUrl),
-                fetch(usahaSheetUrl)
-            ]);
+            // Fetching data from the single Apps Script endpoint
+            const response = await fetch(`${SCRIPT_URL}?action=getAllData`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const result = await response.json();
 
-            const anggotaText = await anggotaRes.text();
-            const usahaText = await usahaRes.text();
+            if (result.status === 'success') {
+                allData = result.data.anggota;
+                usahaData = result.data.usaha;
 
-            allData = Papa.parse(anggotaText, { header: true, skipEmptyLines: true }).data;
-            usahaData = Papa.parse(usahaText, { header: true, skipEmptyLines: true }).data;
-            
-            // Gabungkan data usaha ke data anggota
-            allData.forEach(anggota => {
-                anggota.usaha = usahaData.filter(u => u.id_anggota === anggota.id_anggota);
-            });
+                // Gabungkan data usaha ke data anggota
+                allData.forEach(anggota => {
+                    anggota.usaha = usahaData.filter(u => u.id_anggota === anggota.id_anggota);
+                });
 
-            populateFilters();
-            addFilterListeners();
-            updateTables();
+                populateFilters();
+                addFilterListeners();
+                updateTables();
+            } else {
+                throw new Error(result.message || 'Failed to load data from script.');
+            }
 
         } catch (error) {
             console.error('Error fetching or parsing data:', error);
@@ -104,7 +106,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let filtered = allData.filter(item => {
             const thMasuk = parseInt(item.th_masuk, 10);
             const thKeluar = parseInt(item.th_keluar, 10);
-            const yearInRange = (thMasuk >= startYear && thKeluar <= endYear);
+            
+            // Handle non-numeric or missing years gracefully
+            const yearInRange = 
+                (!startYear || !thMasuk || thMasuk >= startYear) &&
+                (!endYear || !thKeluar || thKeluar <= endYear);
             
             return (!selectedAlumni || item.alumni === selectedAlumni) &&
                    yearInRange &&
@@ -169,53 +175,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateUsahaTable(filteredAnggota) {
         const selectedKategoriUsaha = filterKategoriUsaha.value;
+        const startYear = parseInt(filterTahunMasuk.value, 10) || 0;
+        const endYear = parseInt(filterTahunKeluar.value, 10) || Infinity;
 
-        let relevantUsaha = filteredAnggota.flatMap(anggota => anggota.usaha);
+        // First, filter the members by the year range
+        const anggotaInYearRange = filteredAnggota.filter(item => {
+            const thMasuk = parseInt(item.th_masuk, 10);
+            const thKeluar = parseInt(item.th_keluar, 10);
+            return (!startYear || !thMasuk || thMasuk >= startYear) &&
+                   (!endYear || !thKeluar || thKeluar <= endYear);
+        });
+        
+        // Then, collect all businesses from these filtered members
+        let relevantUsaha = anggotaInYearRange.flatMap(anggota => anggota.usaha || []);
 
-        if (!selectedKategoriUsaha) {
-            // Count all businesses from filtered members, grouped by category
-            const counts = relevantUsaha.reduce((acc, usaha) => {
-                const key = usaha.kategori_usaha ? usaha.kategori_usaha.trim() : 'Lain-lain';
-                acc[key] = (acc[key] || 0) + 1;
-                return acc;
-            }, {});
-            
-            const sortedData = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+        const counts = relevantUsaha.reduce((acc, usaha) => {
+            const key = usaha.kategori_usaha ? usaha.kategori_usaha.trim() : 'Lain-lain';
+            acc[key] = (acc[key] || 0) + 1;
+            return acc;
+        }, {});
+        
+        const sortedData = Object.entries(counts).sort((a, b) => b[1] - a[1]);
 
-            if (sortedData.length === 0) {
-                 usahaTableBody.innerHTML = `<tr><td colspan="2">Tidak ada data usaha.</td></tr>`;
-                 return;
-            }
-            
-            usahaTableBody.innerHTML = sortedData.map(([key, value]) => `
-                <tr>
-                    <td>${key}</td>
-                    <td>${value}</td>
-                </tr>
-            `).join('');
-
-        } else {
-            // If a category is selected, just count how many businesses fall into it
-            const count = relevantUsaha.filter(u => u.kategori_usaha === selectedKategoriUsaha).length;
-
-            if (count === 0) {
-                usahaTableBody.innerHTML = `<tr><td colspan="2">Tidak ada data untuk kategori ini.</td></tr>`;
-                return;
-            }
-            
-            usahaTableBody.innerHTML = `
-                <tr>
-                    <td>${selectedKategoriUsaha}</td>
-                    <td>${count}</td>
-                </tr>
-            `;
+        if (sortedData.length === 0) {
+             usahaTableBody.innerHTML = `<tr><td colspan="2">Tidak ada data usaha yang cocok.</td></tr>`;
+             return;
         }
+        
+        usahaTableBody.innerHTML = sortedData.map(([key, value]) => `
+            <tr>
+                <td>${key}</td>
+                <td>${value}</td>
+            </tr>
+        `).join('');
     }
 
-
-    // Load PapaParse script then fetch data
-    const papaParseScript = document.createElement('script');
-    papaParseScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js';
-    papaParseScript.onload = fetchData;
-    document.body.appendChild(papaParseScript);
+    fetchData();
 }); 
