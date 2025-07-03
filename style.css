@@ -155,7 +155,6 @@ main.content-container {
 
 /* Hero Section */
 .hero-section {
-    background-color: #e9ecef; /* Fallback color */
     padding: 60px 20px;
     text-align: center;
     min-height: 450px;
@@ -184,7 +183,8 @@ main.content-container {
     background-size: cover;
     background-position: center;
     opacity: 0;
-    transition: opacity 1s ease-in-out;
+    transition: opacity 1s ease-in-out; /* This creates the dissolve effect */
+    background-color: #e9ecef; /* Fallback color for each slide */
 }
 
 .slide.active {
