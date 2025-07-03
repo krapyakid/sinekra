@@ -29,6 +29,55 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Mobile Search Logic (REMOVED as it's now always visible)
     
+    // --- Hero Slider Logic ---
+    const sliderContainer = document.querySelector('.slider-container');
+    if (sliderContainer) {
+        const slides = document.querySelectorAll('.slide');
+        const dotsContainer = document.querySelector('.slider-dots');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function createDots() {
+            slides.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => {
+                    goToSlide(i);
+                    resetInterval();
+                });
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function goToSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            dotsContainer.children[currentSlide].classList.remove('active');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            dotsContainer.children[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            goToSlide(currentSlide + 1);
+        }
+
+        function startInterval() {
+            slideInterval = setInterval(nextSlide, 5000); // 5 seconds
+        }
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            startInterval();
+        }
+
+        if (slides.length > 0) {
+            createDots();
+            goToSlide(0); // Show first slide initially
+            startInterval();
+        }
+    }
+
     // --- FUNGSI GLOBAL & DATA BERSAMA ---
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvsDmDoerDTDgV39Op65g8D_fGyCyTy82StbSzsACbpQoYnetw96E4mQ1T0suIHfhR/exec";
     
