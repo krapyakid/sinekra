@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
         breadcrumbContainer.innerHTML = `
             <a href="index.html">Home</a>
             <span>&nbsp;&gt;&nbsp;</span>
-            <span>${business.nama_usaha}</span>
+            <span>Detail Usaha</span>
         `;
     }
 
@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // --- CONTACTS ---
         const waLink = business.whatsapp ? `<a href="https://wa.me/62${(business.whatsapp || '').replace(/[^0-9]/g, '')}" class="btn-contact whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : '';
         const webLink = business.website_usaha ? `<a href="${business.website_usaha}" class="btn-contact website" target="_blank"><i class="fas fa-globe"></i> Website</a>` : '';
+        const gmapsLink = business.url_gmaps_perusahaan ? `<a href="${business.url_gmaps_perusahaan}" class="btn-contact gmaps" target="_blank"><i class="fas fa-map-marked-alt"></i> Lihat Peta</a>` : '';
 
         // --- SOCIAL MEDIA ---
         const socialMediaMap = { instagram: 'fa-instagram', facebook: 'fa-facebook', tiktok: 'fa-tiktok', youtube: 'fa-youtube' };
@@ -76,23 +77,35 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="detail-info">
                 <h1>${business.nama_usaha}</h1>
-                <p class="business-category">${business.jenis_usaha || 'Kategori belum diisi'}</p>
+                <div class="jenis-usaha-wrapper">
+                    <h4 class="jenis-usaha-title">Jenis Usaha</h4>
+                    <p class="business-category">${business.jenis_usaha || 'Kategori belum diisi'}</p>
+                </div>
 
                 <div class="info-section">
                     <h3>Deskripsi Usaha</h3>
-                    <p>${business.deskripsi_usaha || 'Tidak ada deskripsi.'}</p>
+                    <p>${business.detail_usaha || 'Tidak ada deskripsi.'}</p>
+                </div>
+
+                <div class="info-section">
+                    <h3>Peluang Kerjasama</h3>
+                    <p>${business.prospek_kerjasama_penawaran || 'Tidak ada informasi.'}</p>
                 </div>
                 
                 <div class="info-section">
-                    <h3>Informasi Pemilik</h3>
+                    <h3>Informasi Pemilik & Kontak Usaha</h3>
                     <div class="info-item"><i class="fas fa-user"></i> <span>${business.nama_lengkap} (Angkatan ${business.tahun_keluar || 'N/A'})</span></div>
+                    <div class="info-item"><i class="fas fa-phone-alt"></i> <span>${business.no_hp_perusahaan || 'Tidak ada nomor HP usaha'}</span></div>
                     <div class="info-item"><i class="fas fa-map-marker-alt"></i> <span>${business.domisili_usaha || business.domisili || 'Lokasi tidak diketahui'}</span></div>
                 </div>
 
                 <div class="info-section">
-                    <h3>Kontak & Tautan</h3>
+                    <h3>Tautan</h3>
                     <div class="contact-icons-section">
-                        ${waLink} ${webLink}
+                        ${waLink} ${webLink} ${gmapsLink}
+                    </div>
+                     <div class="info-section-divider"></div>
+                    <div class="contact-icons-section">
                         <div class="social-media-icons">${socialLinks}</div>
                         <div class="marketplace-icons">${marketplaceLinks}</div>
                     </div>
