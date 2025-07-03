@@ -54,22 +54,30 @@ document.addEventListener('DOMContentLoaded', function() {
         const defaultImgUrl = 'assets/usaha/default_image_usaha.jpg';
         const businessImgUrl = `${baseAssetUrl}${business.id_usaha}.jpg`;
 
-        // --- CONTACTS ---
-        const waLink = business.whatsapp ? `<a href="https://wa.me/62${(business.whatsapp || '').replace(/[^0-9]/g, '')}" class="btn-contact whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : '';
-        const webLink = business.website_usaha ? `<a href="${business.website_usaha}" class="btn-contact website" target="_blank"><i class="fas fa-globe"></i> Website</a>` : '';
-        const gmapsLink = business.url_gmaps_perusahaan ? `<a href="${business.url_gmaps_perusahaan}" class="btn-contact gmaps" target="_blank"><i class="fas fa-map-marked-alt"></i> Lihat Peta</a>` : '';
-
-        // --- SOCIAL MEDIA ---
-        const socialMediaMap = { instagram: 'fa-instagram', facebook: 'fa-facebook', tiktok: 'fa-tiktok', youtube: 'fa-youtube' };
-        const socialLinks = Object.entries(socialMediaMap)
-            .map(([key, icon]) => business[key] ? `<a href="${business[key]}" target="_blank" title="${key}"><i class="fab ${icon}"></i></a>` : '')
-            .join('');
-
-        // --- MARKETPLACE ---
-        const marketplaceMap = { tokopedia: 'tokopedia.svg', shopee: 'shopee.svg', bukalapak: 'bukalapak.svg', blibli: 'blibli.svg', tiktokshop: 'tiktokshop.svg' };
-        const marketplaceLinks = Object.entries(marketplaceMap)
-            .map(([key, icon]) => business[key] ? `<a href="${business[key]}" target="_blank" title="${key}"><img src="assets/marketplace/${icon}" alt="${key}"></a>` : '')
-            .join('');
+        // --- Kontak, Social Media, and Marketplace Icons ---
+        const contactIcons = [];
+        // Website
+        if (business.website_usaha) {
+            contactIcons.push(`<a href="${business.website_usaha}" target="_blank" title="Website"><i class="fas fa-globe"></i></a>`);
+        }
+        // WhatsApp
+        if (business.whatsapp || business.no_hp_perusahaan) {
+            contactIcons.push(`<a href="#" onclick="alert('Untuk informasi lebih lanjut, silakan hubungi Admin Sinergi Krapyak.'); return false;" title="WhatsApp"><img src="assets/sosmed/whatsapp.png" alt="WhatsApp"></a>`);
+        }
+        // Social Media
+        const socialMediaMap = { instagram: 'instagram.png', facebook: 'facebook.png', tiktok: 'tiktok.png', youtube: 'youtube.png' };
+        Object.entries(socialMediaMap).forEach(([key, icon]) => {
+            if (business[key]) {
+                contactIcons.push(`<a href="${business[key]}" target="_blank" title="${key.charAt(0).toUpperCase() + key.slice(1)}"><img src="assets/sosmed/${icon}" alt="${key}"></a>`);
+            }
+        });
+        // Marketplace
+        const marketplaceMap = { tokopedia: 'tokopedia.png', shopee: 'shopee.png', bukalapak: 'bukalapak.png', blibli: 'blibli.png', lazada: 'lazada.png', tiktokshop: 'tiktokshop.png' };
+        Object.entries(marketplaceMap).forEach(([key, icon]) => {
+            if (business[key]) {
+                contactIcons.push(`<a href="${business[key]}" target="_blank" title="${key.charAt(0).toUpperCase() + key.slice(1)}"><img src="assets/marketplace/${icon}" alt="${key}"></a>`);
+            }
+        });
 
         detailContent.innerHTML = `
             <div class="detail-image-container">
@@ -93,21 +101,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 
                 <div class="info-section">
-                    <h3>Informasi Pemilik & Kontak Usaha</h3>
-                    <div class="info-item"><i class="fas fa-user"></i> <span>${business.nama_lengkap} (Angkatan ${business.tahun_keluar || 'N/A'})</span></div>
-                    <div class="info-item"><i class="fas fa-phone-alt"></i> <span>${business.no_hp_perusahaan || 'Tidak ada nomor HP usaha'}</span></div>
-                    <div class="info-item"><i class="fas fa-map-marker-alt"></i> <span>${business.domisili_usaha || business.domisili || 'Lokasi tidak diketahui'}</span></div>
+                    <h3>Informasi Pemilik</h3>
+                    <div class="info-item"><i class="fas fa-university"></i> <span>Alumni: ${business.alumni || 'N/A'}</span></div>
+                    <div class="info-item"><i class="fas fa-calendar-alt"></i> <span>Angkatan: ${business.th_masuk || '?'} - ${business.th_keluar || '?'}</span></div>
+                    <div class="info-item"><i class="fas fa-user"></i> <span>${business.nama_lengkap}</span></div>
+                    <div class="info-item"><i class="fas fa-map-marker-alt"></i> <span>${business.domisili}</span></div>
                 </div>
 
                 <div class="info-section">
-                    <h3>Tautan</h3>
+                    <h3>Kontak Usaha</h3>
                     <div class="contact-icons-section">
-                        ${waLink} ${webLink} ${gmapsLink}
-                    </div>
-                     <div class="info-section-divider"></div>
-                    <div class="contact-icons-section">
-                        <div class="social-media-icons">${socialLinks}</div>
-                        <div class="marketplace-icons">${marketplaceLinks}</div>
+                        ${contactIcons.join('')}
                     </div>
                 </div>
             </div>
