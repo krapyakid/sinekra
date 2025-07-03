@@ -402,8 +402,8 @@ main.content-container {
     }
 
     .hero-section {
-        min-height: auto;
-        padding: 40px 20px;
+        min-height: 250px; /* Adjusted height for mobile */
+        padding: 0; /* Remove padding as height is now fixed */
     }
     .search-and-filter-section {
         margin: 20px 15px;
