@@ -2126,15 +2126,26 @@ input:checked + .slider:before {
 }
 
 .detail-info h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: var(--primary-color);
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+}
+.jenis-usaha-wrapper {
+    margin-bottom: 1.5rem;
+}
+.jenis-usaha-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--light-text-color);
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 .detail-info .business-category {
     font-size: 1.1rem;
     font-weight: 500;
     color: var(--secondary-color);
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
 }
 
 .info-section {
@@ -2182,9 +2193,18 @@ input:checked + .slider:before {
 }
 .btn-contact.whatsapp { background-color: #25D366; color: white; }
 .btn-contact.website { background-color: #3498db; color: white; }
+.btn-contact.gmaps { background-color: #fbbc05; color: #4285F4; }
+
 
 .btn-contact.whatsapp:hover { background-color: #1DA851; }
 .btn-contact.website:hover { background-color: #287eb9; }
+.btn-contact.gmaps:hover { background-color: #e6ac00; }
+
+.info-section-divider {
+    height: 1px;
+    background-color: #e9ecef;
+    margin: 1rem 0;
+}
 
 .social-media-icons {
     display: flex;
@@ -2222,6 +2242,12 @@ input:checked + .slider:before {
     font-size: 1.5rem;
     color: var(--primary-color);
     margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .detail-info h1 {
+        font-size: 1.8rem;
+    }
 }
 
 .member-card .card-owner {
