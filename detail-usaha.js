@@ -33,9 +33,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function renderBusinessDetails(business, allBusinesses) {
+        document.title = `${business.nama_usaha} - Sinergi Ekonomi Krapyak`;
+        
         const defaultImgUrl = `${baseAssetUrl}default_image_usaha.jpg`;
         const businessImgUrl = `${baseAssetUrl}${business.id_usaha}.jpg`;
-        const memberImgUrl = `${baseAssetUrl}${business.id_anggota}.jpg`;
+        const memberImgUrl = `https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/anggota/${business.id_anggota}.jpg`;
         const mapsUrl = business.url_gmaps_perusahaan || (business.domisili ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(business.domisili)}` : '#');
 
         const contactIcons = [];
@@ -50,6 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const suggestions = allBusinesses.filter(b => b.kategori_usaha === business.kategori_usaha && b.id_usaha !== business.id_usaha).slice(0, 4);
 
         content.innerHTML = `
+            <div class="breadcrumb">
+                <a href="index.html">Home</a> <i class="fas fa-chevron-right"></i> <span>Detail Usaha</span>
+            </div>
             <div class="product-view-container">
                 <div class="product-gallery-pane">
                     <img src="${businessImgUrl}" alt="Gambar ${business.nama_usaha}" onerror="this.onerror=null; this.src='${memberImgUrl}'; this.onerror=function(){this.onerror=null; this.src='${defaultImgUrl}';};">
@@ -64,11 +69,14 @@ document.addEventListener('DOMContentLoaded', function() {
                             <span>Pemilik Usaha &nbsp;&bull;&nbsp; <a href="${mapsUrl}" target="_blank"> ${business.domisili}</a></span>
                         </div>
                     </div>
+                    
                     <div class="separator"></div>
+                    
                     <h3>Deskripsi Usaha</h3>
                     <p class="product-description">${business.detail_usaha || 'Tidak ada deskripsi.'}</p>
+                    
                     ${contactIcons.length > 0 ? `
-                        <h3>Kontak & Tautan</h3>
+                        <h3 class="contact-title">Kontak & Tautan</h3>
                         <div class="contact-links-grid">${contactIcons.map(link => `
                             <a href="${link.href}" target="_blank" rel="noopener noreferrer" class="contact-link-item">
                                 ${link.img ? `<img src="${link.img}" class="contact-link-icon">` : `<i class="${link.icon}"></i>`}
