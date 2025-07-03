@@ -544,7 +544,7 @@ main.content-container {
 }
 
 /* Grid Direktori */
-.directory-grid-container {
+.directory-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 25px;
