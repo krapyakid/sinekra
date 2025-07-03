@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function startInterval() {
-            slideInterval = setInterval(nextSlide, 5000); // 5 seconds
+            slideInterval = setInterval(nextSlide, 5000);
         }
 
         function resetInterval() {
@@ -72,8 +72,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (slides.length > 0) {
+            slides[0].classList.add('active'); // Activate first slide before anything else
             createDots();
-            goToSlide(0); // Show first slide initially
             startInterval();
         }
     }
