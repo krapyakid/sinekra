@@ -155,10 +155,7 @@ main.content-container {
 
 /* Hero Section */
 .hero-section {
-    background-image: url('assets/hero-bg.jpg');
-    background-size: cover;
-    background-position: center;
-    background-color: #ffffff;
+    background-color: #e9ecef; /* Fallback color */
     padding: 60px 20px;
     text-align: center;
     min-height: 450px;
@@ -166,29 +163,85 @@ main.content-container {
     align-items: center;
     justify-content: center;
     position: relative;
+    overflow: hidden; /* Hide overflowing slides */
+}
+
+.slider-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.slider-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 3;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.dot.active {
+    background-color: white;
 }
 
 .hero-section::before {
-    display: none;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3); /* Dark overlay for text readability */
+    z-index: 2;
 }
 
 .hero-content {
     position: relative;
-    z-index: 2;
+    z-index: 3; /* Ensure content is above overlay and slides */
     max-width: 800px;
 }
 
 .hero-content .quote {
     font-size: 1.5rem;
     font-weight: 500;
-    color: var(--primary-color);
+    color: #ffffff; /* White text for contrast */
     margin-bottom: 20px;
-    text-shadow: none;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Text shadow for readability */
 }
 
 .hero-content .source, .hero-content .source-title {
-    color: var(--primary-color);
-    text-shadow: none;
+    color: #ffffff; /* White text for contrast */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Text shadow for readability */
 }
 
 /* Search and Filter Section */
@@ -834,7 +887,7 @@ main.content-container {
     border-radius: 25px;
     border: 1px solid var(--input-border-color);
     font-size: 1rem;
-    background: var(--card-bg);
+    background: var(--form-bg-color);
 }
 
 #mobile-search-bar:focus {
