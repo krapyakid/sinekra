@@ -1875,3 +1875,32 @@ input:checked + .slider:before {
         height: 400px; /* Shorter height for mobile */
     }
 }
+
+/* Main Grid Section */
+.directory-section {
+    padding: 0 20px 40px;
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
+.directory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px; /* Added margin */
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.main-footer {
+    text-align: center;
+    color: #888;
+    font-size: 0.95rem;
+    padding: 40px 0 20px 0; /* Increased top padding */
+    background: none;
+    margin-top: 20px; /* Added margin */
+}
+
+.sort-dropdown {
+  position: relative;
+}
