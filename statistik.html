@@ -6,36 +6,7 @@
     <title>Statistik Anggota - Sinergi Ekonomi Krapyak</title>
     <link rel="icon" href="assets/logo_sinergi_krapyak.jpg" type="image/jpeg">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        body {
-            background: #fff;
-        }
-        .statistik-img-center {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 60vh;
-            margin-top: 48px;
-        }
-        .statistik-img-center img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            box-shadow: none;
-            border-radius: 0;
-        }
-        @media (max-width: 600px) {
-            .statistik-img-center {
-                margin-top: 24px;
-                min-height: 40vh;
-                padding: 0 2vw;
-            }
-        }
-        .mobile-search-trigger {
-            display: none !important;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
     <header class="main-header">
@@ -51,7 +22,6 @@
                     <a href="tentang.html" class="nav-link">Tentang</a>
                 </nav>
                 <div class="header-actions">
-                    <button class="mobile-search-trigger" id="mobile-search-trigger" style="display: none !important;"></button>
                     <div class="mobile-menu-trigger" id="burger-menu-trigger">
                         <img src="assets/menu_kebab.svg" alt="Menu">
                     </div>
@@ -59,6 +29,102 @@
             </div>
         </div>
     </header>
+
+    <main class="content-container">
+        <div class="statistik-container">
+            <h1>Statistik Anggota</h1>
+            <p>Visualisasi data alumni berdasarkan domisili, profesi, dan kategori usaha.</p>
+            
+            <div class="statistik-filters-card">
+                <div class="filter-grid">
+                    <div class="form-group">
+                        <label for="filter-alumni">Alumni</label>
+                        <select id="filter-alumni" class="filter-select"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-tahun-masuk">Tahun Masuk (Mulai)</label>
+                        <input type="number" id="filter-tahun-masuk" class="filter-input" placeholder="Contoh: 2005">
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-tahun-keluar">Tahun Keluar (Akhir)</label>
+                        <input type="number" id="filter-tahun-keluar" class="filter-input" placeholder="Contoh: 2012">
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-domisili">Domisili</label>
+                        <select id="filter-domisili" class="filter-select"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-profesi">Profesi</label>
+                        <select id="filter-profesi" class="filter-select"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-kategori-usaha">Kategori Usaha</label>
+                        <select id="filter-kategori-usaha" class="filter-select"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="statistik-results-grid" class="statistik-results-grid">
+                <div class="stat-card" id="domisili-card">
+                    <h2>Alumni per Domisili</h2>
+                    <div class="table-wrapper">
+                        <table id="domisili-table">
+                            <thead>
+                                <tr>
+                                    <th>Domisili</th>
+                                    <th>Jumlah Alumni</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="loading-spinner" style="display: none;"></div>
+                </div>
+
+                <div class="stat-card" id="profesi-card">
+                    <h2>Alumni per Profesi</h2>
+                    <div class="table-wrapper">
+                        <table id="profesi-table">
+                            <thead>
+                                <tr>
+                                    <th>Profesi</th>
+                                    <th>Jumlah Alumni</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                     <div class="loading-spinner" style="display: none;"></div>
+                </div>
+
+                <div class="stat-card" id="usaha-card">
+                    <h2>Usaha per Kategori</h2>
+                    <div class="table-wrapper">
+                        <table id="usaha-table">
+                             <thead>
+                                <tr>
+                                    <th>Kategori Usaha</th>
+                                    <th>Jumlah Usaha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                     <div class="loading-spinner" style="display: none;"></div>
+                </div>
+            </div>
+             <div id="loading-overall" class="loading-container" style="display: none;">
+                <div class="spinner"></div>
+                <p>Memuat data statistik...</p>
+            </div>
+        </div>
+    </main>
 
     <div class="menu-overlay" id="menu-overlay"></div>
     <nav class="main-nav" id="main-nav">
@@ -68,45 +134,9 @@
         <a href="statistik.html" class="nav-link active">Statistik</a>
         <a href="tentang.html" class="nav-link">Tentang</a>
     </nav>
-    
-    <main class="content-container">
-        <div class="statistik-container">
-            <h1>Statistik Anggota</h1>
-            <p>Visualisasi data alumni berdasarkan domisili dan profesi.</p>
 
-            <div class="chart-card">
-                <h2>Alumni Berdasarkan Domisili</h2>
-                <div class="filter-group">
-                    <select id="filter-tahun-domisili" class="filter-select">
-                        <option value="">Semua Tahun</option>
-                    </select>
-                    <select id="filter-domisili" class="filter-select">
-                        <option value="">Semua Domisili</option>
-                    </select>
-                </div>
-                <div class="chart-wrapper">
-                    <canvas id="domisiliChart"></canvas>
-                </div>
-            </div>
-
-            <div class="chart-card">
-                <h2>Alumni Berdasarkan Profesi</h2>
-                <div class="filter-group">
-                    <select id="filter-profesi" class="filter-select">
-                        <option value="">Semua Profesi</option>
-                    </select>
-                </div>
-                <div class="chart-wrapper">
-                    <canvas id="profesiChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </main>
-    
     <footer class="main-footer">© 2025 Sinergi Ekonomi Santri Krapyak</footer>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" integrity="sha512-u3fPA7V8qQmhBPNT5quvaXVa1mnnLSXUep5PS1qo5NRzHwG19aHmNJnj1Q8hpA/iksyLKGVihMDknh/+EYfGUg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-    <script src="main.js" defer></script>
-    <script src="statistik.js" defer></script>
+
+    <script src="statistik.js"></script>
 </body>
 </html> 
