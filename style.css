@@ -1917,6 +1917,34 @@ input:checked + .slider:before {
     margin-right: 8px;
 }
 
+h3.contact-title {
+    margin-top: 25px;
+}
+
+/* Breadcrumb Styling */
+.breadcrumb {
+    font-size: 0.95rem;
+    color: var(--light-text-color);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.breadcrumb a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb i {
+    font-size: 0.7rem;
+}
+
 /* Responsive untuk Desktop */
 @media (min-width: 768px) {
     #detail-content .product-view-container {
