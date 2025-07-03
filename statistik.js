@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Correct Google Apps Script URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvsDmDoerDTDgV39Op65g8D_fGyCyTy82StbSzsACbpQoYnetw96E4mQ1T0suIHfhR/exec";
 
     // Elements
@@ -25,21 +24,15 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingOverall.style.display = 'flex';
             resultsGrid.style.display = 'none';
 
-            const response = await fetch(`${SCRIPT_URL}?action=getAllData`);
+            const response = await fetch(SCRIPT_URL, { cache: 'no-cache' });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const result = await response.json();
 
             if (result.status === 'success' && result.data) {
-                // Correctly assign data based on main.js structure
-                allData = result.data.anggota || [];
-                usahaData = result.data.usaha || [];
-
-                // Combine business data into member data
-                allData.forEach(anggota => {
-                    anggota.usaha = usahaData.filter(u => u.id_anggota === anggota.id_anggota);
-                });
+                allData = result.data;
+                usahaData = allData.flatMap(member => member.usaha || []);
 
                 populateFilters();
                 addFilterListeners();
@@ -74,6 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         populateSelect(filterAlumni, alumni, 'Semua Alumni');
+        populateYearSelect(filterTahunMasuk, 1983, 2025, 'Semua Tahun');
+        populateYearSelect(filterTahunKeluar, 1991, 2024, 'Semua Tahun');
         populateSelect(filterDomisili, domisili, 'Semua Domisili');
         populateSelect(filterProfesi, profesi, 'Semua Profesi');
         populateSelect(filterKategoriUsaha, kategoriUsaha, 'Semua Kategori Usaha');
@@ -87,6 +82,16 @@ document.addEventListener('DOMContentLoaded', () => {
             option.textContent = item;
             selectElement.appendChild(option);
         });
+    }
+
+    function populateYearSelect(selectElement, start, end, defaultOptionText) {
+        selectElement.innerHTML = `<option value="">${defaultOptionText}</option>`;
+        for (let year = end; year >= start; year--) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            selectElement.appendChild(option);
+        }
     }
 
     function addFilterListeners() {
@@ -107,10 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const thMasuk = parseInt(item.th_masuk, 10);
             const thKeluar = parseInt(item.th_keluar, 10);
             
-            // Handle non-numeric or missing years gracefully
             const yearInRange = 
-                (!startYear || !thMasuk || thMasuk >= startYear) &&
-                (!endYear || !thKeluar || thKeluar <= endYear);
+                (!startYear || (thMasuk && thMasuk >= startYear)) &&
+                (!endYear || (thKeluar && thKeluar <= endYear));
             
             return (!selectedAlumni || item.alumni === selectedAlumni) &&
                    yearInRange &&
@@ -130,20 +134,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateTables() {
         const filteredData = getFilteredData();
         
-        // Update each table
         updateDomisiliTable(filteredData);
         updateProfesiTable(filteredData);
         updateUsahaTable(filteredData);
     }
     
-    function generateAndRenderTable(data, groupBy, tableBody, col1Name, col2Name) {
+    function generateAndRenderTable(data, groupBy, tableBody) {
         if (!data || data.length === 0) {
             tableBody.innerHTML = `<tr><td colspan="2">Tidak ada data yang cocok.</td></tr>`;
             return;
         }
 
         const counts = data.reduce((acc, item) => {
-            const key = item[groupBy] ? item[groupBy].trim() : 'Lain-lain';
+            const key = item[groupBy] ? item[groupBy].trim() : null;
             if (key) {
                 acc[key] = (acc[key] || 0) + 1;
             }
@@ -153,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sortedData = Object.entries(counts).sort((a, b) => b[1] - a[1]);
 
         if (sortedData.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="2">Tidak ada data.</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="2">Tidak ada data untuk ditampilkan.</td></tr>`;
             return;
         }
 
@@ -166,31 +169,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateDomisiliTable(data) {
-       generateAndRenderTable(data, 'domisili', domisiliTableBody, 'Domisili', 'Jumlah Alumni');
+       generateAndRenderTable(data, 'domisili', domisiliTableBody);
     }
 
     function updateProfesiTable(data) {
-        generateAndRenderTable(data, 'profesi', profesiTableBody, 'Profesi', 'Jumlah Alumni');
+        generateAndRenderTable(data, 'profesi', profesiTableBody);
     }
 
     function updateUsahaTable(filteredAnggota) {
-        const selectedKategoriUsaha = filterKategoriUsaha.value;
-        const startYear = parseInt(filterTahunMasuk.value, 10) || 0;
-        const endYear = parseInt(filterTahunKeluar.value, 10) || Infinity;
-
-        // First, filter the members by the year range
-        const anggotaInYearRange = filteredAnggota.filter(item => {
-            const thMasuk = parseInt(item.th_masuk, 10);
-            const thKeluar = parseInt(item.th_keluar, 10);
-            return (!startYear || !thMasuk || thMasuk >= startYear) &&
-                   (!endYear || !thKeluar || thKeluar <= endYear);
-        });
+        let relevantUsaha = filteredAnggota.flatMap(anggota => anggota.usaha || []);
         
-        // Then, collect all businesses from these filtered members
-        let relevantUsaha = anggotaInYearRange.flatMap(anggota => anggota.usaha || []);
+        const selectedKategoriUsaha = filterKategoriUsaha.value;
+        if(selectedKategoriUsaha) {
+            relevantUsaha = relevantUsaha.filter(u => u.kategori_usaha === selectedKategoriUsaha);
+        }
 
         const counts = relevantUsaha.reduce((acc, usaha) => {
-            const key = usaha.kategori_usaha ? usaha.kategori_usaha.trim() : 'Lain-lain';
+            const key = usaha.kategori_usaha ? usaha.kategori_usaha.trim() : null;
             if(key) acc[key] = (acc[key] || 0) + 1;
             return acc;
         }, {});
