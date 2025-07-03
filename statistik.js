@@ -25,18 +25,18 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingOverall.style.display = 'flex';
             resultsGrid.style.display = 'none';
 
-            // Fetching data from the single Apps Script endpoint
             const response = await fetch(`${SCRIPT_URL}?action=getAllData`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const result = await response.json();
 
-            if (result.status === 'success') {
-                allData = result.data.anggota;
-                usahaData = result.data.usaha;
+            if (result.status === 'success' && result.data) {
+                // Correctly assign data based on main.js structure
+                allData = result.data.anggota || [];
+                usahaData = result.data.usaha || [];
 
-                // Gabungkan data usaha ke data anggota
+                // Combine business data into member data
                 allData.forEach(anggota => {
                     anggota.usaha = usahaData.filter(u => u.id_anggota === anggota.id_anggota);
                 });
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 addFilterListeners();
                 updateTables();
             } else {
-                throw new Error(result.message || 'Failed to load data from script.');
+                throw new Error(result.message || 'Format data tidak sesuai.');
             }
 
         } catch (error) {
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const counts = relevantUsaha.reduce((acc, usaha) => {
             const key = usaha.kategori_usaha ? usaha.kategori_usaha.trim() : 'Lain-lain';
-            acc[key] = (acc[key] || 0) + 1;
+            if(key) acc[key] = (acc[key] || 0) + 1;
             return acc;
         }, {});
         
