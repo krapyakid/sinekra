@@ -1848,6 +1848,19 @@ input:checked + .slider:before {
     gap: 20px 25px;
 }
 
+.year-filter-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    grid-column: 1 / -1; /* Span full width */
+}
+
+@media (min-width: 768px) {
+    .year-filter-group {
+        grid-column: auto; /* Revert span on larger screens */
+    }
+}
+
 .statistik-filters-card .form-group label {
     font-size: 0.9rem;
     font-weight: 500;
@@ -1873,8 +1886,14 @@ input:checked + .slider:before {
 
 .statistik-results-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: 1fr; /* Default to one column */
     gap: 30px;
+}
+
+@media (min-width: 992px) {
+    .statistik-results-grid {
+        grid-template-columns: repeat(2, 1fr); /* Two columns on larger screens */
+    }
 }
 
 .stat-card {
