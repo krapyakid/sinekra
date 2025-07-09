@@ -102,29 +102,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getFilteredData() {
         const selectedAlumni = filterAlumni.value;
-        const startYear = parseInt(filterTahunMasuk.value, 10) || 0;
-        const endYear = parseInt(filterTahunKeluar.value, 10) || Infinity;
+        const startYear = parseInt(filterTahunMasuk.value, 10);
+        const endYear = parseInt(filterTahunKeluar.value, 10);
         const selectedDomisili = filterDomisili.value;
         const selectedProfesi = filterProfesi.value;
         const selectedKategoriUsaha = filterKategoriUsaha.value;
 
         let filtered = allData.filter(item => {
+            // Handle null/undefined values
+            if (!item) return false;
+
             const thMasuk = parseInt(item.th_masuk, 10);
             const thKeluar = parseInt(item.th_keluar, 10);
             
-            const yearInRange = 
-                (!startYear || (thMasuk && thMasuk >= startYear)) &&
-                (!endYear || (thKeluar && thKeluar <= endYear));
-            
-            return (!selectedAlumni || item.alumni === selectedAlumni) &&
-                   yearInRange &&
-                   (!selectedDomisili || item.domisili === selectedDomisili) &&
-                   (!selectedProfesi || item.profesi === selectedProfesi);
+            // Year range validation
+            const yearInRange = (
+                // If no start year is selected OR the entry year is valid and >= start year
+                (isNaN(startYear) || (!isNaN(thMasuk) && thMasuk >= startYear)) &&
+                // If no end year is selected OR the exit year is valid and <= end year
+                (isNaN(endYear) || (!isNaN(thKeluar) && thKeluar <= endYear))
+            );
+
+            // Handle empty/null values in filters
+            const alumniMatch = !selectedAlumni || item.alumni === selectedAlumni;
+            const domisiliMatch = !selectedDomisili || 
+                (item.domisili && item.domisili.trim().toLowerCase() === selectedDomisili.trim().toLowerCase());
+            const profesiMatch = !selectedProfesi || 
+                (item.profesi && item.profesi.trim().toLowerCase() === selectedProfesi.trim().toLowerCase());
+
+            return alumniMatch && yearInRange && domisiliMatch && profesiMatch;
         });
 
+        // Handle kategori usaha filter with null checks
         if (selectedKategoriUsaha) {
             filtered = filtered.filter(anggota => 
-                anggota.usaha && anggota.usaha.some(u => u.kategori_usaha === selectedKategoriUsaha)
+                anggota && 
+                anggota.usaha && 
+                Array.isArray(anggota.usaha) && 
+                anggota.usaha.some(u => 
+                    u && 
+                    u.kategori_usaha && 
+                    u.kategori_usaha.trim().toLowerCase() === selectedKategoriUsaha.trim().toLowerCase()
+                )
             );
         }
 
@@ -132,11 +151,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateTables() {
-        const filteredData = getFilteredData();
-        
-        updateDomisiliTable(filteredData);
-        updateProfesiTable(filteredData);
-        updateUsahaTable(filteredData);
+        try {
+            const filteredData = getFilteredData();
+            
+            if (!Array.isArray(filteredData)) {
+                console.error('Filtered data is not an array:', filteredData);
+                return;
+            }
+
+            updateDomisiliTable(filteredData);
+            updateProfesiTable(filteredData);
+            updateUsahaTable(filteredData);
+        } catch (error) {
+            console.error('Error updating tables:', error);
+            // Show error message to user
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = 'Terjadi kesalahan saat memperbarui data. Silakan muat ulang halaman.';
+            resultsGrid.prepend(errorDiv);
+        }
     }
     
     function generateAndRenderTable(data, groupBy, tableBody) {
