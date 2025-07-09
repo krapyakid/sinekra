@@ -56,27 +56,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // --- Kontak, Social Media, and Marketplace Icons ---
         const contactIcons = [];
+        
         // Website
         if (business.website_usaha) {
-            contactIcons.push(`<a href="${business.website_usaha}" target="_blank" title="Website"><i class="fas fa-globe"></i></a>`);
+            const url = business.website_usaha.startsWith('http') ? business.website_usaha : `https://${business.website_usaha}`;
+            contactIcons.push(`<a href="${url}" target="_blank" class="card-icon-link" title="Website"><i class="fas fa-globe"></i></a>`);
         }
+        
         // WhatsApp
-        if (business.whatsapp || business.no_hp_perusahaan) {
-            contactIcons.push(`<a href="#" onclick="alert('Untuk informasi lebih lanjut, silakan hubungi Admin Sinergi Krapyak.'); return false;" title="WhatsApp"><img src="assets/sosmed/whatsapp.png" alt="WhatsApp"></a>`);
+        const waNumber = (business.whatsapp || business.no_hp_perusahaan || '').replace(/[^0-9]/g, '');
+        if (waNumber) {
+            contactIcons.push(`<a href="https://wa.me/62${waNumber}" target="_blank" class="card-icon-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>`);
         }
+        
         // Social Media
-        const socialMediaMap = { instagram: 'instagram.png', facebook: 'facebook.png', tiktok: 'tiktok.png', youtube: 'youtube.png' };
-        Object.entries(socialMediaMap).forEach(([key, icon]) => {
-            if (business[key]) {
-                contactIcons.push(`<a href="${business[key]}" target="_blank" title="${key.charAt(0).toUpperCase() + key.slice(1)}"><img src="assets/sosmed/${icon}" alt="${key}"></a>`);
+        const socialMediaMap = {
+            instagram: { icon: 'fa-instagram', url: business.instagram },
+            facebook: { icon: 'fa-facebook', url: business.facebook },
+            tiktok: { icon: 'fa-tiktok', url: business.tiktok },
+            youtube: { icon: 'fa-youtube', url: business.youtube }
+        };
+
+        // Add social media icons
+        for (const [platform, data] of Object.entries(socialMediaMap)) {
+            if (data.url && data.url.trim() !== '') {
+                const url = data.url.startsWith('http') ? data.url : `https://${data.url}`;
+                contactIcons.push(`<a href="${url}" target="_blank" class="card-icon-link" title="${platform.charAt(0).toUpperCase() + platform.slice(1)}"><i class="fab ${data.icon}"></i></a>`);
             }
-        });
+        }
+
         // Marketplace
-        const marketplaceMap = { tokopedia: 'tokopedia.png', shopee: 'shopee.png', bukalapak: 'bukalapak.png', blibli: 'blibli.png', lazada: 'lazada.png', tiktokshop: 'tiktokshop.png' };
-        Object.entries(marketplaceMap).forEach(([key, icon]) => {
-            if (business[key]) {
-                contactIcons.push(`<a href="${business[key]}" target="_blank" title="${key.charAt(0).toUpperCase() + key.slice(1)}"><img src="assets/marketplace/${icon}" alt="${key}"></a>`);
+        const olshops = {
+            tokopedia: { icon: 'icon-tokopedia.svg', url: business.tokopedia },
+            shopee: { icon: 'icon-shopee.svg', url: business.shopee },
+            bukalapak: { icon: 'icon-bukalapak.svg', url: business.bukalapak },
+            blibli: { icon: 'icon-blibli.svg', url: business.blibli },
+            tiktokshop: { icon: 'icon-tiktok.svg', url: business.tiktok_shop }
+        };
+
+        // Add marketplace icons
+        for (const [platform, data] of Object.entries(olshops)) {
+            if (data.url && data.url.trim() !== '') {
+                const url = data.url.startsWith('http') ? data.url : `https://${data.url}`;
+                contactIcons.push(`<a href="${url}" target="_blank" class="card-icon-link marketplace-icon-link" title="${platform.charAt(0).toUpperCase() + platform.slice(1)}"><img src="assets/marketplace/${data.icon}" alt="${platform}" class="marketplace-icon"></a>`);
             }
+        }
+
+        // Log icon generation results
+        console.log('Generated contact icons for business detail:', {
+            businessName: business.nama_usaha,
+            totalIcons: contactIcons.length,
+            socialMedia: Object.entries(socialMediaMap).filter(([_, data]) => data.url && data.url.trim() !== '').map(([platform]) => platform),
+            marketplaces: Object.entries(olshops).filter(([_, data]) => data.url && data.url.trim() !== '').map(([platform]) => platform)
         });
 
         detailContent.innerHTML = `
