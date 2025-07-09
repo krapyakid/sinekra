@@ -164,12 +164,23 @@ document.addEventListener('DOMContentLoaded', function() {
         // Setup event listeners setelah data siap
         setupHomepageEventListeners();
 
+        // Populate filters dan terapkan filter awal
         populateFilters();
         
         // Sembunyikan filter angkatan pada awal load (tampilan usaha)
         const angkatanFilter = document.getElementById('filter-angkatan');
         if (angkatanFilter) {
             angkatanFilter.style.display = 'none';
+        }
+        
+        // Terapkan filter awal
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialDomicile = urlParams.get('domisili');
+        if (initialDomicile) {
+            const domicileFilter = document.getElementById('filter-domicile');
+            if (domicileFilter) {
+                domicileFilter.value = initialDomicile;
+            }
         }
         
         masterFilterHandler();
@@ -184,6 +195,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const angkatanFilter = document.getElementById('filter-angkatan');
         const sortBtn = document.getElementById('sortDropdownBtn');
         const sortMenu = document.getElementById('sortDropdownMenu');
+
+        // Log status elemen filter
+        console.log('Filter elements status:', {
+            domicileFilter: domicileFilter ? 'found' : 'not found',
+            domicileFilterId: domicileFilter?.id,
+            domicileFilterValue: domicileFilter?.value
+        });
 
         if (viewToggleLink) {
             viewToggleLink.addEventListener('click', (e) => {
@@ -214,12 +232,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 masterFilterHandler();
             });
         }
+
+        // Tambahkan event listener untuk setiap filter
+        if (searchBar) {
+            searchBar.addEventListener('input', () => {
+                console.log('Search input event triggered');
+                masterFilterHandler();
+            });
+        }
         
-        if(searchBar) searchBar.addEventListener('input', masterFilterHandler);
-        if(categoryFilter) categoryFilter.addEventListener('change', masterFilterHandler);
-        if(professionFilter) professionFilter.addEventListener('change', masterFilterHandler);
-        if(domicileFilter) domicileFilter.addEventListener('change', masterFilterHandler);
-        if(angkatanFilter) angkatanFilter.addEventListener('change', masterFilterHandler);
+        if (categoryFilter) {
+            categoryFilter.addEventListener('change', () => {
+                console.log('Category filter changed:', categoryFilter.value);
+                masterFilterHandler();
+            });
+        }
+        
+        if (professionFilter) {
+            professionFilter.addEventListener('change', () => {
+                console.log('Profession filter changed:', professionFilter.value);
+                masterFilterHandler();
+            });
+        }
+        
+        if (domicileFilter) {
+            // Hapus event listener lama jika ada
+            domicileFilter.removeEventListener('change', masterFilterHandler);
+            // Tambahkan event listener baru
+            domicileFilter.addEventListener('change', () => {
+                console.log('Domicile filter changed:', {
+                    value: domicileFilter.value,
+                    element: domicileFilter
+                });
+                masterFilterHandler();
+            });
+        }
+        
+        if (angkatanFilter) {
+            angkatanFilter.addEventListener('change', () => {
+                console.log('Angkatan filter changed:', angkatanFilter.value);
+                masterFilterHandler();
+            });
+        }
 
         if (sortBtn && sortMenu) {
             sortBtn.onclick = function(e) {
@@ -356,13 +410,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const searchTerm = searchBar ? searchBar.value.toLowerCase() : '';
         const selectedCategory = categoryFilter ? categoryFilter.value : '';
-        const selectedDomicile = domicileFilter ? domicileFilter.value : '';
+        const selectedDomicile = domicileFilter ? domicileFilter.value.trim() : '';
         const selectedAngkatan = angkatanFilter ? angkatanFilter.value : '';
 
         console.log('Starting business filter with values:', { 
             searchTerm, 
             selectedCategory, 
-            selectedDomicile: selectedDomicile ? selectedDomicile.trim() : '', 
+            selectedDomicile,
             selectedAngkatan,
             totalData: allBusinessData.length
         });
@@ -380,9 +434,16 @@ document.addEventListener('DOMContentLoaded', function() {
             // Filter domisili - perbaikan untuk memastikan perbandingan yang tepat
             let domicileMatch = !selectedDomicile; // Default true jika tidak ada filter
             if (selectedDomicile && business.domisili) {
-                const cleanSelectedDomicile = selectedDomicile.trim().toLowerCase();
+                const cleanSelectedDomicile = selectedDomicile.toLowerCase();
                 const cleanBusinessDomicile = business.domisili.trim().toLowerCase();
+                
+                // Coba exact match dulu
                 domicileMatch = cleanBusinessDomicile === cleanSelectedDomicile;
+                
+                // Jika tidak match, coba cek apakah domisili bisnis mengandung nilai yang dipilih
+                if (!domicileMatch) {
+                    domicileMatch = cleanBusinessDomicile.includes(cleanSelectedDomicile);
+                }
                 
                 console.log('Checking business domicile:', {
                     business_id: business.id_usaha,
@@ -437,13 +498,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const angkatanFilter = document.getElementById('filter-angkatan');
 
         const searchTerm = searchBar ? searchBar.value.toLowerCase() : '';
-        const selectedDomicile = domicileFilter ? domicileFilter.value : '';
+        const selectedDomicile = domicileFilter ? domicileFilter.value.trim() : '';
         const selectedProfession = professionFilter ? professionFilter.value : '';
         const selectedAngkatan = angkatanFilter ? angkatanFilter.value : '';
 
         console.log('Starting member filter with values:', { 
             searchTerm, 
-            selectedDomicile: selectedDomicile ? selectedDomicile.trim() : '',
+            selectedDomicile,
             selectedProfession, 
             selectedAngkatan,
             totalData: allDataCache.length
@@ -460,9 +521,16 @@ document.addEventListener('DOMContentLoaded', function() {
             // Filter domisili - perbaikan untuk memastikan perbandingan yang tepat
             let domicileMatch = !selectedDomicile; // Default true jika tidak ada filter
             if (selectedDomicile && member.domisili) {
-                const cleanSelectedDomicile = selectedDomicile.trim().toLowerCase();
+                const cleanSelectedDomicile = selectedDomicile.toLowerCase();
                 const cleanMemberDomicile = member.domisili.trim().toLowerCase();
+                
+                // Coba exact match dulu
                 domicileMatch = cleanMemberDomicile === cleanSelectedDomicile;
+                
+                // Jika tidak match, coba cek apakah domisili member mengandung nilai yang dipilih
+                if (!domicileMatch) {
+                    domicileMatch = cleanMemberDomicile.includes(cleanSelectedDomicile);
+                }
                 
                 console.log('Checking member domicile:', {
                     member_id: member.id_anggota,
