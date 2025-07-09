@@ -147,6 +147,13 @@ document.addEventListener('DOMContentLoaded', function() {
         setupHomepageEventListeners();
 
         populateFilters();
+        
+        // Sembunyikan filter angkatan pada awal load (tampilan usaha)
+        const angkatanFilter = document.getElementById('filter-angkatan');
+        if (angkatanFilter) {
+            angkatanFilter.style.display = 'none';
+        }
+        
         masterFilterHandler();
     }
 
@@ -171,6 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     viewToggleLink.textContent = 'Lihat Daftar Usaha';
                     if(categoryFilter) categoryFilter.style.display = 'none';
                     if(professionFilter) professionFilter.style.display = '';
+                    if(angkatanFilter) angkatanFilter.style.display = ''; // Tampilkan filter angkatan
                     if(searchBar) searchBar.placeholder = 'Cari Nama Anggota';
                     if(sortBtn) sortBtn.style.display = '';
                     directoryGrid.classList.add('list-view');
@@ -180,6 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     viewToggleLink.textContent = 'Lihat Daftar Anggota';
                     if(categoryFilter) categoryFilter.style.display = '';
                     if(professionFilter) professionFilter.style.display = 'none';
+                    if(angkatanFilter) angkatanFilter.style.display = 'none'; // Sembunyikan filter angkatan
                     if(searchBar) searchBar.placeholder = 'Cari Nama Usaha atau Anggota';
                     if(sortBtn) sortBtn.style.display = '';
                     directoryGrid.classList.remove('list-view');
@@ -229,7 +238,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const angkatanFilter = document.getElementById('filter-angkatan');
 
         if (categoryFilter) {
-            const categories = [...new Set(allBusinessData.map(b => b.kategori_usaha ? b.kategori_usaha.trim() : '').filter(Boolean))];
+            const categories = [...new Set(allBusinessData
+                .map(b => b.kategori_usaha ? b.kategori_usaha.trim() : '')
+                .filter(Boolean))];
             categoryFilter.innerHTML = '<option value="">Semua Kategori Usaha</option>';
             categories.sort().forEach(category => {
                 const option = document.createElement('option');
@@ -243,8 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Hanya ambil data domisili dari tabel anggota_sinekra_v2
             const domiciles = [...new Set(allDataCache
                 .map(m => m.domisili ? m.domisili.trim() : '')
-                .filter(Boolean)
-            )];
+                .filter(Boolean))];
             
             // Clear semua opsi terlebih dahulu untuk menghindari duplikasi
             domicileFilter.innerHTML = '';
@@ -258,14 +268,18 @@ document.addEventListener('DOMContentLoaded', function() {
             // Tambahkan opsi domisili yang diurutkan
             domiciles.sort().forEach(domicile => {
                 const option = document.createElement('option');
-                option.value = domicile;
+                option.value = domicile; // Value sudah di-trim
                 option.textContent = domicile;
                 domicileFilter.appendChild(option);
             });
+            
+            console.log('Populated domisili options:', domiciles);
         }
 
         if (professionFilter) {
-            const professions = [...new Set(allDataCache.map(m => m.profesi ? m.profesi.trim() : '').filter(Boolean))];
+            const professions = [...new Set(allDataCache
+                .map(m => m.profesi ? m.profesi.trim() : '')
+                .filter(Boolean))];
             professionFilter.innerHTML = '<option value="">Semua Profesi</option>';
             professions.sort().forEach(profession => {
                 const option = document.createElement('option');
@@ -276,7 +290,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (angkatanFilter) {
-            const years = [...new Set(allDataCache.map(m => m.tahun_keluar).filter(Boolean))];
+            const years = [...new Set(allDataCache
+                .map(m => m.tahun_keluar)
+                .filter(Boolean))];
             angkatanFilter.innerHTML = '<option value="">Semua Angkatan</option>';
             years.sort((a, b) => b - a).forEach(year => {
                 const option = document.createElement('option');
@@ -298,19 +314,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedDomicile = domicileFilter ? domicileFilter.value : '';
         const selectedAngkatan = angkatanFilter ? angkatanFilter.value : '';
 
+        console.log('Filter values:', { searchTerm, selectedCategory, selectedDomicile, selectedAngkatan });
+
         const filteredData = allBusinessData.filter(business => {
-            const nameMatch = business.nama_usaha.toLowerCase().includes(searchTerm);
-            const ownerMatch = business.nama_lengkap.toLowerCase().includes(searchTerm);
+            const nameMatch = business.nama_usaha && business.nama_usaha.toLowerCase().includes(searchTerm);
+            const ownerMatch = business.nama_lengkap && business.nama_lengkap.toLowerCase().includes(searchTerm);
             const categoryMatch = !selectedCategory || business.kategori_usaha === selectedCategory;
             
-            // Filter domisili berdasarkan domisili anggota
-            const domicileMatch = !selectedDomicile || 
-                (business.domisili && business.domisili.trim() === selectedDomicile);
-                
+            // Filter domisili - perbaikan untuk memastikan perbandingan yang tepat
+            let domicileMatch = !selectedDomicile; // Jika tidak ada filter, match semua
+            if (selectedDomicile && business.domisili) {
+                domicileMatch = business.domisili.trim().toLowerCase() === selectedDomicile.trim().toLowerCase();
+            }
+            
             const angkatanMatch = !selectedAngkatan || business.tahun_keluar == selectedAngkatan;
 
             return (nameMatch || ownerMatch) && categoryMatch && domicileMatch && angkatanMatch;
         });
+
+        console.log('Filtered business data count:', filteredData.length);
 
         renderBusinessList(filteredData);
         updateTotalCount(filteredData.length);
@@ -327,18 +349,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedProfession = professionFilter ? professionFilter.value : '';
         const selectedAngkatan = angkatanFilter ? angkatanFilter.value : '';
 
+        console.log('Member filter values:', { searchTerm, selectedDomicile, selectedProfession, selectedAngkatan });
+
         const filteredData = allDataCache.filter(member => {
-            const nameMatch = member.nama_lengkap.toLowerCase().includes(searchTerm);
+            const nameMatch = member.nama_lengkap && member.nama_lengkap.toLowerCase().includes(searchTerm);
             
-            // Perbaikan filter domisili untuk anggota
-            const domicileMatch = !selectedDomicile || 
-                (member.domisili && member.domisili.trim() === selectedDomicile);
-                
-            const professionMatch = !selectedProfession || member.profesi === selectedProfession;
+            // Filter domisili - perbaikan untuk memastikan perbandingan yang tepat
+            let domicileMatch = !selectedDomicile; // Jika tidak ada filter, match semua
+            if (selectedDomicile && member.domisili) {
+                domicileMatch = member.domisili.trim().toLowerCase() === selectedDomicile.trim().toLowerCase();
+            }
+            
+            const professionMatch = !selectedProfession || 
+                (member.profesi && member.profesi.trim() === selectedProfession.trim());
             const angkatanMatch = !selectedAngkatan || member.tahun_keluar == selectedAngkatan;
             
             return nameMatch && domicileMatch && professionMatch && angkatanMatch;
         });
+
+        console.log('Filtered member data count:', filteredData.length);
         
         const sortedData = sortMemberData(filteredData, currentSort.by);
         renderMemberList(sortedData);
