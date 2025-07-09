@@ -372,18 +372,62 @@ document.addEventListener('DOMContentLoaded', function() {
             container.innerHTML = '';
             return;
         }
+
         let html = '';
-        for (let i = 1; i <= totalPages; i++) {
-            html += `<button class="pagination-btn${i === currentPage ? ' active' : ''}" data-page="${i}">${i}</button>`;
-        }
-        container.innerHTML = html;
-        container.querySelectorAll('.pagination-btn').forEach(btn => {
-            btn.onclick = e => {
-                currentPage = parseInt(btn.dataset.page);
-                masterFilterHandler();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            };
+        
+        // Previous button
+        html += `<button class="pagination-btn" ${currentPage === 1 ? 'disabled' : ''} data-page="${currentPage - 1}">
+            <i class="fas fa-chevron-left"></i>
+        </button>`;
+
+        // Generate page numbers with ellipsis
+        const pages = generatePaginationArray(currentPage, totalPages);
+        pages.forEach(page => {
+            if (page === '...') {
+                html += `<span class="pagination-ellipsis">...</span>`;
+            } else {
+                html += `<button class="pagination-btn${page === currentPage ? ' active' : ''}" data-page="${page}">${page}</button>`;
+            }
         });
+
+        // Next button
+        html += `<button class="pagination-btn" ${currentPage === totalPages ? 'disabled' : ''} data-page="${currentPage + 1}">
+            <i class="fas fa-chevron-right"></i>
+        </button>`;
+
+        container.innerHTML = html;
+
+        // Add click handlers
+        container.querySelectorAll('.pagination-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+                const page = parseInt(btn.dataset.page);
+                if (!isNaN(page) && page !== currentPage) {
+                    currentPage = page;
+                    if (currentView === 'usaha') {
+                        applyAndRenderBusinessFilters();
+                    } else {
+                        applyAndRenderMemberFilters();
+                    }
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+        });
+    }
+
+    function generatePaginationArray(current, total) {
+        if (total <= 7) {
+            return Array.from({ length: total }, (_, i) => i + 1);
+        }
+
+        if (current <= 3) {
+            return [1, 2, 3, 4, '...', total];
+        }
+
+        if (current >= total - 2) {
+            return [1, '...', total - 3, total - 2, total - 1, total];
+        }
+
+        return [1, '...', current - 1, current, current + 1, '...', total];
     }
 
     function renderBusinessList(businessList) {
@@ -411,10 +455,16 @@ document.addEventListener('DOMContentLoaded', function() {
             directoryGrid.innerHTML = '<div class="no-results-card"><i class="fas fa-info-circle"></i><p>Tidak ada hasil yang ditemukan</p><span>Coba kata kunci atau filter yang berbeda.</span></div>';
             return;
         }
-        memberList.forEach(member => {
+        
+        // Get paginated data
+        const paginatedData = getPaginatedData(memberList, currentPage);
+        paginatedData.forEach(member => {
             const card = createMemberListItem(member);
             directoryGrid.appendChild(card);
         });
+        
+        // Render pagination controls
+        renderPaginationControls(memberList.length, currentPage, 'pagination-container');
     }
 
     // --- RENDER FUNCTIONS (CARD CREATION) ---
