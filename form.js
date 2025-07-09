@@ -43,13 +43,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 header: true,
                 skipEmptyLines: true,
                 complete: function(results) {
+                    if (!results.data || !Array.isArray(results.data)) {
+                        throw new Error('Format data KBLI tidak valid');
+                    }
                     kbliData = results.data;
                     // Jika sudah ada kartu usaha saat data dimuat, populasikan
                     document.querySelectorAll('.business-entry-card select[name="kategori_usaha"]').forEach(populateKbliDropdown);
+                },
+                error: function(error) {
+                    console.error('Error parsing KBLI CSV:', error);
+                    alert('Gagal memproses data KBLI. Silakan muat ulang halaman.');
                 }
             });
         } catch (error) {
             console.error('Error loading KBLI data:', error);
+            alert('Gagal memuat data KBLI. Silakan periksa koneksi internet Anda dan coba lagi.');
         }
     }
 
@@ -210,38 +218,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const button = event.target;
         const targetId = button.dataset.target;
         const targetTextarea = document.getElementById(targetId);
-        if (!targetTextarea) return;
-
-        let prompt = "";
-        const formGroup = button.closest('.form-group, .form-group-full');
-
-        switch (targetId) {
-            case 'detail_usaha':
-                const kategori = formGroup.querySelector('select[name="kategori_usaha"]')?.value || 'umum';
-                prompt = `Buatkan contoh deskripsi usaha yang menarik dan singkat (maksimal 2-3 kalimat) untuk sebuah usaha dalam kategori "${kategori}".`;
-                break;
-            case 'prospek_kerjasama_penawaran':
-                prompt = `Buatkan contoh teks singkat (maksimal 2-3 kalimat) untuk kolom "Prospek Kerjasama/Penawaran" pada formulir data anggota, yang menjelaskan jenis kerjasama yang dicari atau ditawarkan.`;
-                break;
-            case 'pengembangan_profesi':
-                prompt = `Buatkan contoh rencana pengembangan profesi atau keahlian (maksimal 2-3 kalimat) yang relevan untuk seorang anggota komunitas ekonomi.`;
-                break;
-            case 'ide':
-                prompt = `Buatkan contoh ide atau gagasan singkat (maksimal 2-3 kalimat) untuk program atau kegiatan Sinergi Ekonomi Santri.`;
-                break;
-            case 'lain_lain':
-                prompt = `Buatkan contoh isian untuk kolom "Lain-lain" (maksimal 2-3 kalimat) yang berisi informasi tambahan yang relevan tentang keahlian atau kontribusi yang bisa diberikan untuk komunitas.`;
-                break;
-            default:
-                prompt = "Buatkan contoh teks singkat yang relevan.";
+        
+        if (!targetTextarea) {
+            console.error('Target textarea not found');
+            return;
         }
 
         button.classList.add('loading');
         button.disabled = true;
 
+        // Get the context from the textarea's label
+        const label = targetTextarea.closest('.form-group').querySelector('label').textContent;
+        const prompt = `Buatkan deskripsi untuk ${label.replace('*', '')} dengan gaya profesional dan menarik.`;
+
         try {
-            // Alihkan permintaan ke serverless function kita yang aman
-            const response = await fetch('/.netlify/functions/generate-ai-text', {
+            // Check if we're in development or production
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const endpoint = isLocalhost ? 'http://localhost:8888/.netlify/functions/generate-ai-text' : '/.netlify/functions/generate-ai-text';
+
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -250,19 +245,21 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
+                const errorData = await response.json().catch(() => ({}));
                 throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
             }
 
             const data = await response.json();
             if (data.completion) {
                 targetTextarea.value = data.completion.trim();
-                targetTextarea.dispatchEvent(new Event('input', { bubbles: true })); // Update char counter
+                targetTextarea.dispatchEvent(new Event('input', { bubbles: true }));
+            } else {
+                throw new Error('Tidak ada teks yang dihasilkan');
             }
 
         } catch (error) {
             console.error('Error fetching AI completion:', error);
-            alert(`Gagal menghasilkan teks dengan AI. Silakan coba lagi. Error: ${error.message}`);
+            alert('Maaf, fitur AI sedang tidak tersedia. Silakan isi secara manual atau coba lagi nanti.');
         } finally {
             button.classList.remove('loading');
             button.disabled = false;
@@ -541,11 +538,33 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         const confirmed = window.confirm("Anda yakin ingin mengosongkan semua isian pada formulir?");
         if (confirmed) {
+            // Reset the main form
             form.reset();
-            // Reset semua counter karakter dan clear icons
+            
+            // Clear all business entries except the first one
+            const businessEntries = businessListContainer.querySelectorAll('.business-entry-card');
+            businessEntries.forEach((entry, index) => {
+                if (index > 0) {
+                    entry.remove();
+                }
+            });
+            
+            // Reset the first business entry if it exists
+            const firstEntry = businessListContainer.querySelector('.business-entry-card');
+            if (firstEntry) {
+                firstEntry.querySelectorAll('input, textarea, select').forEach(input => {
+                    input.value = '';
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                });
+            }
+            
+            // Reset all character counters
             form.querySelectorAll('input, textarea').forEach(input => {
                 input.dispatchEvent(new Event('input', { bubbles: true }));
             });
+            
+            // Update business titles
+            updateBusinessTitles();
         }
     }
 
