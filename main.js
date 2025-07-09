@@ -240,13 +240,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (domicileFilter) {
-            // Gabungkan domisili dari anggota dan usaha
-            const memberDomiciles = allDataCache.map(m => m.domisili ? m.domisili.trim() : '');
-            const businessDomiciles = allBusinessData.map(b => b.domisili_usaha ? b.domisili_usaha.trim() : '');
-            const allDomiciles = [...new Set([...memberDomiciles, ...businessDomiciles].filter(Boolean))];
+            // Hanya ambil data domisili dari tabel anggota_sinekra_v2
+            const domiciles = [...new Set(allDataCache
+                .map(m => m.domisili ? m.domisili.trim() : '')
+                .filter(Boolean)
+            )];
             
             domicileFilter.innerHTML = '<option value="">Semua Domisili</option>';
-            allDomiciles.sort().forEach(domicile => {
+            domiciles.sort().forEach(domicile => {
                 const option = document.createElement('option');
                 option.value = domicile;
                 option.textContent = domicile;
@@ -293,10 +294,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const ownerMatch = business.nama_lengkap.toLowerCase().includes(searchTerm);
             const categoryMatch = !selectedCategory || business.kategori_usaha === selectedCategory;
             
-            // Perbaikan filter domisili untuk usaha
+            // Filter domisili berdasarkan domisili anggota
             const domicileMatch = !selectedDomicile || 
-                (business.domisili && business.domisili.trim() === selectedDomicile) || 
-                (business.domisili_usaha && business.domisili_usaha.trim() === selectedDomicile);
+                (business.domisili && business.domisili.trim() === selectedDomicile);
                 
             const angkatanMatch = !selectedAngkatan || business.tahun_keluar == selectedAngkatan;
 
@@ -384,7 +384,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let html = '';
         
         // Tombol Previous
-        html += `<button class="pagination-btn" ${currentPage === 1 ? 'disabled' : ''} data-page="${currentPage - 1}">
+        html += `<button type="button" class="pagination-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''} data-page="${currentPage - 1}">
             <i class="fas fa-chevron-left"></i>
         </button>`;
 
@@ -394,22 +394,27 @@ document.addEventListener('DOMContentLoaded', function() {
             if (page === '...') {
                 html += `<span class="pagination-ellipsis">...</span>`;
             } else {
-                html += `<button class="pagination-btn${page === currentPage ? ' active' : ''}" data-page="${page}">${page}</button>`;
+                html += `<button type="button" class="pagination-btn number-btn${page === currentPage ? ' active' : ''}" data-page="${page}">${page}</button>`;
             }
         });
 
         // Tombol Next
-        html += `<button class="pagination-btn" ${currentPage === totalPages ? 'disabled' : ''} data-page="${currentPage + 1}">
+        html += `<button type="button" class="pagination-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''} data-page="${currentPage + 1}">
             <i class="fas fa-chevron-right"></i>
         </button>`;
 
         container.innerHTML = html;
 
-        // Tambahkan event listener untuk setiap tombol
-        container.querySelectorAll('.pagination-btn').forEach(btn => {
-            btn.onclick = (e) => {
+        // Event listener untuk tombol-tombol pagination
+        const paginationButtons = container.querySelectorAll('.pagination-btn');
+        paginationButtons.forEach(btn => {
+            btn.addEventListener('click', function(e) {
                 e.preventDefault();
-                const newPage = parseInt(btn.dataset.page);
+                e.stopPropagation();
+                
+                if (this.disabled) return;
+                
+                const newPage = parseInt(this.dataset.page);
                 if (!isNaN(newPage) && newPage !== currentPage && newPage > 0 && newPage <= totalPages) {
                     currentPage = newPage;
                     if (currentView === 'usaha') {
@@ -419,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
-            };
+            });
         });
     }
 
