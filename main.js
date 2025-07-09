@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentView = 'usaha';
     let filteredBusinessData = [];
     let currentPage = 1;
-    const CARDS_PER_PAGE = 120;
+    const CARDS_PER_PAGE = 12; // Reduced from 120 to a more reasonable number
     let currentSort = { by: 'newest' };
 
     function masterFilterHandler() {
@@ -240,7 +240,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (domicileFilter) {
-            const domiciles = [...new Set(allDataCache.map(m => m.domisili ? m.domisili.trim() : m.domisili).filter(Boolean))];
+            // Kumpulkan dari domisili anggota dan domisili usaha
+            const memberDomiciles = allDataCache.map(m => m.domisili ? m.domisili.trim() : null);
+            const businessDomiciles = allBusinessData.map(b => b.domisili_usaha ? b.domisili_usaha.trim() : null);
+            
+            // Gabungkan, hilangkan duplikat, dan urutkan
+            const domiciles = [...new Set([...memberDomiciles, ...businessDomiciles].filter(Boolean))];
+            
             domicileFilter.innerHTML = '<option value="">Semua Domisili</option>';
             domiciles.sort().forEach(domicile => {
                 const option = document.createElement('option');
@@ -249,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 domicileFilter.appendChild(option);
             });
         }
-
+        
         if (professionFilter) {
             const professions = [...new Set(allDataCache.map(m => m.profesi ? m.profesi.trim() : m.profesi).filter(Boolean))];
             professionFilter.innerHTML = '<option value="">Semua Profesi</option>';
@@ -288,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const nameMatch = business.nama_usaha.toLowerCase().includes(searchTerm);
             const ownerMatch = business.nama_lengkap.toLowerCase().includes(searchTerm);
             const categoryMatch = !selectedCategory || business.kategori_usaha === selectedCategory;
-            const domicileMatch = !selectedDomicile || business.domisili === selectedDomicile;
+            const domicileMatch = !selectedDomicile || business.domisili === selectedDomicile || business.domisili_usaha === selectedDomicile;
             const angkatanMatch = !selectedAngkatan || business.tahun_keluar == selectedAngkatan;
 
             return (nameMatch || ownerMatch) && categoryMatch && domicileMatch && angkatanMatch;
@@ -387,10 +393,16 @@ document.addEventListener('DOMContentLoaded', function() {
             directoryGrid.innerHTML = '<div class="no-results-card"><i class="fas fa-info-circle"></i><p>Tidak ada hasil yang ditemukan</p><span>Coba kata kunci atau filter yang berbeda.</span></div>';
             return;
         }
-        sortedData.forEach(business => {
+        
+        // Get paginated data
+        const paginatedData = getPaginatedData(sortedData, currentPage);
+        paginatedData.forEach(business => {
             const card = createBusinessCard(business);
             directoryGrid.appendChild(card);
         });
+        
+        // Render pagination controls
+        renderPaginationControls(sortedData.length, currentPage, 'pagination-container');
     }
 
     function renderMemberList(memberList) {
