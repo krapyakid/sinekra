@@ -246,7 +246,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 .filter(Boolean)
             )];
             
-            domicileFilter.innerHTML = '<option value="">Semua Domisili</option>';
+            // Clear semua opsi terlebih dahulu untuk menghindari duplikasi
+            domicileFilter.innerHTML = '';
+            
+            // Tambahkan opsi default
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'Semua Domisili';
+            domicileFilter.appendChild(defaultOption);
+            
+            // Tambahkan opsi domisili yang diurutkan
             domiciles.sort().forEach(domicile => {
                 const option = document.createElement('option');
                 option.value = domicile;
@@ -372,56 +381,72 @@ document.addEventListener('DOMContentLoaded', function() {
         return data.slice(startIndex, endIndex);
     }
 
-    function renderPaginationControls(totalItems, currentPage, containerId) {
+    function renderPaginationControls(totalItems, currentPageNum, containerId) {
         const totalPages = Math.ceil(totalItems / CARDS_PER_PAGE);
         const container = document.getElementById(containerId);
-        if (!container) return;
-        if (totalPages <= 1) {
-            container.innerHTML = '';
+        
+        console.log('Rendering pagination:', { totalItems, currentPageNum, totalPages, containerId });
+        
+        if (!container) {
+            console.error('Pagination container not found:', containerId);
             return;
         }
+        
+        if (totalPages <= 1) {
+            container.innerHTML = '';
+            container.style.display = 'none';
+            return;
+        }
+        
+        container.style.display = 'flex';
 
         let html = '';
         
         // Tombol Previous
-        html += `<button type="button" class="pagination-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''} data-page="${currentPage - 1}">
+        html += `<button type="button" class="pagination-btn prev-btn" ${currentPageNum === 1 ? 'disabled' : ''} data-page="${currentPageNum - 1}">
             <i class="fas fa-chevron-left"></i>
         </button>`;
 
         // Generate nomor halaman dengan ellipsis
-        const pages = generatePaginationArray(currentPage, totalPages);
+        const pages = generatePaginationArray(currentPageNum, totalPages);
         pages.forEach(page => {
             if (page === '...') {
                 html += `<span class="pagination-ellipsis">...</span>`;
             } else {
-                html += `<button type="button" class="pagination-btn number-btn${page === currentPage ? ' active' : ''}" data-page="${page}">${page}</button>`;
+                html += `<button type="button" class="pagination-btn number-btn${page === currentPageNum ? ' active' : ''}" data-page="${page}">${page}</button>`;
             }
         });
 
         // Tombol Next
-        html += `<button type="button" class="pagination-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''} data-page="${currentPage + 1}">
+        html += `<button type="button" class="pagination-btn next-btn" ${currentPageNum === totalPages ? 'disabled' : ''} data-page="${currentPageNum + 1}">
             <i class="fas fa-chevron-right"></i>
         </button>`;
 
         container.innerHTML = html;
 
         // Event listener untuk tombol-tombol pagination
-        const paginationButtons = container.querySelectorAll('.pagination-btn');
+        const paginationButtons = container.querySelectorAll('.pagination-btn:not(:disabled)');
+        console.log('Found pagination buttons:', paginationButtons.length);
+        
         paginationButtons.forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                if (this.disabled) return;
-                
                 const newPage = parseInt(this.dataset.page);
-                if (!isNaN(newPage) && newPage !== currentPage && newPage > 0 && newPage <= totalPages) {
+                console.log('Pagination clicked:', { newPage, currentPage, totalPages });
+                
+                if (!isNaN(newPage) && newPage !== currentPage && newPage >= 1 && newPage <= totalPages) {
+                    // Update global currentPage
                     currentPage = newPage;
+                    
                     if (currentView === 'usaha') {
                         applyAndRenderBusinessFilters();
                     } else {
                         applyAndRenderMemberFilters();
                     }
+                    
+                    // Scroll ke atas halaman
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
