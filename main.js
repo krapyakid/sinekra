@@ -120,11 +120,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentView = 'usaha';
     let filteredBusinessData = [];
     let currentPage = 1;
-    const CARDS_PER_PAGE = 12; // Reduced from 120 to a more reasonable number
+    const CARDS_PER_PAGE = 40; // Diubah dari 12 menjadi 40 card per halaman
     let currentSort = { by: 'newest' };
 
     function masterFilterHandler() {
-        currentPage = 1; 
+        currentPage = 1; // Reset ke halaman pertama saat filter berubah
         if (currentView === 'usaha') {
             applyAndRenderBusinessFilters();
         } else {
@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const angkatanFilter = document.getElementById('filter-angkatan');
 
         if (categoryFilter) {
-            const categories = [...new Set(allBusinessData.map(b => b.kategori_usaha ? b.kategori_usaha.trim() : b.kategori_usaha).filter(Boolean))];
+            const categories = [...new Set(allBusinessData.map(b => b.kategori_usaha ? b.kategori_usaha.trim() : '').filter(Boolean))];
             categoryFilter.innerHTML = '<option value="">Semua Kategori Usaha</option>';
             categories.sort().forEach(category => {
                 const option = document.createElement('option');
@@ -240,40 +240,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (domicileFilter) {
-            // Kumpulkan dari domisili anggota dan domisili usaha
-            const memberDomiciles = allDataCache.map(m => m.domisili ? m.domisili.trim() : null);
-            const businessDomiciles = allBusinessData.map(b => b.domisili_usaha ? b.domisili_usaha.trim() : null);
-            
-            // Gabungkan, hilangkan duplikat, dan urutkan
-            const domiciles = [...new Set([...memberDomiciles, ...businessDomiciles].filter(Boolean))];
+            // Gabungkan domisili dari anggota dan usaha
+            const memberDomiciles = allDataCache.map(m => m.domisili ? m.domisili.trim() : '');
+            const businessDomiciles = allBusinessData.map(b => b.domisili_usaha ? b.domisili_usaha.trim() : '');
+            const allDomiciles = [...new Set([...memberDomiciles, ...businessDomiciles].filter(Boolean))];
             
             domicileFilter.innerHTML = '<option value="">Semua Domisili</option>';
-            domiciles.sort().forEach(domicile => {
+            allDomiciles.sort().forEach(domicile => {
                 const option = document.createElement('option');
                 option.value = domicile;
                 option.textContent = domicile;
                 domicileFilter.appendChild(option);
             });
         }
-        
+
         if (professionFilter) {
-            const professions = [...new Set(allDataCache.map(m => m.profesi ? m.profesi.trim() : m.profesi).filter(Boolean))];
+            const professions = [...new Set(allDataCache.map(m => m.profesi ? m.profesi.trim() : '').filter(Boolean))];
             professionFilter.innerHTML = '<option value="">Semua Profesi</option>';
-            professions.sort().forEach(p => {
+            professions.sort().forEach(profession => {
                 const option = document.createElement('option');
-                option.value = p;
-                option.textContent = p;
+                option.value = profession;
+                option.textContent = profession;
                 professionFilter.appendChild(option);
             });
         }
 
         if (angkatanFilter) {
-            const angkatan = [...new Set(allDataCache.map(m => m.tahun_keluar).filter(Boolean))].sort((a, b) => b - a);
+            const years = [...new Set(allDataCache.map(m => m.tahun_keluar).filter(Boolean))];
             angkatanFilter.innerHTML = '<option value="">Semua Angkatan</option>';
-            angkatan.forEach(a => {
+            years.sort((a, b) => b - a).forEach(year => {
                 const option = document.createElement('option');
-                option.value = a;
-                option.textContent = a;
+                option.value = year;
+                option.textContent = `Angkatan ${year}`;
                 angkatanFilter.appendChild(option);
             });
         }
@@ -294,7 +292,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const nameMatch = business.nama_usaha.toLowerCase().includes(searchTerm);
             const ownerMatch = business.nama_lengkap.toLowerCase().includes(searchTerm);
             const categoryMatch = !selectedCategory || business.kategori_usaha === selectedCategory;
-            const domicileMatch = !selectedDomicile || business.domisili === selectedDomicile || business.domisili_usaha === selectedDomicile;
+            
+            // Perbaikan filter domisili untuk usaha
+            const domicileMatch = !selectedDomicile || 
+                (business.domisili && business.domisili.trim() === selectedDomicile) || 
+                (business.domisili_usaha && business.domisili_usaha.trim() === selectedDomicile);
+                
             const angkatanMatch = !selectedAngkatan || business.tahun_keluar == selectedAngkatan;
 
             return (nameMatch || ownerMatch) && categoryMatch && domicileMatch && angkatanMatch;
@@ -317,9 +320,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const filteredData = allDataCache.filter(member => {
             const nameMatch = member.nama_lengkap.toLowerCase().includes(searchTerm);
-            const domicileMatch = !selectedDomicile || member.domisili === selectedDomicile;
+            
+            // Perbaikan filter domisili untuk anggota
+            const domicileMatch = !selectedDomicile || 
+                (member.domisili && member.domisili.trim() === selectedDomicile);
+                
             const professionMatch = !selectedProfession || member.profesi === selectedProfession;
             const angkatanMatch = !selectedAngkatan || member.tahun_keluar == selectedAngkatan;
+            
             return nameMatch && domicileMatch && professionMatch && angkatanMatch;
         });
         
@@ -375,12 +383,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let html = '';
         
-        // Previous button
+        // Tombol Previous
         html += `<button class="pagination-btn" ${currentPage === 1 ? 'disabled' : ''} data-page="${currentPage - 1}">
             <i class="fas fa-chevron-left"></i>
         </button>`;
 
-        // Generate page numbers with ellipsis
+        // Generate nomor halaman dengan ellipsis
         const pages = generatePaginationArray(currentPage, totalPages);
         pages.forEach(page => {
             if (page === '...') {
@@ -390,19 +398,20 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Next button
+        // Tombol Next
         html += `<button class="pagination-btn" ${currentPage === totalPages ? 'disabled' : ''} data-page="${currentPage + 1}">
             <i class="fas fa-chevron-right"></i>
         </button>`;
 
         container.innerHTML = html;
 
-        // Add click handlers
+        // Tambahkan event listener untuk setiap tombol
         container.querySelectorAll('.pagination-btn').forEach(btn => {
-            btn.addEventListener('click', e => {
-                const page = parseInt(btn.dataset.page);
-                if (!isNaN(page) && page !== currentPage) {
-                    currentPage = page;
+            btn.onclick = (e) => {
+                e.preventDefault();
+                const newPage = parseInt(btn.dataset.page);
+                if (!isNaN(newPage) && newPage !== currentPage && newPage > 0 && newPage <= totalPages) {
+                    currentPage = newPage;
                     if (currentView === 'usaha') {
                         applyAndRenderBusinessFilters();
                     } else {
@@ -410,7 +419,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
-            });
+            };
         });
     }
 
