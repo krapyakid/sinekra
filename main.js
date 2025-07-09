@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const urlParams = new URLSearchParams(window.location.search);
         const initialDomicile = urlParams.get('domisili');
         if (initialDomicile) {
-            const domicileFilter = document.getElementById('filter-domicile');
+            const domicileFilter = document.getElementById('filter-domisili'); // Fix ID to match HTML
             if (domicileFilter) {
                 domicileFilter.value = initialDomicile;
             }
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const searchBar = document.getElementById('desktop-search-bar');
         const categoryFilter = document.getElementById('filter-category');
         const professionFilter = document.getElementById('filter-profession');
-        const domicileFilter = document.getElementById('filter-domicile');
+        const domicileFilter = document.getElementById('filter-domisili'); // Fix ID to match HTML
         const angkatanFilter = document.getElementById('filter-angkatan');
         const sortBtn = document.getElementById('sortDropdownBtn');
         const sortMenu = document.getElementById('sortDropdownMenu');
@@ -260,12 +260,19 @@ document.addEventListener('DOMContentLoaded', function() {
             domicileFilter.removeEventListener('change', masterFilterHandler);
             // Tambahkan event listener baru
             domicileFilter.addEventListener('change', () => {
+                const selectedValue = domicileFilter.value;
                 console.log('Domicile filter changed:', {
-                    value: domicileFilter.value,
-                    element: domicileFilter
+                    value: selectedValue,
+                    element: domicileFilter.id,
+                    options: Array.from(domicileFilter.options).map(opt => ({
+                        value: opt.value,
+                        text: opt.text
+                    }))
                 });
                 masterFilterHandler();
             });
+        } else {
+            console.error('Failed to attach event listener to domicile filter - element not found');
         }
         
         if (angkatanFilter) {
@@ -305,61 +312,80 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function populateFilters() {
         const categoryFilter = document.getElementById('filter-category');
-        const domicileFilter = document.getElementById('filter-domicile');
+        const domicileFilter = document.getElementById('filter-domisili');
         const professionFilter = document.getElementById('filter-profession');
         const angkatanFilter = document.getElementById('filter-angkatan');
 
+        console.log('Filter elements found:', {
+            categoryFilter: categoryFilter?.id,
+            domicileFilter: domicileFilter?.id,
+            professionFilter: professionFilter?.id,
+            angkatanFilter: angkatanFilter?.id
+        });
+
+        // Populate category filter
         if (categoryFilter) {
             const categories = [...new Set(allBusinessData
-                .map(b => b.kategori_usaha ? b.kategori_usaha.trim() : '')
-                .filter(Boolean))];
+                .map(b => b.kategori_usaha)
+                .filter(Boolean)
+                .map(c => c.toLowerCase())
+            )].sort();
+
             categoryFilter.innerHTML = '<option value="">Semua Kategori Usaha</option>';
-            categories.sort().forEach(category => {
+            categories.forEach(category => {
                 const option = document.createElement('option');
                 option.value = category;
-                option.textContent = category;
+                option.textContent = category.charAt(0).toUpperCase() + category.slice(1);
                 categoryFilter.appendChild(option);
             });
         }
-        
+
+        // Populate domicile filter
         if (domicileFilter) {
-            // Hanya ambil data domisili dari tabel anggota_sinekra_v2
-            console.log('Populating domicile filter from data:', allDataCache);
+            console.log('Populating domicile filter...');
             
-            const domiciles = [...new Set(allDataCache
-                .map(m => {
-                    const rawDomicile = m.domisili;
-                    console.log('Processing domicile:', {
-                        raw: rawDomicile,
-                        member_id: m.id_anggota,
-                        member_name: m.nama_lengkap
-                    });
-                    return rawDomicile ? rawDomicile.trim() : '';
-                })
-                .filter(Boolean)
-                .map(d => {
-                    console.log('Normalizing domicile:', {
-                        original: d,
-                        normalized: d.toLowerCase()
-                    });
-                    return d.toLowerCase();
-                })
-            )];
+            // Get unique domiciles from both members and businesses
+            const domiciles = new Set();
             
-            // Clear semua opsi terlebih dahulu untuk menghindari duplikasi
-            domicileFilter.innerHTML = '';
+            // Add member domiciles
+            allDataCache.forEach(member => {
+                if (member.domisili) {
+                    const cleanDomicile = member.domisili.trim();
+                    if (cleanDomicile) {
+                        domiciles.add(cleanDomicile);
+                        console.log('Added member domicile:', {
+                            member: member.nama_lengkap,
+                            domicile: cleanDomicile
+                        });
+                    }
+                }
+            });
             
-            // Tambahkan opsi default
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Semua Domisili';
-            domicileFilter.appendChild(defaultOption);
+            // Add business domiciles
+            allBusinessData.forEach(business => {
+                if (business.domisili) {
+                    const cleanDomicile = business.domisili.trim();
+                    if (cleanDomicile) {
+                        domiciles.add(cleanDomicile);
+                        console.log('Added business domicile:', {
+                            business: business.nama_usaha,
+                            domicile: cleanDomicile
+                        });
+                    }
+                }
+            });
+
+            // Convert to array and sort
+            const sortedDomiciles = Array.from(domiciles).sort();
             
-            // Tambahkan opsi domisili yang diurutkan
-            domiciles.sort().forEach(domicile => {
+            // Clear existing options
+            domicileFilter.innerHTML = '<option value="">Semua Domisili</option>';
+            
+            // Add sorted options
+            sortedDomiciles.forEach(domicile => {
                 const option = document.createElement('option');
-                option.value = domicile; // Value dalam lowercase
-                option.textContent = domicile.charAt(0).toUpperCase() + domicile.slice(1); // Display dengan proper case
+                option.value = domicile;
+                option.textContent = domicile;
                 domicileFilter.appendChild(option);
                 
                 console.log('Added domicile option:', {
@@ -367,36 +393,42 @@ document.addEventListener('DOMContentLoaded', function() {
                     text: option.textContent
                 });
             });
-            
-            console.log('Populated domicile options:', {
-                total: domiciles.length,
-                values: domiciles,
-                element: domicileFilter.innerHTML
+
+            console.log('Populated domicile filter:', {
+                total_options: sortedDomiciles.length + 1,
+                options: ['', ...sortedDomiciles]
             });
         }
 
+        // Populate profession filter
         if (professionFilter) {
             const professions = [...new Set(allDataCache
-                .map(m => m.profesi ? m.profesi.trim() : '')
-                .filter(Boolean))];
+                .map(m => m.profesi)
+                .filter(Boolean)
+                .map(p => p.toLowerCase())
+            )].sort();
+
             professionFilter.innerHTML = '<option value="">Semua Profesi</option>';
-            professions.sort().forEach(profession => {
+            professions.forEach(profession => {
                 const option = document.createElement('option');
                 option.value = profession;
-                option.textContent = profession;
+                option.textContent = profession.charAt(0).toUpperCase() + profession.slice(1);
                 professionFilter.appendChild(option);
             });
         }
 
+        // Populate angkatan filter
         if (angkatanFilter) {
-            const years = [...new Set(allDataCache
-                .map(m => m.tahun_keluar)
-                .filter(Boolean))];
+            const angkatans = [...new Set(allDataCache
+                .map(m => m.angkatan)
+                .filter(Boolean)
+            )].sort((a, b) => b - a); // Sort descending
+
             angkatanFilter.innerHTML = '<option value="">Semua Angkatan</option>';
-            years.sort((a, b) => b - a).forEach(year => {
+            angkatans.forEach(angkatan => {
                 const option = document.createElement('option');
-                option.value = year;
-                option.textContent = `Angkatan ${year}`;
+                option.value = angkatan.toString();
+                option.textContent = `Angkatan ${angkatan}`;
                 angkatanFilter.appendChild(option);
             });
         }
@@ -405,7 +437,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function applyAndRenderBusinessFilters() {
         const searchBar = document.getElementById('desktop-search-bar');
         const categoryFilter = document.getElementById('filter-category');
-        const domicileFilter = document.getElementById('filter-domicile');
+        const domicileFilter = document.getElementById('filter-domisili');
         const angkatanFilter = document.getElementById('filter-angkatan');
         
         const searchTerm = searchBar ? searchBar.value.toLowerCase() : '';
@@ -421,79 +453,67 @@ document.addEventListener('DOMContentLoaded', function() {
             totalData: allBusinessData.length
         });
 
-        const filteredData = allBusinessData.filter(business => {
-            if (!business) {
-                console.log('Found null/undefined business data');
-                return false;
-            }
+        // Filter data
+        filteredBusinessData = allBusinessData.filter(business => {
+            const matchesSearch = !searchTerm || 
+                business.nama_usaha?.toLowerCase().includes(searchTerm) ||
+                business.deskripsi_usaha?.toLowerCase().includes(searchTerm) ||
+                business.nama_lengkap?.toLowerCase().includes(searchTerm);
 
-            const nameMatch = business.nama_usaha && business.nama_usaha.toLowerCase().includes(searchTerm);
-            const ownerMatch = business.nama_lengkap && business.nama_lengkap.toLowerCase().includes(searchTerm);
-            const categoryMatch = !selectedCategory || business.kategori_usaha === selectedCategory;
-            
-            // Filter domisili - perbaikan untuk memastikan perbandingan yang tepat
-            let domicileMatch = !selectedDomicile; // Default true jika tidak ada filter
-            if (selectedDomicile && business.domisili) {
-                const cleanSelectedDomicile = selectedDomicile.toLowerCase();
-                const cleanBusinessDomicile = business.domisili.trim().toLowerCase();
-                
-                // Coba exact match dulu
-                domicileMatch = cleanBusinessDomicile === cleanSelectedDomicile;
-                
-                // Jika tidak match, coba cek apakah domisili bisnis mengandung nilai yang dipilih
-                if (!domicileMatch) {
-                    domicileMatch = cleanBusinessDomicile.includes(cleanSelectedDomicile);
-                }
-                
-                console.log('Checking business domicile:', {
-                    business_id: business.id_usaha,
-                    business_name: business.nama_usaha,
-                    raw_domicile: business.domisili,
-                    clean_business: cleanBusinessDomicile,
-                    clean_selected: cleanSelectedDomicile,
-                    matches: domicileMatch
-                });
-            }
-            
-            const angkatanMatch = !selectedAngkatan || business.tahun_keluar == selectedAngkatan;
+            const matchesCategory = !selectedCategory || 
+                business.kategori_usaha?.toLowerCase() === selectedCategory.toLowerCase();
 
-            const matches = (nameMatch || ownerMatch) && categoryMatch && domicileMatch && angkatanMatch;
-            
-            if (!matches && selectedDomicile) {
-                console.log('Business filtered out:', {
-                    id: business.id_usaha,
-                    name: business.nama_usaha,
-                    domicile: business.domisili,
-                    nameMatch,
-                    ownerMatch,
-                    categoryMatch,
-                    domicileMatch,
-                    angkatanMatch
+            const matchesDomicile = !selectedDomicile || 
+                (business.domisili?.toLowerCase().trim() === selectedDomicile.toLowerCase().trim());
+
+            const matchesAngkatan = !selectedAngkatan || 
+                business.angkatan?.toString() === selectedAngkatan;
+
+            const result = matchesSearch && matchesCategory && matchesDomicile && matchesAngkatan;
+
+            // Log filter results for debugging
+            if (selectedDomicile && !matchesDomicile) {
+                console.log('Domicile mismatch:', {
+                    businessDomicile: business.domisili?.toLowerCase().trim(),
+                    selectedDomicile: selectedDomicile.toLowerCase().trim(),
+                    businessId: business.id_usaha,
+                    businessName: business.nama_usaha
                 });
             }
 
-            return matches;
+            return result;
         });
 
+        // Sort filtered data
+        filteredBusinessData = sortBusinessData(filteredBusinessData, currentSort.by);
+
+        // Get paginated data
+        const paginatedData = getPaginatedData(filteredBusinessData, currentPage);
+
+        // Update total count
+        updateTotalCount(filteredBusinessData.length);
+
+        // Log filter results
         console.log('Business filter results:', {
-            total: allBusinessData.length,
-            filtered: filteredData.length,
+            total: filteredBusinessData.length,
+            filtered: paginatedData.length,
             domicileFilter: selectedDomicile,
-            sample_filtered: filteredData.length > 0 ? {
+            sample_filtered: paginatedData.length > 0 ? {
                 first_item: {
-                    name: filteredData[0].nama_usaha,
-                    domicile: filteredData[0].domisili
+                    name: paginatedData[0].nama_usaha,
+                    domicile: paginatedData[0].domisili
                 }
-            } : 'No results'
+            } : null
         });
 
-        renderBusinessList(filteredData);
-        updateTotalCount(filteredData.length);
+        // Render data
+        renderBusinessList(paginatedData);
+        renderPaginationControls(filteredBusinessData.length, currentPage, 'pagination-container');
     }
     
     function applyAndRenderMemberFilters() {
         const searchBar = document.getElementById('desktop-search-bar');
-        const domicileFilter = document.getElementById('filter-domicile');
+        const domicileFilter = document.getElementById('filter-domisili');
         const professionFilter = document.getElementById('filter-profession');
         const angkatanFilter = document.getElementById('filter-angkatan');
 
@@ -505,79 +525,66 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Starting member filter with values:', { 
             searchTerm, 
             selectedDomicile,
-            selectedProfession, 
+            selectedProfession,
             selectedAngkatan,
             totalData: allDataCache.length
         });
 
+        // Filter data
         const filteredData = allDataCache.filter(member => {
-            if (!member) {
-                console.log('Found null/undefined member data');
-                return false;
-            }
-            
-            const nameMatch = member.nama_lengkap && member.nama_lengkap.toLowerCase().includes(searchTerm);
-            
-            // Filter domisili - perbaikan untuk memastikan perbandingan yang tepat
-            let domicileMatch = !selectedDomicile; // Default true jika tidak ada filter
-            if (selectedDomicile && member.domisili) {
-                const cleanSelectedDomicile = selectedDomicile.toLowerCase();
-                const cleanMemberDomicile = member.domisili.trim().toLowerCase();
-                
-                // Coba exact match dulu
-                domicileMatch = cleanMemberDomicile === cleanSelectedDomicile;
-                
-                // Jika tidak match, coba cek apakah domisili member mengandung nilai yang dipilih
-                if (!domicileMatch) {
-                    domicileMatch = cleanMemberDomicile.includes(cleanSelectedDomicile);
-                }
-                
-                console.log('Checking member domicile:', {
-                    member_id: member.id_anggota,
-                    member_name: member.nama_lengkap,
-                    raw_domicile: member.domisili,
-                    clean_member: cleanMemberDomicile,
-                    clean_selected: cleanSelectedDomicile,
-                    matches: domicileMatch
-                });
-            }
-            
-            const professionMatch = !selectedProfession || 
-                (member.profesi && member.profesi.trim().toLowerCase() === selectedProfession.trim().toLowerCase());
-            const angkatanMatch = !selectedAngkatan || member.tahun_keluar == selectedAngkatan;
-            
-            const matches = nameMatch && domicileMatch && professionMatch && angkatanMatch;
-            
-            if (!matches && selectedDomicile) {
-                console.log('Member filtered out:', {
-                    id: member.id_anggota,
-                    name: member.nama_lengkap,
-                    domicile: member.domisili,
-                    nameMatch,
-                    domicileMatch,
-                    professionMatch,
-                    angkatanMatch
+            const matchesSearch = !searchTerm || 
+                member.nama_lengkap?.toLowerCase().includes(searchTerm) ||
+                member.profesi?.toLowerCase().includes(searchTerm);
+
+            const matchesDomicile = !selectedDomicile || 
+                (member.domisili?.toLowerCase().trim() === selectedDomicile.toLowerCase().trim());
+
+            const matchesProfession = !selectedProfession || 
+                member.profesi?.toLowerCase() === selectedProfession.toLowerCase();
+
+            const matchesAngkatan = !selectedAngkatan || 
+                member.angkatan?.toString() === selectedAngkatan;
+
+            const result = matchesSearch && matchesDomicile && matchesProfession && matchesAngkatan;
+
+            // Log filter results for debugging
+            if (selectedDomicile && !matchesDomicile) {
+                console.log('Domicile mismatch:', {
+                    memberDomicile: member.domisili?.toLowerCase().trim(),
+                    selectedDomicile: selectedDomicile.toLowerCase().trim(),
+                    memberId: member.id_anggota,
+                    memberName: member.nama_lengkap
                 });
             }
 
-            return matches;
+            return result;
         });
 
-        console.log('Member filter results:', {
-            total: allDataCache.length,
-            filtered: filteredData.length,
-            domicileFilter: selectedDomicile,
-            sample_filtered: filteredData.length > 0 ? {
-                first_item: {
-                    name: filteredData[0].nama_lengkap,
-                    domicile: filteredData[0].domisili
-                }
-            } : 'No results'
-        });
-        
+        // Sort filtered data
         const sortedData = sortMemberData(filteredData, currentSort.by);
-        renderMemberList(sortedData);
-        updateTotalCount(sortedData.length);
+
+        // Get paginated data
+        const paginatedData = getPaginatedData(sortedData, currentPage);
+
+        // Update total count
+        updateTotalCount(filteredData.length);
+
+        // Log filter results
+        console.log('Member filter results:', {
+            total: filteredData.length,
+            filtered: paginatedData.length,
+            domicileFilter: selectedDomicile,
+            sample_filtered: paginatedData.length > 0 ? {
+                first_item: {
+                    name: paginatedData[0].nama_lengkap,
+                    domicile: paginatedData[0].domisili
+                }
+            } : null
+        });
+
+        // Render data
+        renderMemberList(paginatedData);
+        renderPaginationControls(filteredData.length, currentPage, 'pagination-container');
     }
 
     // --- PAGINATION & SORTING ---
