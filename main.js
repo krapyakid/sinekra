@@ -781,25 +781,30 @@ document.addEventListener('DOMContentLoaded', function() {
         const card = document.createElement('a');
         card.href = `detail-usaha.html?id=${businessData.id_usaha}`;
         card.className = 'member-card';
-    
+
         const baseAssetUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/';
         const defaultImgUrl = `assets/usaha/default_image_usaha.jpg`;
         const businessImgUrl = `${baseAssetUrl}${businessData.id_usaha}.jpg`;
-    
+
         const gmapsUrl = businessData.url_gmaps_perusahaan || 
             (businessData.domisili_usaha ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(businessData.domisili_usaha)}` : '#');
         const locationText = businessData.domisili_usaha || businessData.domisili || 'Lokasi';
         const nickname = businessData.nama_panggilan ? ` &nbsp;&bull;&nbsp; ${businessData.nama_panggilan}` : '';
-    
+
         const contactIcons = [];
+        
+        // WhatsApp icon
         const waNumber = (businessData.whatsapp || '').replace(/[^0-9]/g, '');
         if (waNumber) {
             contactIcons.push(`<a href="https://wa.me/62${waNumber}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>`);
         }
+        
+        // Website icon
         if (businessData.website_usaha) {
             contactIcons.push(`<a href="${businessData.website_usaha}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="Website"><i class="fas fa-globe"></i></a>`);
         }
         
+        // Social Media icons
         const socialMediaMap = {
             instagram: { icon: 'fa-instagram', url: businessData.instagram },
             facebook: { icon: 'fa-facebook', url: businessData.facebook },
@@ -807,25 +812,38 @@ document.addEventListener('DOMContentLoaded', function() {
             youtube: { icon: 'fa-youtube', url: businessData.youtube }
         };
 
-        for (const [key, value] of Object.entries(socialMediaMap)) {
-            if (value.url) {
-                contactIcons.push(`<a href="${value.url}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="${key.charAt(0).toUpperCase() + key.slice(1)}"><i class="fab ${value.icon}"></i></a>`);
+        // Add social media icons
+        for (const [platform, data] of Object.entries(socialMediaMap)) {
+            if (data.url && data.url.trim() !== '') {
+                const url = data.url.startsWith('http') ? data.url : `https://${data.url}`;
+                contactIcons.push(`<a href="${url}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="${platform.charAt(0).toUpperCase() + platform.slice(1)}"><i class="fab ${data.icon}"></i></a>`);
             }
         }
 
+        // Marketplace icons
         const olshops = {
-            tokopedia: { icon: 'tokopedia.svg', url: businessData.tokopedia },
-            shopee: { icon: 'shopee.svg', url: businessData.shopee },
-            bukalapak: { icon: 'bukalapak.svg', url: businessData.bukalapak },
-            blibli: { icon: 'blibli.svg', url: businessData.blibli },
-            tiktokshop: { icon: 'tiktokshop.svg', url: businessData.tiktok }
+            tokopedia: { icon: 'icon-tokopedia.svg', url: businessData.tokopedia },
+            shopee: { icon: 'icon-shopee.svg', url: businessData.shopee },
+            bukalapak: { icon: 'icon-bukalapak.svg', url: businessData.bukalapak },
+            blibli: { icon: 'icon-blibli.svg', url: businessData.blibli },
+            tiktokshop: { icon: 'icon-tiktok.svg', url: businessData.tiktok_shop }
         };
 
-        for (const [key, value] of Object.entries(olshops)) {
-            if (value.url) {
-                contactIcons.push(`<a href="${value.url}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="${key.charAt(0).toUpperCase() + key.slice(1)}"><img src="assets/marketplace/${value.icon}" class="marketplace-icon"></a>`);
+        // Add marketplace icons
+        for (const [platform, data] of Object.entries(olshops)) {
+            if (data.url && data.url.trim() !== '') {
+                const url = data.url.startsWith('http') ? data.url : `https://${data.url}`;
+                contactIcons.push(`<a href="${url}" target="_blank" class="card-icon-link marketplace-icon-link" onclick="event.stopPropagation()" title="${platform.charAt(0).toUpperCase() + platform.slice(1)}"><img src="assets/marketplace/${data.icon}" alt="${platform}" class="marketplace-icon"></a>`);
             }
         }
+
+        // Log icon generation results
+        console.log('Generated contact icons for business:', {
+            businessName: businessData.nama_usaha,
+            totalIcons: contactIcons.length,
+            socialMedia: Object.entries(socialMediaMap).filter(([_, data]) => data.url && data.url.trim() !== '').map(([platform]) => platform),
+            marketplaces: Object.entries(olshops).filter(([_, data]) => data.url && data.url.trim() !== '').map(([platform]) => platform)
+        });
         
         card.innerHTML = `
             <div class="card-banner">
