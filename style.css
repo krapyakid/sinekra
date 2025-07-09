@@ -2114,32 +2114,44 @@ input:checked + .slider:before {
 
 .card-icon-container {
     display: flex;
-    gap: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
 }
 
 .card-icon-link {
-    color: #888;
-    font-size: 1.4rem;
-    transition: all 0.2s ease-in-out;
-    display: inline-flex;
+    color: #666;
+    font-size: 1.2rem;
+    padding: 6px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    display: flex;
     align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
 }
 
 .card-icon-link:hover {
     color: var(--primary-color);
-    transform: scale(1.1);
+    background: #e8e8e8;
+    transform: translateY(-2px);
+}
+
+.card-icon-link.marketplace-icon-link {
+    padding: 4px;
+    background: transparent;
 }
 
 .card-icon-link .marketplace-icon {
-    width: 20px;
-    height: 20px;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-    vertical-align: middle;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    transition: transform 0.2s ease;
 }
 
 .card-icon-link:hover .marketplace-icon {
-    opacity: 1;
+    transform: scale(1.1);
 }
 
 /* ==========================================================================
@@ -2242,29 +2254,42 @@ input:checked + .slider:before {
 .contact-icons-section {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
-    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
 }
 
 .contact-icons-section a {
-    font-size: 1.8rem;
-    color: #555;
+    color: #666;
+    font-size: 1.4rem;
+    padding: 8px;
+    border-radius: 4px;
     transition: all 0.2s ease;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
+    background: #f5f5f5;
 }
+
 .contact-icons-section a:hover {
-    transform: scale(1.1);
     color: var(--primary-color);
+    background: #e8e8e8;
+    transform: translateY(-2px);
 }
-.contact-icons-section img {
+
+.contact-icons-section a.marketplace-icon-link {
+    padding: 6px;
+    background: transparent;
+}
+
+.contact-icons-section img.marketplace-icon {
+    width: 28px;
     height: 28px;
-    width: auto;
-    opacity: 0.8;
+    object-fit: contain;
+    transition: transform 0.2s ease;
 }
-.contact-icons-section a:hover img {
-    opacity: 1;
+
+.contact-icons-section a:hover img.marketplace-icon {
+    transform: scale(1.1);
 }
 
 .recommendation-section {
