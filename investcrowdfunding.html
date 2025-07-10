@@ -43,21 +43,23 @@
         }
         .contact-buttons {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            flex-wrap: wrap;
             gap: 12px;
             margin-top: 16px;
+            justify-content: center;
         }
         .whatsapp-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 12px 20px;
+            padding: 10px 20px;
             background-color: #25D366;
             color: #fff;
             text-decoration: none;
             border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
             transition: background-color 0.3s, transform 0.2s;
         }
         .whatsapp-btn:hover {
@@ -65,13 +67,23 @@
             transform: translateY(-2px);
         }
         .whatsapp-btn i {
-            margin-right: 10px;
-            font-size: 1.2rem;
+            margin-right: 8px;
+            font-size: 1.1rem;
         }
         .form-container {
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid #e2e8f0;
+            margin-top: 40px;
+            padding: 32px;
+            border-radius: 12px;
+            background-color: #f8fafc;
+            border: 1px solid #eef2f7;
+        }
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color, #34308b);
+            margin-top: 0;
+            margin-bottom: 24px;
+            text-align: center;
         }
         .form-group {
             margin-bottom: 20px;
@@ -167,6 +179,7 @@
             </div>
 
             <div class="form-container">
+                <h2 class="form-title">Formulir Pendaftaran Komitmen</h2>
                 <form id="investment-form">
                     <div class="form-group">
                         <label for="nama_lengkap">Nama Lengkap</label>
