@@ -7,13 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let finalData = {};
 
-    // Coba dapatkan id_anggota dari URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const idAnggotaFromUrl = urlParams.get('id_anggota');
-
-    // Jika ada id_anggota, coba ambil datanya (membutuhkan implementasi di main.js atau di sini)
-    // Untuk saat ini, kita akan fokus pada pengisian manual.
-    // Logika pre-fill bisa ditambahkan di sini nanti.
+    // Logika untuk mengambil id_anggota dari URL sudah tidak diperlukan dan dihapus.
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -33,8 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const formData = new FormData(form);
         
+        // Objek data disederhanakan, tidak lagi mengirim id_anggota
         finalData = {
-            id_anggota: idAnggotaFromUrl, // Bisa null jika tidak ada di URL
             nama_lengkap: formData.get('nama_lengkap'),
             alumni_tahun: formData.get('alumni_tahun'),
             nominal: nominalValue,
