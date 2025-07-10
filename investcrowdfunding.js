@@ -9,11 +9,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Logika untuk mengambil id_anggota dari URL sudah tidak diperlukan dan dihapus.
 
+    const alumniTahunInput = document.getElementById('alumni-tahun');
+    const nominalInput = document.getElementById('nominal');
+    const nominalError = document.getElementById('nominal-error');
+
+    if (alumniTahunInput) {
+        alumniTahunInput.addEventListener('input', (e) => {
+            let value = e.target.value;
+            // Hapus semua selain angka
+            value = value.replace(/[^0-9]/g, '');
+            // Jika dimulai dengan 0, ganti dengan 62
+            if (value.startsWith('0')) {
+                value = '62' + value.substring(1);
+            }
+            e.target.value = value;
+        });
+    }
+
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        const nominalInput = document.getElementById('nominal');
-        const nominalError = document.getElementById('nominal-error');
         const nominalValue = parseInt(nominalInput.value, 10);
 
         // Validasi
