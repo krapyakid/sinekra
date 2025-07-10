@@ -41,8 +41,32 @@
             margin-top: 24px;
             margin-bottom: 12px;
         }
-        .page-content .contact-person {
-            margin-top: 8px;
+        .contact-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            background-color: #25D366;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .whatsapp-btn:hover {
+            background-color: #1EBE57;
+            transform: translateY(-2px);
+        }
+        .whatsapp-btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
         }
         .form-container {
             margin-top: 32px;
@@ -132,8 +156,14 @@
                 
                 <h2>❓ Ada pertanyaan?</h2>
                 <p>Silakan hubungi kami:</p>
-                <div class="contact-person">📞 Faishol Adib – 0815-7992-089</div>
-                <div class="contact-person">📞 Abdullah Fahri – 0813-8311-7593</div>
+                <div class="contact-buttons">
+                    <a href="https://wa.me/628157992089" target="_blank" class="whatsapp-btn">
+                        <i class="fab fa-whatsapp"></i> Faishol Adib
+                    </a>
+                    <a href="https://wa.me/6281383117593" target="_blank" class="whatsapp-btn">
+                        <i class="fab fa-whatsapp"></i> Abdullah Fahri
+                    </a>
+                </div>
             </div>
 
             <div class="form-container">
