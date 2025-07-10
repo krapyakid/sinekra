@@ -121,6 +121,24 @@
         .btn-submit:hover {
             background-color: #2c2870;
         }
+        .phone-input-wrapper {
+            display: flex;
+            align-items: center;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding-left: 10px;
+        }
+        .phone-input-wrapper input {
+            flex-grow: 1;
+            padding-left: 5px;
+            border: none;
+            outline: none;
+        }
+        .phone-prefix {
+            font-size: 1rem;
+            color: #4A5568;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -186,11 +204,14 @@
                         <input type="text" id="nama_lengkap" name="nama_lengkap" required>
                     </div>
                     <div class="form-group">
-                        <label for="alumni_tahun">Alumni Tahun Berapa?</label>
-                        <input type="number" id="alumni_tahun" name="alumni_tahun" placeholder="Contoh: 2010" required>
+                        <label for="alumni-tahun">Nomor Telepon/WhatsApp</label>
+                        <div class="phone-input-wrapper">
+                            <span class="phone-prefix">+</span>
+                            <input type="tel" id="alumni-tahun" name="alumni_tahun" placeholder="81234567890" required>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="nominal">Nominal Kesanggupan (Minimal Rp 100.000)</label>
+                        <label for="nominal">Jumlah Komitmen Investasi (Rp)</label>
                         <input type="number" id="nominal" name="nominal" min="100000" placeholder="Contoh: 500000" required>
                         <small id="nominal-error" style="color: red; display: none;">Nominal minimal adalah Rp 100.000.</small>
                     </div>
