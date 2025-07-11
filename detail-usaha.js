@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // WhatsApp
-        const waNumber = (business.whatsapp || business.no_hp_perusahaan || '').replace(/[^0-9]/g, '');
+        const waNumber = String(business.whatsapp || business.no_hp_perusahaan || '').replace(/[^0-9]/g, '');
         if (waNumber) {
             contactIcons.push(`<a href="https://wa.me/62${waNumber}" target="_blank" class="card-icon-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>`);
         }

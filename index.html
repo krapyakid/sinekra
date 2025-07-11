@@ -58,30 +58,9 @@
     </section>
 
     <main class="content-container">
-        <section class="search-and-filter-section">
-            <div class="search-and-filter-container">
-                <div class="search-bar-wrapper">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="desktop-search-bar" class="search-bar" placeholder="Cari Nama Usaha atau Anggota">
-                </div>
-                <select id="filter-category" class="filter-select">
-                    <option value="">Semua Kategori Usaha</option>
-                </select>
-                <select id="filter-profession" class="filter-select" style="display: none;">
-                    <option value="">Semua Profesi</option>
-                </select>
-                <select id="filter-domisili" class="filter-select">
-                    <option value="">Semua Domisili</option>
-                </select>
-                <select id="filter-angkatan" class="filter-select">
-                    <option value="">Semua Angkatan</option>
-                </select>
-            </div>
-        </section>
-
         <section class="directory-section">
             <div class="directory-header">
-                <h2 id="grid-title">Daftar Usaha Santri</h2>
+                <h2 id="grid-title">Daftar Usaha</h2>
                 <div class="actions-group">
                     <span id="total-count"></span>
                     <div class="sort-dropdown-wrapper dropdown">
@@ -96,6 +75,36 @@
                         </div>
                     </div>
                     <a href="#" id="view-toggle-link" class="view-toggle">Lihat Daftar Anggota</a>
+                </div>
+            </div>
+
+            <!-- Search and Filter Section -->
+            <div class="search-and-filter-section">
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="search-input" placeholder="Cari nama usaha atau anggota..." autocomplete="off">
+                        <button type="button" id="clear-search" class="clear-search-btn" style="display: none;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="filter-container">
+                    <div class="filter-group">
+                        <label for="filter-1" id="filter-1-label">Kategori Usaha</label>
+                        <select id="filter-1" class="filter-select">
+                            <option value="">Semua Kategori</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-2" id="filter-2-label">Domisili Usaha</label>
+                        <select id="filter-2" class="filter-select">
+                            <option value="">Semua Lokasi</option>
+                        </select>
+                    </div>
+                    <button type="button" id="reset-filters" class="reset-filters-btn">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
                 </div>
             </div>
 

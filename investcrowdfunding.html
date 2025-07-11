@@ -7,139 +7,6 @@
     <link rel="icon" href="assets/logo_sinergi_krapyak.jpg" type="image/jpeg">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        .page-wrapper {
-            max-width: 800px;
-            margin: 32px auto;
-            padding: 24px 32px;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-        }
-        .page-header h1 {
-            color: var(--primary-color, #34308b);
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 24px; /* Menambah jarak ke gambar */
-            text-align: center;
-        }
-        .page-illustration {
-            width: 100%;
-            margin: 0 auto 24px auto;
-            display: block;
-            border-radius: 10px;
-        }
-        .page-content {
-            font-size: 1rem;
-            line-height: 1.7;
-            color: #4A5568;
-        }
-        .page-content h2 {
-            color: var(--primary-color, #34308b);
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-top: 24px;
-            margin-bottom: 12px;
-        }
-        .contact-buttons {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 16px;
-            justify-content: center;
-        }
-        .whatsapp-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 20px;
-            background-color: #25D366;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-        .whatsapp-btn:hover {
-            background-color: #1EBE57;
-            transform: translateY(-2px);
-        }
-        .whatsapp-btn i {
-            margin-right: 8px;
-            font-size: 1.1rem;
-        }
-        .form-container {
-            margin-top: 40px;
-            padding: 32px;
-            border-radius: 12px;
-            background-color: #f8fafc;
-            border: 1px solid #eef2f7;
-        }
-        .form-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary-color, #34308b);
-            margin-top: 0;
-            margin-bottom: 24px;
-            text-align: center;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #2d3748;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e0;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary-color, #34308b);
-            box-shadow: 0 0 0 2px rgba(52, 48, 139, 0.2);
-        }
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--primary-color, #34308b);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .btn-submit:hover {
-            background-color: #2c2870;
-        }
-        .phone-input-wrapper {
-            display: flex;
-            align-items: center;
-            border: 1px solid #cbd5e0;
-            border-radius: 8px;
-            padding-left: 10px;
-        }
-        .phone-input-wrapper input {
-            flex-grow: 1;
-            padding-left: 5px;
-            border: none;
-            outline: none;
-        }
-        .phone-prefix {
-            font-size: 1rem;
-            color: #4A5568;
-            margin-right: 5px;
-        }
-    </style>
 </head>
 <body>
     <header class="main-header">
@@ -147,81 +14,120 @@
             <a href="index.html" class="logo-link">
                 <img src="assets/logo_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="logo">
             </a>
-            <!-- Navigasi sengaja dikosongkan sesuai permintaan -->
+            <div class="header-right">
+                <nav class="main-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="form.html" class="nav-link">Isi Form</a>
+                    <a href="statistik.html" class="nav-link">Statistik</a>
+                    <a href="tentang.html" class="nav-link">Tentang</a>
+                </nav>
+                <div class="header-actions">
+                    <div class="mobile-menu-trigger" id="burger-menu-trigger">
+                        <img src="assets/menu_kebab.svg" alt="Menu">
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
     <main class="content-container">
-        <div class="page-wrapper">
-            <div class="page-header">
+        <div class="form-container investment-page-wrapper">
+            <div class="investment-page-header">
                 <h1>🌱 Program Investasi Crowdfunding Alumni Krapyak</h1>
-                <img src="assets/investcrowdfunding.jpg" alt="Ilustrasi Program Investasi Crowdfunding" class="page-illustration">
+                <img src="assets/investcrowdfunding.jpg" alt="Ilustrasi Program Investasi Crowdfunding" class="investment-illustration">
             </div>
-            <div class="page-content">
-                <p><strong>Assalamu’alaikum warahmatullahi wabarakatuh.</strong></p>
+            
+            <div class="investment-content">
+                <p><strong>Assalamu'alaikum warahmatullahi wabarakatuh.</strong></p>
                 <p>Kami dengan senang hati menyampaikan kabar baik dari hasil Silaturahmi Kopdar Nasional Sinergi Ekonomi Alumni PP. Krapyak. Salah satu inisiatif penting yang lahir dari pertemuan ini adalah:</p>
-                <blockquote>
+                
+                <div class="highlight-box">
                     <strong>Crowdfunding Alumni:</strong> Program penggalangan dana kolektif dari alumni untuk mendukung usaha produktif.
-                </blockquote>
+                </div>
 
-                <h2>🎯 Tujuan Program</h2>
-                <ul>
-                    <li>Menguatkan ekonomi alumni melalui dukungan langsung terhadap bisnis-bisnis alumni yang sudah berjalan dan siap berbagi hasil.</li>
-                    <li>Menjaga produktivitas dana sementara (jika belum ada bisnis siap dibiayai), melalui platform crowdfunding terpercaya.</li>
-                </ul>
+                <div class="info-section">
+                    <h3>🎯 Tujuan Program</h3>
+                    <ul>
+                        <li>Menguatkan ekonomi alumni melalui dukungan langsung terhadap bisnis-bisnis alumni yang sudah berjalan dan siap berbagi hasil.</li>
+                        <li>Menjaga produktivitas dana sementara (jika belum ada bisnis siap dibiayai), melalui platform crowdfunding terpercaya.</li>
+                    </ul>
+                </div>
 
-                <h2>🔄 Alur Program Crowdfunding</h2>
-                <ol>
-                    <li>Pendaftaran komitmen awal dari alumni (sebagai calon investor).</li>
-                    <li>Diskusi internal investor terkait legalitas, pilihan investasi, dan skema bagi hasil.</li>
-                    <li>Pengumpulan dana dari para investor yang sudah berkomitmen.</li>
-                    <li>Pelaksanaan investasi sesuai kesepakatan bersama.</li>
-                    <li>Distribusi hasil investasi secara berkala dan transparan.</li>
-                </ol>
+                <div class="info-section">
+                    <h3>🔄 Alur Program Crowdfunding</h3>
+                    <ol>
+                        <li>Pendaftaran komitmen awal dari alumni (sebagai calon investor).</li>
+                        <li>Diskusi internal investor terkait legalitas, pilihan investasi, dan skema bagi hasil.</li>
+                        <li>Pengumpulan dana dari para investor yang sudah berkomitmen.</li>
+                        <li>Pelaksanaan investasi sesuai kesepakatan bersama.</li>
+                        <li>Distribusi hasil investasi secara berkala dan transparan.</li>
+                    </ol>
+                </div>
 
-                <h2>🚀 Tes Ombak: Pendaftaran Komitmen Awal</h2>
-                <p>Kami membuka kesempatan bagi alumni yang tertarik untuk bergabung. Cukup dengan komitmen awal mulai dari <strong>Rp100.000</strong> (belum termasuk transfer dana). Tujuannya untuk mengukur minat dan kesiapan alumni terhadap program ini.</p>
+                <div class="info-section">
+                    <h3>🚀 Tes Ombak: Pendaftaran Komitmen Awal</h3>
+                    <p>Kami membuka kesempatan bagi alumni yang tertarik untuk bergabung. Cukup dengan komitmen awal mulai dari <strong>Rp100.000</strong> (belum termasuk transfer dana). Tujuannya untuk mengukur minat dan kesiapan alumni terhadap program ini.</p>
+                    
+                    <p><strong>🗓 Batas waktu pendaftaran komitmen:</strong><br>Senin, 14 Juli 2025 pukul 23.59 WIB</p>
+                </div>
                 
-                <p><strong>🗓 Batas waktu pendaftaran komitmen:</strong><br>Senin, 14 Juli 2025 pukul 23.59 WIB</p>
-                
-                <h2>❓ Ada pertanyaan?</h2>
-                <p>Silakan hubungi kami:</p>
-                <div class="contact-buttons">
-                    <a href="https://wa.me/628157992089" target="_blank" class="whatsapp-btn">
-                        <i class="fab fa-whatsapp"></i> Faishol Adib
-                    </a>
-                    <a href="https://wa.me/6281383117593" target="_blank" class="whatsapp-btn">
-                        <i class="fab fa-whatsapp"></i> Abdullah Fahri
-                    </a>
+                <div class="info-section">
+                    <h3>❓ Ada pertanyaan?</h3>
+                    <p>Silakan hubungi kami:</p>
+                    <div class="contact-buttons">
+                        <a href="https://wa.me/628157992089" target="_blank" class="btn btn-secondary whatsapp-btn">
+                            <i class="fab fa-whatsapp"></i> Faishol Adib
+                        </a>
+                        <a href="https://wa.me/6281383117593" target="_blank" class="btn btn-secondary whatsapp-btn">
+                            <i class="fab fa-whatsapp"></i> Abdullah Fahri
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <div class="form-container">
-                <h2 class="form-title">Formulir Pendaftaran Komitmen</h2>
-                <form id="investment-form">
+            <fieldset class="form-section">
+                <legend class="form-section-title">Formulir Pendaftaran Komitmen</legend>
+                <form id="investment-form" class="form-grid">
                     <div class="form-group">
                         <label for="nama_lengkap">Nama Lengkap</label>
-                        <input type="text" id="nama_lengkap" name="nama_lengkap" required>
+                        <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Contoh: Ahmad Yusuf" required>
+                        <small id="nama-error" style="color: red; display: none;">Nama hanya boleh mengandung huruf dan spasi.</small>
                     </div>
+                    
                     <div class="form-group">
                         <label for="alumni-tahun">Nomor Telepon/WhatsApp</label>
                         <div class="phone-input-wrapper">
-                            <span class="phone-prefix">+</span>
-                            <input type="tel" id="alumni-tahun" name="alumni_tahun" placeholder="81234567890" required>
+                            <span class="phone-prefix">+62</span>
+                            <input type="tel" id="alumni-tahun" name="alumni_tahun" placeholder="856xxxxxxx" required>
                         </div>
+                        <small class="helper-text">Cukup masukkan nomor setelah 62, misal: 856xxxxxxx</small>
                     </div>
+                    
                     <div class="form-group">
                         <label for="nominal">Jumlah Komitmen Investasi (Rp)</label>
-                        <input type="number" id="nominal" name="nominal" min="100000" placeholder="Contoh: 500000" required>
+                        <input type="number" id="nominal" name="nominal" min="100000" placeholder="Contoh: 500000 (minimal Rp 100.000)" required>
                         <small id="nominal-error" style="color: red; display: none;">Nominal minimal adalah Rp 100.000.</small>
                     </div>
-                    <button type="submit" class="btn btn-submit">Lanjut</button>
+                    
+                    <div class="form-actions-center">
+                        <button type="submit" class="btn btn-primary">Lanjut</button>
+                    </div>
                 </form>
-            </div>
+            </fieldset>
         </div>
     </main>
 
-    <!-- Modal Konfirmasi & Status (disalin dari form.html) -->
+    <div class="menu-overlay" id="menu-overlay"></div>
+
+    <nav class="main-nav" id="main-nav">
+        <button class="nav-close-btn" id="nav-close-btn">&times;</button>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="form.html" class="nav-link">Isi Form</a>
+        <a href="statistik.html" class="nav-link">Statistik</a>
+        <a href="tentang.html" class="nav-link">Tentang</a>
+    </nav>
+
+    <!-- Modal Konfirmasi & Status -->
     <div id="confirmation-modal" class="modal-overlay" style="display:none;">
         <div class="modal-content">
             <h2>Konfirmasi Kesanggupan</h2>
@@ -229,6 +135,17 @@
             <div id="review-data">
                 <!-- Data review akan disisipkan di sini -->
             </div>
+            
+            <!-- CAPTCHA Section -->
+            <div id="captcha-section" class="captcha-container">
+                <h3>Verifikasi Keamanan</h3>
+                <div class="captcha-challenge">
+                    <div class="captcha-question" id="captcha-question">5 + 3 = ?</div>
+                    <input type="text" id="captcha-answer" placeholder="Masukkan jawaban" maxlength="3" autocomplete="off">
+                </div>
+                <small id="captcha-error" style="color: red; display: none;">Jawaban CAPTCHA salah. Silakan coba lagi.</small>
+            </div>
+            
             <div class="modal-button-group">
                 <button type="button" id="modal-edit-btn" class="btn btn-secondary">Edit</button>
                 <button type="button" id="modal-confirm-btn" class="btn btn-primary">Konfirmasi & Kirim</button>
@@ -256,6 +173,8 @@
              </div>
          </div>
     </div>
+
+    <footer class="main-footer">© 2025 Sinergi Ekonomi Santri Krapyak</footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
     <script src="investcrowdfunding.js"></script>

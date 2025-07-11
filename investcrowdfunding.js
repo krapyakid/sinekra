@@ -6,9 +6,52 @@ document.addEventListener('DOMContentLoaded', function() {
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvsDmDoerDTDgV39Op65g8D_fGyCyTy82StbSzsACbpQoYnetw96E4mQ1T0suIHfhR/exec"; 
 
     let finalData = {};
+    let captchaQuestion = {};
 
-    // Logika untuk mengambil id_anggota dari URL sudah tidak diperlukan dan dihapus.
+    // Generate CAPTCHA Question
+    function generateCaptcha() {
+        const num1 = Math.floor(Math.random() * 10) + 1;
+        const num2 = Math.floor(Math.random() * 10) + 1;
+        const operators = ['+', '-'];
+        const operator = operators[Math.floor(Math.random() * operators.length)];
+        
+        let answer;
+        if (operator === '+') {
+            answer = num1 + num2;
+        } else {
+            answer = Math.max(num1, num2) - Math.min(num1, num2); // Pastikan tidak negatif
+        }
+        
+        captchaQuestion = {
+            question: `${num1} ${operator} ${num2} = ?`,
+            answer: answer
+        };
+        
+        document.getElementById('captcha-question').textContent = captchaQuestion.question;
+        document.getElementById('captcha-answer').value = '';
+        document.getElementById('captcha-error').style.display = 'none';
+    }
 
+    // Validasi nama lengkap
+    const namaLengkapInput = document.getElementById('nama_lengkap');
+    const namaError = document.getElementById('nama-error');
+    
+    if (namaLengkapInput) {
+        namaLengkapInput.addEventListener('input', function(e) {
+            const value = e.target.value;
+            const namePattern = /^[a-zA-Z\s]+$/;
+            
+            if (value && !namePattern.test(value)) {
+                namaError.style.display = 'block';
+                e.target.setCustomValidity('Nama hanya boleh mengandung huruf dan spasi');
+            } else {
+                namaError.style.display = 'none';
+                e.target.setCustomValidity('');
+            }
+        });
+    }
+
+    // Perbaiki handling nomor telepon
     const alumniTahunInput = document.getElementById('alumni-tahun');
     const nominalInput = document.getElementById('nominal');
     const nominalError = document.getElementById('nominal-error');
@@ -18,20 +61,48 @@ document.addEventListener('DOMContentLoaded', function() {
             let value = e.target.value;
             // Hapus semua selain angka
             value = value.replace(/[^0-9]/g, '');
-            // Jika dimulai dengan 0, ganti dengan 62
-            if (value.startsWith('0')) {
-                value = '62' + value.substring(1);
+            // Batasi maksimal 12 digit (untuk nomor Indonesia)
+            if (value.length > 12) {
+                value = value.substring(0, 12);
             }
             e.target.value = value;
+        });
+        
+        // Validasi minimum 9 digit, maksimal 12 digit
+        alumniTahunInput.addEventListener('blur', (e) => {
+            const value = e.target.value;
+            if (value.length < 9 || value.length > 12) {
+                e.target.setCustomValidity('Nomor telepon harus 9-12 digit');
+            } else {
+                e.target.setCustomValidity('');
+            }
         });
     }
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         
+        // Validasi nama lengkap
+        const namaValue = namaLengkapInput.value.trim();
+        const namePattern = /^[a-zA-Z\s]+$/;
+        if (!namePattern.test(namaValue)) {
+            namaError.style.display = 'block';
+            namaLengkapInput.focus();
+            return;
+        }
+        
+        // Validasi nomor telepon
+        const phoneValue = alumniTahunInput.value.trim();
+        if (phoneValue.length < 9 || phoneValue.length > 12) {
+            alumniTahunInput.setCustomValidity('Nomor telepon harus 9-12 digit');
+            alumniTahunInput.reportValidity();
+            alumniTahunInput.focus();
+            return;
+        }
+        
         const nominalValue = parseInt(nominalInput.value, 10);
 
-        // Validasi
+        // Validasi nominal
         if (isNaN(nominalValue) || nominalValue < 100000) {
             nominalError.style.display = 'block';
             nominalInput.focus();
@@ -42,19 +113,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const formData = new FormData(form);
         
-        // Objek data disederhanakan, tidak lagi mengirim id_anggota
+        // Gabungkan 62 dengan nomor telepon yang diinput user
+        const phoneNumber = '62' + formData.get('alumni_tahun');
+        
+        // Objek data disederhanakan
         finalData = {
             nama_lengkap: formData.get('nama_lengkap'),
-            alumni_tahun: formData.get('alumni_tahun'),
+            alumni_tahun: phoneNumber,
             nominal: nominalValue,
             timestamp: new Date().toISOString()
         };
+
+        // Generate CAPTCHA dan tampilkan modal
+        generateCaptcha();
 
         // Tampilkan data di modal konfirmasi
         const reviewDataContainer = document.getElementById('review-data');
         reviewDataContainer.innerHTML = `
             <p><strong>Nama Lengkap:</strong> ${finalData.nama_lengkap}</p>
-            <p><strong>Alumni Tahun:</strong> ${finalData.alumni_tahun}</p>
+            <p><strong>Nomor Telpon/WA:</strong> +${finalData.alumni_tahun}</p>
             <p><strong>Nominal Kesanggupan:</strong> Rp ${finalData.nominal.toLocaleString('id-ID')}</p>
         `;
         
@@ -70,6 +147,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Tombol Konfirmasi & Kirim
     document.getElementById('modal-confirm-btn').addEventListener('click', function() {
+        // Validasi CAPTCHA
+        const userAnswer = parseInt(document.getElementById('captcha-answer').value);
+        const captchaError = document.getElementById('captcha-error');
+        
+        if (isNaN(userAnswer) || userAnswer !== captchaQuestion.answer) {
+            captchaError.style.display = 'block';
+            generateCaptcha(); // Generate pertanyaan baru
+            return;
+        }
+        
+        captchaError.style.display = 'none';
         confirmationModal.style.display = 'none';
         statusModal.style.display = 'flex';
         

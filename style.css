@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #34308b;
+    --primary-color: #667eea; /* Warna biru Sinergi Ekonomi sebagai primary */
     --secondary-color: #5396FF;
     --background-color: #ffffff;
     --form-bg-color: #ffffff;
     --input-border-color: #ccc;
-    --input-focus-color: #3498db;
+    --input-focus-color: #667eea; /* Konsisten dengan primary color */
     --text-color: #333;
     --light-text-color: #777;
     --header-bg: #ffffff;
@@ -28,9 +28,52 @@
 body {
     font-family: var(--font-main);
     background-color: var(--background-color);
-    color: var(--text-color);
+    color: #555555; /* Warna teks lebih soft */
     line-height: 1.6;
-    font-size: 16px;
+    font-size: 13px; /* Font size lebih kecil */
+}
+
+/* === GLOBAL TYPOGRAPHY === */
+h1, h2, h3, h4, h5, h6 {
+    color: #444444; /* Warna heading lebih lembut */
+    font-weight: 500; /* Font weight lebih kalem */
+    margin-bottom: 0.8em;
+    line-height: 1.4;
+}
+
+h1 {
+    font-size: 1.3rem; /* Ukuran lebih kecil */
+}
+
+h2 {
+    font-size: 1.1rem; /* Ukuran lebih kecil */
+}
+
+h3 {
+    font-size: 1rem;
+}
+
+h4 {
+    font-size: 0.9rem;
+}
+
+p {
+    color: #555555;
+    margin-bottom: 1em;
+    font-size: 0.85rem; /* 13px equivalent */
+}
+
+.card-business-name,
+.member-list-name {
+    color: #444444; /* Warna lebih lembut */
+    font-weight: 500; /* Semi-bold konsisten */
+    font-size: 0.8rem; /* Diperkecil dari 0.85rem untuk lebih subtle */
+}
+
+.card-description,
+.member-list-profession {
+    color: #555555; /* Abu gelap lembut */
+    font-size: 0.75rem; /* Diperkecil dari 0.8rem untuk lebih seimbang */
 }
 
 a {
@@ -125,11 +168,43 @@ nav#main-nav {
 .nav-link {
     color: var(--secondary-color);
     font-weight: 500;
+    position: relative;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
 }
 
-.nav-link.active, .nav-link:hover {
+.nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: all 0.3s ease-in-out;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::before {
+    width: 80%;
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+    background-color: rgba(102, 126, 234, 0.08);
+}
+
+.nav-link.active {
     color: var(--primary-color);
     font-weight: 600;
+    background-color: rgba(102, 126, 234, 0.12);
+}
+
+.nav-link.active::before {
+    width: 80%;
 }
 
 .nav-link:not(.active) {
@@ -235,135 +310,15 @@ main.content-container {
     text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Text shadow for readability */
 }
 
-/* Search and Filter Section */
-.search-and-filter-section {
-    max-width: 1240px; /* Match directory-section width */
-    margin: -60px auto 30px auto; /* Center the container and handle overlap */
-    padding: 20px;
-    background-color: #f7f9fc;
-    border-radius: 12px;
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 8px Gg(0,0,0,0.08);
-}
 
-.search-and-filter-container {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 0 20px;
-}
 
-.search-bar-wrapper {
-    flex: 1 1 300px;
-    position: relative;
-}
 
-.search-bar {
-    width: 100%;
-    padding: 12px 40px 12px 15px; /* Right padding for icon */
-    border: 1px solid #dfe1e5;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.2s ease-in-out;
-    background-color: #fff;
-}
 
-.search-bar:focus {
-    outline: none;
-    border-color: #4A90E2;
-    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
-}
 
-.search-icon {
-    position: absolute;
-    right: 15px; /* Moved to the right */
-    left: auto; /* Unset left */
-    top: 50%;
-    transform: translateY(-50%);
-    color: #9aa0a6;
-    pointer-events: none;
-}
 
-.filter-select {
-    padding: 12px 16px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background-color: white;
-    color: var(--text-color);
-    font-size: 14px;
-    cursor: pointer;
-    transition: border-color 0.3s;
-    min-width: 150px;
-    flex: 0 1 auto;
-}
 
-#filter-angkatan {
-    min-width: 180px;
-}
 
-.filter-select:hover,
-.filter-select:focus {
-    border-color: var(--primary-color);
-    outline: none;
-}
 
-.search-bar-wrapper input,
-.search-and-filter-container .filter-select {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 12px 15px;
-    font-size: 1rem;
-    width: 100%;
-    transition: all 0.3s ease;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    font-family: var(--font-main);
-}
-
-.search-bar-wrapper input:focus,
-.search-and-filter-container .filter-select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(52, 48, 139, 0.1);
-}
-
-.search-bar-wrapper input {
-    padding-left: 15px;
-    padding-right: 40px; /* Make space for the icon on the right */
-}
-
-.filter-select-wrapper i {
-    display: none;
-}
-
-.filter-select-wrapper .filter-select {
-    padding-left: 15px;
-    padding-right: 40px; /* Increased space for the dropdown arrow */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23333333' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1em;
-}
-
-@media (max-width: 992px) {
-    .search-and-filter-container {
-        justify-content: center;
-    }
-
-    .search-and-filter-container .filter-select {
-        width: 100%; /* Buat filter mengisi lebar di mobile */
-    }
-
-    .search-bar-wrapper {
-        width: 100%;
-        height: auto;
-        min-height: 48px;
-    }
-}
 
 @media (max-width: 768px) {
     /* Hide Desktop Nav on Mobile */
@@ -415,38 +370,137 @@ main.content-container {
         min-height: 250px; /* Adjusted height for mobile */
         padding: 0; /* Remove padding as height is now fixed */
     }
-    .search-and-filter-section {
-        margin: 20px 15px;
-        padding: 15px;
-    }
-    .search-and-filter-container {
-        flex-direction: row; /* Allow side-by-side */
-        flex-wrap: wrap; /* Allow wrapping */
-        gap: 10px;
-        padding: 0; /* Remove extra padding, section has it */
-    }
-    .search-bar-wrapper {
-        flex-basis: 100%; /* Search bar takes full width */
-    }
-    .filter-select {
-        flex-grow: 1;
-        flex-basis: calc(50% - 5px); /* Two filters per row */
-        min-width: calc(50% - 5px);
-    }
-    .search-bar, .filter-select {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        font-size: 0.95rem;
-    }
-    .search-bar-wrapper input {
-        padding-left: 15px; /* Reset for consistency */
-        padding-right: 40px; /* Ensure padding is consistent on mobile */
+
+
+    /* === MOBILE CARD STYLING === */
+    .member-card {
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
     }
 
-    .search-and-filter-container > *:last-child {
-        margin-bottom: 0;
+    .member-card .card-banner {
+        border-radius: 0;
     }
-    
+
+    .card-location-info {
+        padding: 8px 10px;
+        background-color: #ffffff; /* Background putih untuk mobile */
+        border-bottom: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card-location-btn {
+        padding: 6px 12px;
+        font-size: 9px;
+        border-radius: 10px;
+        box-shadow: 0 1px 4px rgba(102, 126, 234, 0.25);
+        background-color: #667eea; /* Warna biru Sinergi Ekonomi */
+        border: none;
+        outline: none;
+        text-align: center;
+        justify-content: center;
+        gap: 4px;
+    }
+
+    .card-location-btn .icon-location {
+        width: 12px;
+        height: 12px;
+    }
+
+    .member-location-btn {
+        padding: 5px 10px;
+        font-size: 8px;
+        border-radius: 8px;
+        margin-top: 4px;
+        box-shadow: 0 1px 3px rgba(102, 126, 234, 0.25);
+        background-color: #667eea; /* Konsisten dengan tema biru Sinergi Ekonomi */
+        border: none;
+        outline: none;
+        text-align: center;
+        justify-content: center;
+        gap: 3px;
+    }
+
+    .member-location-btn .icon-location {
+        width: 10px;
+        height: 10px;
+    }
+
+    .member-card .card-business-name {
+        font-size: 0.85rem; /* Diperkecil dari 0.9rem untuk lebih harmonis */
+        font-weight: 500; /* Semi-bold, tidak terlalu tebal */
+        margin-bottom: 8px;
+        color: #444444; /* Warna lebih soft */
+        line-height: 1.3;
+        /* Mencegah teks terlalu panjang */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-height: 20.8px; /* Fallback for 1 line */
+    }
+
+    .member-card .card-description {
+        font-size: 0.75rem; /* Diperkecil dari 0.8rem untuk proporsional */
+        color: #555555; /* Abu gelap lembut */
+        line-height: 1.5;
+        margin-bottom: 12px;
+        flex-grow: 1;
+        min-height: 48px; /* Reserve space for 2 lines */
+    }
+
+        .member-card .card-content {
+        padding: 12px; /* Padding dikecilkan */
+        box-shadow: none;
+        border: none;
+    }
+
+    /* === MOBILE GENERAL CONTENT STYLING === */
+    .directory-section {
+        padding: 15px;
+    }
+
+    .directory-header {
+        margin-bottom: 15px;
+    }
+
+    .directory-header h2 {
+        font-size: 1rem; /* Title dikecilkan */
+        color: #444444; /* Warna soft */
+        font-weight: 500;
+    }
+
+    .view-toggle, 
+    .sort-dropdown-wrapper .dropdown-btn {
+        padding: 8px 14px; /* Padding dikecilkan */
+        font-size: 0.8rem; /* Font dikecilkan */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        border: none;
+    }
+
+    .member-list-item {
+        box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+        border: none;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    .member-list-name {
+        font-size: 0.8rem; /* Dikecilkan untuk mobile */
+        color: #444444; /* Warna soft */
+        font-weight: 500; /* Semi-bold konsisten */
+    }
+
+    .member-list-profession {
+        font-size: 0.7rem; /* Dikecilkan untuk mobile */
+        color: #555555; /* Abu gelap lembut */
+    }
+
+    /* .member-list-domicile removed - replaced with .member-location-btn */
+     
     .hero-content .quote {
         font-size: 1.5rem;
     }
@@ -525,6 +579,8 @@ main.content-container {
     }
 }
 
+
+
 /* Grid Section */
 .main-grid-section {
     max-width: 1240px;
@@ -572,8 +628,8 @@ main.content-container {
     background-color: var(--card-bg);
     padding: 15px;
     border-radius: 10px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border: none;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     align-items: center;
@@ -584,7 +640,7 @@ main.content-container {
 
 .member-list-item:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
 }
 
 .member-list-avatar {
@@ -618,23 +674,18 @@ main.content-container {
     margin-bottom: 4px;
 }
 
-.member-list-domicile {
-    font-size: 0.85rem;
-    color: var(--light-text-color);
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
+/* .member-list-domicile removed - replaced with .member-location-btn */
 
 /* Kartu Anggota */
 .member-card {
-    border: 1px solid var(--border-color);
+    border: none;
     border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     transition: box-shadow 0.3s;
 }
 .member-card:hover {
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
 .member-card .card-banner {
@@ -658,23 +709,86 @@ main.content-container {
     transform: scale(1.05);
 }
 
-.member-card .card-location-overlay {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 0.8rem;
+/* === CARD LOCATION INFO === */
+.card-location-info {
+    padding: 10px 12px;
+    background-color: #ffffff; /* Background putih untuk semua ukuran layar */
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-location-btn {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    justify-content: center;
+    padding: 8px 16px;
+    background-color: #667eea; /* Warna biru Sinergi Ekonomi utama */
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 400;
     text-decoration: none;
-    transition: background-color 0.3s;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.25); /* Shadow dengan tema biru Sinergi */
+    transition: all 0.2s ease;
+    line-height: 1.3;
+    text-align: center;
+    border: none;
+    outline: none;
+    gap: 5px;
 }
-.member-card .card-location-overlay.clickable:hover {
-    background-color: rgba(0, 0, 0, 0.9);
+
+.card-location-btn:hover {
+    background-color: #5a67d8; /* Darker shade biru Sinergi saat hover */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.35);
+    color: #ffffff;
+    text-decoration: none;
+    border: none;
+    outline: none;
+}
+
+.card-location-btn .icon-location {
+    flex-shrink: 0;
+    margin-right: 1px;
+}
+
+/* === MEMBER LIST LOCATION BUTTON === */
+.member-location-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    background-color: #667eea; /* Konsisten dengan card location btn */
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: 400;
+    text-decoration: none;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(102, 126, 234, 0.25);
+    transition: all 0.2s ease;
+    margin-top: 6px;
+    line-height: 1.3;
+    text-align: center;
+    border: none;
+    outline: none;
+    gap: 4px;
+}
+
+.member-location-btn:hover {
+    background-color: #5a67d8; /* Darker shade biru Sinergi saat hover */
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.35);
+    color: #ffffff;
+    text-decoration: none;
+    border: none;
+    outline: none;
+}
+
+.member-location-btn .icon-location {
+    flex-shrink: 0;
+    margin-right: 1px;
 }
 
 .member-card .card-content {
@@ -685,10 +799,10 @@ main.content-container {
 }
 
 .member-card .card-business-name {
-    font-size: 1rem; /* Diperkecil sesuai permintaan */
-    font-weight: 600;
+    font-size: 0.85rem; /* Diperkecil dari 0.9rem untuk lebih harmonis */
+    font-weight: 500; /* Semi-bold, tidak terlalu tebal */
     margin-bottom: 8px;
-    color: #333;
+    color: #444444; /* Warna lebih soft */
     line-height: 1.3;
     /* Mencegah teks terlalu panjang */
     white-space: nowrap;
@@ -698,8 +812,8 @@ main.content-container {
 }
 
 .member-card .card-description {
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 0.75rem; /* Diperkecil dari 0.8rem untuk proporsional */
+    color: #555555; /* Abu gelap lembut */
     line-height: 1.5;
     margin-bottom: 12px;
     flex-grow: 1;
@@ -774,29 +888,39 @@ main.content-container {
     white-space: nowrap;
 }
 
+/* === ENHANCED BUTTONS === */
 .view-toggle, 
 .sort-dropdown-wrapper .dropdown-btn {
-    color: #333;
-    background-color: #e9ecef;
-    border: 1px solid #dee2e6;
-    border-radius: 50px; /* Pill shape */
-    padding: 6px 14px; /* Tighter padding */
-    font-weight: 600; /* Bold text */
-    font-size: 0.85rem; /* Smaller text */
+    color: #4a5568;
+    background-color: #f8f9fc;
+    border: 1px solid #e2e8f0;
+    border-radius: 100px; /* Pill shape sesuai permintaan */
+    padding: 10px 16px; /* Padding seragam */
+    font-weight: 500; /* Medium weight */
+    font-size: 0.85rem; /* Font size konsisten */
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease-in-out; /* Smooth transition */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px; /* Tinggi minimum sama */
+    justify-content: center;
 }
+
 .view-toggle:hover, 
 .sort-dropdown-wrapper .dropdown-btn:hover {
-    background-color: #dee2e6;
-    border-color: #adb5bd;
-    color: var(--primary-color);
+    background-color: #667eea;
+    border-color: #667eea;
+    color: white;
+    transform: translateY(-1px) scale(1.03); /* Scale effect */
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
 }
 
 #total-count {
-    font-size: 0.9rem;
-    color: var(--text-color); /* Emphasized color */
-    font-weight: 500; /* Medium weight */
+    font-size: 0.65rem; /* Diperkecil dari 0.75rem untuk lebih subtle */
+    color: #888888; /* Warna lebih light untuk tidak mencolok */
+    font-weight: 400; /* Tetap light */
     margin-right: 10px;
 }
 
@@ -812,8 +936,17 @@ main.content-container {
 }
 .sort-dropdown-wrapper .dropdown-btn i {
     font-size: 0.8em;
-    margin-left: 8px; /* Added space for the arrow */
-    transition: transform 0.3s;
+    margin-left: 6px; /* Spacing for the arrow */
+    transition: transform 0.25s ease-in-out;
+}
+
+.view-toggle i {
+    font-size: 0.85em;
+    transition: transform 0.25s ease-in-out;
+}
+
+.view-toggle:hover i {
+    transform: translateX(2px);
 }
 
 .sort-dropdown-wrapper.open .dropdown-btn i {
@@ -855,7 +988,7 @@ main.content-container {
 }
 .sort-dropdown-wrapper .dropdown-menu .sort-option.active {
     font-weight: 600;
-    color: var(--primary-color);
+    color: #667eea; /* Warna biru Sinergi Ekonomi */
 }
 
 /* --- Penyesuaian card-header yang tidak digunakan --- */
@@ -2076,16 +2209,15 @@ input:checked + .slider:before {
 
 /* Main Grid Section */
 .directory-section {
-    padding: 0 20px 40px;
+    padding: 20px 20px 40px;
     max-width: 1240px;
-    margin: 0 auto;
+    margin: 40px auto 0 auto;
 }
 
 .directory-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 30px; /* Added margin */
     margin-bottom: 20px;
     flex-wrap: wrap;
 }
@@ -2311,4 +2443,663 @@ input:checked + .slider:before {
 .member-card .card-owner {
     font-size: 0.9rem;
     color: #555;
+}
+
+/* Search and Filter Section */
+.search-and-filter-section {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.08);
+}
+
+.search-container {
+    margin-bottom: 16px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    max-width: 400px;
+    width: 100%;
+}
+
+.search-input-wrapper .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 14px;
+    z-index: 2;
+}
+
+#search-input {
+    width: 100%;
+    padding: 10px 40px 10px 36px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.clear-search-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.clear-search-btn:hover {
+    color: #666;
+    background-color: rgba(0,0,0,0.05);
+}
+
+.filter-container {
+    display: flex;
+    gap: 16px;
+    align-items: end;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 180px;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    cursor: pointer;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.reset-filters-btn {
+    padding: 10px 16px;
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    white-space: nowrap;
+}
+
+.reset-filters-btn:hover {
+    background-color: #e9ecef;
+    border-color: #d3d3d3;
+    color: #555;
+}
+
+.reset-filters-btn i {
+    margin-right: 6px;
+}
+
+/* Card Bottom Styling untuk Tanggal Posting */
+.card-posting-date {
+    text-align: center;
+    font-size: 10px;
+    color: rgba(85, 85, 85, 0.5);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+.member-list-posting-date {
+    font-size: 10px;
+    color: rgba(85, 85, 85, 0.5);
+    margin-top: 4px;
+}
+
+@media (max-width: 768px) {
+    .search-and-filter-section {
+        padding: 16px;
+        margin-bottom: 20px;
+    }
+    
+    .search-container {
+        margin-bottom: 16px;
+    }
+    
+    .search-input-wrapper {
+        max-width: 100%;
+    }
+    
+    .filter-container {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+    
+    .filter-group {
+        min-width: auto;
+    }
+    
+    .reset-filters-btn {
+        align-self: flex-start;
+    }
+}
+
+/* No Results Card */
+.no-results-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.08);
+    text-align: center;
+    margin: 20px 0;
+}
+
+.no-results-card i {
+    font-size: 48px;
+    color: #ddd;
+    margin-bottom: 16px;
+}
+
+.no-results-card p {
+    color: #888;
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Investment Crowdfunding Page Styles */
+.investment-page-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px;
+}
+
+.investment-page-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.investment-page-header h1 {
+    color: var(--primary-color);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+    line-height: 1.4;
+}
+
+.investment-illustration {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    margin: 0 auto 24px auto;
+    display: block;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.investment-content {
+    margin-bottom: 40px;
+}
+
+.investment-content p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #555;
+    margin-bottom: 16px;
+}
+
+.highlight-box {
+    background-color: rgba(102, 126, 234, 0.08);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 20px 0;
+    font-size: 0.9rem;
+    color: var(--primary-color);
+}
+
+.info-section {
+    margin-bottom: 28px;
+}
+
+.info-section h3 {
+    color: var(--primary-color);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.info-section ul,
+.info-section ol {
+    margin-left: 20px;
+    margin-bottom: 16px;
+}
+
+.info-section li {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.contact-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+    justify-content: center;
+}
+
+.whatsapp-btn {
+    background-color: #d0f0d0 !important;
+    border-color: #b2eeb2 !important;
+    color: #444 !important;
+    font-size: 0.8rem;
+    padding: 8px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    border-radius: 6px;
+}
+
+.whatsapp-btn:hover {
+    background-color: #c0e6c0 !important;
+    border-color: #a0d8a0 !important;
+    color: #333 !important;
+    transform: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.whatsapp-btn i {
+    font-size: 0.9rem;
+    color: #25D366;
+}
+
+/* Form Section Specific Styling untuk Investment Page */
+.investment-page-wrapper .form-section {
+    margin-top: 40px;
+    padding: 32px;
+    background-color: var(--form-bg-color);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.investment-page-wrapper .form-section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 24px;
+    text-align: left;
+    border: none;
+    padding: 0;
+    background: transparent;
+}
+
+.investment-page-wrapper .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.investment-page-wrapper .form-group {
+    margin-bottom: 0;
+}
+
+.investment-page-wrapper .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.investment-page-wrapper .form-group input[type="text"],
+.investment-page-wrapper .form-group input[type="tel"],
+.investment-page-wrapper .form-group input[type="number"] {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background-color: var(--form-bg-color);
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.investment-page-wrapper .form-group input:focus {
+    outline: none;
+    border-color: var(--input-focus-color);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.investment-page-wrapper .form-group input::placeholder {
+    color: #999;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.investment-page-wrapper .form-group small {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.8rem;
+}
+
+.investment-page-wrapper .form-actions-center {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.investment-page-wrapper .btn {
+    padding: 14px 32px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 140px;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.investment-page-wrapper .btn-primary {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+.investment-page-wrapper .btn-primary:hover {
+    background-color: #5a4fcf;
+    border-color: #5a4fcf;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* CAPTCHA Styling */
+.captcha-container {
+    margin: 24px 0;
+    padding: 20px;
+    background-color: rgba(102, 126, 234, 0.05);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    border-radius: 12px;
+}
+
+.captcha-container h3 {
+    margin: 0 0 16px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.captcha-challenge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.captcha-question {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    background-color: #fff;
+    padding: 16px 24px;
+    border-radius: 8px;
+    border: 2px solid var(--primary-color);
+    text-align: center;
+    min-width: 120px;
+    letter-spacing: 2px;
+}
+
+#captcha-answer {
+    width: 120px;
+    padding: 12px 16px;
+    border: 2px solid var(--input-border-color);
+    border-radius: 8px;
+    font-size: 1.1rem;
+    text-align: center;
+    font-weight: 600;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+#captcha-answer:focus {
+    outline: none;
+    border-color: var(--input-focus-color);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+#captcha-error {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .investment-page-wrapper {
+        padding: 20px;
+    }
+    
+    .investment-page-header h1 {
+        font-size: 1.2rem;
+    }
+    
+    .investment-content p,
+    .info-section li {
+        font-size: 0.8rem;
+    }
+    
+    .info-section h3 {
+        font-size: 0.9rem;
+    }
+    
+    .contact-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .whatsapp-btn {
+        width: 100%;
+        max-width: 240px;
+        justify-content: center;
+        font-size: 0.75rem;
+        padding: 7px 12px;
+    }
+    
+    .whatsapp-btn i {
+        font-size: 0.85rem;
+    }
+    
+    .investment-illustration {
+        margin-bottom: 20px;
+        border-radius: 8px;
+    }
+    
+    .highlight-box {
+        padding: 12px;
+        font-size: 0.8rem;
+    }
+    
+    .info-section ul,
+    .info-section ol {
+        margin-left: 16px;
+    }
+    
+    .investment-page-wrapper .form-section {
+        padding: 24px 20px;
+        margin-top: 32px;
+    }
+    
+    .investment-page-wrapper .form-section-title {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+    
+    .investment-page-wrapper .form-grid {
+        gap: 16px;
+        max-width: 100%;
+    }
+    
+    .investment-page-wrapper .form-actions-center {
+        margin-top: 24px;
+    }
+    
+    .investment-page-wrapper .btn {
+        width: 100%;
+        max-width: 280px;
+        min-width: auto;
+    }
+    
+    .captcha-question {
+        font-size: 1.2rem;
+        padding: 14px 20px;
+    }
+    
+    #captcha-answer {
+        width: 100px;
+        font-size: 1rem;
+    }
+    
+    .investment-page-wrapper .phone-prefix {
+        padding: 14px 10px;
+        font-size: 0.85rem;
+    }
+    
+    .investment-page-wrapper .phone-input-wrapper input {
+        padding: 14px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .investment-page-wrapper .helper-text {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .investment-page-wrapper {
+        padding: 16px;
+    }
+    
+    .investment-page-header h1 {
+        font-size: 1.1rem;
+    }
+    
+    .investment-content {
+        margin-bottom: 32px;
+    }
+    
+    .investment-page-wrapper .form-section {
+        padding: 20px 16px;
+    }
+    
+    .captcha-container {
+        padding: 16px;
+    }
+}
+
+.investment-page-wrapper .form-group small {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.8rem;
+}
+
+.investment-page-wrapper .phone-input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--input-border-color);
+    border-radius: 8px;
+    background-color: var(--form-bg-color);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.investment-page-wrapper .phone-input-wrapper:focus-within {
+    border-color: var(--input-focus-color);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.investment-page-wrapper .phone-prefix {
+    background-color: #f8f9fa;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 14px 12px;
+    border-right: 1px solid #e9ecef;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.investment-page-wrapper .phone-input-wrapper input {
+    flex: 1;
+    padding: 14px 16px;
+    border: none;
+    background: transparent;
+    font-size: 0.9rem;
+    outline: none;
+    min-width: 0;
+}
+
+.investment-page-wrapper .phone-input-wrapper input::placeholder {
+    color: #999;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.investment-page-wrapper .helper-text {
+    color: #888;
+    font-style: italic;
+    font-size: 0.75rem;
+    margin-top: 6px;
+    display: block;
 }
