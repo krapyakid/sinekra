@@ -39,7 +39,7 @@
     <section class="hero-section">
         <div class="slider-container">
             <div class="slide">
-                <a href="https://krapyakid.github.io/sinekra/investcrowdfunding.html" target="_blank">
+                <a href="https://krapyakid.github.io/sinekra/form.html" target="_blank">
                     <img src="assets/hero-slide/hero-slide-1.jpg" alt="Hero Banner Slide 1">
                 </a>
             </div>
@@ -58,6 +58,24 @@
     </section>
 
     <main class="content-container">
+        <section class="search-and-filter-section">
+            <div class="search-and-filter-container">
+                <div class="search-bar-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="desktop-search-bar" class="search-bar" placeholder="Cari Nama Usaha atau Anggota">
+                </div>
+                <select id="filter-category" class="filter-select">
+                    <option value="">Semua Kategori Usaha</option>
+                </select>
+                <select id="filter-profession" class="filter-select" style="display: none;">
+                    <option value="">Semua Profesi</option>
+                </select>
+                <select id="filter-domisili" class="filter-select">
+                    <option value="">Semua Domisili</option>
+                </select>
+            </div>
+        </section>
+
         <section class="directory-section">
             <div class="directory-header">
                 <h2 id="grid-title">Daftar Usaha</h2>
@@ -75,36 +93,6 @@
                         </div>
                     </div>
                     <a href="#" id="view-toggle-link" class="view-toggle">Lihat Daftar Anggota</a>
-                </div>
-            </div>
-
-            <!-- Search and Filter Section -->
-            <div class="search-and-filter-section">
-                <div class="search-container">
-                    <div class="search-input-wrapper">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="search-input" placeholder="Cari nama usaha atau anggota..." autocomplete="off">
-                        <button type="button" id="clear-search" class="clear-search-btn" style="display: none;">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="filter-container">
-                    <div class="filter-group">
-                        <label for="filter-1" id="filter-1-label">Kategori Usaha</label>
-                        <select id="filter-1" class="filter-select">
-                            <option value="">Semua Kategori</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="filter-2" id="filter-2-label">Domisili Usaha</label>
-                        <select id="filter-2" class="filter-select">
-                            <option value="">Semua Lokasi</option>
-                        </select>
-                    </div>
-                    <button type="button" id="reset-filters" class="reset-filters-btn">
-                        <i class="fas fa-undo"></i> Reset
-                    </button>
                 </div>
             </div>
 
@@ -132,5 +120,43 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"></script>
     <script src="main.js"></script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
 </body>
 </html> 
