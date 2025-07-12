@@ -33,6 +33,106 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 
+    function createBusinessCard(businessData) {
+        const card = document.createElement('a');
+        card.href = `detail-usaha.html?id=${businessData.id_usaha}`;
+        card.className = 'member-card';
+
+        const baseAssetUrl = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/usaha/';
+        const defaultImgUrl = `assets/usaha/default_image_usaha.jpg`;
+        const businessImgUrl = `${baseAssetUrl}${businessData.id_usaha}.jpg`;
+
+        const gmapsUrl = businessData.url_gmaps_perusahaan || 
+            (businessData.domisili_usaha ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(businessData.domisili_usaha)}` : 
+            (businessData.domisili ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(businessData.domisili)}` : '#'));
+        
+        // Format: SVG [Nama Panggilan] | [Domisili]
+        const domisiliText = businessData.domisili_usaha || businessData.domisili || 'Lokasi tidak diketahui';
+        const nickname = businessData.nama_panggilan || '';
+        const locationSvg = '<svg class="icon-location" width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>';
+        const locationButtonText = nickname ? `${locationSvg}<span>${nickname}</span> | <span>${domisiliText}</span>` : `${locationSvg}<span>${domisiliText}</span>`;
+
+        const contactIcons = [];
+        
+        // WhatsApp icon
+        const waNumber = (businessData.whatsapp || '').replace(/[^0-9]/g, '');
+        if (waNumber) {
+            contactIcons.push(`<a href="https://wa.me/62${waNumber}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>`);
+        }
+        
+        // Website icon
+        if (businessData.website_usaha) {
+            contactIcons.push(`<a href="${businessData.website_usaha}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="Website"><i class="fas fa-globe"></i></a>`);
+        }
+        
+        // Social Media icons
+        const socialMediaMap = {
+            instagram: { icon: 'fa-instagram', url: businessData.instagram },
+            facebook: { icon: 'fa-facebook', url: businessData.facebook },
+            tiktok: { icon: 'fa-tiktok', url: businessData.tiktok },
+            youtube: { icon: 'fa-youtube', url: businessData.youtube }
+        };
+
+        // Add social media icons
+        for (const [platform, data] of Object.entries(socialMediaMap)) {
+            if (data.url && data.url.trim() !== '') {
+                const url = data.url.startsWith('http') ? data.url : `https://${data.url}`;
+                contactIcons.push(`<a href="${url}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="${platform.charAt(0).toUpperCase() + platform.slice(1)}"><i class="fab ${data.icon}"></i></a>`);
+            }
+        }
+
+        // Marketplace icons
+        const olshops = {
+            tokopedia: { icon: 'icon-tokopedia.svg', url: businessData.tokopedia },
+            shopee: { icon: 'icon-shopee.svg', url: businessData.shopee },
+            bukalapak: { icon: 'icon-bukalapak.svg', url: businessData.bukalapak },
+            blibli: { icon: 'icon-blibli.svg', url: businessData.blibli },
+            tiktokshop: { icon: 'icon-tiktok.svg', url: businessData.tiktok_shop }
+        };
+
+        // Add marketplace icons
+        for (const [platform, data] of Object.entries(olshops)) {
+            if (data.url && data.url.trim() !== '') {
+                const url = data.url.startsWith('http') ? data.url : `https://${data.url}`;
+                contactIcons.push(`<a href="${url}" target="_blank" class="card-icon-link marketplace-icon-link" onclick="event.stopPropagation()" title="${platform.charAt(0).toUpperCase() + platform.slice(1)}"><img src="assets/marketplace/${data.icon}" alt="${platform}" class="marketplace-icon"></a>`);
+            }
+        }
+
+        // Format tanggal posting
+        function formatPostingDate(timestamp) {
+            if (!timestamp) return 'Tanggal tidak tersedia';
+            try {
+                const date = new Date(timestamp);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}/${month}/${year}`;
+            } catch (error) {
+                return 'Tanggal tidak valid';
+            }
+        }
+        
+        card.innerHTML = `
+            <div class="card-banner">
+                <img src="${businessImgUrl}" alt="Gambar ${businessData.nama_usaha}" loading="lazy" onerror="this.onerror=null; this.src='${defaultImgUrl}';">
+            </div>
+            <div class="card-location-info">
+                <a href="${gmapsUrl}" target="_blank" class="card-location-btn" onclick="event.stopPropagation()">
+                    ${locationButtonText}
+                </a>
+            </div>
+            <div class="card-content">
+                <h3 class="card-business-name">${businessData.nama_usaha}</h3>
+                <p class="card-description">${businessData.jenis_usaha || ''}</p>
+                <div class="card-bottom-row">
+                    <div class="card-icon-container">${contactIcons.join('')}</div>
+                </div>
+                <div class="card-posting-date">Diposting: ${formatPostingDate(businessData.timestamp)}</div>
+            </div>
+        `;
+        return card;
+    }
+
     function renderDetail(allData) {
         if (!businessId) {
             detailContent.innerHTML = `<p class="error-message">ID Usaha tidak ditemukan.</p>`;
@@ -160,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (recommendations.length > 0) {
             recommendationGrid.innerHTML = '';
             recommendations.forEach(rec => {
-                const card = createBusinessCard(rec); // Re-use from main.js
+                const card = createBusinessCard(rec);
                 recommendationGrid.appendChild(card);
             });
             recommendationSection.style.display = 'block';

@@ -29,6 +29,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Mobile Search Logic (REMOVED as it's now always visible)
     
+    // --- Sticky Filter Logic ---
+    const stickyFilterSection = document.querySelector('.search-and-filter-section');
+    const heroSection = document.querySelector('.hero-section');
+    
+    if (stickyFilterSection && heroSection) {
+        let isSticky = false;
+        
+        function handleStickyFilter() {
+            const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop >= heroBottom && !isSticky) {
+                // Activate sticky when hero is scrolled past
+                stickyFilterSection.classList.add('sticky-active');
+                isSticky = true;
+            } else if (scrollTop < heroBottom && isSticky) {
+                // Deactivate sticky when back to top
+                stickyFilterSection.classList.remove('sticky-active');
+                isSticky = false;
+            }
+        }
+        
+        // Add scroll listener
+        window.addEventListener('scroll', handleStickyFilter);
+        
+        // Check initial state
+        handleStickyFilter();
+    }
+    
     // --- Hero Slider Logic ---
     const sliderContainer = document.querySelector('.slider-container');
     if (sliderContainer) {
@@ -195,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (filters.filter1) { // Kategori Usaha
             filtered = filtered.filter(business => 
-                (business.jenis_usaha || '').toLowerCase().includes(filters.filter1.toLowerCase())
+                (business.kategori_usaha || '').toLowerCase().includes(filters.filter1.toLowerCase())
             );
         }
         
@@ -290,7 +319,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Kategori Usaha (filter 1)
         const categories = [...new Set(allBusinessData
-            .map(business => business.jenis_usaha)
+            .map(business => business.kategori_usaha)
             .filter(category => category && category.trim() !== '')
         )].sort();
         
