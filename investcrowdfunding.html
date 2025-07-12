@@ -7,6 +7,171 @@
     <link rel="icon" href="assets/logo_sinergi_krapyak.jpg" type="image/jpeg">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .program-closure {
+            background: #E1F0FF;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .program-closure h2 {
+            color: #2563eb;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+            font-weight: bold;
+        }
+        
+        .program-closure p {
+            color: #1e40af;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: 500;
+        }
+        
+        .total-dana {
+            font-size: 2em;
+            font-weight: bold;
+            color: #059669;
+            margin: 20px 0;
+        }
+        
+        .investor-button {
+            background: #2563eb;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 15px;
+        }
+        
+        .investor-button:hover {
+            background: #1d4ed8;
+        }
+        
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .popup-content {
+            background: white;
+            padding: 30px 30px 80px 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .popup-scrollable {
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .popup-close:hover {
+            color: #000;
+        }
+        
+        .investor-list {
+            margin-top: 20px;
+        }
+        
+        .investor-item {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+        }
+        
+        .investor-item:last-child {
+            border-bottom: none;
+        }
+        
+        .investor-number {
+            background: #3b82f6;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .investor-name {
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .popup-bottom-button {
+            position: sticky;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #dc2626;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s;
+            z-index: 10;
+            margin-top: 20px;
+            align-self: center;
+            flex-shrink: 0;
+        }
+        
+        .popup-bottom-button:hover {
+            background: #b91c1c;
+        }
+        
+        .closure-status-box {
+            display: inline-block;
+            background: #dc2626;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-top: 10px;
+            margin-bottom: 25px;
+            border: 3px solid #991b1b;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+    </style>
 </head>
 <body>
     <header class="main-header">
@@ -32,9 +197,23 @@
 
     <main class="content-container">
         <div class="form-container investment-page-wrapper">
+            <!-- Blok Penutupan Program -->
+            <div class="program-closure">
+                <h2>🌟 Program Investasi Sinergi Alumni</h2>
+                <div class="closure-status-box">DI TUTUP</div>
+                <p>Terima kasih atas kepercayaan dan partisipasi seluruh Alumni.<br>
+                Dana yang terkumpul telah menjadi modal awal keberlanjutan usaha bersama.<br>
+                Semoga sinergi ini menjadi keberkahan untuk semua pihak.</p>
+                
+                <div class="total-dana" id="total-dana">Rp 0</div>
+                
+                <button class="investor-button" onclick="showInvestorList()">
+                    <i class="fas fa-users"></i> Lihat Daftar Investor
+                </button>
+            </div>
+            
             <div class="investment-page-header">
                 <h1>🌱 Program Investasi Crowdfunding Alumni Krapyak</h1>
-                <img src="assets/investcrowdfunding.jpg" alt="Ilustrasi Program Investasi Crowdfunding" class="investment-illustration">
             </div>
             
             <div class="investment-content">
@@ -84,38 +263,26 @@
                     </div>
                 </div>
             </div>
-
-            <fieldset class="form-section">
-                <legend class="form-section-title">Formulir Pendaftaran Komitmen</legend>
-                <form id="investment-form" class="form-grid">
-                    <div class="form-group">
-                        <label for="nama_lengkap">Nama Lengkap</label>
-                        <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Contoh: Ahmad Yusuf" required>
-                        <small id="nama-error" style="color: red; display: none;">Nama hanya boleh mengandung huruf dan spasi.</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="alumni-tahun">Nomor Telepon/WhatsApp</label>
-                        <div class="phone-input-wrapper">
-                            <span class="phone-prefix">+62</span>
-                            <input type="tel" id="alumni-tahun" name="alumni_tahun" placeholder="856xxxxxxx" required>
-                        </div>
-                        <small class="helper-text">Cukup masukkan nomor setelah 62, misal: 856xxxxxxx</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="nominal">Jumlah Komitmen Investasi (Rp)</label>
-                        <input type="number" id="nominal" name="nominal" min="100000" placeholder="Contoh: 500000 (minimal Rp 100.000)" required>
-                        <small id="nominal-error" style="color: red; display: none;">Nominal minimal adalah Rp 100.000.</small>
-                    </div>
-                    
-                    <div class="form-actions-center">
-                        <button type="submit" class="btn btn-primary">Lanjut</button>
-                    </div>
-                </form>
-            </fieldset>
         </div>
     </main>
+
+    <!-- Popup Daftar Investor -->
+    <div class="popup-overlay" id="investor-popup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closeInvestorList()">&times;</button>
+            <h2 style="margin-top: 0; color: #2563eb; flex-shrink: 0;">
+                <i class="fas fa-users"></i> Daftar Investor
+            </h2>
+            <div class="popup-scrollable">
+                <div class="investor-list" id="investor-list">
+                    <!-- Daftar investor akan dimuat di sini -->
+                </div>
+            </div>
+            <button class="popup-bottom-button" onclick="closeInvestorList()">
+                <i class="fas fa-times"></i> Tutup
+            </button>
+        </div>
+    </div>
 
     <div class="menu-overlay" id="menu-overlay"></div>
 
@@ -126,53 +293,6 @@
         <a href="statistik.html" class="nav-link">Statistik</a>
         <a href="tentang.html" class="nav-link">Tentang</a>
     </nav>
-
-    <!-- Modal Konfirmasi & Status -->
-    <div id="confirmation-modal" class="modal-overlay" style="display:none;">
-        <div class="modal-content">
-            <h2>Konfirmasi Kesanggupan</h2>
-            <p>Harap periksa kembali detail kesanggupan Anda sebelum mengirim.</p>
-            <div id="review-data">
-                <!-- Data review akan disisipkan di sini -->
-            </div>
-            
-            <!-- CAPTCHA Section -->
-            <div id="captcha-section" class="captcha-container">
-                <h3>Verifikasi Keamanan</h3>
-                <div class="captcha-challenge">
-                    <div class="captcha-question" id="captcha-question">5 + 3 = ?</div>
-                    <input type="text" id="captcha-answer" placeholder="Masukkan jawaban" maxlength="3" autocomplete="off">
-                </div>
-                <small id="captcha-error" style="color: red; display: none;">Jawaban CAPTCHA salah. Silakan coba lagi.</small>
-            </div>
-            
-            <div class="modal-button-group">
-                <button type="button" id="modal-edit-btn" class="btn btn-secondary">Edit</button>
-                <button type="button" id="modal-confirm-btn" class="btn btn-primary">Konfirmasi & Kirim</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="status-modal" class="modal-overlay" style="display:none;">
-         <div class="modal-content">
-             <div id="submission-loading">
-                <div class="spinner"></div>
-                <p>Mengirim data...</p>
-             </div>
-             <div id="submission-success" style="display:none;">
-                <i class="fas fa-check-circle success-icon"></i>
-                <h2>Terima Kasih!</h2>
-                <p>Data kesanggupan Anda telah berhasil dikirim.</p>
-                <button type="button" id="success-close-btn" class="btn btn-primary">Tutup</button>
-             </div>
-             <div id="submission-error" style="display:none;">
-                <i class="fas fa-times-circle error-icon"></i>
-                <h2>Gagal Mengirim</h2>
-                <p>Terjadi kesalahan. Silakan coba lagi nanti.</p>
-                <button type="button" id="error-close-btn" class="btn btn-secondary">Tutup</button>
-             </div>
-         </div>
-    </div>
 
     <footer class="main-footer">© 2025 Sinergi Ekonomi Santri Krapyak</footer>
 

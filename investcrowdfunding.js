@@ -1,209 +1,157 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('investment-form');
-    const confirmationModal = document.getElementById('confirmation-modal');
-    const statusModal = document.getElementById('status-modal');
-    // URL Google Apps Script untuk menerima data formulir
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvsDmDoerDTDgV39Op65g8D_fGyCyTy82StbSzsACbpQoYnetw96E4mQ1T0suIHfhR/exec"; 
+    // Data investasi crowdfunding (data real dari Google Sheets)
+    const investmentData = [
+        { nama_lengkap: "Muhammad Idham Kholid", nominal: 100000 },
+        { nama_lengkap: "Faishol Adib", nominal: 1000000 },
+        { nama_lengkap: "Pekik Nur Sasongko", nominal: 200000 },
+        { nama_lengkap: "Muhammad Mustofa", nominal: 500000 },
+        { nama_lengkap: "Syaifuddin Jufri", nominal: 1000000 },
+        { nama_lengkap: "Nafakhatin Nur", nominal: 500000 },
+        { nama_lengkap: "Istiqomah", nominal: 200000 },
+        { nama_lengkap: "Evi Nurbaeti", nominal: 100000 },
+        { nama_lengkap: "Akhmad Fanani", nominal: 2000000 },
+        { nama_lengkap: "Muhammad 'Ainun Na'iim", nominal: 100000 },
+        { nama_lengkap: "FAIZ ROKHMAN", nominal: 100000 },
+        { nama_lengkap: "Angga Aulia Akbar", nominal: 1000000 },
+        { nama_lengkap: "Roby Yulian", nominal: 100000 },
+        { nama_lengkap: "Rofiq burhannudin", nominal: 300000 },
+        { nama_lengkap: "Very Rosadi", nominal: 200000 },
+        { nama_lengkap: "M Jamroni", nominal: 100000 },
+        { nama_lengkap: "Farah Dina", nominal: 500000 },
+        { nama_lengkap: "Syafiah Aziz ( Fifie )", nominal: 100000 },
+        { nama_lengkap: "Mukhlis", nominal: 100000 },
+        { nama_lengkap: "Mochamad Yusuf", nominal: 100000 },
+        { nama_lengkap: "Muhammad Obrin", nominal: 100000 },
+        { nama_lengkap: "Ani Suwarni", nominal: 200000 },
+        { nama_lengkap: "Ismangil akhmad saifi", nominal: 100000 },
+        { nama_lengkap: "Muhammad Hanif Hakim", nominal: 1000000 },
+        { nama_lengkap: "Syahir Bahar A", nominal: 100000 },
+        { nama_lengkap: "Hamzah Fasal", nominal: 100000 },
+        { nama_lengkap: "Fitroh ahmad sugianto", nominal: 100000 },
+        { nama_lengkap: "Mahin Muqoddam Assarwani", nominal: 100000 },
+        { nama_lengkap: "Abdullah Fahri", nominal: 100000 },
+        { nama_lengkap: "Okta Rijaya M", nominal: 5000000 },
+        { nama_lengkap: "Ahmad Rotsiq A'la", nominal: 100000 },
+        { nama_lengkap: "Arham Chairuddin Sam", nominal: 100000 },
+        { nama_lengkap: "Siti Roudhotul Jannah", nominal: 100000 },
+        { nama_lengkap: "Ufiya Ajdar", nominal: 100000 },
+        { nama_lengkap: "Irfan Taufiq", nominal: 100000 },
+        { nama_lengkap: "Moh.imanudin setiawan", nominal: 500000 },
+        { nama_lengkap: "Qowangit", nominal: 100000 },
+        { nama_lengkap: "Lukman Hakim", nominal: 300000 },
+        { nama_lengkap: "Ianatullah Ishomuddin", nominal: 100000 },
+        { nama_lengkap: "Sugiarto", nominal: 5000000 },
+        { nama_lengkap: "Kuswanto", nominal: 100000 },
+        { nama_lengkap: "R. Sjafmaryzal", nominal: 1000000 },
+        { nama_lengkap: "Eka Prasetiawati", nominal: 100000 },
+        { nama_lengkap: "Dr. Nur Hidayat, M. Ag", nominal: 200000 },
+        { nama_lengkap: "Lutfan Muntaqo", nominal: 2500000 },
+        { nama_lengkap: "Munadhirin", nominal: 100000 },
+        { nama_lengkap: "Alfa ifana", nominal: 500000 },
+        { nama_lengkap: "Dr. Nur Hidayat, M. Ag", nominal: 100000 },
+        { nama_lengkap: "FATHUR ROHMAN", nominal: 300000 },
+        { nama_lengkap: "Mukhsin", nominal: 200000 },
+        { nama_lengkap: "Mahmud dimyati", nominal: 100000 },
+        { nama_lengkap: "Moch Syafiudin", nominal: 1000000 },
+        { nama_lengkap: "Muchlis Kamil", nominal: 200000 },
+        { nama_lengkap: "Fuad Nawawi", nominal: 500000 },
+        { nama_lengkap: "Nasrul Hakim", nominal: 100000 },
+        { nama_lengkap: "Haerul Maulana", nominal: 100000 },
+        { nama_lengkap: "Isfaudhi Arifian", nominal: 2500000 },
+        { nama_lengkap: "Iwan RS", nominal: 100000 },
+        { nama_lengkap: "Sodikun", nominal: 200000 },
+        { nama_lengkap: "Ni matul maula", nominal: 300000 },
+        { nama_lengkap: "Achmad Muzayyin Qudsi", nominal: 100000 },
+        { nama_lengkap: "Muklisin Purnomo", nominal: 500000 },
+        { nama_lengkap: "Farah Dina", nominal: 500000 },
+        { nama_lengkap: "Nandar", nominal: 10000000 }
+    ];
 
-    let finalData = {};
-    let captchaQuestion = {};
+    // Hitung total dana (total sebenarnya adalah 43.000.000)
+    const totalDana = 43000000;
 
-    // Generate CAPTCHA Question
-    function generateCaptcha() {
-        const num1 = Math.floor(Math.random() * 10) + 1;
-        const num2 = Math.floor(Math.random() * 10) + 1;
-        const operators = ['+', '-'];
-        const operator = operators[Math.floor(Math.random() * operators.length)];
-        
-        let answer;
-        if (operator === '+') {
-            answer = num1 + num2;
-        } else {
-            answer = Math.max(num1, num2) - Math.min(num1, num2); // Pastikan tidak negatif
-        }
-        
-        captchaQuestion = {
-            question: `${num1} ${operator} ${num2} = ?`,
-            answer: answer
-        };
-        
-        document.getElementById('captcha-question').textContent = captchaQuestion.question;
-        document.getElementById('captcha-answer').value = '';
-        document.getElementById('captcha-error').style.display = 'none';
-    }
+    // Fungsi animasi angka berjalan
+    function animateNumber(element, start, end, duration) {
+        const startTime = performance.now();
+        const range = end - start;
 
-    // Validasi nama lengkap
-    const namaLengkapInput = document.getElementById('nama_lengkap');
-    const namaError = document.getElementById('nama-error');
-    
-    if (namaLengkapInput) {
-        namaLengkapInput.addEventListener('input', function(e) {
-            const value = e.target.value;
-            const namePattern = /^[a-zA-Z\s]+$/;
+        function updateNumber(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
             
-            if (value && !namePattern.test(value)) {
-                namaError.style.display = 'block';
-                e.target.setCustomValidity('Nama hanya boleh mengandung huruf dan spasi');
+            // Easing function untuk animasi yang lebih smooth
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const current = Math.floor(start + (range * easeOutQuart));
+            
+            element.textContent = `Rp ${current.toLocaleString('id-ID')}`;
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateNumber);
             } else {
-                namaError.style.display = 'none';
-                e.target.setCustomValidity('');
+                element.textContent = `Rp ${end.toLocaleString('id-ID')}`;
             }
-        });
+        }
+        
+        requestAnimationFrame(updateNumber);
     }
 
-    // Perbaiki handling nomor telepon
-    const alumniTahunInput = document.getElementById('alumni-tahun');
-    const nominalInput = document.getElementById('nominal');
-    const nominalError = document.getElementById('nominal-error');
+    // Mulai animasi total dana setelah halaman dimuat
+    setTimeout(() => {
+        const totalDanaElement = document.getElementById('total-dana');
+        animateNumber(totalDanaElement, 0, totalDana, 8000); // Animasi 8 detik (sangat lambat)
+    }, 500);
 
-    if (alumniTahunInput) {
-        alumniTahunInput.addEventListener('input', (e) => {
-            let value = e.target.value;
-            // Hapus semua selain angka
-            value = value.replace(/[^0-9]/g, '');
-            // Batasi maksimal 12 digit (untuk nomor Indonesia)
-            if (value.length > 12) {
-                value = value.substring(0, 12);
-            }
-            e.target.value = value;
+    // Fungsi untuk menampilkan popup daftar investor
+    window.showInvestorList = function() {
+        const popup = document.getElementById('investor-popup');
+        const investorList = document.getElementById('investor-list');
+        
+        // Bersihkan daftar sebelumnya
+        investorList.innerHTML = '';
+        
+        // Tambahkan setiap investor ke daftar
+        investmentData.forEach((investor, index) => {
+            const investorItem = document.createElement('div');
+            investorItem.className = 'investor-item';
+            
+            investorItem.innerHTML = `
+                <div class="investor-number">${index + 1}</div>
+                <div class="investor-name">${investor.nama_lengkap}</div>
+            `;
+            
+            investorList.appendChild(investorItem);
         });
         
-        // Validasi minimum 9 digit, maksimal 12 digit
-        alumniTahunInput.addEventListener('blur', (e) => {
-            const value = e.target.value;
-            if (value.length < 9 || value.length > 12) {
-                e.target.setCustomValidity('Nomor telepon harus 9-12 digit');
-            } else {
-                e.target.setCustomValidity('');
+        // Tampilkan popup
+        popup.style.display = 'flex';
+        
+        // Prevent body scroll saat popup terbuka
+        document.body.style.overflow = 'hidden';
+    };
+
+    // Fungsi untuk menutup popup daftar investor
+    window.closeInvestorList = function() {
+        const popup = document.getElementById('investor-popup');
+        popup.style.display = 'none';
+        
+        // Restore body scroll
+        document.body.style.overflow = 'auto';
+    };
+
+    // Tutup popup jika klik di luar area popup
+    document.getElementById('investor-popup').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeInvestorList();
+        }
+    });
+
+    // Tutup popup dengan tombol ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const popup = document.getElementById('investor-popup');
+            if (popup.style.display === 'flex') {
+                closeInvestorList();
             }
-        });
-    }
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Validasi nama lengkap
-        const namaValue = namaLengkapInput.value.trim();
-        const namePattern = /^[a-zA-Z\s]+$/;
-        if (!namePattern.test(namaValue)) {
-            namaError.style.display = 'block';
-            namaLengkapInput.focus();
-            return;
         }
-        
-        // Validasi nomor telepon
-        const phoneValue = alumniTahunInput.value.trim();
-        if (phoneValue.length < 9 || phoneValue.length > 12) {
-            alumniTahunInput.setCustomValidity('Nomor telepon harus 9-12 digit');
-            alumniTahunInput.reportValidity();
-            alumniTahunInput.focus();
-            return;
-        }
-        
-        const nominalValue = parseInt(nominalInput.value, 10);
-
-        // Validasi nominal
-        if (isNaN(nominalValue) || nominalValue < 100000) {
-            nominalError.style.display = 'block';
-            nominalInput.focus();
-            return;
-        } else {
-            nominalError.style.display = 'none';
-        }
-
-        const formData = new FormData(form);
-        
-        // Gabungkan 62 dengan nomor telepon yang diinput user
-        const phoneNumber = '62' + formData.get('alumni_tahun');
-        
-        // Objek data disederhanakan
-        finalData = {
-            nama_lengkap: formData.get('nama_lengkap'),
-            alumni_tahun: phoneNumber,
-            nominal: nominalValue,
-            timestamp: new Date().toISOString()
-        };
-
-        // Generate CAPTCHA dan tampilkan modal
-        generateCaptcha();
-
-        // Tampilkan data di modal konfirmasi
-        const reviewDataContainer = document.getElementById('review-data');
-        reviewDataContainer.innerHTML = `
-            <p><strong>Nama Lengkap:</strong> ${finalData.nama_lengkap}</p>
-            <p><strong>Nomor Telpon/WA:</strong> +${finalData.alumni_tahun}</p>
-            <p><strong>Nominal Kesanggupan:</strong> Rp ${finalData.nominal.toLocaleString('id-ID')}</p>
-        `;
-        
-        confirmationModal.style.display = 'flex';
     });
-
-    // --- Event Listeners untuk Modal ---
-
-    // Tombol Edit di Modal Konfirmasi
-    document.getElementById('modal-edit-btn').addEventListener('click', function() {
-        confirmationModal.style.display = 'none';
-    });
-
-    // Tombol Konfirmasi & Kirim
-    document.getElementById('modal-confirm-btn').addEventListener('click', function() {
-        // Validasi CAPTCHA
-        const userAnswer = parseInt(document.getElementById('captcha-answer').value);
-        const captchaError = document.getElementById('captcha-error');
-        
-        if (isNaN(userAnswer) || userAnswer !== captchaQuestion.answer) {
-            captchaError.style.display = 'block';
-            generateCaptcha(); // Generate pertanyaan baru
-            return;
-        }
-        
-        captchaError.style.display = 'none';
-        confirmationModal.style.display = 'none';
-        statusModal.style.display = 'flex';
-        
-        const loadingDiv = document.getElementById('submission-loading');
-        const successDiv = document.getElementById('submission-success');
-        const errorDiv = document.getElementById('submission-error');
-
-        loadingDiv.style.display = 'block';
-        successDiv.style.display = 'none';
-        errorDiv.style.display = 'none';
-        
-        if (SCRIPT_URL === "PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE") {
-             console.error("URL Google Script belum diatur! Harap deploy script di Google Sheet dan tempel URL-nya di sini.");
-             alert("Konfigurasi pengiriman belum lengkap. Harap hubungi admin.");
-             loadingDiv.style.display = 'none';
-             errorDiv.style.display = 'block';
-             return;
-        }
-
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'cors',
-            cache: 'no-cache',
-            headers: {
-                'Content-Type': 'text/plain;charset=utf-8',
-            },
-            body: JSON.stringify(finalData)
-        })
-        .then(res => res.json())
-        .then(data => {
-            loadingDiv.style.display = 'none';
-            if (data.status === "success") {
-                successDiv.style.display = 'block';
-                form.reset();
-            } else {
-                throw new Error(data.message || 'Terjadi kesalahan dari server.');
-            }
-        })
-        .catch(error => {
-            console.error('Error submitting data:', error);
-            loadingDiv.style.display = 'none';
-            errorDiv.style.display = 'block';
-        });
-    });
-
-    // Tombol tutup di modal success dan error
-    document.getElementById('success-close-btn').addEventListener('click', () => statusModal.style.display = 'none');
-    document.getElementById('error-close-btn').addEventListener('click', () => statusModal.style.display = 'none');
 }); 
