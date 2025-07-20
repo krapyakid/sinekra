@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Versi - SINEKRA</title>
+    <link rel="icon" href="assets/logo_sinergi_krapyak.jpg" type="image/jpeg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sinekra: {
+                            primary: '#667eea',
+                            secondary: '#5396FF',
+                            light: '#f8faff',
+                        }
+                    },
+                    boxShadow: {
+                        'thin': '0 2px 4px rgba(0,0,0,0.05)',
+                        'card': '0 4px 8px rgba(0,0,0,0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-sinekra-light min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-thin sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center">
+                    <img src="assets/logo_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="h-12 w-auto">
+                </a>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-sinekra-primary">Home</a>
+                    <a href="form.html" class="text-gray-700 hover:text-sinekra-primary">Isi Form</a>
+                    <a href="statistik.html" class="text-gray-700 hover:text-sinekra-primary">Statistik</a>
+                    <a href="tentang.html" class="text-gray-700 hover:text-sinekra-primary">Tentang</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl shadow-card p-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-8">Daftar Update & Versi</h1>
+            <div class="text-sm text-gray-500 mb-8">
+                Versi Saat Ini: <span class="font-mono bg-gray-100 px-2 py-1 rounded">v1.3.0</span>
+            </div>
+
+            <!-- Version History -->
+            <div class="space-y-8">
+                <!-- Latest Update -->
+                <div class="border-l-4 border-sinekra-primary pl-4 pb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-sinekra-primary w-3 h-3 rounded-full -ml-[22px]"></div>
+                        <h2 class="text-xl font-semibold text-gray-800 ml-4">20 Juli 2025 (v1.3.0)</h2>
+                    </div>
+                    <div class="space-y-3 text-gray-600">
+                        <h3 class="font-semibold text-sinekra-primary">Perbaikan & Peningkatan</h3>
+                        <ul class="list-disc list-inside space-y-2 ml-4">
+                            <li>Perbaikan format nomor WhatsApp pada halaman detail anggota</li>
+                            <li>Penambahan informasi versi di footer semua halaman</li>
+                            <li>Penyesuaian tampilan footer untuk konsistensi antar halaman</li>
+                            <li>Perbaikan logika pemilihan tahun masuk dan keluar di <a href="form.html" class="text-blue-600 hover:underline">halaman pendaftaran</a></li>
+                            <li>Tahun keluar hanya bisa dipilih setelah tahun masuk dipilih</li>
+                            <li>Validasi tahun keluar tidak boleh lebih kecil dari tahun masuk</li>
+                        </ul>
+
+                        <h3 class="font-semibold text-sinekra-primary mt-4">Program Pendampingan</h3>
+                        <ul class="list-disc list-inside space-y-2 ml-4">
+                            <li>Penambahan <a href="program-pendampingan.html" class="text-blue-600 hover:underline">layanan pendampingan khusus untuk pengembangan usaha santri</a></li>
+                            <li>Terintegrasi dengan data anggota dan usaha yang sudah terdaftar</li>
+                            <li>Dilengkapi fitur pencarian cerdas untuk data anggota</li>
+                            <li>Implementasi validasi form yang komprehensif</li>
+                            <li>Optimalisasi tampilan untuk pengalaman pengguna yang lebih baik</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="border-l-4 border-gray-200 pl-4 pb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-300 w-3 h-3 rounded-full -ml-[22px]"></div>
+                        <h2 class="text-xl font-semibold text-gray-800 ml-4">12 Juli 2025 (v1.2.0)</h2>
+                    </div>
+                    <div class="space-y-3 text-gray-600">
+                        <h3 class="font-semibold text-gray-700">Investasi & Crowdfunding</h3>
+                        <ul class="list-disc list-inside space-y-2 ml-4">
+                            <li>Penyempurnaan tampilan informasi investor pada halaman investasi</li>
+                            <li>Peningkatan kemudahan penggunaan menu dan tombol</li>
+                            <li>Penyederhanaan alur investasi</li>
+                            <li>Optimalisasi logika dan tata letak popup investor</li>
+                            <li>Perbaikan sticky header pada popup informasi</li>
+                            <li>Peningkatan responsivitas antarmuka pengguna</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="border-l-4 border-gray-200 pl-4 pb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-300 w-3 h-3 rounded-full -ml-[22px]"></div>
+                        <h2 class="text-xl font-semibold text-gray-800 ml-4">11 Juli 2025 (v1.1.0)</h2>
+                    </div>
+                    <div class="space-y-3 text-gray-600">
+                        <h3 class="font-semibold text-gray-700">Ruang Sinergi & Hero Slide</h3>
+                        <ul class="list-disc list-inside space-y-2 ml-4">
+                            <li>Penambahan halaman <a href="ruang-sinergi.html" class="text-blue-600 hover:underline">Ruang Sinergi</a> untuk kolaborasi antar anggota</li>
+                            <li>Pembaruan hero slide dengan link ke halaman investasi</li>
+                            <li>Peningkatan UI dan validasi captcha</li>
+                            <li>Implementasi sistem rekomendasi kerjasama antar anggota</li>
+                            <li>Optimalisasi tampilan untuk berbagai ukuran layar</li>
+                            <li>Penyempurnaan alur navigasi pengguna</li>
+                        </ul>
+
+                        <h3 class="font-semibold text-gray-700 mt-4">Peningkatan Keamanan</h3>
+                        <ul class="list-disc list-inside space-y-2 ml-4">
+                            <li>Implementasi validasi captcha yang lebih kuat</li>
+                            <li>Peningkatan keamanan pengiriman data</li>
+                            <li>Optimalisasi penanganan error dan feedback</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="border-l-4 border-gray-200 pl-4 pb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-300 w-3 h-3 rounded-full -ml-[22px]"></div>
+                        <h2 class="text-xl font-semibold text-gray-800 ml-4">9 Juli 2025 (v1.0.0)</h2>
+                    </div>
+                    <div class="space-y-3 text-gray-600">
+                        <h3 class="font-semibold text-gray-700">Platform Sinergi Ekonomi Santri Alumni PP Krapyak</h3>
+                        <ul class="list-disc list-inside space-y-2 ml-4">
+                            <li>Peluncuran perdana platform untuk mendukung pengembangan ekonomi santri</li>
+                            <li><a href="form.html" class="text-blue-600 hover:underline">Sistem pendataan</a> dan pengelolaan informasi anggota</li>
+                            <li>Pencatatan lengkap usaha santri melalui <a href="direktori.html" class="text-blue-600 hover:underline">direktori digital</a></li>
+                            <li>Pemantauan perkembangan melalui <a href="statistik.html" class="text-blue-600 hover:underline">dashboard statistik</a></li>
+                            <li>Profil detail untuk setiap anggota dan usaha</li>
+                            <li>Sistem manajemen data terintegrasi dengan Google Sheet</li>
+                        </ul>
+
+                        <h3 class="font-semibold text-gray-700 mt-4">Fitur Dasar</h3>
+                        <ul class="list-disc list-inside space-y-2 ml-4">
+                            <li>Sistem pencarian dan filter data yang canggih</li>
+                            <li>Validasi input data yang komprehensif</li>
+                            <li>Antarmuka responsif untuk mobile dan desktop</li>
+                            <li>Optimalisasi performa dan kecepatan loading</li>
+                            <li>Sistem manajemen konten yang fleksibel</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="mt-8 flex justify-center">
+                    <nav class="inline-flex rounded-md shadow">
+                        <a href="#" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            1
+                        </a>
+                        <span class="px-3 py-2 border border-l-0 border-gray-300 bg-gray-100 text-sm font-medium text-gray-700">
+                            Halaman 1 dari 1
+                        </span>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-12">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col items-center space-y-1">
+                <p class="text-center text-sm text-gray-500">© 2025 Sinergi Ekonomi Santri Krapyak</p>
+                <p class="text-center text-sm text-gray-500">v1.3.0</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 
