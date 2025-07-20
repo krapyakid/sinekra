@@ -87,12 +87,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Clear existing options except the first placeholder
         thMasukSelect.innerHTML = '<option value="" disabled selected>Pilih Tahun</option>';
-        thKeluarSelect.innerHTML = '<option value="" disabled selected>Pilih Tahun</option>';
+        thKeluarSelect.innerHTML = '<option value="" disabled selected>Pilih Tahun Masuk Terlebih Dahulu</option>';
+        thKeluarSelect.disabled = true;
 
+        // Populate tahun masuk
         for (let year = endYear; year >= startYear; year--) {
             thMasukSelect.add(new Option(year, year));
-            thKeluarSelect.add(new Option(year, year));
         }
+
+        // Event listener untuk tahun masuk
+        thMasukSelect.addEventListener('change', function() {
+            const selectedYear = parseInt(this.value);
+            
+            // Reset dan disable tahun keluar jika tahun masuk belum dipilih
+            if (!selectedYear) {
+                thKeluarSelect.innerHTML = '<option value="" disabled selected>Pilih Tahun Masuk Terlebih Dahulu</option>';
+                thKeluarSelect.disabled = true;
+                return;
+            }
+
+            // Enable dan populate tahun keluar
+            thKeluarSelect.disabled = false;
+            thKeluarSelect.innerHTML = '<option value="" disabled selected>Pilih Tahun</option>';
+            
+            // Populate tahun keluar dari tahun masuk sampai tahun sekarang
+            for (let year = endYear; year >= selectedYear; year--) {
+                thKeluarSelect.add(new Option(year, year));
+            }
+        });
     }
 
     async function populateDropdownFromCSV(selectElement, url, placeholder) {
@@ -397,11 +419,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // Tambahkan status alumni secara spesifik
-        if (data.anggota_data.alumni !== undefined) {
-             const statusAlumni = data.anggota_data.alumni === 1 ? 'Alumni Pondok Pesantren Krapyak Yogyakarta' : 'Bukan Alumni';
-             anggotaHtml += `<div class="preview-item"><span class="preview-label">Status Alumni</span><span class="preview-value">${statusAlumni}</span></div>`;
-        }
+                        // Tambahkan status alumni
+                anggotaHtml += `<div class="preview-item"><span class="preview-label">Status Alumni</span><span class="preview-value">Alumni Pondok Pesantren Krapyak Yogyakarta</span></div>`;
 
         previewContainer.innerHTML += `<div class="preview-section">${anggotaHtml}</div>`;
 
