@@ -199,7 +199,11 @@ document.addEventListener('DOMContentLoaded', function() {
         let contactButtons = [];
         const phoneField = String(member.no_hp_anggota || '');
         if (showKontak && phoneField && phoneField.trim() !== '') {
-            const waNumber = phoneField.replace(/[^0-9]/g, '');
+            let waNumber = phoneField.replace(/[^0-9]/g, '');
+            // Hapus awalan 62 jika ada
+            if (waNumber.startsWith('62')) {
+                waNumber = waNumber.substring(2);
+            }
             if (waNumber) {
                 contactButtons.push(`<a href="https://wa.me/62${waNumber}" target="_blank" class="contact-wa-btn" title="WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a>`);
             }
@@ -222,9 +226,18 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
 
+        // Format tanggal posting
+        const postDate = member.timestamp ? new Date(member.timestamp) : new Date();
+        const formattedDate = postDate.toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+
         // Create main info content
         let mainContent = `
             <div class="detail-info">
+                <p class="text-xs text-gray-400 mb-2">Diposting ${formattedDate}</p>
                 <h1>${member.nama_lengkap}</h1>
                 <div class="alumni-status-wrapper">
                     <p class="alumni-status">Alumni Pondok Pesantren Krapyak</p>
