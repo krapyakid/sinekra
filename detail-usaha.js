@@ -55,7 +55,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const contactIcons = [];
         
         // WhatsApp icon
-        const waNumber = (businessData.whatsapp || '').replace(/[^0-9]/g, '');
+        let waNumber = (businessData.whatsapp || '').replace(/[^0-9]/g, '');
+        // Hapus awalan 62 jika ada
+        if (waNumber.startsWith('62')) {
+            waNumber = waNumber.substring(2);
+        }
         if (waNumber) {
             contactIcons.push(`<a href="https://wa.me/62${waNumber}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>`);
         }
@@ -164,7 +168,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // WhatsApp
-        const waNumber = String(business.whatsapp || business.no_hp_perusahaan || '').replace(/[^0-9]/g, '');
+        let waNumber = String(business.whatsapp || business.no_hp_perusahaan || '').replace(/[^0-9]/g, '');
+        // Hapus awalan 62 jika ada
+        if (waNumber.startsWith('62')) {
+            waNumber = waNumber.substring(2);
+        }
         if (waNumber) {
             contactIcons.push(`<a href="https://wa.me/62${waNumber}" target="_blank" class="card-icon-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>`);
         }
@@ -215,6 +223,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 <img src="${businessImgUrl}" alt="Foto ${business.nama_usaha}" onerror="this.onerror=null; this.src='${defaultImgUrl}';">
             </div>
             <div class="detail-info">
+                <p class="text-xs text-gray-400 mb-2">Diposting ${new Date(business.timestamp || Date.now()).toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                })}</p>
                 <h1>${business.nama_usaha}</h1>
                 <div class="jenis-usaha-wrapper">
                     <h4 class="jenis-usaha-title">Jenis Usaha</h4>
