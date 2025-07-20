@@ -2890,7 +2890,7 @@ input:checked + .slider:before {
     .compact-member-domisili {
         font-size: 0.7rem;
     }
-}
+
 
 /* Mobile responsiveness for new elements */
 @media (max-width: 768px) {
