@@ -3,178 +3,404 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Update Versi - SINEKRA</title>
     <link rel="icon" href="assets/logo_sinergi_krapyak.jpg" type="image/jpeg">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        sinekra: {
-                            primary: '#667eea',
-                            secondary: '#5396FF',
-                            light: '#f8faff',
-                        }
-                    },
-                    boxShadow: {
-                        'thin': '0 2px 4px rgba(0,0,0,0.05)',
-                        'card': '0 4px 8px rgba(0,0,0,0.08)',
-                    }
-                }
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        .version-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        .version-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .version-header h1 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .current-version {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            font-size: 0.9rem;
+            color: var(--primary-color);
+        }
+
+        .version-tag {
+            background: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-family: monospace;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .version-timeline {
+            position: relative;
+            padding-left: 32px;
+        }
+
+        .version-item {
+            position: relative;
+            padding-bottom: 32px;
+            padding-left: 24px;
+            border-left: 2px solid #E5E7EB;
+        }
+
+        .version-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .version-item::before {
+            content: '';
+            position: absolute;
+            left: -7px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .version-item.inactive::before {
+            background: #9CA3AF;
+        }
+
+        .version-date {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .version-number {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            font-weight: 500;
+            padding: 2px 8px;
+            background: #F3F4F6;
+            border-radius: 4px;
+        }
+
+        .version-section {
+            margin-bottom: 20px;
+        }
+
+        .version-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .update-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .update-item {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #4B5563;
+            line-height: 1.6;
+        }
+
+        .update-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+        }
+
+        .update-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .update-item a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .version-container {
+                padding: 16px;
+            }
+
+            .version-header h1 {
+                font-size: 1.2rem;
+            }
+
+            .current-version {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+
+            .version-date {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 0.95rem;
+            }
+
+            .update-item {
+                font-size: 0.85rem;
+                padding-left: 20px;
             }
         }
-    </script>
+    </style>
 </head>
-<body class="bg-sinekra-light min-h-screen">
-    <!-- Header -->
-    <header class="bg-white shadow-thin sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex justify-between items-center">
-                <a href="index.html" class="flex items-center">
-                    <img src="assets/logo_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="h-12 w-auto">
-                </a>
-                <nav class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-sinekra-primary">Home</a>
-                    <a href="form.html" class="text-gray-700 hover:text-sinekra-primary">Isi Form</a>
-                    <a href="statistik.html" class="text-gray-700 hover:text-sinekra-primary">Statistik</a>
-                    <a href="tentang.html" class="text-gray-700 hover:text-sinekra-primary">Tentang</a>
+<body>
+    <header class="main-header">
+        <div class="header-wrapper">
+            <a href="index.html" class="logo-link">
+                <img src="assets/logo_sinergi_krapyak.jpg" alt="Logo Sinergi Krapyak" class="logo">
+            </a>
+            <div class="header-right">
+                <nav class="main-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="form.html" class="nav-link">Isi Form</a>
+                    <a href="ruang-sinergi.html" class="nav-link">Ruang Sinergi</a>
+                    <a href="statistik.html" class="nav-link">Statistik</a>
+                    <a href="tentang.html" class="nav-link">Tentang</a>
                 </nav>
+                <div class="header-actions">
+                    <button class="mobile-search-trigger" id="mobile-search-trigger" style="display: none !important;"></button>
+                    <div class="mobile-menu-trigger" id="burger-menu-trigger">
+                        <img src="assets/menu_kebab.svg" alt="Menu">
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-4 py-8">
-        <div class="bg-white rounded-xl shadow-card p-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-8">Daftar Update & Versi</h1>
-            <div class="text-sm text-gray-500 mb-8">
-                Versi Saat Ini: <span class="font-mono bg-gray-100 px-2 py-1 rounded">v1.3.0</span>
+    <div class="menu-overlay" id="menu-overlay"></div>
+
+    <nav class="main-nav" id="main-nav">
+        <button class="nav-close-btn" id="nav-close-btn">&times;</button>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="form.html" class="nav-link">Isi Form</a>
+        <a href="ruang-sinergi.html" class="nav-link">Ruang Sinergi</a>
+        <a href="statistik.html" class="nav-link">Statistik</a>
+        <a href="tentang.html" class="nav-link">Tentang</a>
+    </nav>
+
+    <main class="version-container">
+        <div class="version-header">
+            <h1>Daftar Update & Versi</h1>
+            <div class="current-version">
+                <i class="fas fa-code-branch"></i>
+                Versi Saat Ini: <span class="version-tag">v1.3.0</span>
+            </div>
+        </div>
+
+        <div class="version-timeline">
+            <!-- Latest Version -->
+            <div class="version-item">
+                <div class="version-date">
+                    20 Juli 2025
+                    <span class="version-number">v1.3.0</span>
+                </div>
+
+                <div class="version-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-wrench"></i>
+                        Perbaikan & Peningkatan
+                    </h3>
+                    <ul class="update-list">
+                        <li class="update-item">Perbaikan format nomor WhatsApp pada halaman detail anggota</li>
+                        <li class="update-item">Penambahan informasi versi di footer semua halaman</li>
+                        <li class="update-item">Penyesuaian tampilan footer untuk konsistensi antar halaman</li>
+                        <li class="update-item">Perbaikan logika pemilihan tahun masuk dan keluar di <a href="form.html">halaman pendaftaran</a></li>
+                        <li class="update-item">Tahun keluar hanya bisa dipilih setelah tahun masuk dipilih</li>
+                        <li class="update-item">Validasi tahun keluar tidak boleh lebih kecil dari tahun masuk</li>
+                    </ul>
+                </div>
+
+                <div class="version-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-users"></i>
+                        Program Pendampingan
+                    </h3>
+                    <ul class="update-list">
+                        <li class="update-item">Penambahan <a href="program-pendampingan.html">layanan pendampingan khusus untuk pengembangan usaha santri</a></li>
+                        <li class="update-item">Terintegrasi dengan data anggota dan usaha yang sudah terdaftar</li>
+                        <li class="update-item">Dilengkapi fitur pencarian cerdas untuk data anggota</li>
+                        <li class="update-item">Implementasi validasi form yang komprehensif</li>
+                        <li class="update-item">Optimalisasi tampilan untuk pengalaman pengguna yang lebih baik</li>
+                    </ul>
+                </div>
             </div>
 
-            <!-- Version History -->
-            <div class="space-y-8">
-                <!-- Latest Update -->
-                <div class="border-l-4 border-sinekra-primary pl-4 pb-8">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-sinekra-primary w-3 h-3 rounded-full -ml-[22px]"></div>
-                        <h2 class="text-xl font-semibold text-gray-800 ml-4">20 Juli 2025 (v1.3.0)</h2>
-                    </div>
-                    <div class="space-y-3 text-gray-600">
-                        <h3 class="font-semibold text-sinekra-primary">Perbaikan & Peningkatan</h3>
-                        <ul class="list-disc list-inside space-y-2 ml-4">
-                            <li>Perbaikan format nomor WhatsApp pada halaman detail anggota</li>
-                            <li>Penambahan informasi versi di footer semua halaman</li>
-                            <li>Penyesuaian tampilan footer untuk konsistensi antar halaman</li>
-                            <li>Perbaikan logika pemilihan tahun masuk dan keluar di <a href="form.html" class="text-blue-600 hover:underline">halaman pendaftaran</a></li>
-                            <li>Tahun keluar hanya bisa dipilih setelah tahun masuk dipilih</li>
-                            <li>Validasi tahun keluar tidak boleh lebih kecil dari tahun masuk</li>
-                        </ul>
-
-                        <h3 class="font-semibold text-sinekra-primary mt-4">Program Pendampingan</h3>
-                        <ul class="list-disc list-inside space-y-2 ml-4">
-                            <li>Penambahan <a href="program-pendampingan.html" class="text-blue-600 hover:underline">layanan pendampingan khusus untuk pengembangan usaha santri</a></li>
-                            <li>Terintegrasi dengan data anggota dan usaha yang sudah terdaftar</li>
-                            <li>Dilengkapi fitur pencarian cerdas untuk data anggota</li>
-                            <li>Implementasi validasi form yang komprehensif</li>
-                            <li>Optimalisasi tampilan untuk pengalaman pengguna yang lebih baik</li>
-                        </ul>
-                    </div>
+            <!-- Previous Versions -->
+            <div class="version-item inactive">
+                <div class="version-date">
+                    12 Juli 2025
+                    <span class="version-number">v1.2.0</span>
                 </div>
 
-                <div class="border-l-4 border-gray-200 pl-4 pb-8">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-gray-300 w-3 h-3 rounded-full -ml-[22px]"></div>
-                        <h2 class="text-xl font-semibold text-gray-800 ml-4">12 Juli 2025 (v1.2.0)</h2>
-                    </div>
-                    <div class="space-y-3 text-gray-600">
-                        <h3 class="font-semibold text-gray-700">Investasi & Crowdfunding</h3>
-                        <ul class="list-disc list-inside space-y-2 ml-4">
-                            <li>Penyempurnaan tampilan informasi investor pada halaman investasi</li>
-                            <li>Peningkatan kemudahan penggunaan menu dan tombol</li>
-                            <li>Penyederhanaan alur investasi</li>
-                            <li>Optimalisasi logika dan tata letak popup investor</li>
-                            <li>Perbaikan sticky header pada popup informasi</li>
-                            <li>Peningkatan responsivitas antarmuka pengguna</li>
-                        </ul>
-                    </div>
+                <div class="version-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        Investasi & Crowdfunding
+                    </h3>
+                    <ul class="update-list">
+                        <li class="update-item">Penyempurnaan tampilan informasi investor pada halaman investasi</li>
+                        <li class="update-item">Peningkatan kemudahan penggunaan menu dan tombol</li>
+                        <li class="update-item">Penyederhanaan alur investasi</li>
+                        <li class="update-item">Optimalisasi logika dan tata letak popup investor</li>
+                        <li class="update-item">Perbaikan sticky header pada popup informasi</li>
+                        <li class="update-item">Peningkatan responsivitas antarmuka pengguna</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="version-item inactive">
+                <div class="version-date">
+                    11 Juli 2025
+                    <span class="version-number">v1.1.0</span>
                 </div>
 
-                <div class="border-l-4 border-gray-200 pl-4 pb-8">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-gray-300 w-3 h-3 rounded-full -ml-[22px]"></div>
-                        <h2 class="text-xl font-semibold text-gray-800 ml-4">11 Juli 2025 (v1.1.0)</h2>
-                    </div>
-                    <div class="space-y-3 text-gray-600">
-                        <h3 class="font-semibold text-gray-700">Ruang Sinergi & Hero Slide</h3>
-                        <ul class="list-disc list-inside space-y-2 ml-4">
-                            <li>Penambahan halaman <a href="ruang-sinergi.html" class="text-blue-600 hover:underline">Ruang Sinergi</a> untuk kolaborasi antar anggota</li>
-                            <li>Pembaruan hero slide dengan link ke halaman investasi</li>
-                            <li>Peningkatan UI dan validasi captcha</li>
-                            <li>Implementasi sistem rekomendasi kerjasama antar anggota</li>
-                            <li>Optimalisasi tampilan untuk berbagai ukuran layar</li>
-                            <li>Penyempurnaan alur navigasi pengguna</li>
-                        </ul>
-
-                        <h3 class="font-semibold text-gray-700 mt-4">Peningkatan Keamanan</h3>
-                        <ul class="list-disc list-inside space-y-2 ml-4">
-                            <li>Implementasi validasi captcha yang lebih kuat</li>
-                            <li>Peningkatan keamanan pengiriman data</li>
-                            <li>Optimalisasi penanganan error dan feedback</li>
-                        </ul>
-                    </div>
+                <div class="version-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-handshake"></i>
+                        Ruang Sinergi & Hero Slide
+                    </h3>
+                    <ul class="update-list">
+                        <li class="update-item">Penambahan <a href="ruang-sinergi.html">Ruang Sinergi</a> untuk kolaborasi antar anggota</li>
+                        <li class="update-item">Pembaruan hero slide dengan link ke halaman investasi</li>
+                        <li class="update-item">Peningkatan UI dan validasi captcha</li>
+                        <li class="update-item">Implementasi sistem rekomendasi kerjasama antar anggota</li>
+                        <li class="update-item">Optimalisasi tampilan untuk berbagai ukuran layar</li>
+                        <li class="update-item">Penyempurnaan alur navigasi pengguna</li>
+                    </ul>
                 </div>
 
-                <div class="border-l-4 border-gray-200 pl-4 pb-8">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-gray-300 w-3 h-3 rounded-full -ml-[22px]"></div>
-                        <h2 class="text-xl font-semibold text-gray-800 ml-4">9 Juli 2025 (v1.0.0)</h2>
-                    </div>
-                    <div class="space-y-3 text-gray-600">
-                        <h3 class="font-semibold text-gray-700">Platform Sinergi Ekonomi Santri Alumni PP Krapyak</h3>
-                        <ul class="list-disc list-inside space-y-2 ml-4">
-                            <li>Peluncuran perdana platform untuk mendukung pengembangan ekonomi santri</li>
-                            <li><a href="form.html" class="text-blue-600 hover:underline">Sistem pendataan</a> dan pengelolaan informasi anggota</li>
-                            <li>Pencatatan lengkap usaha santri melalui <a href="direktori.html" class="text-blue-600 hover:underline">direktori digital</a></li>
-                            <li>Pemantauan perkembangan melalui <a href="statistik.html" class="text-blue-600 hover:underline">dashboard statistik</a></li>
-                            <li>Profil detail untuk setiap anggota dan usaha</li>
-                            <li>Sistem manajemen data terintegrasi dengan Google Sheet</li>
-                        </ul>
+                <div class="version-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Peningkatan Keamanan
+                    </h3>
+                    <ul class="update-list">
+                        <li class="update-item">Implementasi validasi captcha yang lebih kuat</li>
+                        <li class="update-item">Peningkatan keamanan pengiriman data</li>
+                        <li class="update-item">Optimalisasi penanganan error dan feedback</li>
+                    </ul>
+                </div>
+            </div>
 
-                        <h3 class="font-semibold text-gray-700 mt-4">Fitur Dasar</h3>
-                        <ul class="list-disc list-inside space-y-2 ml-4">
-                            <li>Sistem pencarian dan filter data yang canggih</li>
-                            <li>Validasi input data yang komprehensif</li>
-                            <li>Antarmuka responsif untuk mobile dan desktop</li>
-                            <li>Optimalisasi performa dan kecepatan loading</li>
-                            <li>Sistem manajemen konten yang fleksibel</li>
-                        </ul>
-                    </div>
+            <div class="version-item inactive">
+                <div class="version-date">
+                    9 Juli 2025
+                    <span class="version-number">v1.0.0</span>
                 </div>
 
-                <!-- Pagination -->
-                <div class="mt-8 flex justify-center">
-                    <nav class="inline-flex rounded-md shadow">
-                        <a href="#" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                            1
-                        </a>
-                        <span class="px-3 py-2 border border-l-0 border-gray-300 bg-gray-100 text-sm font-medium text-gray-700">
-                            Halaman 1 dari 1
-                        </span>
-                    </nav>
+                <div class="version-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-rocket"></i>
+                        Platform Sinergi Ekonomi Santri Alumni PP Krapyak
+                    </h3>
+                    <ul class="update-list">
+                        <li class="update-item">Peluncuran perdana platform untuk mendukung pengembangan ekonomi santri</li>
+                        <li class="update-item"><a href="form.html">Sistem pendataan</a> dan pengelolaan informasi anggota</li>
+                        <li class="update-item">Pencatatan lengkap usaha santri melalui <a href="direktori.html">direktori digital</a></li>
+                        <li class="update-item">Pemantauan perkembangan melalui <a href="statistik.html">dashboard statistik</a></li>
+                        <li class="update-item">Profil detail untuk setiap anggota dan usaha</li>
+                        <li class="update-item">Sistem manajemen data terintegrasi dengan Google Sheet</li>
+                    </ul>
+                </div>
+
+                <div class="version-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-star"></i>
+                        Fitur Dasar
+                    </h3>
+                    <ul class="update-list">
+                        <li class="update-item">Sistem pencarian dan filter data yang canggih</li>
+                        <li class="update-item">Validasi input data yang komprehensif</li>
+                        <li class="update-item">Antarmuka responsif untuk mobile dan desktop</li>
+                        <li class="update-item">Optimalisasi performa dan kecepatan loading</li>
+                        <li class="update-item">Sistem manajemen konten yang fleksibel</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t mt-12">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col items-center space-y-1">
-                <p class="text-center text-sm text-gray-500">© 2025 Sinergi Ekonomi Santri Krapyak</p>
-                <p class="text-center text-sm text-gray-500">v1.3.0</p>
-            </div>
+    <footer class="main-footer">
+        <div class="flex flex-col items-center space-y-1">
+            <span>© 2025 Sinergi Ekonomi Santri Krapyak</span>
+            <a href="versi.html" target="_blank" class="text-sm text-gray-500 hover:text-sinekra-primary">v1.3.0</a>
         </div>
     </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuTrigger = document.getElementById('burger-menu-trigger');
+            const mainNav = document.getElementById('main-nav');
+            const overlay = document.getElementById('menu-overlay');
+            const closeBtn = document.getElementById('nav-close-btn');
+
+            if (menuTrigger && mainNav && overlay && closeBtn) {
+                const closeMenu = () => {
+                    mainNav.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                };
+
+                menuTrigger.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    mainNav.classList.add('active');
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+
+                overlay.addEventListener('click', closeMenu);
+                closeBtn.addEventListener('click', closeMenu);
+
+                mainNav.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', closeMenu);
+                });
+            }
+        });
+    </script>
 </body>
 </html> 
