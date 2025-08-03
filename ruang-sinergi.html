@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruang Sinergi Alumni PP Krapyak</title>
+    <title>Ruang Sinergi - SINEKRA</title>
     <link rel="icon" href="assets/logo_sinergi_krapyak.jpg" type="image/jpeg">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -100,26 +100,138 @@
         }
         .program-card {
             width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
             background: linear-gradient(to right, #EEF2FF, #E0E7FF);
             border-radius: 1rem;
-            padding: 1.5rem;
+            padding: 2rem;
             border: 1px solid #E5E7EB;
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
+        }
+        
+        .program-thumbnail {
+            width: 100%;
+            height: 200px;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .program-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .program-card:hover .program-thumbnail img {
+            transform: scale(1.05);
+        }
+        
+        .participant-box {
+            width: 100%;
+            max-width: 200px;
+            margin: 2rem auto 0;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .participant-label {
+            font-size: 0.875rem;
+            color: #6B7280;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .participant-counter {
+            font-size: 2rem;
+            font-weight: 700;
+            background: -webkit-linear-gradient(45deg, #2563EB, #4F46E5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+        
+        @media (max-width: 768px) {
+            .program-card {
+                padding: 1.5rem;
+            }
+            
+            .program-thumbnail {
+                height: 180px;
+            }
+            
+            .participant-box {
+                max-width: 180px;
+                margin-top: 1.5rem;
+                background: rgba(255, 255, 255, 0.8);
+                backdrop-filter: blur(4px);
+            }
+            
+            .participant-counter {
+                font-size: 1.75rem;
+            }
+            
+            .program-header {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .action-link {
+                margin-bottom: 0.5rem;
+            }
+        }
+        
+        .participant-counter::after {
+            content: "+";
+            font-size: 1.25rem;
+            opacity: 0.8;
+        }
+        
+        @keyframes countUp {
+            0% { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .participant-counter.animate {
+            animation: countUp 0.5s ease forwards;
         }
         .program-card:hover {
             transform: translateX(4px);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         .program-header {
-            grid-column: 1;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
         }
         .program-content {
-            grid-column: 2;
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto 0;
         }
         .program-title {
             font-size: 1.25rem;
@@ -185,15 +297,18 @@
         .action-link {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
             color: #2563EB;
             font-weight: 500;
             text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
+            padding: 0.75rem 2rem;
+            border-radius: 0.75rem;
             background: rgba(255, 255, 255, 0.9);
             border: 1px solid currentColor;
             transition: all 0.2s;
+            margin: 1.5rem auto 0;
+            min-width: 200px;
         }
         .action-link:hover {
             background: #2563EB;
@@ -330,9 +445,20 @@
             }
             .program-card {
                 grid-template-columns: 1fr;
+                padding: 1.25rem;
             }
             .program-header, .program-content {
                 grid-column: 1;
+            }
+            .program-header {
+                order: 1;
+            }
+            .program-content {
+                order: 2;
+                margin-top: 1rem;
+            }
+            .feature-list {
+                margin-bottom: 0;
             }
             .feature-list {
                 grid-template-columns: 1fr;
@@ -402,7 +528,14 @@
                     <!-- Program Card 1: Pendampingan -->
                     <div class="program-card">
                         <div class="program-header">
+                            <div class="program-thumbnail">
+                                <img src="assets/program-pendampingan.jpg" alt="Program Pendampingan">
+                            </div>
                             <h3 class="program-title">Pendampingan Usaha Santri</h3>
+                            <div class="participant-box">
+                                <div class="participant-label">Jumlah Peserta</div>
+                                <div class="participant-counter" data-target="2">0</div>
+                            </div>
                             <p class="program-description mt-4">Program khusus untuk mengembangkan usaha santri dengan pendampingan intensif dari mentor berpengalaman.</p>
                             <a href="program-pendampingan.html" class="action-link mt-4">
                                 Daftar Sekarang
@@ -441,7 +574,14 @@
                     <!-- Program Card 2: Investasi -->
                     <div class="program-card" style="background: linear-gradient(to right, #FCE7F3, #EDE9FE);">
                         <div class="program-header">
+                            <div class="program-thumbnail">
+                                <img src="assets/investcrowdfunding.jpg" alt="Investasi & Crowdfunding">
+                            </div>
                             <h3 class="program-title">Investasi & Crowdfunding</h3>
+                            <div class="participant-box">
+                                <div class="participant-label">Jumlah Peserta</div>
+                                <div class="participant-counter" data-target="64">0</div>
+                            </div>
                             <p class="program-description mt-4">Kesempatan untuk berinvestasi dan mendukung pengembangan usaha santri melalui platform crowdfunding.</p>
                             <a href="investcrowdfunding.html" class="action-link mt-4" style="color: #9333EA; border-color: currentColor;">
                                 Lihat Selengkapnya →
@@ -574,12 +714,65 @@
     <footer class="main-footer">
         <div class="flex flex-col items-center space-y-1">
             <span>© 2025 Sinergi Ekonomi Santri Krapyak</span>
-            <a href="versi.html" target="_blank" class="text-sm text-gray-500 hover:text-sinekra-primary">v1.3.0</a>
+            <a href="versi.html" target="_blank" class="text-sm text-gray-500 hover:text-sinekra-primary">v1.5.0</a>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Counter animation
+            function startCounter(counter) {
+                if (counter.classList.contains('counted')) return;
+                
+                counter.classList.add('counted', 'animate');
+                const target = parseInt(counter.getAttribute('data-target'));
+                let current = 0;
+                const duration = 2000; // 2 seconds
+                const steps = 60;
+                const increment = target / steps;
+                const stepDuration = duration / steps;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        counter.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = Math.round(current);
+                    }
+                }, stepDuration);
+            }
+            
+            // Initialize counters
+            function initCounters() {
+                const counters = document.querySelectorAll('.participant-counter');
+                
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            startCounter(entry.target);
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.5,
+                    rootMargin: '0px'
+                });
+                
+                counters.forEach(counter => {
+                    counter.textContent = '0';
+                    observer.observe(counter);
+                });
+            }
+            
+            // Call initCounters when page loads and when switching tabs
+            initCounters();
+            
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    setTimeout(initCounters, 100); // Re-init counters after tab switch
+                });
+            });
             // Tab switching functionality
             const switchButtons = document.querySelectorAll('.tab-button');
             const sections = {
