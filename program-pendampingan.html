@@ -51,6 +51,19 @@
             text-align: left;
         }
 
+        /* --- STYLE UNTUK GAMBAR HEADER --- */
+        .header-image {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            height: auto; /* Menjaga rasio aspek gambar */
+            border-radius: 12px; /* Sudut yang lebih membulat */
+            margin-bottom: 24px; /* Jarak bawah yang cukup dari salam pembuka */
+            object-fit: cover; /* Memastikan gambar mengisi area tanpa distorsi */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Shadow halus untuk efek kedalaman */
+        }
+        /* --- AKHIR STYLE GAMBAR --- */
+
         .form-section {
             display: none; /* Hidden by default */
             background: white;
@@ -97,12 +110,36 @@
             border-radius: 8px;
             font-size: 0.9rem;
             transition: all 0.3s ease;
+            box-sizing: border-box; /* PERBAIKAN: Menyamakan lebar input */
         }
 
         .form-input:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
             outline: none;
+        }
+
+        /* Style untuk select multiple */
+        select[multiple] {
+            height: auto;
+            min-height: 100px;
+            padding: 8px;
+        }
+
+        select[multiple] option {
+            padding: 8px;
+            margin-bottom: 4px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        select[multiple] option:checked {
+            background: var(--primary-color) linear-gradient(0deg, var(--primary-color) 0%, var(--primary-color) 100%);
+            color: white;
+        }
+
+        select[multiple] option:hover {
+            background-color: rgba(99, 102, 241, 0.1);
         }
 
         .form-input.error {
@@ -115,23 +152,54 @@
             margin-top: 4px;
         }
 
+        /* --- PERBAIKAN TAMPILAN RADIO BUTTON (FINAL) --- */
         .radio-group {
+            width: 100%;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            background-color: #fff;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
             display: flex;
-            gap: 16px;
+            justify-content: space-around; /* Distribusi ruang yang merata */
+            min-height: 42px; /* Sesuaikan dengan tinggi input lainnya */
+            padding: 4px 16px; /* Padding yang lebih nyaman */
+        }
+
+        .radio-group:has(input:focus-visible) {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
         .radio-option {
+            flex: 1; /* Mengambil ruang yang sama */
             display: flex;
             align-items: center;
+            justify-content: center; /* Pusatkan konten */
             gap: 8px;
             cursor: pointer;
+            padding: 8px 0;
+            transition: background-color 0.2s ease;
+            border-radius: 6px;
+        }
+
+        .radio-option:hover {
+            background-color: #F9FAFB;
         }
 
         .radio-option input[type="radio"] {
             width: 16px;
             height: 16px;
             accent-color: var(--primary-color);
+            margin: 0;
         }
+
+        .radio-option span {
+            font-size: 0.9rem;
+            color: #374151;
+            user-select: none; /* Mencegah seleksi teks */
+        }
+        /* --- AKHIR PERBAIKAN --- */
 
         .business-cards {
             display: grid;
@@ -203,14 +271,127 @@
             animation: fadeIn 0.3s ease;
         }
 
+        /* --- STYLE UNTUK LOADING SPINNER --- */
+        #loadingModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+        }
+
+        #loadingModal.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #ffffff;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .loading-subtext {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- STYLE UNTUK ERROR MODAL --- */
+        .text-warning {
+            color: #F59E0B;
+        }
+
+        .text-danger {
+            color: #DC2626;
+        }
+
+        #errorModal .modal-content {
+            max-width: 450px;
+        }
+
+        #errorModal .modal-body {
+            text-align: center;
+            padding: 24px;
+        }
+
+        #errorModal .modal-body i {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        #errorModal .modal-body p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        /* --- STYLE UNTUK REVIEW MODAL --- */
+        .review-section {
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #F9FAFB;
+            border-radius: 8px;
+            border: 1px solid #E5E7EB;
+        }
+
+        .review-section h4 {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .review-item {
+            display: flex;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+
+        .review-label {
+            font-weight: 500;
+            color: #374151;
+            width: 200px;
+            flex-shrink: 0;
+        }
+
+        .review-value {
+            color: #1F2937;
+            flex: 1;
+        }
+
+        /* --- PERBAIKAN TAMPILAN MODAL --- */
         .modal-content {
             background: white;
             border-radius: 12px;
-            padding: 24px;
+            padding: 32px; /* Jarak dalam modal diperbesar agar tidak padat */
             max-width: 500px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Shadow diperhalus untuk efek modern */
         }
 
         .modal-header {
@@ -226,15 +407,102 @@
             margin: 0;
         }
 
+        /* Perbaikan pada body modal untuk keterbacaan */
         .modal-body {
+            line-height: 1.6; /* Jarak antar baris teks agar lebih mudah dibaca */
+        }
+
+        .modal-body p {
+            margin-bottom: 16px; /* Jarak di bawah paragraf pengantar */
+        }
+
+        .modal-body ul {
+            list-style-position: inside; /* Membuat bullet point lebih rapi */
+            padding-left: 0;
             margin-bottom: 24px;
+        }
+
+        /* Style untuk modal komitmen */
+        .commitment-section {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .commitment-section h4 {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .commitment-section p {
+            color: #4B5563;
+            margin-bottom: 16px;
+        }
+
+        .commitment-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .commitment-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .commitment-list li:hover {
+            transform: translateX(4px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .commitment-list i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-top: 2px;
+        }
+
+        .commitment-list span {
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .commitment-note {
+            background: rgba(99, 102, 241, 0.05);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 24px;
+        }
+
+        .commitment-note p {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            color: #4B5563;
+            font-size: 0.9rem;
+        }
+
+        .commitment-note i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
         }
 
         .modal-footer {
             display: flex;
             justify-content: flex-end;
-            gap: 12px;
+            gap: 16px; /* Jarak antar tombol */
+            margin-top: 16px; /* Jarak dari konten di atasnya ke tombol */
         }
+        /* --- AKHIR PERBAIKAN --- */
 
         .btn {
             padding: 10px 20px;
@@ -338,6 +606,377 @@
             margin: 0 0.25rem;
         }
 
+        #autocompleteList {
+            position: relative;
+        }
+
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #E5E7EB;
+            border-top: none;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .autocomplete-items ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .autocomplete-item, .autocomplete-item-error {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #F3F4F6;
+            font-size: 0.9rem;
+        }
+        
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+
+        .autocomplete-item:hover {
+            background-color: #F9FAFB;
+            color: var(--primary-color);
+        }
+        
+        .autocomplete-item-error {
+            color: #9CA3AF;
+            cursor: default;
+        }
+
+        .business-card-wrapper {
+            margin-bottom: 16px;
+        }
+
+        .business-details-form-container {
+            padding: 24px;
+            background-color: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            margin-top: -1px; /* Aligns with the card border */
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .form-grid .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* --- STYLE BARU UNTUK KARTU & TOMBOL REGISTRASI --- */
+        .registration-card {
+            display: block; /* Selalu tampil */
+            background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 48px 0 24px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .registration-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .registration-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .registration-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .registration-title i {
+            color: #FFD700;
+            font-size: 1.8rem;
+        }
+
+        .registration-text {
+            color: #4B5563;
+            line-height: 1.7;
+            font-size: 1rem;
+            margin-bottom: 24px;
+        }
+
+        .registration-benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin: 48px 0 24px;
+            padding: 16px;
+            background: rgba(99, 102, 241, 0.05);
+            border-radius: 12px;
+        }
+
+        .benefit-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .benefit-item i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .benefit-item span {
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .registration-button {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: 16px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            animation: pulse-animation 2s infinite;
+        }
+
+        .registration-button i {
+            margin-right: 10px;
+        }
+
+        .registration-button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            animation: none;
+        }
+
+        @keyframes pulse-animation {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            }
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .registration-benefits {
+                grid-template-columns: 1fr;
+            }
+            
+            .registration-card {
+                padding: 24px 16px;
+            }
+
+            .registration-title {
+                font-size: 1.3rem;
+            }
+
+            .registration-button {
+                width: 100%;
+                padding: 14px 24px;
+            }
+        }
+
+        /* --- STYLE BARU UNTUK KARTU & TOMBOL REGISTRASI --- */
+        .registration-card {
+            display: block; /* Selalu tampil */
+            background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 48px 0 24px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .registration-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .registration-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .registration-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .registration-title i {
+            color: #FFD700;
+            font-size: 1.8rem;
+        }
+
+        .registration-text {
+            color: #4B5563;
+            line-height: 1.7;
+            font-size: 1rem;
+            margin-bottom: 24px;
+        }
+
+        .registration-benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin: 48px 0 24px;
+            padding: 16px;
+            background: rgba(99, 102, 241, 0.05);
+            border-radius: 12px;
+        }
+
+        .benefit-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .benefit-item i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .benefit-item span {
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .registration-button {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: 16px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            animation: pulse-animation 2s infinite;
+        }
+
+        .registration-button i {
+            margin-right: 10px;
+        }
+
+        .registration-button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            animation: none;
+        }
+
+        @keyframes pulse-animation {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            }
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .registration-benefits {
+                grid-template-columns: 1fr;
+            }
+            
+            .registration-card {
+                padding: 24px 16px;
+            }
+
+            .registration-title {
+                font-size: 1.3rem;
+            }
+
+            .registration-button {
+                width: 100%;
+                padding: 14px 24px;
+            }
+        }
+
+
+
         @media (max-width: 768px) {
             .program-container {
                 padding: 16px;
@@ -427,6 +1066,9 @@
             <h1>Program Pendampingan Peningkatan Usaha Santri</h1>
         </div>
 
+        <!-- GAMBAR HEADER HALAMAN -->
+        <img src="assets/program-pendampingan.jpg" alt="Program Pendampingan Usaha Santri" class="header-image">
+
         <div class="welcome-message">
             <h2 class="welcome-title">Assalamu'alaikum Warahmatullahi Wabarakatuh! 🌟</h2>
             <p class="welcome-text">
@@ -448,18 +1090,7 @@
                 </div>
             </div>
 
-            <!-- Registration Card - Shown when no results -->
-            <div class="registration-card" id="registrationCard">
-                <h3 class="registration-title">Belum Menjadi Anggota?</h3>
-                <p class="registration-text">
-                    Untuk mengikuti Program Pendampingan Usaha Santri, Anda harus terdaftar sebagai anggota terlebih dahulu.
-                    Yuk, bergabung sekarang dan mulai kembangkan usaha Anda bersama kami!
-                </p>
-                <a href="form.html" class="registration-button">
-                    <i class="fas fa-user-plus"></i>
-                    Daftar Sekarang
-                </a>
-            </div>
+            <!-- Form sections will be here -->
 
             <!-- Personal Information Section - Hidden by default -->
             <div class="form-section" id="personalInfoSection">
@@ -473,7 +1104,7 @@
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="gender" value="L" required>
-                                <span>Laki-Laki</span>
+                                <span>Laki-laki</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="gender" value="P">
@@ -484,12 +1115,15 @@
 
                     <div class="form-group">
                         <label class="form-label">No. KTP</label>
-                        <input type="text" id="noKtp" name="noKtp" class="form-input" maxlength="16" pattern="\d*" required>
+                        <input type="text" id="noKtp" name="noKtp" class="form-input" maxlength="16" 
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                            required>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">No. NPWP</label>
-                        <input type="text" id="noNpwp" name="noNpwp" class="form-input" maxlength="20">
+                        <input type="text" id="noNpwp" name="noNpwp" class="form-input" maxlength="25"
+                            required>
                     </div>
 
                     <div class="form-group">
@@ -507,15 +1141,20 @@
 
                     <div class="form-group">
                         <label class="form-label">No. WhatsApp</label>
-                        <input type="tel" id="noWhatsapp" name="noWhatsapp" class="form-input" required>
+                        <input type="tel" id="noWhatsapp" name="noWhatsapp" class="form-input" 
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                            required>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Email</label>
-                        <input type="email" id="email" name="email" class="form-input" required>
+                        <input type="email" id="email" name="email" class="form-input" 
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                            title="Masukkan alamat email yang valid"
+                            required>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group full-width">
                         <label class="form-label">Alamat</label>
                         <textarea id="alamat" name="alamat" class="form-input" rows="3" maxlength="300" required></textarea>
                     </div>
@@ -603,6 +1242,90 @@
             </div>
         </form>
 
+        <!-- Registration Card - Always visible -->
+        <div class="registration-card" id="registrationCard" style="display: block;">
+            <div class="registration-content">
+                <h3 class="registration-title">
+                    <i class="fas fa-star-half-alt"></i>
+                    Belum Menjadi Anggota?
+                </h3>
+                <p class="registration-text">
+                    Untuk mengikuti Program Pendampingan Usaha Santri, Anda harus terdaftar sebagai anggota terlebih dahulu.
+                    Yuk, bergabung sekarang dan mulai kembangkan usaha Anda bersama kami! 🚀
+                </p>
+                <div class="registration-benefits">
+                    <div class="benefit-item">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Bimbingan Intensif</span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-users"></i>
+                        <span>Komunitas Supportif</span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Pengembangan Usaha</span>
+                    </div>
+                </div>
+                <a href="form.html" class="registration-button">
+                    <i class="fas fa-user-plus"></i>
+                    Daftar Sekarang
+                </a>
+            </div>
+        </div>
+
+        <!-- Review Modal -->
+        <div class="modal" id="reviewModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Review Data Pendaftaran</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="review-section">
+                        <h4>Data Pribadi</h4>
+                        <div id="reviewPersonalData"></div>
+                    </div>
+                    <div class="review-section">
+                        <h4>Data Usaha</h4>
+                        <div id="reviewBusinessData"></div>
+                    </div>
+                    <div class="review-section">
+                        <h4>Materi yang Dipilih</h4>
+                        <div id="reviewMaterials"></div>
+                    </div>
+                    <div class="review-section">
+                        <h4>Kendala Usaha</h4>
+                        <div id="reviewChallenges"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="editData">Edit Data</button>
+                    <button type="button" class="btn btn-primary" id="confirmReview">Lanjutkan</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Spinner Modal -->
+        <div class="modal" id="loadingModal">
+            <div class="spinner"></div>
+            <p class="loading-text">Sedang memproses pendaftaran...</p>
+            <p class="loading-subtext">Mohon tunggu sebentar</p>
+        </div>
+
+        <!-- Error Modal -->
+        <div class="modal" id="errorModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="errorTitle"></h3>
+                </div>
+                <div class="modal-body" id="errorMessage">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="closeErrorBtn">Tutup</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Commitment Modal -->
         <div class="modal" id="commitmentModal">
             <div class="modal-content">
@@ -610,18 +1333,30 @@
                     <h3 class="modal-title">Komitmen Program</h3>
                 </div>
                 <div class="modal-body">
-                    <p>Dengan ini saya menyatakan:</p>
-                    <ul>
-                        <li>Berkomitmen untuk mengikuti program pendampingan hingga selesai</li>
-                        <li>Bersedia mengikuti seluruh kegiatan yang telah dijadwalkan</li>
-                        <li>Bersedia memberikan fee komitmen sesuai ketentuan</li>
-                        <li>Bersedia mematuhi seluruh peraturan program</li>
-                    </ul>
-                    <div class="form-group">
-                        <label class="checkbox-option">
-                            <input type="checkbox" id="commitmentCheck" required>
-                            <span>Saya setuju dengan semua ketentuan di atas</span>
-                        </label>
+                    <div class="commitment-section">
+                        <h4>Pernyataan Komitmen</h4>
+                        <p>Dengan mendaftar program ini, saya berkomitmen untuk:</p>
+                        <ul class="commitment-list">
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <span>Mengikuti seluruh rangkaian program pendampingan sesuai jadwal yang ditentukan</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <span>Mematuhi tata tertib dan ketentuan program pendampingan</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <span>Aktif berpartisipasi dalam setiap sesi pendampingan</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <span>Memberikan data dan informasi yang benar dan dapat dipertanggungjawabkan</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="commitment-note">
+                        <p><i class="fas fa-info-circle"></i> Dengan menekan tombol "Setuju & Lanjutkan", Anda menyetujui semua komitmen di atas.</p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -683,145 +1418,532 @@
             const submitButton = document.getElementById('submitButton');
             const commitmentModal = document.getElementById('commitmentModal');
 
+            let allMembers = [];
             let selectedAnggotaId = null;
             let timeout = null;
+            let kategoriUsahaList = []; // Variabel untuk menyimpan kategori usaha
 
-            // Search functionality
+            // --- FUNGSI BARU UNTUK MENGAMBIL KATEGORI USAHA DARI CSV ---
+            async function fetchKategoriUsaha() {
+                // URL raw dari file CSV di GitHub
+                const KATEGORI_URL = 'https://raw.githubusercontent.com/krapyakid/sinekra/main/assets/kategori_usaha_kbli_lengkap.csv';
+                try {
+                    const response = await fetch(KATEGORI_URL);
+                    if (!response.ok) throw new Error('Gagal memuat data CSV');
+                    const csvText = await response.text();
+
+                    // --- PERBAIKAN PARSING CSV ---
+                    // Parser diubah untuk mengambil kolom kedua (nama kategori) bukan kode.
+                    const categories = csvText
+                        .split('\n')
+                        .slice(1) // Lewati baris header
+                        .map(row => {
+                            const columns = row.split(',');
+                            // Pastikan ada kolom kedua
+                            if (columns.length > 1) {
+                                // Ambil kolom kedua, bersihkan dari spasi dan karakter kutip
+                                const categoryName = columns[1].trim().replace(/^"|"$/g, '');
+                                return categoryName;
+                            }
+                            return null;
+                        })
+                        .filter(kategori => kategori); // Hapus baris yang kosong atau null
+
+                    // Simpan daftar kategori unik
+                    kategoriUsahaList = [...new Set(categories)];
+
+                } catch (error) {
+                    console.error('Gagal memuat kategori usaha dari CSV:', error);
+                    // Fallback ke daftar default jika fetch gagal
+                    kategoriUsahaList = ['Kuliner', 'Kesehatan & Kecantikan', 'Industri Kreatif', 'Teknologi', 'Agribisnis', 'Perdagangan', 'Jasa', 'Lainnya'];
+                }
+            }
+            
+            // Fetch all members on page load
+            async function fetchAllMembers() {
+                const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvsDmDoerDTDgV39Op65g8D_fGyCyTy82StbSzsACbpQoYnetw96E4mQ1T0suIHfhR/exec";
+                try {
+                    const response = await fetch(SCRIPT_URL, { cache: 'no-cache' });
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    const result = await response.json();
+                    if (result.status === "success") {
+                        const uniqueMembers = new Map();
+                        result.data.forEach(member => {
+                            // Gunakan id_anggota sebagai kunci untuk memastikan keunikan
+                            if (!uniqueMembers.has(member.id_anggota)) {
+                                uniqueMembers.set(member.id_anggota, {
+                                    id: member.id_anggota,
+                                    nama: member.nama_lengkap,
+                                    noWhatsapp: member.no_hp_anggota,
+                                    email: member.email,
+                                    alamat: member.alamat_sekarang,
+                                    usaha: member.usaha || []
+                                });
+                            }
+                        });
+                        allMembers = Array.from(uniqueMembers.values());
+                    } else {
+                        throw new Error(result.message || 'Error fetching data');
+                    }
+                } catch (error) {
+                    console.error('Gagal memuat data anggota:', error);
+                    // Optionally, show an error message to the user
+                }
+            }
+
+            // Panggil semua fungsi fetch saat halaman dimuat
+            async function initializePage() {
+                await fetchKategoriUsaha(); // Tunggu kategori selesai dimuat
+                await fetchAllMembers();
+            }
+
+            initializePage();
+
+
+            // Search functionality (filters local data)
             namaAnggotaInput.addEventListener('input', function(e) {
-                const query = e.target.value.trim();
+                const query = e.target.value.trim().toLowerCase();
                 
                 clearTimeout(timeout);
                 
                 if (query.length < 2) {
                     autocompleteList.innerHTML = '';
                     autocompleteList.style.display = 'none';
+                    hideFormSections();
                     return;
                 }
 
                 timeout = setTimeout(() => {
-                    // Fetch data from backend
-                    fetch(`/api/members/search?query=${encodeURIComponent(query)}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            autocompleteList.innerHTML = '';
+                    const filteredMembers = allMembers.filter(member => 
+                        member.nama.toLowerCase().includes(query)
+                    );
+
+                    const listContainer = document.createElement('div');
+                    listContainer.className = 'autocomplete-items';
+                    const ul = document.createElement('ul');
+
+                    if (filteredMembers.length === 0) {
+                        const li = document.createElement('li');
+                        li.textContent = 'Nama tidak ditemukan. Silakan daftar.';
+                        li.className = 'autocomplete-item-error';
+                        ul.appendChild(li);
+                    } else {
+                        filteredMembers.forEach(member => {
+                            const li = document.createElement('li');
+                            li.textContent = member.nama;
+                            li.className = 'autocomplete-item';
                             
-                            if (!data || data.length === 0) {
-                                registrationCard.style.display = 'block';
-                                const noResult = document.createElement('div');
-                                noResult.textContent = 'Tidak ada hasil';
-                                noResult.style.color = '#DC2626';
-                                noResult.style.textAlign = 'center';
-                                autocompleteList.appendChild(noResult);
-                            } else {
-                                registrationCard.style.display = 'none';
-                                data.forEach(member => {
-                                    const item = document.createElement('div');
-                                    item.textContent = member.nama;
-                                    
-                                    item.addEventListener('click', () => {
+                            li.addEventListener('click', () => {
                                         selectedAnggotaId = member.id;
                                         namaAnggotaInput.value = member.nama;
+                                autocompleteList.innerHTML = ''; // Clear the list
                                         autocompleteList.style.display = 'none';
                                         
-                                        // Show and populate personal info section
                                         personalInfoSection.classList.add('active');
                                         populatePersonalInfo(member);
 
-                                        // Fetch and show business data
-                                        fetchBusinessData(member.id);
-
-                                        // Show submit button
+                                if (member.usaha && member.usaha.length > 0) {
+                                    displayBusinessData(member.usaha);
+                                } else {
+                                    businessSection.classList.remove('active');
+                                    businessDetailsSection.classList.remove('active');
+                                }
+                                
+                                learningSection.classList.add('active');
+                                challengesSection.classList.add('active');
                                         submitButton.style.display = 'block';
                                     });
                                     
-                                    autocompleteList.appendChild(item);
+                            ul.appendChild(li);
                                 });
                             }
-                            
+                    listContainer.appendChild(ul);
+                    autocompleteList.appendChild(listContainer);
                             autocompleteList.style.display = 'block';
-                        })
-                        .catch(error => {
-                            console.error('Error fetching member data:', error);
-                            const errorDiv = document.createElement('div');
-                            errorDiv.textContent = 'Terjadi kesalahan saat mencari data';
-                            errorDiv.style.color = '#DC2626';
-                            errorDiv.style.textAlign = 'center';
-                            autocompleteList.innerHTML = '';
-                            autocompleteList.appendChild(errorDiv);
-                            autocompleteList.style.display = 'block';
-                        });
                 }, 300);
             });
+
+            function hideFormSections() {
+                personalInfoSection.classList.remove('active');
+                businessSection.classList.remove('active');
+                businessDetailsSection.classList.remove('active');
+                learningSection.classList.remove('active');
+                challengesSection.classList.remove('active');
+                submitButton.style.display = 'none';
+            }
 
             // Populate personal info
             function populatePersonalInfo(member) {
                 document.getElementById('noWhatsapp').value = member.noWhatsapp || '';
                 document.getElementById('email').value = member.email || '';
                 document.getElementById('alamat').value = member.alamat || '';
-                // Set other fields if available in member data
             }
 
-            // Fetch business data
-            function fetchBusinessData(memberId) {
-                fetch(`/api/business/${memberId}`)
-                    .then(response => response.json())
-                    .then(businesses => {
-                        const businessCards = document.getElementById('businessCards');
-                        businessCards.innerHTML = '';
+            // Display business data
+            function displayBusinessData(businesses) {
+                const businessCardsContainer = document.getElementById('businessCards');
+                businessCardsContainer.innerHTML = '';
 
                         businesses.forEach(business => {
                             const card = createBusinessCard(business);
-                            businessCards.appendChild(card);
+                    businessCardsContainer.appendChild(card);
                         });
 
                         businessSection.classList.add('active');
 
-                        // If only one business, auto-select it
-                        if (businesses.length === 1) {
-                            const radio = businessCards.querySelector('input[type="radio"]');
-                            radio.checked = true;
-                            showBusinessDetails(businesses[0]);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching business data:', error);
-                    });
+                // --- PERBAIKAN BUG ---
+                // Logika untuk menampilkan form secara otomatis jika ada 1 atau lebih usaha.
+                // Ini akan memilih kartu pertama sebagai default.
+                if (businesses.length > 0) {
+                    const firstBusiness = businesses[0];
+                    const firstRadio = businessCardsContainer.querySelector(`input[data-business-id="${firstBusiness.id_usaha}"]`);
+                    const firstForm = document.getElementById(`business-details-${firstBusiness.id_usaha}`);
+                    
+                    // Centang radio button pertama
+                    if (firstRadio) {
+                        firstRadio.checked = true;
+                    }
+
+                    // Tampilkan form pertama
+                    if (firstForm) {
+                        firstForm.style.display = 'block';
+                    }
+
+                    // Panggil fungsi untuk menampilkan section berikutnya
+                    showBusinessDetails(firstBusiness);
+                }
             }
 
             // Create business card
             function createBusinessCard(business) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'business-card-wrapper';
+
                 const card = document.createElement('div');
                 card.className = 'business-card';
+                card.setAttribute('data-id', business.id_usaha);
+                const thumbnailUrl = business.id_usaha ? `assets/usaha/${business.id_usaha}.jpg` : 'assets/usaha/default_image_usaha.jpg';
                 card.innerHTML = `
                     <div class="business-card-header">
-                        <input type="radio" name="selectedBusiness" value="${business.id}" class="business-card-radio">
-                        <img src="${business.thumbnail || 'assets/default-business.jpg'}" alt="${business.nama}" class="business-card-image">
-                        <h4 class="business-card-title">${business.nama}</h4>
+                        <input type="radio" name="selectedBusiness" value="${business.id_usaha}" class="business-card-radio" data-business-id="${business.id_usaha}">
+                        <img src="${thumbnailUrl}" alt="${business.nama_usaha}" class="business-card-image" onerror="this.src='assets/usaha/default_image_usaha.jpg'">
+                        <h4 class="business-card-title">${business.nama_usaha}</h4>
                     </div>
                 `;
 
-                const radio = card.querySelector('input[type="radio"]');
-                radio.addEventListener('change', () => showBusinessDetails(business));
+                const detailsFormContainer = document.createElement('div');
+                detailsFormContainer.className = 'business-details-form-container';
+                detailsFormContainer.id = `business-details-${business.id_usaha}`;
+                detailsFormContainer.style.display = 'none'; // Hidden by default
+                detailsFormContainer.innerHTML = generateBusinessForm(business);
 
-                return card;
+                wrapper.appendChild(card);
+                wrapper.appendChild(detailsFormContainer);
+
+                const radio = card.querySelector('input[type="radio"]');
+                radio.addEventListener('change', () => {
+                    // Hide all other forms
+                    document.querySelectorAll('.business-details-form-container').forEach(form => {
+                        form.style.display = 'none';
+                    });
+                    // Show the selected one
+                    detailsFormContainer.style.display = 'block';
+                    showBusinessDetails(business);
+                });
+
+                return wrapper;
             }
 
-            // Show business details
+            // --- FUNGSI GENERATE FORM DIUPDATE UNTUK MENGGUNAKAN DATA DINAMIS ---
+            function generateBusinessForm(business) {
+                // Membuat opsi dropdown dari data kategori yang sudah di-fetch
+                const kategoriOptions = kategoriUsahaList
+                    .map(kategori => `<option value="${kategori}">${kategori}</option>`)
+                    .join('');
+
+                return `
+                    <h4 class="section-subtitle">Informasi Usaha</h4>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label">Kategori Usaha</label>
+                            <select name="kategori_usaha_${business.id_usaha}" class="form-input">
+                                <option value="">Pilih Kategori</option>
+                                ${kategoriOptions}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Jenis Usaha</label>
+                            <select name="jenis_usaha_${business.id_usaha}" class="form-input">
+                                <option value="">Pilih Jenis</option>
+                                <option value="Produsen">Produsen</option>
+                                <option value="Distributor">Distributor</option>
+                                <option value="Agen">Agen</option>
+                                <option value="Reseller">Reseller</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Bentuk Usaha</label>
+                             <select name="bentuk_usaha_${business.id_usaha}" class="form-input">
+                                <option value="">Pilih Bentuk</option>
+                                <option value="Perorangan">Perorangan</option>
+                                <option value="CV">CV</option>
+                                <option value="PD">PD</option>
+                                <option value="PT">PT</option>
+                                <option value="Koperasi">Koperasi</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tahun Mulai Usaha</label>
+                            <input type="number" name="tahun_usaha_${business.id_usaha}" class="form-input" 
+                                placeholder="Contoh: 2020" 
+                                value="${business.tahun_berdiri || '2020'}"
+                                min="1900" max="2024"
+                                oninput="validateYear(this)">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Legalitas Usaha</label>
+                            <input type="text" name="legalitas_${business.id_usaha}" class="form-input" 
+                                placeholder="NIB, SKU, dll">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Sertifikat</label>
+                            <input type="text" name="sertifikat_${business.id_usaha}" class="form-input" 
+                                placeholder="Halal, BPOM, dll">
+                        </div>
+                         <div class="form-group full-width">
+                            <label class="form-label">Barang yang Diproduksi/Dijual</label>
+                            <input type="text" name="produk_${business.id_usaha}" class="form-input" 
+                                placeholder="Contoh: Kebab, Jasa Digital Marketing">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Aset Tahun 2024 (Rp)</label>
+                            <input type="text" name="aset_${business.id_usaha}" class="form-input" 
+                                placeholder="Contoh: 50000000"
+                                oninput="validateNumber(this)">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Omzet Tahun 2024 (Rp)</label>
+                            <input type="text" name="omzet_${business.id_usaha}" class="form-input" 
+                                placeholder="Contoh: 120000000"
+                                oninput="validateNumber(this)">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Kapasitas Produksi / bulan</label>
+                            <input type="text" name="kapasitas_${business.id_usaha}" class="form-input" 
+                                placeholder="Contoh: 1000 pcs"
+                                oninput="validateNumber(this)">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Penjualan / bulan</label>
+                            <input type="text" name="penjualan_${business.id_usaha}" class="form-input" 
+                                placeholder="Contoh: 800 pcs"
+                                oninput="validateNumber(this)">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Jumlah Tenaga Kerja Tetap</label>
+                            <div class="input-group">
+                                <input type="number" name="tk_tetap_l_${business.id_usaha}" class="form-input" 
+                                    placeholder="Laki-laki" min="0"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <input type="number" name="tk_tetap_p_${business.id_usaha}" class="form-input" 
+                                    placeholder="Perempuan" min="0"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Jumlah Tenaga Kerja Tidak Tetap</label>
+                             <div class="input-group">
+                                <input type="number" name="tk_tidak_tetap_l_${business.id_usaha}" class="form-input" 
+                                    placeholder="Laki-laki" min="0"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <input type="number" name="tk_tidak_tetap_p_${business.id_usaha}" class="form-input" 
+                                    placeholder="Perempuan" min="0"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                            </div>
+                        </div>
+                         <div class="form-group full-width">
+                            <label class="form-label">Wilayah Pemasaran</label>
+                            <select name="pemasaran_${business.id_usaha}" class="form-input">
+                                <option value="">Pilih Wilayah Pemasaran</option>
+                                <option value="Lokal">Lokal</option>
+                                <option value="Nasional">Nasional</option>
+                                <option value="Internasional">Internasional</option>
+                                <option value="Lokal & Nasional">Lokal & Nasional</option>
+                                <option value="Lokal, Nasional & Internasional">Lokal, Nasional & Internasional</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Show business details and subsequent sections
             function showBusinessDetails(business) {
-                businessDetailsSection.classList.add('active');
-                // Populate business details form
-                // Show learning materials section
+                // This function is now mainly a trigger for other sections
                 learningSection.classList.add('active');
-                // Show challenges section
                 challengesSection.classList.add('active');
             }
 
-            // Form submission
+            // Form submission remains the same
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // Show commitment modal
+                // Tampilkan review modal
+                const reviewModal = document.getElementById('reviewModal');
+                populateReviewData();
+                reviewModal.classList.add('active');
+            });
+
+            function populateReviewData() {
+                const reviewPersonalData = document.getElementById('reviewPersonalData');
+                const reviewBusinessData = document.getElementById('reviewBusinessData');
+                const reviewMaterials = document.getElementById('reviewMaterials');
+                const reviewChallenges = document.getElementById('reviewChallenges');
+
+                // Populate personal data
+                reviewPersonalData.innerHTML = `
+                    <div class="review-item">
+                        <span class="review-label">Nama Lengkap</span>
+                        <span class="review-value">${document.getElementById('namaAnggota').value}</span>
+                    </div>
+                    <div class="review-item">
+                        <span class="review-label">Jenis Kelamin</span>
+                        <span class="review-value">${document.querySelector('input[name="gender"]:checked')?.value === 'L' ? 'Laki-laki' : 'Perempuan'}</span>
+                    </div>
+                    <div class="review-item">
+                        <span class="review-label">No. KTP</span>
+                        <span class="review-value">${document.getElementById('noKtp').value}</span>
+                    </div>
+                    <div class="review-item">
+                        <span class="review-label">No. NPWP</span>
+                        <span class="review-value">${document.getElementById('noNpwp').value || '-'}</span>
+                    </div>
+                    <div class="review-item">
+                        <span class="review-label">Pendidikan</span>
+                        <span class="review-value">${document.querySelector('select[name="pendidikan"]').value}</span>
+                    </div>
+                    <div class="review-item">
+                        <span class="review-label">No. WhatsApp</span>
+                        <span class="review-value">${document.getElementById('noWhatsapp').value}</span>
+                    </div>
+                    <div class="review-item">
+                        <span class="review-label">Email</span>
+                        <span class="review-value">${document.getElementById('email').value}</span>
+                    </div>
+                    <div class="review-item">
+                        <span class="review-label">Alamat</span>
+                        <span class="review-value">${document.getElementById('alamat').value}</span>
+                    </div>
+                `;
+
+                // Populate business data
+                const selectedBusiness = document.querySelector('input[name="selectedBusiness"]:checked');
+                if (selectedBusiness) {
+                    const businessId = selectedBusiness.value;
+                    const businessName = selectedBusiness.closest('.business-card').querySelector('.business-card-title').textContent;
+                    
+                    reviewBusinessData.innerHTML = `
+                        <div class="review-item">
+                            <span class="review-label">Nama Usaha</span>
+                            <span class="review-value">${businessName}</span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Kategori Usaha</span>
+                            <span class="review-value">${document.querySelector(`select[name="kategori_usaha_${businessId}"]`).value}</span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Jenis Usaha</span>
+                            <span class="review-value">${document.querySelector(`select[name="jenis_usaha_${businessId}"]`).value}</span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Bentuk Usaha</span>
+                            <span class="review-value">${document.querySelector(`select[name="bentuk_usaha_${businessId}"]`).value}</span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Tahun Mulai Usaha</span>
+                            <span class="review-value">${document.querySelector(`input[name="tahun_usaha_${businessId}"]`).value}</span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Legalitas Usaha</span>
+                            <span class="review-value">${document.querySelector(`input[name="legalitas_${businessId}"]`).value || '-'}</span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Sertifikat</span>
+                            <span class="review-value">${document.querySelector(`input[name="sertifikat_${businessId}"]`).value || '-'}</span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Produk</span>
+                            <span class="review-value">${document.querySelector(`input[name="produk_${businessId}"]`).value}</span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Aset 2024</span>
+                            <span class="review-value">Rp ${document.querySelector(`input[name="aset_${businessId}"]`).value}</span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Omzet 2024</span>
+                            <span class="review-value">Rp ${document.querySelector(`input[name="omzet_${businessId}"]`).value}</span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Kapasitas Produksi</span>
+                            <span class="review-value">${document.querySelector(`input[name="kapasitas_${businessId}"]`).value}</span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Penjualan per Bulan</span>
+                            <span class="review-value">${document.querySelector(`input[name="penjualan_${businessId}"]`).value}</span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Tenaga Kerja Tetap</span>
+                            <span class="review-value">Laki-laki: ${document.querySelector(`input[name="tk_tetap_l_${businessId}"]`).value || '0'}, Perempuan: ${document.querySelector(`input[name="tk_tetap_p_${businessId}"]`).value || '0'}</span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Tenaga Kerja Tidak Tetap</span>
+                            <span class="review-value">Laki-laki: ${document.querySelector(`input[name="tk_tidak_tetap_l_${businessId}"]`).value || '0'}, Perempuan: ${document.querySelector(`input[name="tk_tidak_tetap_p_${businessId}"]`).value || '0'}</span>
+                        </div>
+                        <div class="review-item">
+                            <span class="review-label">Wilayah Pemasaran</span>
+                            <span class="review-value">${document.querySelector(`select[name="pemasaran_${businessId}"]`).value}</span>
+                        </div>
+                    `;
+                }
+
+                // Populate materials
+                const selectedMaterials = Array.from(document.querySelectorAll('input[name="materi[]"]:checked'))
+                    .map(checkbox => {
+                        const title = checkbox.parentElement.querySelector('.option-title').textContent;
+                        const description = checkbox.parentElement.querySelector('.option-description').textContent;
+                        return `<div class="review-item">
+                            <span class="review-label">${title}</span>
+                            <span class="review-value">${description}</span>
+                        </div>`;
+                    });
+                
+                if (selectedMaterials.length > 0) {
+                    reviewMaterials.innerHTML = selectedMaterials.join('');
+                } else {
+                    reviewMaterials.innerHTML = `
+                        <div class="review-item">
+                            <span class="review-value">Belum ada materi yang dipilih</span>
+                        </div>
+                    `;
+                }
+
+                // Populate challenges
+                reviewChallenges.innerHTML = `
+                    <div class="review-item">
+                        <span class="review-value">${document.getElementById('kendala').value || '-'}</span>
+                    </div>
+                `;
+            }
+
+            // Handle review confirmation
+            document.getElementById('confirmReview').addEventListener('click', function() {
+                document.getElementById('reviewModal').classList.remove('active');
                 commitmentModal.classList.add('active');
+            });
+
+            // Handle edit data
+            document.getElementById('editData').addEventListener('click', function() {
+                document.getElementById('reviewModal').classList.remove('active');
             });
 
             // Commitment modal handlers
@@ -829,31 +1951,149 @@
                 commitmentModal.classList.remove('active');
             });
 
-            document.getElementById('confirmCommitment').addEventListener('click', () => {
-                const commitmentCheck = document.getElementById('commitmentCheck');
-                if (!commitmentCheck.checked) {
-                    alert('Mohon setujui komitmen program terlebih dahulu');
-                    return;
-                }
+            // Fungsi untuk menampilkan loading spinner
+            function showLoading() {
+                document.getElementById('loadingModal').classList.add('active');
+            }
 
-                // Submit form data
-                const formData = new FormData(form);
-                formData.append('anggotaId', selectedAnggotaId);
+            // Fungsi untuk menyembunyikan loading spinner
+            function hideLoading() {
+                document.getElementById('loadingModal').classList.remove('active');
+            }
 
-                fetch('/api/pendampingan/daftar', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert('Pendaftaran berhasil!');
-                    window.location.href = 'ruang-sinergi.html';
-                })
-                .catch(error => {
+            document.getElementById('confirmCommitment').addEventListener('click', async () => {
+                try {
+                    // Sembunyikan modal komitmen
+                    commitmentModal.classList.remove('active');
+                    
+                    // Tampilkan loading spinner
+                    document.getElementById('loadingModal').classList.add('active');
+
+                    const formData = new FormData(form);
+                    formData.append('anggotaId', selectedAnggotaId);
+
+                    // URL Apps Script yang akan dibuat
+                    const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbzZr-9YUiv_MjZSd9VCrr4onSntOGJwzQrku1gN-DJMz8nubIlhjx7uh4g2WnHgh4uYuQ/exec"; // Akan diisi setelah deploy
+
+                    // Kumpulkan semua data form
+                    const selectedBusiness = document.querySelector('input[name="selectedBusiness"]:checked');
+                    const businessId = selectedBusiness ? selectedBusiness.value : null;
+                    
+                    // Kumpulkan data materi yang dipilih
+                    const selectedMateri = Array.from(document.querySelectorAll('input[name="materi[]"]:checked'))
+                        .map(checkbox => checkbox.value);
+
+                    // Buat objek data untuk dikirim
+                    const submitData = {
+                        id_anggota: selectedAnggotaId,
+                        nama_lengkap: document.getElementById('namaAnggota').value,
+                        gender: document.querySelector('input[name="gender"]:checked').value,
+                        no_ktp: document.getElementById('noKtp').value,
+                        no_npwp: document.getElementById('noNpwp').value,
+                        pendidikan: document.querySelector('select[name="pendidikan"]').value,
+                        no_whatsapp: document.getElementById('noWhatsapp').value,
+                        email: document.getElementById('email').value,
+                        alamat: document.getElementById('alamat').value,
+                        
+                        // Data usaha yang dipilih
+                        id_usaha: businessId,
+                        nama_usaha: businessId ? document.querySelector(`.business-card[data-id="${businessId}"] .business-card-title`).textContent : '',
+                        kategori_usaha: businessId ? document.querySelector(`select[name="kategori_usaha_${businessId}"]`).value : '',
+                        jenis_usaha: businessId ? document.querySelector(`select[name="jenis_usaha_${businessId}"]`).value : '',
+                        bentuk_usaha: businessId ? document.querySelector(`select[name="bentuk_usaha_${businessId}"]`).value : '',
+                        tahun_usaha: businessId ? document.querySelector(`input[name="tahun_usaha_${businessId}"]`).value : '',
+                        legalitas: businessId ? document.querySelector(`input[name="legalitas_${businessId}"]`).value : '',
+                        sertifikat: businessId ? document.querySelector(`input[name="sertifikat_${businessId}"]`).value : '',
+                        produk: businessId ? document.querySelector(`input[name="produk_${businessId}"]`).value : '',
+                        aset: businessId ? document.querySelector(`input[name="aset_${businessId}"]`).value : '',
+                        omzet: businessId ? document.querySelector(`input[name="omzet_${businessId}"]`).value : '',
+                        kapasitas_produksi: businessId ? document.querySelector(`input[name="kapasitas_${businessId}"]`).value : '',
+                        penjualan: businessId ? document.querySelector(`input[name="penjualan_${businessId}"]`).value : '',
+                        tk_tetap_l: businessId ? document.querySelector(`input[name="tk_tetap_l_${businessId}"]`).value : '',
+                        tk_tetap_p: businessId ? document.querySelector(`input[name="tk_tetap_p_${businessId}"]`).value : '',
+                        tk_tidak_tetap_l: businessId ? document.querySelector(`input[name="tk_tidak_tetap_l_${businessId}"]`).value : '',
+                        tk_tidak_tetap_p: businessId ? document.querySelector(`input[name="tk_tidak_tetap_p_${businessId}"]`).value : '',
+                        wilayah_pemasaran: businessId ? document.querySelector(`select[name="pemasaran_${businessId}"]`).value : '',
+                        
+                        // Data materi dan kendala
+                        materi: selectedMateri,
+                        kendala: document.getElementById('kendala').value
+                    };
+
+                    // Kirim data ke Apps Script
+                                        // Log data yang akan dikirim
+                    console.log('Data yang akan dikirim:', submitData);
+ 
+                    const response = await fetch(SUBMIT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            data: JSON.stringify(submitData)
+                        })
+                    });
+
+                    // Simpan data ke localStorage untuk fallback
+                    localStorage.setItem('registrationData', JSON.stringify(submitData));
+                    
+                    // Redirect ke halaman sukses
+                    const idPeserta = generateUniqueCode();
+                    window.location.href = `peserta-program-pendampingan.html?idpeserta=${idPeserta}`;
+                } catch (error) {
                     console.error('Error:', error);
-                    alert('Gagal mendaftar. Silakan coba lagi.');
-                });
+                    showErrorModal("Gagal Mengirim Data", `
+                        <p><i class="fas fa-times-circle text-danger"></i> Terjadi kesalahan saat mengirim data:</p>
+                        <p>Koneksi gagal atau server tidak merespon.</p>
+                        <p>Silakan periksa koneksi internet Anda dan coba lagi.</p>
+                    `);
+                } finally {
+                    // Pastikan loading spinner selalu disembunyikan
+                    document.getElementById('loadingModal').classList.remove('active');
+                }
             });
+
+            // Fungsi untuk menampilkan error modal
+            function showErrorModal(title, message) {
+                const errorModal = document.getElementById('errorModal');
+                document.getElementById('errorTitle').textContent = title;
+                document.getElementById('errorMessage').innerHTML = message;
+                errorModal.classList.add('active');
+            }
+
+            // Fungsi untuk menutup error modal
+            function closeErrorModal() {
+                document.getElementById('errorModal').classList.remove('active');
+            }
+
+            // Event listener untuk tombol Tutup di modal error
+            document.getElementById('closeErrorBtn').addEventListener('click', function() {
+                closeErrorModal();
+            });
+
+            // Fungsi untuk generate kode unik 6 karakter (angka dan huruf)
+            function generateUniqueCode() {
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let result = '';
+                for (let i = 0; i < 6; i++) {
+                    result += characters.charAt(Math.floor(Math.random() * characters.length));
+                }
+                return result;
+            }
+
+            // Fungsi untuk validasi input angka
+            function validateNumber(input) {
+                input.value = input.value.replace(/[^0-9]/g, '');
+            }
+
+            // Validasi tahun
+            function validateYear(input) {
+                let value = parseInt(input.value);
+                if (value > 2024) {
+                    input.value = '2024';
+                }
+            }
 
             // Close search results when clicking outside
             document.addEventListener('click', function(e) {
