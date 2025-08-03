@@ -261,15 +261,15 @@
 
                     <div class="share-section">
                 <h3 class="share-title">Bagikan Link Pendaftaran</h3>
-                <div class="share-link">
-                    <span class="link-text" id="shareLink">Loading...</span>
-                    <button class="copy-button" onclick="copyShareLink()" style="background: #4CAF50; padding: 12px 24px;">
+                <div class="share-link" style="display: flex; justify-content: center;">
+                    <input type="hidden" id="shareLink" value="https://krapyakid.github.io/sinekra/program-pendampingan.html">
+                    <button class="share-button" onclick="shareLink()" style="background: #4CAF50; color: white; border: none; border-radius: 8px; padding: 16px 32px; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s ease;">
                         <i class="fas fa-share-alt"></i> Bagikan dan Ajak Teman Ikut Program
                     </button>
                 </div>
-                <p style="margin-top: 12px; color: #666; font-size: 0.9rem;">
+                <p style="margin-top: 12px; color: #666; font-size: 0.9rem; text-align: center;">
                     <i class="fas fa-info-circle"></i> 
-                    Bagikan link ini ke teman-teman yang ingin mengembangkan usahanya bersama SINEKRA!
+                    Bagikan program ini ke teman-teman yang ingin mengembangkan usahanya bersama Sinergi Ekonomi Santri PP Krapyak!
                 </p>
             </div>
 
@@ -408,11 +408,23 @@
             });
         }
 
-        function copyShareLink() {
-            const link = document.getElementById('shareLink').textContent;
-            navigator.clipboard.writeText(link).then(() => {
-                alert('Link berhasil disalin! Bagikan ke teman-teman untuk mengajak mereka bergabung dalam Program Pendampingan Peningkatan Usaha Santri.');
-            });
+        function shareLink() {
+            const link = document.getElementById('shareLink').value;
+            
+            // Cek apakah Web Share API tersedia
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Program Pendampingan Peningkatan Usaha Santri',
+                    text: 'Yuk, bergabung dalam Program Pendampingan Peningkatan Usaha Santri SINEKRA! 🚀',
+                    url: link
+                }).catch(err => {
+                    // Fallback jika share gagal
+                    window.open(link, '_blank');
+                });
+            } else {
+                // Fallback untuk browser yang tidak mendukung Web Share API
+                window.open(link, '_blank');
+            }
         }
     </script>
 </body>
