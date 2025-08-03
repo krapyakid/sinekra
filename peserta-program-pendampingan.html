@@ -259,15 +259,19 @@
             </div>
         </div>
 
-        <div class="share-section">
-            <h3 class="share-title">Bagikan Link Pendaftaran</h3>
-            <div class="share-link">
-                <span class="link-text" id="shareLink">Loading...</span>
-                <button class="copy-button" onclick="copyShareLink()">
-                    <i class="fas fa-copy"></i> Salin Link
-                </button>
+                    <div class="share-section">
+                <h3 class="share-title">Bagikan Link Pendaftaran</h3>
+                <div class="share-link">
+                    <span class="link-text" id="shareLink">Loading...</span>
+                    <button class="copy-button" onclick="copyShareLink()" style="background: #4CAF50; padding: 12px 24px;">
+                        <i class="fas fa-share-alt"></i> Bagikan dan Ajak Teman Ikut Program
+                    </button>
+                </div>
+                <p style="margin-top: 12px; color: #666; font-size: 0.9rem;">
+                    <i class="fas fa-info-circle"></i> 
+                    Bagikan link ini ke teman-teman yang ingin mengembangkan usahanya bersama SINEKRA!
+                </p>
             </div>
-        </div>
 
         <div class="next-steps">
             <h3>Langkah Selanjutnya</h3>
@@ -343,6 +347,7 @@
 
             function displayRegistrationData(data) {
                 const detailsGrid = document.getElementById('registrationDetails');
+                detailsGrid.innerHTML = ''; // Clear existing content
                 
                 // Fungsi helper untuk menambahkan detail item
                 function addDetailItem(label, value) {
@@ -356,21 +361,42 @@
                 }
 
                 // Tambahkan detail personal
-                addDetailItem('Nama Lengkap', registrationData.nama_lengkap);
-                addDetailItem('Jenis Kelamin', registrationData.gender === 'L' ? 'Laki-laki' : 'Perempuan');
-                addDetailItem('No. WhatsApp', registrationData.no_whatsapp);
-                addDetailItem('Email', registrationData.email);
+                addDetailItem('Nama Lengkap', data.nama_lengkap);
+                addDetailItem('Jenis Kelamin', data.gender === 'L' ? 'Laki-laki' : 'Perempuan');
+                addDetailItem('No. KTP', data.no_ktp);
+                addDetailItem('No. NPWP', data.no_npwp);
+                addDetailItem('Pendidikan', data.pendidikan);
+                addDetailItem('No. WhatsApp', data.no_whatsapp);
+                addDetailItem('Email', data.email);
+                addDetailItem('Alamat', data.alamat);
                 
                 // Tambahkan detail usaha
-                if (registrationData.id_usaha) {
-                    addDetailItem('Nama Usaha', registrationData.nama_usaha);
-                    addDetailItem('Kategori Usaha', registrationData.kategori_usaha);
-                    addDetailItem('Jenis Usaha', registrationData.jenis_usaha);
+                if (data.id_usaha) {
+                    addDetailItem('Nama Usaha', data.nama_usaha);
+                    addDetailItem('Kategori Usaha', data.kategori_usaha);
+                    addDetailItem('Jenis Usaha', data.jenis_usaha);
+                    addDetailItem('Bentuk Usaha', data.bentuk_usaha);
+                    addDetailItem('Tahun Mulai Usaha', data.tahun_usaha);
+                    addDetailItem('Legalitas Usaha', data.legalitas);
+                    addDetailItem('Sertifikat', data.sertifikat);
+                    addDetailItem('Produk', data.produk);
+                    addDetailItem('Aset 2024', `Rp ${data.aset}`);
+                    addDetailItem('Omzet 2024', `Rp ${data.omzet}`);
+                    addDetailItem('Kapasitas Produksi', data.kapasitas_produksi);
+                    addDetailItem('Penjualan per Bulan', data.penjualan);
+                    addDetailItem('Tenaga Kerja Tetap', `Laki-laki: ${data.tk_tetap_l || 0}, Perempuan: ${data.tk_tetap_p || 0}`);
+                    addDetailItem('Tenaga Kerja Tidak Tetap', `Laki-laki: ${data.tk_tidak_tetap_l || 0}, Perempuan: ${data.tk_tidak_tetap_p || 0}`);
+                    addDetailItem('Wilayah Pemasaran', data.wilayah_pemasaran);
                 }
 
                 // Tambahkan materi yang dipilih
-                if (registrationData.materi && registrationData.materi.length > 0) {
-                    addDetailItem('Materi yang Dipilih', registrationData.materi.join(', '));
+                if (data.materi) {
+                    addDetailItem('Materi yang Dipilih', Array.isArray(data.materi) ? data.materi.join(', ') : data.materi);
+                }
+
+                // Tambahkan kendala usaha
+                if (data.kendala) {
+                    addDetailItem('Kendala Usaha', data.kendala);
                 }
             }
         });
@@ -385,7 +411,7 @@
         function copyShareLink() {
             const link = document.getElementById('shareLink').textContent;
             navigator.clipboard.writeText(link).then(() => {
-                alert('Link berhasil disalin!');
+                alert('Link berhasil disalin! Bagikan ke teman-teman untuk mengajak mereka bergabung dalam Program Pendampingan Peningkatan Usaha Santri.');
             });
         }
     </script>
