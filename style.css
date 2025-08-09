@@ -433,10 +433,10 @@ main.content-container {
     }
 
     .member-card .card-business-name {
-        font-size: 0.85rem; /* Diperkecil dari 0.9rem untuk lebih harmonis */
-        font-weight: 500; /* Semi-bold, tidak terlalu tebal */
+        font-size: 0.9rem; /* Mobile responsive */
+        font-weight: 700;
         margin-bottom: 8px;
-        color: #444444; /* Warna lebih soft */
+        color: var(--primary-color);
         line-height: 1.3;
         /* Mencegah teks terlalu panjang */
         white-space: nowrap;
@@ -700,6 +700,7 @@ main.content-container {
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -822,26 +823,16 @@ main.content-container {
 }
 
 .member-card .card-content {
-    padding: 15px;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    min-height: 120px;
+    min-height: 140px;
+    gap: 0.25rem;
     justify-content: space-between;
 }
 
-.member-card .card-business-name {
-    font-size: 0.85rem; /* Diperkecil dari 0.9rem untuk lebih harmonis */
-    font-weight: 500; /* Semi-bold, tidak terlalu tebal */
-    margin-bottom: 8px;
-    color: #444444; /* Warna lebih soft */
-    line-height: 1.3;
-    /* Mencegah teks terlalu panjang */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    min-height: 20.8px; /* Fallback for 1 line */
-}
+/* Updated to use new typography system above */
 
 .member-card .card-description {
     font-size: 0.75rem; /* Diperkecil dari 0.8rem untuk proporsional */
@@ -1747,9 +1738,7 @@ input:checked + .slider:before {
         padding-bottom: 45px;
     }
 
-    .ai-btn {
-        /* Tidak perlu style khusus mobile, akan mengikuti style desktop */
-    }
+
 }
 
 @media (max-width: 992px) {
@@ -2323,13 +2312,21 @@ input:checked + .slider:before {
 }
 
 /* ==========================================================================
-   Halaman Detail Usaha & Anggota
+   Detail View - SINGLE SOURCE OF TRUTH
    ========================================================================== */
+
+/* Page layout */
+body.detail-page {
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
 
 .detail-container {
     max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 15px;
+    margin: 0 auto;
+    padding: 16px;
+    background: transparent;
 }
 
 .breadcrumb-container {
@@ -2347,31 +2344,161 @@ input:checked + .slider:before {
     color: var(--light-text-color);
 }
 
+/* Main layout with image in top-left corner next to title */
 .detail-content-wrapper {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 30px;
+    display: block;
     margin-bottom: 3rem;
 }
 
-@media (min-width: 768px) {
-    .detail-content-wrapper {
-        grid-template-columns: 1fr 2fr;
-        gap: 40px;
-    }
+.detail-header {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.detail-image-container {
+    flex-shrink: 0;
+    width: 120px;
+    height: 120px;
 }
 
 .detail-image-container img {
     width: 100%;
+    height: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.detail-header-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.detail-info {
+    min-width: 0;
+}
+
+.detail-title {
+    margin: 0 0 8px;
+    line-height: 1.2;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.business-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    padding: 10px 12px;
+    background: #f8f9fa;
+    border-left: 3px solid #cfe2ff;
+    border-radius: 10px;
+    margin-bottom: 18px;
+}
+
+.business-meta span {
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: anywhere;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.business-meta .sep {
+    opacity: .6;
+}
+
+.info-section {
+    margin: 18px 0;
+    padding: 0;
+    border: none;
+}
+
+.info-section h3 {
+    color: var(--primary-color);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-section h3 i {
+    color: var(--secondary-color);
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.info-section p {
+    color: #555;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.info-section p:last-child {
+    margin-bottom: 0;
+}
+
+/* Mobile responsive with header layout */
+@media (max-width: 768px) {
+    .detail-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .detail-image-container {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .detail-header-content {
+        width: 100%;
+    }
+    
+    .detail-title {
+        font-size: 1.2rem;
+    }
+    
+    .business-meta {
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px 8px;
+    }
+    
+    .compact-business-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        padding: 0 0.5rem;
+    }
+    
+    .recommendation-section-container {
+        padding: 0 1rem;
+    }
+    
+    .recommendation-section-container h2 {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .alumni-avatar {
+        font-size: 1.8rem;
+    }
+}
+
 /* Alumni Avatar styling for detail-anggota */
 .alumni-avatar {
     width: 100%;
+    height: 100%;
     aspect-ratio: 1 / 1;
     border-radius: 12px;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -2379,72 +2506,34 @@ input:checked + .slider:before {
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 600;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin: 0 auto;
 }
 
-@media (max-width: 768px) {
-    .alumni-avatar {
-        font-size: 2.2rem;
-    }
-}
+/* Mobile font size for alumni avatar is handled in main mobile responsive section above */
 
-@media (max-width: 480px) {
-    .alumni-avatar {
-        font-size: 1.8rem;
-    }
-}
-
-.detail-info h1 {
-    font-size: 2rem;
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
-}
-.jenis-usaha-wrapper {
-    margin-bottom: 1.5rem;
-}
-.jenis-usaha-title {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--light-text-color);
-    margin-bottom: 2px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-.detail-info .business-category {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--secondary-color);
-    margin-bottom: 0;
-}
-
-.info-section {
-    margin-bottom: 2rem;
-}
-.info-section h3 {
-    font-size: 1.2rem;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
-    color: var(--primary-color);
-}
-.info-section p, .info-section .info-item {
-    color: #555;
-    line-height: 1.7;
-}
+/* Legacy styles removed - using single source of truth above */
 
 .info-item {
     display: flex;
-    gap: 10px;
-    margin-bottom: 0.5rem;
+    gap: 12px;
+    margin-bottom: 8px;
+    padding: 8px;
+    background: #f8f9fa;
+    border-radius: 8px;
 }
 .info-item i {
     color: var(--secondary-color);
-    margin-top: 5px;
-    width: 20px;
+    font-size: 14px;
+    width: 16px;
     text-align: center;
+    flex-shrink: 0;
+}
+.info-item span {
+    color: #555;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .contact-icons-section {
@@ -2452,6 +2541,35 @@ input:checked + .slider:before {
     flex-wrap: wrap;
     gap: 12px;
     margin-top: 16px;
+}
+
+.contact-buttons-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.location-button-wrapper {
+    margin-top: 8px;
+}
+
+.share-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.posting-timestamp {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e9ecef;
+}
+
+.posting-timestamp p {
+    margin: 0;
+    text-align: center;
+    font-size: 12px;
+    color: #6c757d;
 }
 
 .contact-icons-section a {
@@ -2603,34 +2721,118 @@ input:checked + .slider:before {
     font-weight: 500;
 }
 
-/* Enhanced Info Sections */
-.info-section h3 {
-    font-size: 1.2rem;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
+/* Typography improvements for member cards */
+.card-member-name {
     color: var(--primary-color);
+    font-weight: 650;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+    letter-spacing: -0.025em;
+}
+
+.card-business-name {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+    letter-spacing: -0.025em;
+}
+
+.card-category {
+    color: #666;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card-type {
+    color: #777;
+    font-size: 0.9rem;
+    font-weight: 450;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.card-profession {
+    color: #555;
+    font-size: 0.9rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.card-domicile {
+    color: #666;
+    font-size: 0.8rem;
+    font-weight: 400;
+    margin-bottom: 0.75rem;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.25rem;
 }
 
-.info-section h3::before {
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 1rem;
+.card-domicile i {
     color: var(--secondary-color);
+    font-size: 0.75rem;
 }
 
-.info-section h3:nth-of-type(1)::before { content: "\f007"; } /* fa-user for Informasi Pribadi */
-.info-section h3:nth-of-type(2)::before { content: "\f3c5"; } /* fa-map-marker-alt for Domisili */
-.info-section h3:nth-of-type(3)::before { content: "\f0b1"; } /* fa-briefcase for Karir */
-.info-section h3:nth-of-type(4)::before { content: "\f095"; } /* fa-phone for Kontak */
-.info-section h3:nth-of-type(5)::before { content: "\f54f"; } /* fa-store for Usaha */
+.card-posting-date {
+    color: #999;
+    font-size: 0.75rem;
+    font-weight: 300;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.card-offer-badge {
+    color: var(--secondary-color);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.card-offer-badge.business-badge {
+    color: #ff6b35;
+}
+
+.card-info-badge {
+    color: #666;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+
+/* Member avatar styling */
+.member-avatar-banner {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.member-card-avatar {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Removed duplicate info-section styles */
 
 /* Recommendation Section Enhanced */
 .recommendation-section h2 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: var(--primary-color);
     margin-bottom: 1.5rem;
     display: flex;
@@ -2645,14 +2847,7 @@ input:checked + .slider:before {
     font-size: 1.3rem;
 }
 
-/* Enhanced visual appeal */
-.detail-info h1 {
-    font-size: 2.2rem;
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+/* Removed duplicate detail-info h1 styles */
 
 .info-item {
     display: flex;
@@ -2850,7 +3045,7 @@ input:checked + .slider:before {
     }
     
     .recommendation-section-container h2 {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
         margin-bottom: 1.5rem;
     }
 }
@@ -2935,6 +3130,39 @@ input:checked + .slider:before {
     .compact-business-type {
         font-size: 0.8rem;
     }
+    
+    .compact-business-card {
+        padding: 0.75rem;
+        border-radius: 8px;
+    }
+    
+    .compact-business-grid {
+        gap: 1rem;
+    }
+    
+    .card-member-name {
+        font-size: 0.95rem;
+    }
+    
+    .card-business-name {
+        font-size: 1.1rem;
+    }
+    
+    .card-category {
+        font-size: 0.65rem;
+    }
+    
+    .card-type {
+        font-size: 0.8rem;
+    }
+    
+    .card-profession {
+        font-size: 0.85rem;
+    }
+    
+    .member-card-avatar {
+        font-size: 2rem;
+    }
 }
 
 /* Full-width recommendation section - separate from main container */
@@ -2953,7 +3181,7 @@ input:checked + .slider:before {
 }
 
 .recommendation-section-container h2 {
-    font-size: 1.8rem;
+    font-size: 1.2rem;
     color: var(--primary-color);
     margin-bottom: 2rem;
     text-align: center;
@@ -3335,16 +3563,7 @@ input:checked + .slider:before {
     color: var(--primary-color);
 }
 
-.info-section {
-    margin-bottom: 28px;
-}
-
-.info-section h3 {
-    color: var(--primary-color);
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 12px;
-}
+/* Removed duplicate info-section styles */
 
 .info-section ul,
 .info-section ol {
@@ -3368,9 +3587,9 @@ input:checked + .slider:before {
 }
 
 .whatsapp-btn {
-    background-color: #d0f0d0 !important;
-    border-color: #b2eeb2 !important;
-    color: #444 !important;
+    background-color: #25D366 !important;
+    border: none !important;
+    color: #fff !important;
     font-size: 0.8rem;
     padding: 8px 14px;
     display: inline-flex;
@@ -3382,16 +3601,39 @@ input:checked + .slider:before {
 }
 
 .whatsapp-btn:hover {
-    background-color: #c0e6c0 !important;
-    border-color: #a0d8a0 !important;
-    color: #333 !important;
-    transform: none;
+    background-color: #128C7E !important;
+    color: #fff !important;
+    transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
-.whatsapp-btn i {
-    font-size: 0.9rem;
-    color: #25D366;
+.whatsapp-btn .whatsapp-icon {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1);
+}
+
+.website-btn {
+    background-color: #007bff;
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 8px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    border-radius: 6px;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.website-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
 /* Form Section Specific Styling untuk Investment Page */
@@ -3742,4 +3984,298 @@ input:checked + .slider:before {
     font-size: 0.75rem;
     margin-top: 6px;
     display: block;
+}
+
+/* Removed duplicate info-section styles */
+
+/* Clean button styles */
+.whatsapp-btn {
+    background: #25D366;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    border-radius: 8px;
+    width: 100%;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.whatsapp-btn:hover {
+    background: #128C7E;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-decoration: none;
+}
+
+.whatsapp-btn .whatsapp-icon {
+    width: 16px;
+    height: 16px;
+    filter: brightness(0) invert(1);
+}
+
+.website-btn {
+    background: #007bff;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    border-radius: 8px;
+    width: 100%;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.website-btn:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-decoration: none;
+}
+
+.location-btn {
+    background: #17a2b8;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    border-radius: 8px;
+    width: 100%;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.location-btn:hover {
+    background: #138496;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-decoration: none;
+}
+
+.share-btn {
+    background: #6c757d;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    border-radius: 8px;
+    width: 100%;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.share-btn:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-decoration: none;
+}
+
+.download-btn {
+    background: #28a745;
+}
+
+.download-btn:hover {
+    background: #218838;
+}
+
+/* Removed duplicate info-item styles */
+
+/* Removed duplicate layout styles - using single source of truth above */
+
+/* Removed duplicate mobile styles - using main mobile responsive above */
+
+/* Cleaned up - removed conflicting overrides */
+
+/* Recommendation section following detail-anggota pattern */
+.recommendation-section-full-width {
+    background: #f8f9fa;
+    padding: 3rem 0;
+    margin-top: 3rem;
+    border-top: 3px solid var(--secondary-color);
+}
+
+.recommendation-section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.recommendation-section-container h2 {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.recommendation-section-container h2 i {
+    color: var(--secondary-color);
+    font-size: 1.3rem;
+}
+
+.compact-business-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.compact-business-card {
+    display: flex;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 1rem;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.compact-business-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    text-decoration: none;
+}
+
+.compact-business-thumbnail {
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    background: #f8f9fa;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.compact-business-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.compact-business-thumbnail img:hover {
+    transform: scale(1.05);
+}
+
+.compact-business-info {
+    padding: 8px 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0; /* Prevents text overflow issues */
+}
+
+.compact-business-name {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.compact-business-type {
+    color: #666;
+    font-size: 0.75rem;
+    margin: 0;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+/* Removed old directory-grid styles - using compact-business-grid pattern */
+
+/* Clean Owner Card */
+.owner-card-item {
+    background: #e3f2fd;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+
+.owner-card {
+    background: #fff;
+    border: 1px solid #e3f2fd;
+    border-radius: 8px;
+    padding: 12px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.owner-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-decoration: none;
+}
+
+.owner-card-content {
+    flex: 1;
+}
+
+.owner-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 4px;
+}
+
+.owner-subtitle {
+    font-size: 12px;
+    color: #666;
+}
+
+.owner-arrow {
+    color: var(--secondary-color);
+    font-size: 14px;
+}
+
+.owner-card:hover .owner-arrow {
+    transform: translateX(2px);
 }
