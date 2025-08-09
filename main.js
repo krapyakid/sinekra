@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let currentView = 'usaha';
     let currentPage = 1;
-    const CARDS_PER_PAGE = 40; // Diubah dari 12 menjadi 40 card per halaman
+    const CARDS_PER_PAGE = 50; // 5 kolom × 10 baris = 50 kartu per halaman
     let currentSort = { by: 'newest' };
     
     // State untuk pencarian dan filter
@@ -487,7 +487,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     gridTitle.textContent = 'Daftar Anggota';
                     viewToggleLink.textContent = 'Lihat Daftar Usaha';
                     if(sortBtn) sortBtn.style.display = '';
-                    directoryGrid.classList.add('list-view');
+                    // Remove list-view class to use same grid as business cards
+                    directoryGrid.classList.remove('list-view');
                     updateContextualUI();
                     applyAndRenderMemberFilters();
                 } else {
@@ -716,29 +717,35 @@ document.addEventListener('DOMContentLoaded', function() {
     function createMemberListItem(member) {
         const item = document.createElement('a');
         item.href = `detail-anggota.html?id=${member.id_anggota}`;
-        item.className = 'member-list-item';
+        item.className = 'member-card';
 
-        let profession = member.profesi || 'Belum diisi';
-        if (member.nama_lembaga) {
-            profession += ` di ${member.nama_lembaga}`;
-        }
-
-        // Format lokasi: SVG [Nama Panggilan] | [Domisili]
-        const domisiliText = member.domisili || 'Lokasi tidak diketahui';
-        const nickname = member.nama_panggilan || '';
-        const locationSvg = '<svg class="icon-location" width="12" height="12" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>';
-        const locationButtonText = nickname ? `${locationSvg}<span>${nickname}</span> | <span>${domisiliText}</span>` : `${locationSvg}<span>${domisiliText}</span>`;
-        const gmapsUrl = member.domisili ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(member.domisili)}` : '#';
+        // Format tahun masuk dan keluar
+        const periode = formatPeriodeTahun(member.th_masuk, member.th_keluar);
+        
+        // Truncate nama lengkap if longer than 30 characters
+        const truncatedName = member.nama_lengkap && member.nama_lengkap.length > 30 
+            ? member.nama_lengkap.substring(0, 30) + '...' 
+            : (member.nama_lengkap || 'Nama Belum Diisi');
 
         item.innerHTML = `
-            <div class="member-list-avatar">${member.nama_lengkap.charAt(0)}</div>
-            <div class="member-list-details">
-                <h3 class="member-list-name">${member.nama_lengkap}</h3>
-                <p class="member-list-profession">${profession}</p>
-                <a href="${gmapsUrl}" target="_blank" class="member-location-btn" onclick="event.stopPropagation()">
-                    ${locationButtonText}
-                </a>
-                <div class="member-list-posting-date">Diposting: ${formatPostingDate(member.timestamp)}</div>
+            <div class="card-banner">
+                <div class="member-avatar-banner">
+                    <div class="member-card-avatar">${member.nama_lengkap.charAt(0)}</div>
+                </div>
+            </div>
+            <div class="card-content">
+                <h3 class="card-business-name" title="${member.nama_lengkap || ''}">${truncatedName}</h3>
+                <div class="card-category">${member.alumni || 'Alumni belum diisi'}</div>
+                <div class="card-type">${periode}</div>
+                ${member.komplek ? 
+                    `<div class="card-offer-badge">${member.komplek}</div>` : 
+                    ''}
+                ${member.domisili ? 
+                    `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(member.domisili)}" class="card-location-link" target="_blank" onclick="event.stopPropagation()">
+                        <i class="fas fa-map-marker-alt"></i> ${member.domisili}
+                    </a>` : 
+                    ''}
+                <div class="card-posting-date">Diposting: ${formatPostingDate(member.timestamp)}</div>
             </div>
         `;
         return item;
@@ -764,6 +771,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // Format periode tahun masuk dan keluar
+    function formatPeriodeTahun(tahunMasuk, tahunKeluar) {
+        if (!tahunMasuk && !tahunKeluar) return 'Periode belum diisi';
+        if (tahunMasuk && !tahunKeluar) return `${tahunMasuk} - Sekarang`;
+        if (!tahunMasuk && tahunKeluar) return `- ${tahunKeluar}`;
+        return `${tahunMasuk} - ${tahunKeluar}`;
+    }
+    
     function createBusinessCard(businessData) {
         const card = document.createElement('a');
         card.href = `detail-usaha.html?id=${businessData.id_usaha}`;
@@ -773,85 +788,29 @@ document.addEventListener('DOMContentLoaded', function() {
         const defaultImgUrl = `assets/usaha/default_image_usaha.jpg`;
         const businessImgUrl = `${baseAssetUrl}${businessData.id_usaha}.jpg`;
 
-        const gmapsUrl = businessData.url_gmaps_perusahaan || 
-            (businessData.domisili_usaha ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(businessData.domisili_usaha)}` : 
-            (businessData.domisili ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(businessData.domisili)}` : '#'));
-        
-        // Format: SVG [Nama Panggilan] | [Domisili]
-        const domisiliText = businessData.domisili_usaha || businessData.domisili || 'Lokasi tidak diketahui';
-        const nickname = businessData.nama_panggilan || '';
-        const locationSvg = '<svg class="icon-location" width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>';
-        const locationButtonText = nickname ? `${locationSvg}<span>${nickname}</span> | <span>${domisiliText}</span>` : `${locationSvg}<span>${domisiliText}</span>`;
 
-        const contactIcons = [];
         
-        // WhatsApp icon
-        const waNumber = (businessData.whatsapp || '').replace(/[^0-9]/g, '');
-        if (waNumber) {
-            contactIcons.push(`<a href="https://wa.me/62${waNumber}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>`);
-        }
-        
-        // Website icon
-        if (businessData.website_usaha) {
-            contactIcons.push(`<a href="${businessData.website_usaha}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="Website"><i class="fas fa-globe"></i></a>`);
-        }
-        
-        // Social Media icons
-        const socialMediaMap = {
-            instagram: { icon: 'fa-instagram', url: businessData.instagram },
-            facebook: { icon: 'fa-facebook', url: businessData.facebook },
-            tiktok: { icon: 'fa-tiktok', url: businessData.tiktok },
-            youtube: { icon: 'fa-youtube', url: businessData.youtube }
-        };
+        // Truncate business name if longer than 30 characters
+        const truncatedName = businessData.nama_usaha && businessData.nama_usaha.length > 30 
+            ? businessData.nama_usaha.substring(0, 30) + '...' 
+            : (businessData.nama_usaha || 'Nama Usaha Belum Diisi');
 
-        // Add social media icons
-        for (const [platform, data] of Object.entries(socialMediaMap)) {
-            if (data.url && data.url.trim() !== '') {
-                const url = data.url.startsWith('http') ? data.url : `https://${data.url}`;
-                contactIcons.push(`<a href="${url}" target="_blank" class="card-icon-link" onclick="event.stopPropagation()" title="${platform.charAt(0).toUpperCase() + platform.slice(1)}"><i class="fab ${data.icon}"></i></a>`);
-            }
-        }
-
-        // Marketplace icons
-        const olshops = {
-            tokopedia: { icon: 'icon-tokopedia.svg', url: businessData.tokopedia },
-            shopee: { icon: 'icon-shopee.svg', url: businessData.shopee },
-            bukalapak: { icon: 'icon-bukalapak.svg', url: businessData.bukalapak },
-            blibli: { icon: 'icon-blibli.svg', url: businessData.blibli },
-            tiktokshop: { icon: 'icon-tiktok.svg', url: businessData.tiktok_shop }
-        };
-
-        // Add marketplace icons
-        for (const [platform, data] of Object.entries(olshops)) {
-            if (data.url && data.url.trim() !== '') {
-                const url = data.url.startsWith('http') ? data.url : `https://${data.url}`;
-                contactIcons.push(`<a href="${url}" target="_blank" class="card-icon-link marketplace-icon-link" onclick="event.stopPropagation()" title="${platform.charAt(0).toUpperCase() + platform.slice(1)}"><img src="assets/marketplace/${data.icon}" alt="${platform}" class="marketplace-icon"></a>`);
-            }
-        }
-
-        // Log icon generation results
-        console.log('Generated contact icons for business:', {
-            businessName: businessData.nama_usaha,
-            totalIcons: contactIcons.length,
-            socialMedia: Object.entries(socialMediaMap).filter(([_, data]) => data.url && data.url.trim() !== '').map(([platform]) => platform),
-            marketplaces: Object.entries(olshops).filter(([_, data]) => data.url && data.url.trim() !== '').map(([platform]) => platform)
-        });
-        
         card.innerHTML = `
             <div class="card-banner">
                 <img src="${businessImgUrl}" alt="Gambar ${businessData.nama_usaha}" loading="lazy" onerror="this.onerror=null; this.src='${defaultImgUrl}';">
             </div>
-            <div class="card-location-info">
-                <a href="${gmapsUrl}" target="_blank" class="card-location-btn" onclick="event.stopPropagation()">
-                    ${locationButtonText}
-                </a>
-            </div>
             <div class="card-content">
-                <h3 class="card-business-name">${businessData.nama_usaha}</h3>
-                <p class="card-description">${businessData.jenis_usaha || ''}</p>
-                <div class="card-bottom-row">
-                    <div class="card-icon-container">${contactIcons.join('')}</div>
-                </div>
+                <h3 class="card-business-name" title="${businessData.nama_usaha || ''}">${truncatedName}</h3>
+                <div class="card-category">${businessData.kategori_usaha || 'Kategori belum diisi'}</div>
+                <div class="card-type">${businessData.jenis_usaha || 'Jenis usaha belum diisi'}</div>
+                ${businessData.prospek_kerjasama_penawaran ? 
+                    '<div class="card-offer-badge">Memiliki Penawaran</div>' : 
+                    ''}
+                ${businessData.url_gmaps_perusahaan ? 
+                    `<a href="${businessData.url_gmaps_perusahaan}" class="card-location-link" target="_blank" onclick="event.stopPropagation()">
+                        <i class="fas fa-map-marker-alt"></i> ${businessData.domisili || 'Lokasi tidak tersedia'}
+                    </a>` : 
+                    ''}
                 <div class="card-posting-date">Diposting: ${formatPostingDate(businessData.timestamp)}</div>
             </div>
         `;
