@@ -23,9 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function renderBreadcrumb(member) {
         breadcrumbContainer.innerHTML = `
-            <a href="index.html">Home</a>
-            <span>&nbsp;&gt;&nbsp;</span>
-            <span>Detail Anggota</span>
+            <a href="index.html">Beranda</a> > 
+            <a href="index.html#daftar-anggota">Daftar Anggota</a> > 
+            <span>${member.nama_lengkap || 'Detail Anggota'}</span>
         `;
     }
 
@@ -205,7 +205,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 waNumber = waNumber.substring(2);
             }
             if (waNumber) {
-                contactButtons.push(`<a href="https://wa.me/62${waNumber}" target="_blank" class="contact-wa-btn" title="WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a>`);
+                contactButtons.push(`
+                    <a href="https://wa.me/62${waNumber}" target="_blank" class="contact-btn whatsapp-btn">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>Chat WhatsApp</span>
+                    </a>`);
             }
         }
 
@@ -217,15 +221,6 @@ document.addEventListener('DOMContentLoaded', function() {
             `${member.th_masuk} – ${member.th_keluar}` : 
             (member.th_masuk ? `${member.th_masuk} –` : 'Tidak diketahui');
 
-        // Create avatar image container (using same structure as detail-usaha)
-        const avatarContainer = `
-            <div class="detail-image-container">
-                <div class="alumni-avatar">
-                    ${initialLetter}
-                </div>
-            </div>
-        `;
-
         // Format tanggal posting
         const postDate = member.timestamp ? new Date(member.timestamp) : new Date();
         const formattedDate = postDate.toLocaleDateString('id-ID', {
@@ -234,15 +229,26 @@ document.addEventListener('DOMContentLoaded', function() {
             year: 'numeric'
         });
 
-        // Create main info content
+        // Create header with avatar and title side by side
         let mainContent = `
-            <div class="detail-info">
-                <p class="text-xs text-gray-400 mb-2">Diposting ${formattedDate}</p>
-                <h1>${member.nama_lengkap}</h1>
-                <div class="alumni-status-wrapper">
-                    <p class="alumni-status">Alumni Pondok Pesantren Krapyak</p>
-                    <p class="alumni-angkatan">Angkatan ${angkatanText}</p>
+            <div class="detail-header">
+                <div class="detail-image-container">
+                    <div class="alumni-avatar">
+                        ${initialLetter}
+                    </div>
                 </div>
+                <div class="detail-header-content">
+                    <h1 class="detail-title">${member.nama_lengkap}</h1>
+                    <div class="business-meta">
+                        <span class="business-category-label">Alumni:</span>
+                        <span class="business-category-value">Pondok Pesantren Krapyak</span>
+                        <span class="separator">•</span>
+                        <span class="business-type-label">Angkatan:</span>
+                        <span class="business-type-value">${angkatanText}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-info">
 
                 <div class="info-section">
                     <h3>Informasi Pribadi</h3>
@@ -251,58 +257,91 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
 
                 <div class="info-section">
-                    <h3>Domisili</h3>
-                    <div class="info-item">
-                        <i class="fas fa-map-marker-alt"></i> 
-                        <span>Lokasi: `;
+                    <h3>Lokasi Domisili</h3>
+                    <div class="location-button-wrapper">`;
         
         // Handle Google Maps link for domisili using google_maps_url field
         if (member.google_maps_url && String(member.google_maps_url).trim() !== '') {
-            mainContent += `<a href="${member.google_maps_url}" target="_blank" class="location-link">
-                <i class="fas fa-map-marker-alt"></i>${member.domisili || 'Lokasi'}
-            </a>`;
+            mainContent += `
+                <a href="${member.google_maps_url}" target="_blank" class="location-btn">
+                    <i class="fas fa-map-marker-alt"></i>
+                    ${member.domisili || 'Lihat Lokasi'}
+                </a>`;
         } else if (member.google_map && String(member.google_map).trim() !== '') {
             // Fallback to google_map field
-            mainContent += `<a href="${member.google_map}" target="_blank" class="location-link">
-                <i class="fas fa-map-marker-alt"></i>${member.domisili || 'Lokasi'}
-            </a>`;
+            mainContent += `
+                <a href="${member.google_map}" target="_blank" class="location-btn">
+                    <i class="fas fa-map-marker-alt"></i>
+                    ${member.domisili || 'Lihat Lokasi'}
+                </a>`;
+        } else if (member.domisili) {
+            // Generate Google Maps search URL if no direct maps URL
+            const searchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(member.domisili)}`;
+            mainContent += `
+                <a href="${searchUrl}" target="_blank" class="location-btn">
+                    <i class="fas fa-map-marker-alt"></i>
+                    ${member.domisili}
+                </a>`;
         } else {
-            mainContent += member.domisili || '-';
+            mainContent += `<div class="location-text">Lokasi tidak tersedia</div>`;
         }
         
-        mainContent += `</span></div>`;
+        mainContent += `
+                    </div>
+                </div>`;
         
         // Show detailed address only if alamat_active is 1
         if (showAlamat && member.detail_alamat && String(member.detail_alamat).trim() !== '') {
-            mainContent += `<div class="info-item"><i class="fas fa-home"></i> <span>Detail Alamat: ${String(member.detail_alamat)}</span></div>`;
-        }
-        
-        mainContent += `</div>`;
-
-        // Karir & Kontribusi section
-        const hasCareerInfo = member.profesi || member.detail_profesi || member.pengembangan_profesi || member.ide || member.lain_lain;
-        if (hasCareerInfo) {
             mainContent += `
                 <div class="info-section">
-                    <h3>Karir & Kontribusi</h3>`;
-            
-            if (member.profesi) {
-                mainContent += `<div class="info-item"><i class="fas fa-user-tie"></i> <span>Profesi: ${member.profesi}</span></div>`;
-            }
-            if (member.detail_profesi && String(member.detail_profesi).trim() !== '' && member.detail_profesi !== '-') {
-                mainContent += `<div class="info-item"><i class="fas fa-info-circle"></i> <span>Detail Profesi: ${String(member.detail_profesi)}</span></div>`;
-            }
-            if (member.pengembangan_profesi && String(member.pengembangan_profesi).trim() !== '' && member.pengembangan_profesi !== '-') {
-                mainContent += `<div class="info-item"><i class="fas fa-chart-line"></i> <span>Pengembangan: ${String(member.pengembangan_profesi)}</span></div>`;
-            }
-            if (member.ide && String(member.ide).trim() !== '' && member.ide !== '-') {
-                mainContent += `<div class="info-item"><i class="fas fa-lightbulb"></i> <span>Ide/Gagasan: ${String(member.ide)}</span></div>`;
-            }
-            if (member.lain_lain && String(member.lain_lain).trim() !== '' && member.lain_lain !== '-') {
-                mainContent += `<div class="info-item"><i class="fas fa-plus-circle"></i> <span>Lain-lain: ${String(member.lain_lain)}</span></div>`;
-            }
-            
-            mainContent += `</div>`;
+                    <h3>Detail Alamat</h3>
+                    <div class="info-item"><i class="fas fa-home"></i> <span>${String(member.detail_alamat)}</span></div>
+                </div>`;
+        }
+
+        // Profesi section
+        if (member.profesi) {
+            mainContent += `
+                <div class="info-section">
+                    <h3>Profesi</h3>
+                    <div class="info-item"><i class="fas fa-user-tie"></i> <span>${member.profesi}</span></div>
+                </div>`;
+        }
+
+        // Detail Profesi section
+        if (member.detail_profesi && String(member.detail_profesi).trim() !== '' && member.detail_profesi !== '-') {
+            mainContent += `
+                <div class="info-section">
+                    <h3>Detail Profesi</h3>
+                    <p>${String(member.detail_profesi)}</p>
+                </div>`;
+        }
+
+        // Pengembangan Profesi section
+        if (member.pengembangan_profesi && String(member.pengembangan_profesi).trim() !== '' && member.pengembangan_profesi !== '-') {
+            mainContent += `
+                <div class="info-section">
+                    <h3>Pengembangan Profesi</h3>
+                    <p>${String(member.pengembangan_profesi)}</p>
+                </div>`;
+        }
+
+        // Ide/Gagasan section
+        if (member.ide && String(member.ide).trim() !== '' && member.ide !== '-') {
+            mainContent += `
+                <div class="info-section">
+                    <h3>Ide & Gagasan</h3>
+                    <p>${String(member.ide)}</p>
+                </div>`;
+        }
+
+        // Informasi Lainnya section
+        if (member.lain_lain && String(member.lain_lain).trim() !== '' && member.lain_lain !== '-') {
+            mainContent += `
+                <div class="info-section">
+                    <h3>Informasi Lainnya</h3>
+                    <p>${String(member.lain_lain)}</p>
+                </div>`;
         }
 
         // Contact section - only show if there are contact buttons
@@ -329,10 +368,16 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         }
 
-        mainContent += `</div>`;
+        // Waktu posting di paling bawah
+        mainContent += `
+                <div class="info-section posting-timestamp">
+                    <p class="text-xs text-gray-400">Diposting ${formattedDate}</p>
+                </div>
+            </div>
+        `;
 
-        // Combine main content without recommendations
-        detailContent.innerHTML = avatarContainer + mainContent;
+        // Set main content with new header layout
+        detailContent.innerHTML = mainContent;
 
         // Member recommendations section - separate from main container
         const memberRecommendations = renderMemberRecommendations(allData, member);
