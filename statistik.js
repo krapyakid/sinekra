@@ -95,7 +95,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addFilterListeners() {
-        [filterAlumni, filterDomisili, filterProfesi, filterKategoriUsaha, filterTahunMasuk, filterTahunKeluar].forEach(el => {
+        // Listener untuk tahun masuk
+        filterTahunMasuk.addEventListener('change', function() {
+            const tahunMasuk = parseInt(this.value, 10);
+            const tahunKeluar = parseInt(filterTahunKeluar.value, 10);
+            
+            // Reset opsi tahun keluar
+            const defaultOption = filterTahunKeluar.querySelector('option[value=""]');
+            filterTahunKeluar.innerHTML = '';
+            filterTahunKeluar.appendChild(defaultOption);
+            
+            // Populate tahun keluar berdasarkan tahun masuk yang dipilih
+            if (!isNaN(tahunMasuk)) {
+                // Tahun keluar minimal sama dengan tahun masuk
+                for (let year = 2024; year >= tahunMasuk; year--) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    // Jika ada tahun keluar yang dipilih sebelumnya dan masih valid, pilih kembali
+                    if (year === tahunKeluar && year >= tahunMasuk) {
+                        option.selected = true;
+                    }
+                    filterTahunKeluar.appendChild(option);
+                }
+            } else {
+                // Jika tahun masuk kosong, tampilkan semua opsi tahun keluar
+                populateYearSelect(filterTahunKeluar, 1991, 2024, 'Semua Tahun');
+            }
+            
+            updateTables();
+        });
+
+        // Listener untuk filter lainnya
+        [filterAlumni, filterDomisili, filterProfesi, filterKategoriUsaha, filterTahunKeluar].forEach(el => {
             el.addEventListener('change', updateTables);
         });
     }
@@ -116,12 +148,34 @@ document.addEventListener('DOMContentLoaded', () => {
             const thKeluar = parseInt(item.th_keluar, 10);
             
             // Year range validation
-            const yearInRange = (
-                // If no start year is selected OR the entry year is valid and >= start year
-                (isNaN(startYear) || (!isNaN(thMasuk) && thMasuk >= startYear)) &&
-                // If no end year is selected OR the exit year is valid and <= end year
-                (isNaN(endYear) || (!isNaN(thKeluar) && thKeluar <= endYear))
-            );
+            const yearInRange = (() => {
+                // Jika tidak ada tahun yang dipilih
+                if (isNaN(startYear) && isNaN(endYear)) return true;
+
+                // Jika hanya tahun masuk yang dipilih
+                if (!isNaN(startYear) && isNaN(endYear)) {
+                    return !isNaN(thMasuk) && thMasuk >= startYear;
+                }
+
+                // Jika hanya tahun keluar yang dipilih
+                if (isNaN(startYear) && !isNaN(endYear)) {
+                    return !isNaN(thKeluar) && thKeluar <= endYear;
+                }
+
+                // Jika kedua tahun dipilih
+                if (!isNaN(startYear) && !isNaN(endYear)) {
+                    // Pastikan tahun masuk dan keluar valid
+                    if (isNaN(thMasuk) || isNaN(thKeluar)) return false;
+                    
+                    // Pastikan tahun masuk <= tahun keluar
+                    if (thMasuk > thKeluar) return false;
+                    
+                    // Cek apakah periode anggota berada dalam rentang yang dipilih
+                    return thMasuk >= startYear && thKeluar <= endYear;
+                }
+
+                return false;
+            })();
 
             // Handle empty/null values in filters
             const alumniMatch = !selectedAlumni || item.alumni === selectedAlumni;
