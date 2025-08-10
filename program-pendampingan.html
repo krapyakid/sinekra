@@ -51,6 +51,229 @@
             text-align: left;
         }
 
+        /* Participant Stats Styling */
+        .participant-stats {
+            margin: 32px 0;
+        }
+
+        .participant-box {
+            background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .participant-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .participant-count {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .count-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .count-label {
+            font-size: 1rem;
+            color: #4B5563;
+        }
+
+        .view-participants-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .view-participants-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .view-participants-btn i {
+            font-size: 1.1rem;
+        }
+
+        /* Participants List Modal Styling */
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6B7280;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: #374151;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .participants-list {
+            margin-top: 24px;
+        }
+
+        .participant-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #E5E7EB;
+            transition: background-color 0.2s ease;
+        }
+
+        .participant-item:last-child {
+            border-bottom: none;
+        }
+
+        .participant-item:hover {
+            background-color: #F9FAFB;
+        }
+
+        .participant-info {
+            flex: 1;
+        }
+
+        .participant-name {
+            font-weight: 500;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .participant-details {
+            font-size: 0.85rem;
+            color: #6B7280;
+        }
+
+        .participant-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .status-active {
+            color: #059669;
+        }
+
+        .status-inactive {
+            color: #DC2626;
+        }
+
+        /* Loading Spinner for Participants List */
+        .loading-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 0;
+        }
+
+        .loading-spinner .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #E5E7EB;
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        .loading-spinner p {
+            color: #6B7280;
+            font-size: 0.9rem;
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+                color: var(--secondary-color);
+            }
+            100% {
+                transform: scale(1);
+                color: var(--primary-color);
+            }
+        }
+
+        .count-animate {
+            animation: countUp 0.5s ease forwards;
+        }
+
+        .count-complete {
+            animation: pulse 0.3s ease-out;
+        }
+
+        .participant-box {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .participant-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            100% {
+                left: 100%;
+            }
+        }
+
         /* --- STYLE UNTUK GAMBAR HEADER --- */
         .header-image {
             display: block;
@@ -392,6 +615,69 @@
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Shadow diperhalus untuk efek modern */
+        }
+
+        /* --- STICKY MODAL UNTUK PARTICIPANTS --- */
+        #participantsModal .modal-content {
+            max-width: 800px;
+            width: 95%;
+            max-height: 90vh;
+            padding: 0; /* Reset padding untuk sticky layout */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header-sticky {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+            padding: 20px 24px;
+            border-bottom: 2px solid #E5E7EB;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-body-scrollable {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 24px;
+            min-height: 0; /* Allow flex shrink */
+        }
+
+        .modal-footer-sticky {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            z-index: 10;
+            padding: 16px 24px;
+            border-top: 2px solid #E5E7EB;
+            border-radius: 0 0 12px 12px;
+            text-align: center;
+        }
+
+        .btn-tutup {
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-tutup:hover {
+            background: linear-gradient(135deg, #DC2626, #B91C1C);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-tutup i {
+            font-size: 14px;
         }
 
         .modal-header {
@@ -1018,6 +1304,81 @@
             .business-cards {
                 grid-template-columns: 1fr;
             }
+
+            /* Responsive Participant Box */
+            .participant-box {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .participant-count {
+                align-items: center;
+            }
+
+            .count-number {
+                font-size: 2rem;
+            }
+
+            .count-label {
+                font-size: 0.9rem;
+            }
+
+            .view-participants-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* Responsive Modal */
+            .modal-content {
+                width: 95%;
+                max-height: 85vh;
+                padding: 20px;
+                margin: 20px;
+            }
+
+            .modal-header {
+                padding-bottom: 12px;
+            }
+
+            .modal-title {
+                font-size: 1.1rem;
+            }
+
+            .participant-item {
+                flex-direction: column;
+                gap: 8px;
+                padding: 12px;
+            }
+
+            .participant-info {
+                width: 100%;
+            }
+
+            .participant-details {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .participant-details span {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+
+            .participant-details span::before {
+                content: '•';
+                color: var(--primary-color);
+            }
+
+            .participant-status {
+                width: 100%;
+                justify-content: flex-start;
+                padding-top: 8px;
+                border-top: 1px solid #E5E7EB;
+            }
         }
     </style>
 </head>
@@ -1075,6 +1436,52 @@
                 Halo Sahabat Sinergi Ekonomi! 🎉<br>
                 Yuk, daftarkan dirimu untuk ikut Program Pendampingan Usaha Santri. Di sini kamu bisa belajar, dapat bimbingan usaha, dan bertumbuh bareng teman-teman komunitas. Jangan ragu! Isi data dengan lengkap, ikuti programnya, dan gapai mimpi usahamu bareng kami! 💪✨
             </p>
+        </div>
+
+        <!-- Participant Stats Section -->
+        <div class="participant-stats">
+            <div class="participant-box" id="participantBox">
+                <div class="participant-count">
+                    <span class="count-number" id="participantCounter">0</span>
+                    <span class="count-label">Peserta Terdaftar</span>
+                </div>
+                <button class="view-participants-btn" id="viewParticipantsBtn">
+                    <i class="fas fa-users"></i>
+                    Lihat Daftar Peserta
+                </button>
+            </div>
+        </div>
+
+        <!-- Participants List Modal -->
+        <div class="modal" id="participantsModal">
+            <div class="modal-content">
+                <!-- Sticky Header -->
+                <div class="modal-header modal-header-sticky">
+                    <h3 class="modal-title">
+                        <i class="fas fa-users"></i>
+                        Daftar Peserta Program Pendampingan
+                    </h3>
+                </div>
+                
+                <!-- Scrollable Body -->
+                <div class="modal-body modal-body-scrollable">
+                    <div class="participants-list" id="participantsList">
+                        <!-- Participants will be loaded here -->
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                            <p>Memuat data peserta...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sticky Footer dengan Button Tutup -->
+                <div class="modal-footer modal-footer-sticky">
+                    <button class="btn-tutup" id="closeParticipantsModal">
+                        <i class="fas fa-times"></i>
+                        Tutup
+                    </button>
+                </div>
+            </div>
         </div>
 
         <form id="pendampinganForm" class="form-container">
@@ -1368,15 +1775,237 @@
     </main>
 
     <footer class="main-footer">
-        <div class="flex flex-col items-center space-y-1">
-            <span>© 2025 Sinergi Ekonomi Santri Krapyak</span>
-            <a href="versi.html" target="_blank" class="text-sm text-gray-500 hover:text-sinekra-primary">v1.3.0</a>
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; line-height: 1.2;">
+            <span style="font-size: 0.85rem; margin-bottom: 6px;">© 2025 Sinergi Ekonomi Santri Krapyak</span>
+            <a href="versi.html" target="_blank" style="
+                font-size: 0.7rem; 
+                color: #6b7280; 
+                text-decoration: none; 
+                background-color: #f3f4f6; 
+                padding: 3px 8px; 
+                border-radius: 100px; 
+                transition: all 0.2s ease;
+                border: 1px solid #e5e7eb;
+            " onmouseover="this.style.backgroundColor='#e5e7eb'; this.style.color='#374151'" onmouseout="this.style.backgroundColor='#f3f4f6'; this.style.color='#6b7280'">v1.6.0</a>
         </div>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Participant Box and Modal functionality
+            const participantBox = document.getElementById('participantBox');
+            const participantCounter = document.getElementById('participantCounter');
+            const viewParticipantsBtn = document.getElementById('viewParticipantsBtn');
+            const participantsModal = document.getElementById('participantsModal');
+            const closeParticipantsModal = document.getElementById('closeParticipantsModal');
+            const participantsList = document.getElementById('participantsList');
+
+            // Function to fetch participants data
+            async function fetchParticipants() {
+                // API untuk data program pendampingan (counting & list peserta)
+                const PROGRAM_PARTICIPANTS_URL = "https://script.google.com/macros/s/AKfycbzZr-9YUiv_MjZSd9VCrr4onSntOGJwzQrku1gN-DJMz8nubIlhjx7uh4g2WnHgh4uYuQ/exec?action=getParticipants";
+                
+                // API untuk data anggota lengkap (untuk join domisili, th_masuk, th_keluar)
+                const ANGGOTA_DATA_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLi5gcgMlV715GPICHo9NqGH1cvHzS0DZzcPk2wSgxNPKJkGIwzPwDW6Xi6VpdxxoJB31XQ63jPosKkzIeuzFvfUXO2FnXZ2rEuz-tdHvqwVCm3Ue0HrCVZwBAYctOYc2zD2h5zqCBIcK4qKiRYjMkdZHQRgGRSN-ybybiLqj9m37OZQrCvXZ9W9vOpxeGCkoM7GniDXEJVMTjuyudrGOH--qQPimf_qAmhpTBNSO0oKgidKrZa_IdMPplifmjCCI_MJmV2YfmJgaFIgoccXvkToIFf1lA&lib=M-aXtcKF51ru9wCWmoQxSRyT8B5DgJEAP";
+                
+                try {
+                    // Fetch kedua API secara paralel
+                    const [programResponse, anggotaResponse] = await Promise.all([
+                        fetch(PROGRAM_PARTICIPANTS_URL),
+                        fetch(ANGGOTA_DATA_URL)
+                    ]);
+
+                    if (!programResponse.ok || !anggotaResponse.ok) {
+                        throw new Error('Failed to fetch data');
+                    }
+
+                    const programResult = await programResponse.json();
+                    const anggotaResult = await anggotaResponse.json();
+                    
+                    console.log('Program Participants API Response:', programResult);
+                    console.log('Anggota Data API Response:', anggotaResult);
+
+                    // Check if responses are successful
+                    if (programResult.status === "error") {
+                        throw new Error(programResult.message || 'Error fetching program participants data');
+                    }
+                    if (anggotaResult.status === "error") {
+                        throw new Error(anggotaResult.message || 'Error fetching anggota data');
+                    }
+
+                    // Data dari program_pendampingan_anggota (untuk list & counting)
+                    const programParticipants = programResult.data || [];
+                    
+                    // Data dari anggota_sinekra_v2 (untuk join domisili, th_masuk, th_keluar)
+                    const allAnggota = anggotaResult.data || [];
+                    
+                    // Helper function untuk normalisasi nama
+                    function normalizeName(name) {
+                        return (name || '').toString().toLowerCase().trim().replace(/\s+/g, ' ');
+                    }
+                    
+                    // JOIN data: ambil nama & ID dari program_pendampingan, join dengan anggota_sinekra untuk domisili dll
+                    const joinedData = programParticipants.map(programEntry => {
+                        // Cari data anggota yang sesuai
+                        let anggotaInfo = null;
+                        
+                        // Cari berdasarkan ID Anggota
+                        anggotaInfo = allAnggota.find(anggota => anggota.id_anggota === programEntry.id_anggota);
+                        
+                        // Jika tidak ketemu berdasarkan ID, coba berdasarkan nama
+                        if (!anggotaInfo && programEntry.nama_lengkap) {
+                            const programName = normalizeName(programEntry.nama_lengkap);
+                            anggotaInfo = allAnggota.find(anggota => 
+                                normalizeName(anggota.nama_lengkap) === programName
+                            );
+                        }
+                        
+                        return {
+                            nama_lengkap: programEntry.nama_lengkap || '', // Dari program_pendampingan
+                            id_anggota: programEntry.id_anggota || '',     // Dari program_pendampingan
+                            th_masuk: anggotaInfo ? anggotaInfo.th_masuk : 'Data tidak tersedia',    // Dari anggota_sinekra (JOIN)
+                            th_keluar: anggotaInfo ? anggotaInfo.th_keluar : 'Data tidak tersedia',  // Dari anggota_sinekra (JOIN)
+                            domisili: anggotaInfo ? anggotaInfo.domisili : 'Data tidak tersedia',    // Dari anggota_sinekra (JOIN)
+                            status: programEntry.status || 'Terdaftar',    // Status dari program_pendampingan
+                            program_status: programEntry.status           // Backup untuk logic
+                        };
+                    });
+
+                    // Update counter with animation (get count from same endpoint)
+                    await fetchAndUpdateCounter();
+
+                    // Render participants list
+                    renderParticipants(joinedData);
+
+                } catch (error) {
+                    console.error('Error fetching participants:', error);
+                    participantsList.innerHTML = `
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <p>Gagal memuat data peserta. Silakan coba lagi nanti.</p>
+                        </div>
+                    `;
+                }
+            }
+
+            // Function to animate counter with easing
+            function animateCounter(targetCount) {
+                let startTime;
+                const duration = 2000; // 2 seconds for smoother animation
+                
+                participantCounter.classList.add('count-animate');
+
+                function easeOutExpo(t) {
+                    return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+                }
+
+                function updateCounter(currentTime) {
+                    if (!startTime) startTime = currentTime;
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+
+                    const easedProgress = easeOutExpo(progress);
+                    const currentCount = Math.round(easedProgress * targetCount);
+                    
+                    participantCounter.textContent = currentCount;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        // Add final animation class
+                        participantCounter.classList.add('count-complete');
+                        setTimeout(() => {
+                            participantCounter.classList.remove('count-complete');
+                        }, 300);
+                    }
+                }
+
+                requestAnimationFrame(updateCounter);
+            }
+
+            // Function to fetch and update counter from counting endpoint
+            async function fetchAndUpdateCounter() {
+                // BENAR: Count dari program_pendampingan_anggota
+                const COUNTING_URL = "https://script.google.com/macros/s/AKfycbzZr-9YUiv_MjZSd9VCrr4onSntOGJwzQrku1gN-DJMz8nubIlhjx7uh4g2WnHgh4uYuQ/exec?action=getCount";
+                
+                try {
+                    const response = await fetch(COUNTING_URL);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch counting data');
+                    }
+
+                    const result = await response.json();
+                    console.log('Counter API Response:', result); // Debug log
+                    
+                    // Handle response dari program pendampingan (BUKAN dari anggota_sinekra)
+                    let count = 0;
+                    if (result.status === "success" && result.count !== undefined) {
+                        count = result.count; // Count peserta program pendampingan
+                    } else if (result.status === "error") {
+                        console.error('API Error:', result.message);
+                        count = 10; // Fallback
+                    } else {
+                        // Fallback to default count
+                        count = 10;
+                    }
+
+                    animateCounter(count);
+                } catch (error) {
+                    console.error('Error fetching counter data:', error);
+                    // Fallback to default count
+                    animateCounter(10);
+                }
+            }
+
+            // Function to render participants list
+            function renderParticipants(participants) {
+                const participantsHTML = participants.map(participant => {
+                    // Logic status berdasarkan kolom Status di program_pendampingan
+                    const isActive = participant.status === 'Terdaftar' || participant.program_status === 'Terdaftar';
+                    const statusText = isActive ? 'Sudah Terdaftar' : participant.status || 'Tidak Aktif';
+                    const statusClass = isActive ? 'status-active' : 'status-inactive';
+                    
+                    return `
+                        <div class="participant-item">
+                            <div class="participant-info">
+                                <div class="participant-name">${participant.nama_lengkap}</div>
+                                <div class="participant-details">
+                                    <span>Masuk: ${participant.th_masuk}</span> • 
+                                    <span>Keluar: ${participant.th_keluar}</span> • 
+                                    <span>Domisili: ${participant.domisili}</span>
+                                </div>
+                            </div>
+                            <div class="participant-status ${statusClass}">
+                                <i class="fas fa-circle"></i>
+                                ${statusText}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                participantsList.innerHTML = participantsHTML;
+            }
+
+            // Event listeners for modal
+            viewParticipantsBtn.addEventListener('click', () => {
+                participantsModal.classList.add('active');
+                fetchParticipants();
+            });
+
+            closeParticipantsModal.addEventListener('click', () => {
+                participantsModal.classList.remove('active');
+            });
+
+            // Close modal when clicking outside
+            participantsModal.addEventListener('click', (e) => {
+                if (e.target === participantsModal) {
+                    participantsModal.classList.remove('active');
+                }
+            });
+
+            // Initial fetch for counter only (not participants list)
+            fetchAndUpdateCounter();
             // Mobile menu functionality
             const menuTrigger = document.getElementById('burger-menu-trigger');
             const mainNav = document.getElementById('main-nav');
