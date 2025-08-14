@@ -357,11 +357,24 @@
                 <div class="spinner"></div>
                 <p>Mengirim data...</p>
              </div>
-             <div id="submission-success" style="display:none;">
-                <i class="fas fa-check-circle success-icon"></i>
-                <h2>Terima Kasih!</h2>
-                <p>Data Anda telah berhasil dikirim.</p>
-                <a href="index.html" class="btn btn-primary">Kembali ke Direktori</a>
+             <div id="submission-success" style="display:none; text-align: center;">
+                <i class="fas fa-check-circle success-icon" style="color: #27ae60; font-size: 80px; margin-bottom: 20px;"></i>
+                <h2 style="color: #27ae60; margin-bottom: 15px;">Terima Kasih!</h2>
+                <p style="color: #555; margin-bottom: 25px;">Data Anda telah berhasil dikirim.</p>
+                
+                <div id="countdown-container" style="margin-bottom: 20px;">
+                    <div id="countdown-circle" style="width: 80px; height: 80px; border-radius: 50%; background: #3498db; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 28px; font-weight: bold; position: relative; overflow: hidden;">
+                        <span id="countdown-number">5</span>
+                        <div id="countdown-progress" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(#2ecc71 0deg, transparent 0deg); transition: all 1s ease;"></div>
+                        <span id="countdown-number-front" style="position: relative; z-index: 2; color: white; font-size: 28px; font-weight: bold;">5</span>
+                    </div>
+                    <p id="countdown-text" style="color: #666; margin: 0; font-size: 16px;">Mengarahkan ke halaman detail anggota...</p>
+                </div>
+                
+                <button id="skip-countdown" class="btn btn-secondary" style="background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-right: 10px;">
+                    Lewati
+                </button>
+                <a href="index.html" class="btn btn-primary" style="background: #3498db; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px;">Kembali ke Direktori</a>
              </div>
              <div id="submission-error" style="display:none;">
                 <i class="fas fa-times-circle error-icon"></i>
@@ -430,14 +443,27 @@
                     })
                     .then(res => res.json())
                     .then(data => {
+                        console.log('Response dari server:', data);
                         if (data.status === "success") {
                             document.getElementById('submission-loading').style.display = 'none';
                             document.getElementById('submission-success').style.display = 'block';
-                            // Redirect ke halaman detail setelah 2 detik menggunakan ID dari server
-                            setTimeout(() => {
-                                window.location.href = `detail.html?id=${data.id_anggota}`;
-                            }, 2000);
+                            
+                            // Debug untuk melihat struktur response
+                            console.log('Data keys:', Object.keys(data));
+                            console.log('ID Anggota:', data.id_anggota);
+                            
+                            // Cek apakah id_anggota ada
+                            if (data.id_anggota) {
+                                // Redirect ke halaman detail setelah countdown
+                                console.log('Akan redirect ke:', `detail-anggota.html?id=${data.id_anggota}`);
+                                startCountdownRedirect(`detail-anggota.html?id=${data.id_anggota}`, 5);
+                            } else {
+                                console.warn('ID Anggota tidak ditemukan dalam response, tidak ada redirect');
+                                // Fallback redirect ke halaman utama setelah countdown
+                                startCountdownRedirect('index.html', 5);
+                            }
                         } else {
+                            console.error('Status response bukan success:', data);
                             throw new Error(data.message || 'Terjadi kesalahan dari server.');
                         }
                     })
@@ -456,6 +482,60 @@
             document.getElementById('error-close-btn').addEventListener('click', () => {
                 document.getElementById('status-modal').style.display = 'none';
             });
+            
+            // Fungsi countdown untuk redirect
+            function startCountdownRedirect(targetUrl, seconds) {
+                let timeLeft = seconds;
+                let countdownInterval;
+                
+                // Update tampilan awal
+                updateCountdownDisplay(timeLeft);
+                
+                // Setup interval countdown
+                countdownInterval = setInterval(() => {
+                    timeLeft--;
+                    updateCountdownDisplay(timeLeft);
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(countdownInterval);
+                        window.location.href = targetUrl;
+                    }
+                }, 1000);
+                
+                // Event listener untuk tombol skip
+                document.getElementById('skip-countdown').addEventListener('click', () => {
+                    clearInterval(countdownInterval);
+                    window.location.href = targetUrl;
+                });
+            }
+            
+            // Fungsi untuk update tampilan countdown
+            function updateCountdownDisplay(timeLeft) {
+                const countdownNumber = document.getElementById('countdown-number-front');
+                const countdownProgress = document.getElementById('countdown-progress');
+                const countdownText = document.getElementById('countdown-text');
+                
+                if (countdownNumber) {
+                    countdownNumber.textContent = timeLeft;
+                }
+                
+                // Update progress circle (360 degrees / total seconds * remaining seconds)
+                if (countdownProgress) {
+                    const progressDegrees = (5 - timeLeft) * (360 / 5);
+                    countdownProgress.style.background = `conic-gradient(#2ecc71 ${progressDegrees}deg, transparent ${progressDegrees}deg)`;
+                }
+                
+                // Update text based on time left
+                if (countdownText) {
+                    if (timeLeft > 1) {
+                        countdownText.textContent = `Mengarahkan ke halaman detail anggota dalam ${timeLeft} detik...`;
+                    } else if (timeLeft === 1) {
+                        countdownText.textContent = `Mengarahkan ke halaman detail anggota dalam ${timeLeft} detik...`;
+                    } else {
+                        countdownText.textContent = 'Mengarahkan sekarang...';
+                    }
+                }
+            }
         });
     </script>
     <script src="main.js"></script>
