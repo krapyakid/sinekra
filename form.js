@@ -34,6 +34,101 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === FUNGSI-FUNGSI ===
 
+    // Helper functions untuk normalisasi data
+    function normalizeName(s){ 
+        return s.toLowerCase().trim().replace(/\s+/g,' '); 
+    }
+    
+    function normalizePhone(s){
+        const d = String(s).replace(/\D/g,'');
+        // jadikan kanonik: buang leading 0 → 62…
+        if (d.startsWith('0')) return '62'+d.slice(1);
+        if (d.startsWith('62')) return d; // Jika sudah 62, return as is
+        return '62'+d; // Jika tidak ada 62 atau 0, tambah 62
+    }
+
+    // Fungsi untuk menampilkan loading validation
+    function showValidationLoading(message) {
+        let loadingEl = document.getElementById('validation-loading');
+        if (!loadingEl) {
+            loadingEl = document.createElement('div');
+            loadingEl.id = 'validation-loading';
+            loadingEl.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 30px; border-radius: 10px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                        <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px;"></div>
+                        <p style="margin: 0; font-size: 16px; color: #333;"><span id="loading-message">${message}</span></p>
+                    </div>
+                </div>
+                <style>
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                </style>
+            `;
+            document.body.appendChild(loadingEl);
+        } else {
+            document.getElementById('loading-message').textContent = message;
+            loadingEl.style.display = 'block';
+        }
+    }
+
+    // Fungsi untuk menyembunyikan loading validation
+    function hideValidationLoading() {
+        const loadingEl = document.getElementById('validation-loading');
+        if (loadingEl) {
+            loadingEl.style.display = 'none';
+        }
+    }
+
+    // Fungsi untuk menampilkan modal duplikat yang eye-catching
+    function showDuplicateModal(title, message, focusField) {
+        let modalEl = document.getElementById('duplicate-modal');
+        if (!modalEl) {
+            modalEl = document.createElement('div');
+            modalEl.id = 'duplicate-modal';
+            modalEl.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 400px; width: 90%;">
+                        <div style="color: #e74c3c; font-size: 60px; margin-bottom: 20px;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3 id="duplicate-title" style="color: #e74c3c; margin: 0 0 15px 0; font-size: 22px; font-weight: bold;">Data Duplikat!</h3>
+                        <p id="duplicate-message" style="color: #666; margin: 0 0 25px 0; font-size: 16px; line-height: 1.5;">Silakan cari pada daftar anggota</p>
+                        <button id="duplicate-ok-btn" style="background: #3498db; color: white; border: none; padding: 12px 30px; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background 0.3s;">
+                            OK, Saya Mengerti
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modalEl);
+            
+            // Event listener untuk tombol OK
+            document.getElementById('duplicate-ok-btn').addEventListener('click', () => {
+                modalEl.style.display = 'none';
+                if (focusField) {
+                    focusField.focus();
+                    focusField.classList.add('input-error');
+                    setTimeout(() => focusField.classList.remove('input-error'), 3000);
+                }
+            });
+            
+            // Hover effect untuk tombol
+            const btn = document.getElementById('duplicate-ok-btn');
+            btn.addEventListener('mouseenter', () => btn.style.background = '#2980b9');
+            btn.addEventListener('mouseleave', () => btn.style.background = '#3498db');
+        }
+        
+        // Update konten dan tampilkan modal
+        document.getElementById('duplicate-title').textContent = title;
+        document.getElementById('duplicate-message').textContent = message;
+        modalEl.style.display = 'flex';
+        
+        // Store field reference untuk focus nanti
+        modalEl.focusField = focusField;
+    }
+
     async function loadKbliData() {
         try {
             const response = await fetch(KBLI_URL);
@@ -154,6 +249,16 @@ document.addEventListener('DOMContentLoaded', function() {
             // Memaksa input hanya angka untuk nomor HP
             if (target.id === 'no_hp_anggota') {
                 target.value = target.value.replace(/\D/g, '');
+            }
+
+            // Memaksa input hanya huruf dan spasi untuk nama lengkap
+            if (target.id === 'nama_lengkap') {
+                target.value = target.value.replace(/[^a-zA-Z\s]/g, '');
+            }
+
+            // Memaksa input hanya huruf dan spasi untuk nama panggilan
+            if (target.id === 'nama_panggilan') {
+                target.value = target.value.replace(/[^a-zA-Z\s]/g, '');
             }
 
             // Character Counter
@@ -380,24 +485,153 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    function validateForm() {
+    async function validateForm() {
+        console.log('=== VALIDASI DIMULAI ===');
         let firstInvalidField = null;
         const requiredFields = form.querySelectorAll('[required]');
 
+        // Validasi field yang wajib diisi
         for (const field of requiredFields) {
             if (!field.value.trim()) {
                 const label = field.closest('.form-group, .form-group-full').querySelector('label').innerText;
                 alert(`Kolom wajib diisi: "${label.replace('*', '').trim()}"`);
                 field.focus();
                 firstInvalidField = field;
-                // Tambahkan class error untuk styling
                 field.classList.add('input-error');
-                // Hapus class error setelah beberapa detik
                 setTimeout(() => field.classList.remove('input-error'), 3000);
+                console.log('Validasi gagal: field kosong -', field.name);
                 return false;
             }
-             field.classList.remove('input-error');
+            field.classList.remove('input-error');
         }
+
+        // Validasi khusus untuk Nama Lengkap
+        const namaLengkapField = document.querySelector('input[name="nama_lengkap"]');
+        const namaLengkap = namaLengkapField ? namaLengkapField.value.trim() : '';
+        console.log('Nama Lengkap:', namaLengkap, 'Length:', namaLengkap.length);
+        
+        if (namaLengkap.length < 3) {
+            alert('Nama Lengkap minimal 3 karakter!');
+            if (namaLengkapField) {
+                namaLengkapField.focus();
+                namaLengkapField.classList.add('input-error');
+                setTimeout(() => namaLengkapField.classList.remove('input-error'), 3000);
+            }
+            console.log('Validasi gagal: Nama lengkap kurang dari 3 karakter');
+            return false;
+        }
+
+        // Validasi simbol untuk Nama Lengkap - hanya huruf dan spasi
+        if (!/^[a-zA-Z\s]+$/.test(namaLengkap)) {
+            alert('Nama Lengkap hanya boleh berisi huruf dan spasi! Tidak boleh ada angka, titik, koma, atau simbol lainnya.');
+            if (namaLengkapField) {
+                namaLengkapField.focus();
+                namaLengkapField.classList.add('input-error');
+                setTimeout(() => namaLengkapField.classList.remove('input-error'), 3000);
+            }
+            console.log('Validasi gagal: Nama lengkap mengandung simbol:', namaLengkap);
+            return false;
+        }
+
+        // Validasi untuk Nama Panggilan - hanya huruf dan spasi
+        const namaPanggilanField = document.querySelector('input[name="nama_panggilan"]');
+        const namaPanggilan = namaPanggilanField ? namaPanggilanField.value.trim() : '';
+        if (namaPanggilan && !/^[a-zA-Z\s]+$/.test(namaPanggilan)) {
+            alert('Nama Panggilan hanya boleh berisi huruf dan spasi! Tidak boleh ada angka, titik, koma, atau simbol lainnya.');
+            if (namaPanggilanField) {
+                namaPanggilanField.focus();
+                namaPanggilanField.classList.add('input-error');
+                setTimeout(() => namaPanggilanField.classList.remove('input-error'), 3000);
+            }
+            console.log('Validasi gagal: Nama panggilan mengandung simbol:', namaPanggilan);
+            return false;
+        }
+
+        // Validasi khusus untuk No. HP
+        const noHpField = document.querySelector('input[name="no_hp_anggota"]');
+        const noHp = noHpField ? noHpField.value.trim() : '';
+        console.log('No HP:', noHp, 'Length:', noHp.length);
+        
+        if (!/^\d{9,13}$/.test(noHp)) {
+            alert('No. HP tidak valid! Masukkan 9-13 digit angka tanpa spasi atau karakter khusus');
+            if (noHpField) {
+                noHpField.focus();
+                noHpField.classList.add('input-error');
+                setTimeout(() => noHpField.classList.remove('input-error'), 3000);
+            }
+            console.log('Validasi gagal: No HP tidak valid');
+            return false;
+        }
+
+        // Cek data duplikat ke server
+        console.log('Memulai pengecekan duplikat...');
+        
+        // Tampilkan loading indicator
+        showValidationLoading('Memeriksa data duplikat...');
+        
+        try {
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvsDmDoerDTDgV39Op65g8D_fGyCyTy82StbSzsACbpQoYnetw96E4mQ1T0suIHfhR/exec";
+            const response = await fetch(`${SCRIPT_URL}?action=get_all_data`, {
+                method: 'GET',
+                mode: 'cors'
+            });
+            
+            console.log('Response status:', response.status);
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                // --- setelah const data = await response.json();
+                const rows = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : []);
+                console.log('Parsed rows length:', rows.length);
+
+                // Cek jika data berupa array dan punya isi
+                if (rows.length > 0) {
+                  console.log('Jumlah data existing:', rows.length);
+
+                  // Cek duplikat nama lengkap
+                  const normalizedInputName = normalizeName(namaLengkap);
+                  const duplicateName = rows.find(item => {
+                    if (!item.nama_lengkap) return false;
+                    const normalizedExistingName = normalizeName(item.nama_lengkap);
+                    console.log('Comparing:', normalizedExistingName, 'vs', normalizedInputName);
+                    return normalizedExistingName === normalizedInputName;
+                  });
+                  if (duplicateName) {
+                    hideValidationLoading();
+                    showDuplicateModal('Nama Lengkap sudah terdaftar!', 'Silakan cari nama Anda pada daftar anggota Sinergi Ekonomi Krapyak', namaLengkapField);
+                    return false;
+                  }
+
+                  // Cek duplikat No. HP (kanonik)
+                  const normalizedInputPhone = normalizePhone(noHp);
+                  console.log('Input HP normalisasi:', noHp, '→', normalizedInputPhone);
+                  
+                  const duplicateHP = rows.find(item => {
+                    if (!item.no_hp_anggota) return false;
+                    const normalizedExistingPhone = normalizePhone(item.no_hp_anggota);
+                    console.log('Comparing HP:', item.no_hp_anggota, '→', normalizedExistingPhone, 'vs input:', normalizedInputPhone);
+                    return normalizedExistingPhone === normalizedInputPhone;
+                  });
+                  if (duplicateHP) {
+                    hideValidationLoading();
+                    showDuplicateModal('No. HP sudah terdaftar!', 'Silakan cari nama Anda pada daftar anggota Sinergi Ekonomi Krapyak', noHpField);
+                    return false;
+                  }
+                } else {
+                  console.log('Data existing kosong atau format tidak sesuai:', data);
+                }
+            } else {
+                console.warn('Could not check for duplicates, proceeding with form submission');
+            }
+        } catch (error) {
+            console.error('Error checking duplicate:', error);
+            console.warn('Duplicate check failed, proceeding with form submission');
+        } finally {
+            hideValidationLoading();
+        }
+
+        console.log('=== VALIDASI BERHASIL ===');
         return true;
     }
     
@@ -458,7 +692,8 @@ document.addEventListener('DOMContentLoaded', function() {
     async function handleFormSubmit(e) {
         e.preventDefault();
         
-        if (!validateForm()) {
+        const isValid = await validateForm();
+        if (!isValid) {
             return; // Hentikan jika validasi gagal
         }
 
@@ -480,7 +715,7 @@ document.addEventListener('DOMContentLoaded', function() {
             domisili: formData.get('domisili'),
             detail_alamat: formData.get('detail_alamat'),
             alamat_active: document.getElementById('alamat_active').checked ? 1 : 0, // Konversi boolean ke 1/0
-            no_hp_anggota: `+62${formData.get('no_hp_anggota')}`,
+            no_hp_anggota: `+${normalizePhone(formData.get('no_hp_anggota'))}`,
             no_hp_active: document.getElementById('no_hp_active').checked ? 1 : 0, // Konversi boolean ke 1/0
             profesi: formData.get('profesi'),
             detail_profesi: formData.get('detail_profesi'),
@@ -503,7 +738,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 kategori_usaha: card.querySelector('[name="kategori_usaha"]').value,
                 jenis_usaha: card.querySelector('[name="jenis_usaha"]').value,
                 detail_usaha: card.querySelector('[name="detail_usaha"]').value,
-                no_hp_perusahaan: card.querySelector('[name="no_hp_perusahaan"]').value ? `+62${card.querySelector('[name="no_hp_perusahaan"]').value}`: '',
+                no_hp_perusahaan: card.querySelector('[name="no_hp_perusahaan"]').value ? `+${normalizePhone(card.querySelector('[name="no_hp_perusahaan"]').value)}`: '',
                 prospek_kerjasama_penawaran: card.querySelector('[name="prospek_kerjasama_penawaran"]').value,
                 website_perusahaan: card.querySelector('[name="website_perusahaan"]').value ? websitePrefix + card.querySelector('[name="website_perusahaan"]').value : '',
                 url_gmaps_perusahaan: card.querySelector('[name="url_gmaps_perusahaan"]').value ? gmapsPrefix + card.querySelector('[name="url_gmaps_perusahaan"]').value : '',
