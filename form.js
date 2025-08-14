@@ -589,35 +589,42 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (rows.length > 0) {
                   console.log('Jumlah data existing:', rows.length);
 
-                  // Cek duplikat nama lengkap
+                  // Normalisasi input
                   const normalizedInputName = normalizeName(namaLengkap);
-                  const duplicateName = rows.find(item => {
-                    if (!item.nama_lengkap) return false;
-                    const normalizedExistingName = normalizeName(item.nama_lengkap);
-                    console.log('Comparing:', normalizedExistingName, 'vs', normalizedInputName);
-                    return normalizedExistingName === normalizedInputName;
-                  });
-                  if (duplicateName) {
+                  const normalizedInputPhone = normalizePhone(noHp);
+
+                  // Cari kecocokan di database
+                  const nameMatched  = rows.some(item =>
+                    item.nama_lengkap && normalizeName(item.nama_lengkap) === normalizedInputName
+                  );
+                  const phoneMatched = rows.some(item =>
+                    item.no_hp_anggota && normalizePhone(item.no_hp_anggota) === normalizedInputPhone
+                  );
+
+                  // Terapkan 3 aturan:
+                  if (nameMatched && phoneMatched) {
+                    // 1) Nama & HP sama → TOLAK
                     hideValidationLoading();
-                    showDuplicateModal('Nama Lengkap sudah terdaftar!', 'Silakan cari nama Anda pada daftar anggota Sinergi Ekonomi Krapyak', namaLengkapField);
+                    showDuplicateModal(
+                      'Data sudah terdaftar!',
+                      'Nama Lengkap dan No. HP ini sudah terdaftar. Silakan cek di daftar anggota.',
+                      document.querySelector('input[name="no_hp_anggota"]')
+                    );
                     return false;
                   }
 
-                  // Cek duplikat No. HP (kanonik)
-                  const normalizedInputPhone = normalizePhone(noHp);
-                  console.log('Input HP normalisasi:', noHp, '→', normalizedInputPhone);
-                  
-                  const duplicateHP = rows.find(item => {
-                    if (!item.no_hp_anggota) return false;
-                    const normalizedExistingPhone = normalizePhone(item.no_hp_anggota);
-                    console.log('Comparing HP:', item.no_hp_anggota, '→', normalizedExistingPhone, 'vs input:', normalizedInputPhone);
-                    return normalizedExistingPhone === normalizedInputPhone;
-                  });
-                  if (duplicateHP) {
+                  if (!nameMatched && phoneMatched) {
+                    // 3) Nama unik, HP sudah ada → TOLAK
                     hideValidationLoading();
-                    showDuplicateModal('No. HP sudah terdaftar!', 'Silakan cari nama Anda pada daftar anggota Sinergi Ekonomi Krapyak', noHpField);
+                    showDuplicateModal(
+                      'No. HP sudah terpakai!',
+                      'No. HP ini sudah terdaftar untuk anggota lain.',
+                      document.querySelector('input[name="no_hp_anggota"]')
+                    );
                     return false;
                   }
+
+                  // 2) Nama sama, HP unik → BOLEH lanjut (tidak memblokir)
                 } else {
                   console.log('Data existing kosong atau format tidak sesuai:', data);
                 }
